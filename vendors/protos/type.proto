@@ -1,0 +1,193 @@
+syntax = "proto3";
+package forge_abi;
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/any.proto";
+
+import "vendor.proto";
+import "code.proto";
+
+// basic enum definition
+
+enum KeyType {
+  ed25519 = 0;
+  secp256k1 = 1;
+}
+
+enum HashType {
+  keccak = 0;
+  sha3 = 1;
+  sha2 = 2;
+
+  // 3-5 reserved
+
+  keccak_384 = 6;
+  sha3_384 = 7;
+  sha2_384 = 9;
+
+  // 10-12 reserved
+
+  keccak_512 = 13;
+  sha3_512 = 14;
+  sha2_512 = 15;
+}
+
+enum EncodingType {
+  base16 = 0;
+  base58 = 1;
+}
+
+enum AccountRole {
+  normal = 0;
+  admin = 1;
+}
+
+enum UpgradeType {
+  // configuration
+  config_app = 0;
+  config_forge = 1;
+  config_dfs = 2;
+  config_consensus = 3;
+  config_p2p = 4;
+
+  // executable
+  exe_app = 10;
+  exe_forge = 11;
+  exe_dfs = 12;
+  exe_consensus = 13;
+  exe_p2p = 14;
+}
+
+enum UpgradeAction {
+  verify = 0;
+  backup = 1;
+  replace = 2;
+
+  // restart different part of the system
+  restart_app = 10;
+  restart_dfs = 11;
+  restart_consensus = 12;
+  restart_p2p = 13;
+  restart_forge = 14; // restart forge will indirectly restart all component in
+                      // a graceful manner
+
+  // depend on deployment, the monitor app (e.g. systemd) shall bring the
+  // process back
+  rollback_if_fail = 30;
+  restart_all_if_fail = 31;
+  crash_if_fail = 33;
+
+  // drop different intermediate files
+  drop_address_book = 50;
+}
+
+// basic type definition
+
+enum StateType {
+  account = 0;
+  asset = 1;
+  channel = 2;
+  forge = 3;
+}
+
+message BigUint { bytes value = 1; }
+message BigSint {
+  bytes value = 1;
+  bool minus = 2;
+}
+
+message WalletType {
+  KeyType pk = 1;
+  HashType hash = 2;
+  EncodingType address = 3;
+}
+
+message WalletInfo {
+  WalletType type = 1;
+  bytes sk = 2;
+  bytes pk = 3;
+  bytes address = 4;
+}
+
+message ChainInfo {
+  string id = 1;           // node id.
+  string network = 2;      // which network the node belongs to.
+  string moniker = 3;      // name of the node.
+  string version = 4;      // consensus engine version for this node.
+  bool synced = 5;         // indicate if this node is fully synced.
+  bytes app_hash = 6;      // current application hash.
+  bytes block_hash = 7;    // current application hash.
+  uint64 block_height = 8; // latest block height, in integer.
+  google.protobuf.Timestamp block_time = 9; // latest block time.
+  bytes address = 10;                       // the address of the node.
+  uint32 voting_power = 11; // the voting power of the node, in integer.
+}
+
+message Validator {
+  bytes address = 1;
+  // setting power to 0 will remove existing address from validator
+  uint64 power = 2;
+}
+
+message ConsensusParams {
+  uint64 max_bytes = 1;
+  uint64 max_gas = 2;
+  repeated string pub_key_types = 3;
+}
+
+// a deferred task (need more consideration)
+message UpgradeTask {
+  UpgradeType type = 1;
+  bytes data_hash = 2;                // data shall be first put into IPFS
+  repeated UpgradeAction actions = 4; // actions
+}
+
+message UpgradeTasks { repeated UpgradeTask item = 1; }
+
+message AbciContext {
+  // the hash of the transaction that being handled. Application can record this
+  // in their state as a reference.
+  bytes tx_hash = 1;
+  // the height of the current block.
+  uint64 block_height = 2;
+  // the deterministic time (in google protobuf timestamp format) of the current
+  // block.
+  google.protobuf.Timestamp block_time = 3;
+}
+
+message Transaction {
+  bytes from = 1;
+  uint64 nonce = 2;
+  bytes signature = 3;
+  uint32 chain_id = 4;
+  // we will support multiple signatures in case of certain tx need multiple
+  // parties' signature.
+  repeated KVPair signatures = 5;
+  // at current version we don't have a VM to process byte
+  // code so this should always be empty. Forge will reject
+  // tx with non-empty byte_code
+  // bytes byte_code = 6;
+
+  google.protobuf.Any itx = 7;
+}
+
+message TransactionInfo {
+  Transaction tx = 1;
+  uint64 height = 2;
+  uint32 index = 3;
+  string hash = 4;
+  repeated KVPair tags = 5;
+}
+
+message BlockInfo {
+  uint64 height = 1;
+  uint32 num_txs = 2;
+  google.protobuf.Timestamp time = 3;
+  string app_hash = 4;
+  string proposer = 5;
+  repeated Transaction txs = 6;
+}
+
+message TxStatus {
+  StatusCode code = 1;
+  bytes hash = 2;
+}

@@ -1,0 +1,38 @@
+syntax = "proto3";
+package forge_abi;
+
+enum StatusCode {
+  ok = 0;
+
+  // common code
+  // 1 - 15
+  invalid_nonce = 1;
+  invalid_signature = 2;
+  invalid_sender_state = 3;
+  invalid_receiver_state = 4;
+  insufficient_data = 5;
+  insufficient_fund = 6;
+  invalid_owner = 7;
+  invalid_tx = 8;
+  unsupported_tx = 9;
+
+  // 16 - 2047 various errors
+  invalid_moniker = 16;
+  invalid_passphrase = 17;
+  invalid_channel = 18;
+  invalid_channel_waiting_data = 19;
+  invalid_multisig = 20;
+  invalid_wallet = 21;
+  invalid_chain_id = 22;
+
+  need_confirmation = 23;
+
+  consensus_rpc_error = 24;
+  storage_rpc_error = 25;
+  noent = 26;
+  account_migrated = 27;
+
+  internal = 500;
+
+  // user defined status code shall start from 501
+}

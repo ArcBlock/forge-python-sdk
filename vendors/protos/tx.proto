@@ -1,0 +1,67 @@
+syntax = "proto3";
+package forge_abi;
+import "google/protobuf/any.proto";
+import "type.proto";
+
+// Transaction definition
+
+message TransferTx {
+  bytes to = 1;
+  BigSint value = 2;
+  repeated bytes assets = 3;
+  bool confirmation = 4;
+  // how long after a receiver can confirm the transfer. Will enable it later.
+  // uint32 grace_peroid = 5;
+}
+
+message ExchangeInfo {
+  BigSint value = 1;
+  repeated bytes assets = 2;
+}
+
+// we could support these cases (and vise versa):
+// 1. sender fungible token <-> receiver one or more assets
+// 2. sender fungible token + asset <-> receiver one or more assets
+// 3. sender one or more assets <-> receiver one or more assets
+message ExchangeTx {
+  bytes to = 1;
+  ExchangeInfo sender = 2;
+  ExchangeInfo receiver = 3;
+}
+
+message DeclareTx {
+  string moniker = 1;
+  bytes pk = 2;
+  WalletType type = 3;
+}
+
+message ConfirmTx {
+  bytes sender = 1; // sender address
+  bytes hash = 2;   // the tx hash to be confirmed
+}
+
+message RevokeTx {
+  bytes receiver = 1; // receiver address
+  bytes hash = 2;     // the tx hash to be revoked
+}
+
+message AccountMigrateTx {
+  bytes pk = 1;        // new public key
+  WalletType type = 2; // new wallet type
+}
+
+message AccountUpgradeTx {
+  bytes to = 1;
+  AccountRole role = 2;
+}
+
+message ConsensusUpgradeTx { repeated Validator validators = 1; }
+
+message SysUpgradeTx {
+  UpgradeTask task = 1;
+  uint32 grace_period = 2; // wait for how many blocks to take the operation
+}
+
+message DeclareFileTx { string hash = 1; }
+
+message CreateAssetTx { google.protobuf.Any data = 1; }
