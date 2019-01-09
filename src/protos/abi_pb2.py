@@ -12,9 +12,9 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-import code_pb2 as code__pb2
-import type_pb2 as type__pb2
-import state_pb2 as state__pb2
+from . import code_pb2 as code__pb2
+from . import type_pb2 as type__pb2
+from . import state_pb2 as state__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(

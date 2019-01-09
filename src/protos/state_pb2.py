@@ -14,8 +14,8 @@ _sym_db = _symbol_database.Default()
 
 from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 from google.protobuf import any_pb2 as google_dot_protobuf_dot_any__pb2
-import vendor_pb2 as vendor__pb2
-import type_pb2 as type__pb2
+from . import vendor_pb2 as vendor__pb2
+from . import type_pb2 as type__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(

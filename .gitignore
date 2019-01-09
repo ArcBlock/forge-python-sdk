@@ -6,3 +6,5 @@ node_modules
 *.pyc
 .vscode
 __pycache__
+protos/*
+src/protos/*
