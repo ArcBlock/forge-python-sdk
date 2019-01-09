@@ -3,6 +3,7 @@ ENV=~/.envs
 README=$(TOP_DIR)/README.md
 
 VERSION=$(strip $(shell cat version))
+PROTOS=abi event type tx state code rpc
 
 build:
 	@echo "Building the software..."
@@ -64,8 +65,19 @@ watch:
 run:
 	@echo "Running the software..."
 
-rebuild-proto:
-	python -m grpc_tools.protoc -I ./vendors/protos -I./vendors/github.com/tendermint/tendermint -I./vendors/github.com/gogo/protobuf/gogoproto -I./vendors/ --python_out=./src/protos --grpc_python_out=./src/protos ./vendors/protos/abi.proto ./vendors/protos/rpc.proto ./vendors/protos/event.proto ./vendors/protos/code.proto ./vendors/protos/type.proto ./vendors/protos/state.proto ./vendors/protos/vendor.proto
+prepare-all-proto:
+	@mkdir -p protos
+	@mkdir -p src/protos
+	@echo "Preparing all protobuf..."
+	@$(foreach proto, $(PROTOS), curl --silent https://$(GITHUB_TOKEN)@raw.githubusercontent.com/ArcBlock/forge/master/tools/forge_sdk/lib/forge_sdk/protobuf/$(proto).proto > ./protos/$(proto).proto;)
+	@curl --silent https://raw.githubusercontent.com/ArcBlock/ex_abci/master/lib/abci_protos/vendor.proto > ./protos/vendor.proto
+	@echo "All protobuf files are fetched!"
+
+rebuild-proto: prepare-all-proto
+	@echo "Buiding all protobuf files..."
+	@python -m grpc_tools.protoc -I ./protos --python_out=./src/protos --grpc_python_out=./src/protos ./protos/*.proto
+	@sed -i -E 's/^import.*_pb2/from . \0/' ./src/protos/*.py
+	@echo "All protobuf files are built and ready to use!.."
 
 include .makefiles/*.mk
 
