@@ -8,7 +8,7 @@ PROTOS=abi event type tx state code rpc
 build:
 	@echo "Building the software..."
 
-init: install dep create_env add_precommit_hook
+init: install dep create_env
 	@echo "Initializing the repo..."
 	@git submodule update --init --recursive
 
@@ -19,6 +19,7 @@ create_env:
 		source /usr/local/bin/virtualenvwrapper.sh; \
 		mkvirtualenv forge-python-sdk; \
 		pip install -r requirements.txt; \
+		pre-commit install; \
 	)
 
 add_precommit_hook:
