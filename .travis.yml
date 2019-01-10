@@ -1,0 +1,24 @@
+language: python
+python:
+  - "3.6"
+install:
+  - pip install -r requirements.txt
+dist: xenial
+branches:
+  only:
+  - master
+before_install:
+  - sudo apt-get install -y libstdc++6 wget binutils
+before_script: make travis-init
+script: make travis
+before_deploy: make travis-deploy
+deploy:
+  provider: script
+  skip_cleanup: true
+  script: git clone https://$GITHUB_TOKEN@github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_REPO_SLUG;
+    cd $TRAVIS_REPO_SLUG; make travis-deploy
+  on:
+    branch: master
+env:
+  global:
+    - secure:
