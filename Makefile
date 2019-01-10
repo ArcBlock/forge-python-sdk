@@ -8,7 +8,7 @@ PROTOS=abi event type tx state code rpc
 build:
 	@echo "Building the software..."
 
-init: install dep create_env
+init: install dep create_env add_precommit_hook
 	@echo "Initializing the repo..."
 	@git submodule update --init --recursive
 
@@ -21,7 +21,10 @@ create_env:
 		pip install -r requirements.txt; \
 	)
 
-travis-init:
+add_precommit_hook:
+	@pre-commit install
+
+travis-init: add_precommit_hook
 	@echo "Initialize software required for travis (normally ubuntu software)"
 
 install:
@@ -43,6 +46,7 @@ test:
 
 lint:
 	@echo "Linting the software..."
+	@python .git/hooks/pre-commit
 
 doc:
 	@echo "Building the documenation..."
