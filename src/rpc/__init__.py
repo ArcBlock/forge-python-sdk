@@ -1,1 +1,1 @@
-from .main import ForgeRpc
+from .forge_rpc import ForgeRpc

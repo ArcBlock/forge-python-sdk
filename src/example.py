@@ -1,8 +1,5 @@
-
-
 import base64
-from rpc import ForgeRpc
-
+from forge_sdk import ForgeSdk
 # def example():
 #     forge_sdk = ForgeSdk.init(path)
 #     rpc = forge_sdk.rpc
@@ -11,13 +8,14 @@ from rpc import ForgeRpc
 #     tornado.run()
 #     response = rpc.get_chain_info()
 
-def run():
-    rpc = ForgeRpc()
+
+def simple_rpc_example():
+    forge_sdk = ForgeSdk()
+    rpc = forge_sdk.rpc
     response = rpc.get_chain_info()
-    rpc.abcde
     app_hash = base64.b64encode(response.info.app_hash)
     print('Chain info:', response, app_hash)
-    print(type(response))
+
 
 if __name__ == "__main__":
-    run()
+    simple_rpc_example()
