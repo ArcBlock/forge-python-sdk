@@ -39,9 +39,13 @@ class ForgeConfig:
 
     def parse_socket(self):
         expanded_forge_path = expanduser(self.forge_path)
+        socket_type = self.forge_socket_grpc.split("://")[0]
         parsed_socket = self.forge_socket_grpc.split("://")[1]
-        socket_target = '/'.join([
-            'unix:/',
-            expanded_forge_path, parsed_socket,
-        ])
+        if socket_type == 'unix':
+            socket_target = '/'.join([
+                'unix:/',
+                expanded_forge_path, parsed_socket,
+            ])
+        else:
+            socket_target = parsed_socket
         return socket_target

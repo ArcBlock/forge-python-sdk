@@ -1,6 +1,6 @@
 import base64
 
-from rpc import ForgeRpc
+from forge_sdk import ForgeSdk
 
 # def example():
 #     forge_sdk = ForgeSdk.init(path)
@@ -14,7 +14,7 @@ from rpc import ForgeRpc
 
 
 def run():
-    rpc = ForgeRpc("127.0.0.1:28210")
+    rpc = ForgeSdk().rpc
     response = rpc.get_chain_info()
     app_hash = base64.b64encode(response.info.app_hash)
     print('Chain info:', response, app_hash)
