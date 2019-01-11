@@ -1,6 +1,5 @@
-import base64
-
 from forge_sdk import ForgeSdk
+
 
 # def example():
 #     forge_sdk = ForgeSdk.init(path)
@@ -16,9 +15,11 @@ from forge_sdk import ForgeSdk
 def run():
     rpc = ForgeSdk().rpc
     response = rpc.get_chain_info()
-    app_hash = base64.b64encode(response.info.app_hash)
-    print('Chain info:', response, app_hash)
-    print(type(response))
+    # app_hash = base64.b64encode(response.info.app_hash)
+    print('Chain info:', response)
+    print('Search: ', rpc.search(key='1', value='2'))
+    # wallet rpc
+    print('create_wallet: ', rpc.create_wallet(passphrase='abc123'))
 
 
 if __name__ == "__main__":

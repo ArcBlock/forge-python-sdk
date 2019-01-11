@@ -8,3 +8,5 @@ node_modules
 __pycache__
 protos/*
 src/protos/*
+
+src/test/_trial_temp
