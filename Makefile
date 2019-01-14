@@ -19,9 +19,13 @@ create_env:
 		source /usr/local/bin/virtualenvwrapper.sh; \
 		mkvirtualenv forge-python-sdk; \
 		pip install -r requirements.txt; \
+		pre-commit install; \
 	)
 
-travis-init:
+add_precommit_hook:
+	@pre-commit install
+
+travis-init: add_precommit_hook
 	@echo "Initialize software required for travis (normally ubuntu software)"
 
 install:
@@ -43,6 +47,7 @@ test:
 
 lint:
 	@echo "Linting the software..."
+	@python .git/hooks/pre-commit
 
 doc:
 	@echo "Building the documenation..."

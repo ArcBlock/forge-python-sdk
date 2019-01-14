@@ -1,2 +1,5 @@
 grpcio
 grpcio-tools
+pre-commit
+pre-commit-hooks
+toml

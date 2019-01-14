@@ -1,0 +1,24 @@
+language: python
+python:
+  - "3.6"
+install:
+  - pip install -r requirements.txt
+dist: xenial
+branches:
+  only:
+  - master
+before_install:
+  - sudo apt-get install -y libstdc++6 wget binutils
+before_script: make travis-init
+script: make travis
+before_deploy: make travis-deploy
+deploy:
+  provider: script
+  skip_cleanup: true
+  script: git clone https://$GITHUB_TOKEN@github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_REPO_SLUG;
+    cd $TRAVIS_REPO_SLUG; make travis-deploy
+  on:
+    branch: master
+env:
+  global:
+    - secure: "d84eLtQ+93Dx05lRtY2wZuH+dkDR7bMP4DDO0z1UHYUlEs83X+TxpDyRiw//+sDGKgYo9HtxYAmBskg/atpX+Is0otaEiXtT6YwWlumCN72UTSZQLp/rW3WlgGu6wU/bbDpkwCa8YkMu8hq2c0QnmVRDkOOMpzIvg7JgzuUb05OcXlFHCRB4WF1juZEGTn8EQVjFNP7z0izw+6cy8fcNsP5VFHtGFF8a+XUuAuqeNDB+vnD4scxZVdYILZgbusLZcJrbNRGyFpC8A0vaio3Dn6Zezq2BN3y6Q3dWVZ9rOULFoTSBd2YUCWNu8+aFIk+4zSeTCGPrrrxZoyzmcWIBpzVx7o1nAQtij9+8+AUihTKb+xQaO0Ey4yh3AtC50xDza8ZWFQZyfnirc91WLhkGeV/ggHt/oyf+mgRxLuojZ5gw73QDmL3ixlHzPSAXrYWOKYDDXHxvRMNxpubWOrNYOUH2KUgw4GNYKp19zPQwEVwsLevrivAW+672n6YSCKHLoEfUJcY2g7BWkvuoQwO3bPjVvzDSpGyv1MZsnZ6d+uuo6w5Cr23rWqIRQP8hWwXNuY1PVXnLahLeb/7kqU5AVIwlzNF715XGVlw3B6P4ES2hDEd1ON5/2OT2+cEEwR0gunkWhXQzaXpMBXOR4hxeXqi7g8IHOlF5T+vmy8JApzs="
