@@ -17,9 +17,11 @@ def run():
     response = rpc.get_chain_info()
     # app_hash = base64.b64encode(response.info.app_hash)
     print('Chain info:', response)
-    print('Search: ', rpc.search(key='1', value='2'))
+    # print('Search: ', rpc.search(key='1', value='2'))
     # wallet rpc
-    print('create_wallet: ', rpc.create_wallet(passphrase='abc123'))
+    print('list_wallet: ')
+    for i in rpc.list_wallets():
+        print(i)
 
 
 if __name__ == "__main__":
