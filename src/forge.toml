@@ -1,0 +1,112 @@
+[app]
+name = "forge_kv"
+version = "0.1.0"
+
+path = "~/.forge/app"
+executable = ""
+logfile = "logs/app.log"
+error_logfile = "logs/app_error.log"
+sock_tcp = "tcp://127.0.0.1:28211"
+
+[forge]
+decimal = 16
+proto_version = 1
+path = "~/.forge/core"
+# State db path
+db = "data"
+# index db path
+index_db = "index"
+keystore = "keystore"
+logfile = "logs/forge.log"
+
+sock_grpc = "tcp://127.0.0.1:28210"
+
+consensus_engine = "tendermint"
+storage_engine = "ipfs"
+hash = "sha3"
+encoding = "base64"
+unlock_ttl = 300
+
+[forge.limit]
+# max grace period is 10
+grace_peroid = 10
+
+[forge.account]
+# for ethereum compatibility, use secp256k1
+public_key_format = "ed25519"
+# for ethereum compatibility, use keccak_256
+public_key_hash_format = "sha3_256"
+# for ethereum compatibility, use base16
+address_format = "base58"
+
+[forge.transaction]
+disabled_tx = ["SysUpgradeTx"]
+
+[forge.web]
+enabled = true
+
+[tendermint]
+version = "0.27.3-01"
+moniker = "forge"
+path = "~/.forge/tendermint"
+
+# relative paths to "path"
+logfile = "logs/tendermint.log"
+
+# socket to proxy app
+sock_proxy_app = "tcp://127.0.0.1:28220"
+
+# socket for tendermint json rpc
+sock_rpc = "tcp://127.0.0.1:28221"
+
+# socket for tendermint grpc (right now just use it for send tx and commit immediately)
+sock_grpc = "tcp://127.0.0.1:28222"
+
+# socket for tendermint p2p. Normally this shall be opened to the public network
+sock_p2p = "tcp://0.0.0.0:26656"
+
+# socket for performance metrics
+sock_prof = ""
+
+# persistent peers
+# persistent_peers = "d5eed6f5579225f34192116a11d088b09406eaf2@54.245.146.201:26656"
+persistent_peers = ""
+
+# seed peers
+seed_peers = ""
+
+# timeout for commiting a new block
+timeout_commit = "5s"
+
+# create empty blocks in 5s interval
+create_empty_blocks = true
+
+[tendermint.genesis]
+genesis_time = "2018-11-05T19:22:08.938749Z"
+chain_id = 1
+max_bytes = 22020096
+max_gas = -1
+app_hash = ""
+
+# note that if you don't give this information we will use self as validator
+[[tendermint.genesis.validators]]
+# address = "3BDFA5D3033371909F000B36EFE5CC58FC0A3F35"
+# name = "forge"
+# power = "10"
+
+# [tendermint.genesis.validators.pub_key]
+# type = "tendermint/PubKeyEd25519"
+# value = "f3eSlsdrEYX4UY2QzU7Aqqxu2sb+CcOHmUSj67zhAGI="
+
+[ipfs]
+version = "0.4.18"
+path = "~/.forge/ipfs"
+logfile = "logs/ipfs.log"
+storage_max = "10GB"
+bootstrap = []
+
+#ipfs_cluster_version = "0.7.0"
+#ipfs_cluster_ctl_version = "0.7.0"
+
+max_file_size.admin = "100M"
+max_file_size.account = "1M"

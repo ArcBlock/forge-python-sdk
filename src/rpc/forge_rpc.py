@@ -237,7 +237,7 @@ class ForgeRpc:
             )
 
     def recover_wallet(
-        self, passphrase, moniker='', req=None, data=b'',
+        self, passphrase='', moniker='', req=None, data=b'',
         wallet_type=__wallet_type,
     ):
         """
