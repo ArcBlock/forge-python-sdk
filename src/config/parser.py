@@ -9,6 +9,13 @@ FORGE_CONFIG_DEFAULT_PATH = '~/.forge/forge.toml'
 FORGE_CONFIG_FILE_NAME = 'forge.toml'
 
 
+def parse_config(path=None):
+    if path:
+        return parse_from_path(path)
+    else:
+        return parse_from_default()
+
+
 def parse_from_path(file_path):
     forge_toml = toml.load(file_path)
     return ForgeConfig(forge_toml)
@@ -33,14 +40,19 @@ class ForgeConfig:
 
     def __init__(self, toml_dict):
         self.toml_dict = toml_dict
-        self.forge_path = self.toml_dict['forge']['path']
-        self.forge_socket_grpc = self.toml_dict['forge']['sock_grpc']
-        self.socket_target = self.parse_socket()
+        self.sock_grpc = self.parse_socket(
+            toml_dict['forge']['path'],
+            toml_dict['forge']['sock_grpc'],
+        )
+        self.sock_tcp = self.parse_socket(
+            toml_dict['app']['path'],
+            toml_dict['app']['sock_tcp'],
+        )
 
-    def parse_socket(self):
-        expanded_forge_path = expanduser(self.forge_path)
-        socket_type = self.forge_socket_grpc.split("://")[0]
-        parsed_socket = self.forge_socket_grpc.split("://")[1]
+    def parse_socket(self, forge_path, forge_socket):
+        expanded_forge_path = expanduser(forge_path)
+        socket_type = forge_socket.split("://")[0]
+        parsed_socket = forge_socket.split("://")[1]
         if socket_type == 'unix':
             socket_target = '/'.join([
                 'unix:/',

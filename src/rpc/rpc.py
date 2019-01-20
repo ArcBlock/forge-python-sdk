@@ -6,7 +6,6 @@ import protos
 
 
 class ForgeRpc:
-
     __wallet_type = protos.WalletType(pk=0, hash=1, address=1)
 
     def __init__(self, socket):
@@ -23,8 +22,8 @@ class ForgeRpc:
         self.file = protos.FileRpcStub(self.chan)
 
     def create_tx(
-        self, req=None, itx=None, from_address='', nonce=0,
-        wallet=None, token='',
+            self, req=None, itx=None, from_address='', nonce=0,
+            wallet=None, token='',
     ):
         """
         RPC call to create transaction.
@@ -84,7 +83,8 @@ class ForgeRpc:
                 'token': token,
                 'commit': commit,
             }
-            return self.chain.send_tx(protos.RequestSendTx(**req_kwargs))
+            req = protos.RequestSendTx(**req_kwargs)
+            return self.chain.send_tx(req)
 
     def get_tx(self, req=None, tx_hash=''):
         """
@@ -100,6 +100,7 @@ class ForgeRpc:
         stream  ResponseGetTx
 
         """
+
         def to_req(item):
             if isinstance(item, protos.RequestGetTx):
                 return item
@@ -134,6 +135,7 @@ class ForgeRpc:
         stream ResponseGetBlock
 
         """
+
         def to_req(item):
             if isinstance(item, protos.RequestGetBlock):
                 return item
@@ -181,8 +183,8 @@ class ForgeRpc:
             return self.chain.search(protos.RequestSearch(**req_kwargs))
 
     def create_wallet(
-        self, req=None, wallet_type=__wallet_type, moniker='',
-        passphrase='',
+            self, req=None, wallet_type=__wallet_type, moniker='',
+            passphrase='',
     ):
         """
 
@@ -237,8 +239,8 @@ class ForgeRpc:
             )
 
     def recover_wallet(
-        self, passphrase='', moniker='', req=None, data=b'',
-        wallet_type=__wallet_type,
+            self, passphrase='', moniker='', req=None, data=b'',
+            wallet_type=__wallet_type,
     ):
         """
         rpc call to recover wallet with given passphrase.
@@ -258,6 +260,7 @@ class ForgeRpc:
 
         """
         if req is not None:
+            print(req)
             return self.wallet.recover_wallet(req)
         else:
             req_kwargs = {
@@ -266,8 +269,10 @@ class ForgeRpc:
                 'passphrase': passphrase,
                 'moniker': moniker,
             }
+            req = protos.RequestRecoverWallet(**req_kwargs)
+            print(req)
             return self.wallet.recover_wallet(
-                protos.RequestRecoverWallet(**req_kwargs),
+                req,
             )
 
     def list_wallets(self):
@@ -389,6 +394,7 @@ class ForgeRpc:
         ResponseStoreFile
 
         """
+
         def to_req(item):
             if isinstance(item, protos.RequestStoreFile):
                 return item

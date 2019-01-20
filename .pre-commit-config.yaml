@@ -12,24 +12,30 @@ repos:
     -   id: name-tests-test
     -   id: requirements-txt-fixer
     -   id: flake8
+        exclude: ^src(/protos/.*|/.*/__init__)\.py$
 -   repo: https://github.com/pre-commit/mirrors-autopep8
     rev: v1.4.3
     hooks:
     -   id: autopep8
+        exclude: ^src/protos/
 -   repo: https://github.com/pre-commit/pre-commit
     rev: v1.13.0
     hooks:
     -   id: validate_manifest
+        exclude: ^src/protos/
 -   repo: https://github.com/asottile/reorder_python_imports
     rev: v1.3.4
     hooks:
     -   id: reorder-python-imports
         language_version: python2.7
+        exclude: ^src/protos/
 -   repo: https://github.com/asottile/pyupgrade
     rev: v1.11.0
     hooks:
     -   id: pyupgrade
+        exclude: ^src/protos/
 -   repo: https://github.com/asottile/add-trailing-comma
     rev: v0.7.1
     hooks:
     -   id: add-trailing-comma
+        exclude: ^src/protos/
