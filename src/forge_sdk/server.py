@@ -50,7 +50,8 @@ class ForgeServer:
             self.logger.info("Connected!")
 
             while True:
-                data = self.conn.recv(self.buf_size)
+                data = self.conn.recv(1024)
+                self.logger.info(data)
                 if data:
                     self.buffer = self.buffer + data
                     self.__process_buffer()
@@ -105,7 +106,8 @@ class ForgeServer:
                 parsed_addr[0], int(parsed_addr[1]),
             )
         elif socket_type == 'unix':
-            os.unlink(socket_addr)
+            if os.path.exists(socket_addr):
+                os.unlink(socket_addr)
             return socket(AF_UNIX, SOCK_STREAM), socket_addr
         else:
             raise AttributeError(

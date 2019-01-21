@@ -2,6 +2,7 @@ from forge_sdk import ForgeSdk
 from google.protobuf.any_pb2 import Any
 
 import protos
+from time import sleep
 
 
 def run():
@@ -10,29 +11,30 @@ def run():
 
     wallet1 = rpc.create_wallet(moniker='aliceya', passphrase='abc123')
     print(wallet1)
+    sleep(1)
 
     reqs = [
         protos.RequestGetAccountState(
-            address='zzzYFfYydmBU616jD3BW319tzKB6',
+            address=wallet1.wallet.address,
         ),
     ]
 
     before_state = rpc.get_account_state(req=reqs.__iter__())
     for i in before_state:
-        print('before', i.state.num_txs)
+        print('before', i)
 
     itx = Any(
         type_url='tx/test',
         value=protos.pythonSDKTx(
-            to='zzzYFfYydmBU616jD3BW319tzKB6',
+            to=wallet1.wallet.address,
             value=100,
         ).SerializeToString(),
     )
     kwargs = {
         'itx': itx,
         'from_address': wallet1.wallet.address,
-        'nonce': 1,
         'wallet': wallet1.wallet,
+        'nonce': 2,
         'token': wallet1.token,
     }
     tx = rpc.create_tx(**kwargs).tx
