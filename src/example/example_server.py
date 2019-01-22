@@ -7,19 +7,19 @@ import protos
 
 def run():
     def tx_test_verify_tx(request):
-        itx = utils.parse_proto_from(request.tx.itx.value, protos.pythonSDKTx)
+        itx = utils.parse_to_proto(request.tx.itx.value, protos.pythonSDKTx)
         if itx.value != 100:
             print("Wrong value!")
             return protos.ResponseVerifyTx(code=1)
         else:
-            print("Yes! 100 is sent to {}".format(itx.to))
+            print("Tranaction is verified!")
             return protos.ResponseVerifyTx(code=0)
 
     def tx_test_update_state(request):
-        itx = utils.parse_proto_from(request.tx.itx.value, protos.pythonSDKTx)
+        itx = utils.parse_to_proto(request.tx.itx.value, protos.pythonSDKTx)
         new_account_state = protos.AccountState(
             address=itx.to,
-            num_txs=1000,
+            moniker='changedbyriley',
         )
         return protos.ResponseUpdateState(
             code=0,

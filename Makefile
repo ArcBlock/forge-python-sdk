@@ -4,6 +4,7 @@ README=$(TOP_DIR)/README.md
 
 VERSION=$(strip $(shell cat version))
 PROTOS=abi event type tx state code rpc
+CONFIGS=forge forge_release forge_test
 
 build:
 	@echo "Building the software..."
@@ -69,6 +70,12 @@ watch:
 
 run:
 	@echo "Running the software..."
+
+fetch-configs:
+	@mkdir -p priv
+	@echo "Fetching latest configs from Forge..."
+	@$(foreach config, $(CONFIGS), curl --silent https://$(GITHUB_TOKEN)@raw.githubusercontent.com/ArcBlock/forge/master/tools/forge_sdk/priv/$(config).toml > ./priv/$(config).toml;)
+	@echo "All config files are fetched and updated!"
 
 prepare-all-proto:
 	@mkdir -p protos

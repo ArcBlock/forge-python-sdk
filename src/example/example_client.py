@@ -1,8 +1,9 @@
+from time import sleep
+
 from forge_sdk import ForgeSdk
 from google.protobuf.any_pb2 import Any
 
 import protos
-from time import sleep
 
 
 def run():
@@ -21,7 +22,7 @@ def run():
 
     before_state = rpc.get_account_state(req=reqs.__iter__())
     for i in before_state:
-        print('before', i)
+        print('before', i.state.moniker)
 
     itx = Any(
         type_url='tx/test',
@@ -41,9 +42,11 @@ def run():
     res = rpc.send_tx(tx=tx)
     print(res)
 
+    sleep(2)
+
     after_state = rpc.get_account_state(req=reqs.__iter__())
     for i in after_state:
-        print('after', i.state.num_txs)
+        print('after', i.state.moniker)
 
 
 if __name__ == "__main__":

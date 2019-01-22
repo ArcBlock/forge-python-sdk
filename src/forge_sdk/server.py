@@ -6,7 +6,6 @@ from socket import SOCK_STREAM
 from socket import socket
 
 import utils
-from google.protobuf.internal.decoder import _DecodeVarint32
 
 import protos
 from .helper import SupportedActions
@@ -51,7 +50,7 @@ class ForgeServer:
 
             while True:
                 data = self.conn.recv(1024)
-                self.logger.info(data)
+                self.logger.info("bytes received: {}".format(data))
                 if data:
                     self.buffer = self.buffer + data
                     self.__process_buffer()
@@ -60,10 +59,10 @@ class ForgeServer:
 
     def __process_buffer(self):
         while self.__buffer_contains_full_request():
-            request_bytes, len, pos = utils.decode_varint_request(
-                self.buffer, 0,
+            request_bytes, len, pos = utils.decode(
+                self.buffer,
             )
-            request = utils.parse_proto_from(request_bytes, protos.Request)
+            request = utils.parse_to_proto(request_bytes, protos.Request)
             self.logger.info("request parsed: {}".format(request))
             action = request.WhichOneof('value')
             self.__handle_request(request, action)
@@ -75,16 +74,31 @@ class ForgeServer:
     def __handle_request(self, request, action):
         self.logger.info("Received a {} request!".format(action))
         action_request = getattr(request, action)
-        itx_type = action_request.tx.itx.type_url
-        if self.__is_type_supported(itx_type):
-            func = self.__get_itx_action(itx_type, action)
-            self.conn.send(
-                self.__reply(result=func(action_request), action=action),
-            )
+        if action == 'info':
+            self.__handle_info_request(action_request)
         else:
-            self.conn.send(self.__reply(action=action, unsupported=True))
+            itx_type = action_request.tx.itx.type_url
+            if self.__is_type_supported(itx_type):
+                func = self.__get_itx_action(itx_type, action)
+                res = self.__reply(
+                    response=func(
+                        action_request,
+                    ), action=action,
+                )
+                self.conn.send(res)
+
+                self.logger.info("Response sent: {}".format(res))
+            else:
+                self.conn.send(self.__reply(action=action, unsupported=True))
 
         self.logger.info("type {} has been processed!".format(action))
+
+    def __handle_info_request(self, request):
+        url_list = self.handlers.keys()
+        response = utils.encode(
+            protos.Response(info=protos.ResponseInfo(type_urls=url_list)),
+        )
+        self.conn.send(response)
 
     def __is_type_supported(self, itx_type):
         return itx_type in self.handlers.keys()
@@ -117,19 +131,33 @@ class ForgeServer:
 
     def __buffer_contains_full_request(self):
         if len(self.buffer) > 0:
-            req_len, start_pos = _DecodeVarint32(self.buffer, 0)
-            return req_len + start_pos <= len(self.buffer)
-        else:
-            return False
+            req, req_len, start_pos = utils.decode(self.buffer)
+            if req_len + start_pos <= len(self.buffer):
+                self.logger.info(
+                    "Buffer contains a full request. Processing the "
+                    "request..",
+                )
+                return True
+            else:
+                self.logger.info(
+                    "Buffer doesn't contain a full request! request "
+                    "length "
+                    "is {}, start position is {}, the length of buffer "
+                    "is {}".format(
+                        req_len, start_pos, len(self.buffer),
+                    ),
+                )
+        return False
 
-    def __reply(self, action, unsupported=False, result=None):
+    def __reply(self, action, unsupported=False, response=None):
         if unsupported:
             result = protos.Response(
                 **{action: self.response_type[action](
                     code=protos.StatusCode.UNSUPPORTED_TX,
                 )}
             )
-
+            self.logger.info("Response is {}".format(result))
         else:
-            result = protos.Response(**{action: result})
-        return utils.encode_varint_request(result)
+            result = protos.Response(**{action: response})
+            self.logger.info("Response is {}".format(result))
+        return utils.encode(result)
