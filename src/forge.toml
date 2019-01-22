@@ -1,0 +1,138 @@
+[app]
+name = "forge_test"
+version = "0.1.0"
+
+path = "/tmp/.forge_test/app"
+executable = ""
+logfile = "logs/app.log"
+error_logfile = "logs/app_error.log"
+sock_grpc = ""
+sock_tcp = "unix://socks/abi.sock"
+
+[forge]
+decimal = 16
+proto_version = 1
+path = "/tmp/.forge_test/core"
+# State db path
+db = "data"
+# index db path
+index_db = "index"
+keystore = "keystore"
+logfile = "logs/forge.log"
+
+sock_grpc = "unix://socks/forge_grpc.sock"
+# sock_grpc = "tcp://127.0.0.1:38210"
+
+consensus_engine = "tendermint"
+storage_engine = "ipfs"
+hash = "sha3"
+encoding = "base64"
+unlock_ttl = 300
+
+max_validators = 64
+max_candidates = 256
+
+[forge.limit]
+# max grace period is 10
+grace_peroid = 10
+
+[forge.account]
+# for ethereum compatibility, use secp256k1
+public_key_format = "ed25519"
+# for ethereum compatibility, use keccak_256
+public_key_hash_format = "sha3_256"
+# for ethereum compatibility, use base16
+address_format = "base58"
+
+[forge.transaction]
+disabled_tx = ["SysUpgradeTx"]
+
+[forge.web]
+enabled = false
+
+[forge.stake]
+
+[forge.stake.timeout]
+# for general stake, we do T+1
+general = 86400
+# for node stake, we do T+7
+stake_for_node = 604800
+
+[tendermint]
+version = "0.27.3-01"
+moniker = "forge_test"
+path = "/tmp/.forge_test/tendermint"
+
+# relative paths to "path"
+executable = "bin/tendermint"
+logfile = "logs/tendermint.log"
+
+sock_proxy_app = "unix://socks/tm_proxy_app.sock"
+sock_rpc = "unix://socks/tm_rpc.sock"
+sock_grpc = "unix://socks/tm_grpc.sock"
+# sock_rpc = "tcp://0.0.0.0:39210"
+# sock_grpc = "tcp://0.0.0.0:39211"
+sock_p2p = "tcp://0.0.0.0:36656"
+sock_prof = ""
+
+# persistent peers
+# persistent_peers = "d5eed6f5579225f34192116a11d088b09406eaf2@54.245.146.201:26656"
+persistent_peers = ""
+
+# seed peers
+seed_peers = ""
+
+timeout_commit = "1s"
+create_empty_blocks = false
+
+# set if this node runs in a seed mode
+seed_mode = false
+
+log_level = "consensus:info,main:info,state:info,*:error"
+
+max_num_inbound_peers = 40
+max_num_outbound_peers = 10
+
+upnp = false
+
+
+[tendermint.genesis]
+genesis_time = "2018-11-05T19:22:08.938749Z"
+chain_id = 1
+max_bytes = 22020096
+max_gas = -1
+app_hash = ""
+
+# note that if you don't give this information we will use self as validator
+[[tendermint.genesis.validators]]
+#   address = "8C26D0CC9A722C393BBB9913B79C27849C7D5377"
+#   name = "forge"
+#   power = "10"
+
+#   [tendermint.genesis.validators.pub_key]
+#   type = "tendermint/PubKeyEd25519"
+#   value = "OaijWiDFnhE20AtbBV3U65ee4nfcawnrinxu9d4EXxA="
+
+[ipfs]
+version = "0.4.18"
+executable = "bin/ipfs"
+path = "/tmp/.forge_test/ipfs"
+logfile = "logs/ipfs.log"
+storage_max = "10GB"
+bootstrap = []
+
+#ipfs_cluster_version = "0.7.0"
+#ipfs_cluster_ctl_version = "0.7.0"
+
+max_file_size.admin = "100M"
+max_file_size.account = "1M"
+
+[cache]
+dc_dump_limit = 50
+dump_log_write_threshold = 50_000
+cache_mnesia_table_timeout = 15_000
+path = "~/.forge_test/cache/mnesia_data_dir"
+
+[geolix]
+mmdb_url = "https://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz"
+mmdb_path = "~/.mmdb/GeoLite2-City.tar.gz"
