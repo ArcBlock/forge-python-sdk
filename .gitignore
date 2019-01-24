@@ -10,4 +10,4 @@ __pycache__
 src/test/_trial_temp
 src/_trial_temp/*
 _trial_temp/
-src/quick_test/*
+src/test/quick_test/*
