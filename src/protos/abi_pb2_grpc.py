@@ -5,9 +5,8 @@ from . import abi_pb2 as abi__pb2
 
 
 class ForgeAppRpcStub(object):
-  """ABI for forge application
-
-  """
+  # missing associated documentation comment in .proto file
+  pass
 
   def __init__(self, channel):
     """Constructor.
@@ -28,9 +27,8 @@ class ForgeAppRpcStub(object):
 
 
 class ForgeAppRpcServicer(object):
-  """ABI for forge application
-
-  """
+  # missing associated documentation comment in .proto file
+  pass
 
   def process_one(self, request, context):
     # missing associated documentation comment in .proto file

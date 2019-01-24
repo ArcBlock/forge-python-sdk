@@ -6,8 +6,8 @@ node_modules
 *.pyc
 .vscode
 __pycache__
-protos/*
-src/protos/*
 
 src/test/_trial_temp
 src/_trial_temp/*
+_trial_temp/
+src/quick_test/*

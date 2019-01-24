@@ -3,7 +3,6 @@
 
 import sys
 _b=sys.version_info[0]<3 and (lambda x:x) or (lambda x:x.encode('latin1'))
-from google.protobuf.internal import enum_type_wrapper
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
@@ -16,7 +15,7 @@ _sym_db = _symbol_database.Default()
 from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 from google.protobuf import any_pb2 as google_dot_protobuf_dot_any__pb2
 from . import vendor_pb2 as vendor__pb2
-from . import code_pb2 as code__pb2
+from . import enum_pb2 as enum__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -24,335 +23,10 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='forge_abi',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\ntype.proto\x12\tforge_abi\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x19google/protobuf/any.proto\x1a\x0cvendor.proto\x1a\ncode.proto\"\x18\n\x07\x42igUint\x12\r\n\x05value\x18\x01 \x01(\x0c\"\'\n\x07\x42igSint\x12\r\n\x05value\x18\x01 \x01(\x0c\x12\r\n\x05minus\x18\x02 \x01(\x08\"y\n\nWalletType\x12\x1e\n\x02pk\x18\x01 \x01(\x0e\x32\x12.forge_abi.KeyType\x12!\n\x04hash\x18\x02 \x01(\x0e\x32\x13.forge_abi.HashType\x12(\n\x07\x61\x64\x64ress\x18\x03 \x01(\x0e\x32\x17.forge_abi.EncodingType\"Z\n\nWalletInfo\x12#\n\x04type\x18\x01 \x01(\x0b\x32\x15.forge_abi.WalletType\x12\n\n\x02sk\x18\x02 \x01(\x0c\x12\n\n\x02pk\x18\x03 \x01(\x0c\x12\x0f\n\x07\x61\x64\x64ress\x18\x04 \x01(\t\"\x80\x02\n\tChainInfo\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0f\n\x07network\x18\x02 \x01(\t\x12\x0f\n\x07moniker\x18\x03 \x01(\t\x12\x0f\n\x07version\x18\x04 \x01(\t\x12\x0e\n\x06synced\x18\x05 \x01(\x08\x12\x10\n\x08\x61pp_hash\x18\x06 \x01(\x0c\x12\x12\n\nblock_hash\x18\x07 \x01(\x0c\x12\x14\n\x0c\x62lock_height\x18\x08 \x01(\x04\x12.\n\nblock_time\x18\t \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0f\n\x07\x61\x64\x64ress\x18\n \x01(\t\x12\x14\n\x0cvoting_power\x18\x0b \x01(\r\x12\x11\n\ttotal_txs\x18\x0c \x01(\x04\"+\n\tValidator\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\r\n\x05power\x18\x02 \x01(\x04\"\xd8\x01\n\x0f\x43onsensusParams\x12\x11\n\tmax_bytes\x18\x01 \x01(\x04\x12\x0f\n\x07max_gas\x18\x02 \x01(\x12\x12\x16\n\x0emax_validators\x18\x03 \x01(\r\x12\x16\n\x0emax_candidates\x18\x04 \x01(\r\x12\x15\n\rpub_key_types\x18\x05 \x03(\t\x12(\n\nvalidators\x18\x06 \x03(\x0b\x32\x14.forge_abi.Validator\x12\x19\n\x11validator_changed\x18\x07 \x01(\x08\x12\x15\n\rparam_changed\x18\x08 \x01(\x08\"q\n\x0bUpgradeTask\x12$\n\x04type\x18\x01 \x01(\x0e\x32\x16.forge_abi.UpgradeType\x12\x11\n\tdata_hash\x18\x02 \x01(\t\x12)\n\x07\x61\x63tions\x18\x04 \x03(\x0e\x32\x18.forge_abi.UpgradeAction\"4\n\x0cUpgradeTasks\x12$\n\x04item\x18\x01 \x03(\x0b\x32\x16.forge_abi.UpgradeTask\"d\n\x0b\x41\x62\x63iContext\x12\x0f\n\x07tx_hash\x18\x01 \x01(\t\x12\x14\n\x0c\x62lock_height\x18\x02 \x01(\x04\x12.\n\nblock_time\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\x9c\x01\n\x0bTransaction\x12\x0c\n\x04\x66rom\x18\x01 \x01(\t\x12\r\n\x05nonce\x18\x02 \x01(\x04\x12\x11\n\tsignature\x18\x03 \x01(\x0c\x12\x10\n\x08\x63hain_id\x18\x04 \x01(\r\x12(\n\nsignatures\x18\x05 \x03(\x0b\x32\x14.forge_vendor.KVPair\x12!\n\x03itx\x18\x07 \x01(\x0b\x32\x14.google.protobuf.Any\"\x86\x01\n\x0fTransactionInfo\x12\"\n\x02tx\x18\x01 \x01(\x0b\x32\x16.forge_abi.Transaction\x12\x0e\n\x06height\x18\x02 \x01(\x04\x12\r\n\x05index\x18\x03 \x01(\r\x12\x0c\n\x04hash\x18\x04 \x01(\t\x12\"\n\x04tags\x18\x05 \x03(\x0b\x32\x14.forge_vendor.KVPair\"\xb2\x01\n\tBlockInfo\x12\x0e\n\x06height\x18\x01 \x01(\x04\x12\x0f\n\x07num_txs\x18\x02 \x01(\r\x12(\n\x04time\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x10\n\x08\x61pp_hash\x18\x04 \x01(\t\x12\x10\n\x08proposer\x18\x05 \x01(\t\x12#\n\x03txs\x18\x06 \x03(\x0b\x32\x16.forge_abi.Transaction\x12\x11\n\ttotal_txs\x18\x07 \x01(\x04\"=\n\x08TxStatus\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\x0c\n\x04hash\x18\x02 \x01(\t\"y\n\rCircularQueue\x12#\n\x05items\x18\x01 \x03(\x0b\x32\x14.google.protobuf.Any\x12\x10\n\x08type_url\x18\x02 \x01(\t\x12\x11\n\tmax_items\x18\x03 \x01(\r\x12\x10\n\x08\x63ircular\x18\x04 \x01(\x08\x12\x0c\n\x04\x66ifo\x18\x05 \x01(\x08\"\xa2\x01\n\x0cStateContext\x12\x12\n\ngenesis_tx\x18\x01 \x01(\t\x12\x16\n\x0erenaissance_tx\x18\x02 \x01(\t\x12\x30\n\x0cgenesis_time\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x34\n\x10renaissance_time\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\x82\x02\n\x0cStakeContext\x12(\n\x0ctotal_stakes\x18\x01 \x01(\x0b\x32\x12.forge_abi.BigUint\x12*\n\x0etotal_unstakes\x18\x02 \x01(\x0b\x32\x12.forge_abi.BigUint\x12\x31\n\x15total_received_stakes\x18\x03 \x01(\x0b\x32\x12.forge_abi.BigUint\x12/\n\rrecent_stakes\x18\x04 \x01(\x0b\x32\x18.forge_abi.CircularQueue\x12\x38\n\x16recent_received_stakes\x18\x0f \x01(\x0b\x32\x18.forge_abi.CircularQueue\"\x8e\x01\n\x0cStakeSummary\x12(\n\x0ctotal_stakes\x18\x01 \x01(\x0b\x32\x12.forge_abi.BigUint\x12*\n\x0etotal_unstakes\x18\x02 \x01(\x0b\x32\x12.forge_abi.BigUint\x12(\n\x07\x63ontext\x18\x03 \x01(\x0b\x32\x17.forge_abi.StateContext\"D\n\x0eUnconfirmedTxs\x12\r\n\x05n_txs\x18\x01 \x01(\r\x12#\n\x03txs\x18\x02 \x03(\x0b\x32\x16.forge_abi.Transaction\"d\n\x07NetInfo\x12\x11\n\tlistening\x18\x01 \x01(\x08\x12\x11\n\tlisteners\x18\x02 \x03(\t\x12\x0f\n\x07n_peers\x18\x03 \x01(\r\x12\"\n\x05peers\x18\x04 \x03(\x0b\x32\x13.forge_abi.PeerInfo\"2\n\x08PeerInfo\x12&\n\tnode_info\x18\x01 \x01(\x0b\x32\x13.forge_abi.NodeInfo\"{\n\x08NodeInfo\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0f\n\x07network\x18\x02 \x01(\t\x12\x0f\n\x07version\x18\x03 \x01(\t\x12\x0f\n\x07moniker\x18\x04 \x01(\t\x12\n\n\x02ip\x18\x05 \x01(\t\x12$\n\x08geo_info\x18\x06 \x01(\x0b\x32\x12.forge_abi.GeoInfo\"M\n\x07GeoInfo\x12\x0c\n\x04\x63ity\x18\x01 \x01(\t\x12\x0f\n\x07\x63ountry\x18\x02 \x01(\t\x12\x10\n\x08latitude\x18\x03 \x01(\x02\x12\x11\n\tlongitude\x18\x04 \x01(\x02\"T\n\x0eValidatorsInfo\x12\x14\n\x0c\x62lock_height\x18\x01 \x01(\x04\x12,\n\nvalidators\x18\x02 \x03(\x0b\x32\x18.forge_abi.ValidatorInfo\"Q\n\rValidatorInfo\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x14\n\x0cvoting_power\x18\x03 \x01(\r\x12\x19\n\x11proposer_priority\x18\x04 \x01(\t*%\n\x07KeyType\x12\x0b\n\x07\x65\x64\x32\x35\x35\x31\x39\x10\x00\x12\r\n\tsecp256k1\x10\x01*\x82\x01\n\x08HashType\x12\n\n\x06keccak\x10\x00\x12\x08\n\x04sha3\x10\x01\x12\x08\n\x04sha2\x10\x02\x12\x0e\n\nkeccak_384\x10\x06\x12\x0c\n\x08sha3_384\x10\x07\x12\x0c\n\x08sha2_384\x10\t\x12\x0e\n\nkeccak_512\x10\r\x12\x0c\n\x08sha3_512\x10\x0e\x12\x0c\n\x08sha2_512\x10\x0f*&\n\x0c\x45ncodingType\x12\n\n\x06\x62\x61se16\x10\x00\x12\n\n\x06\x62\x61se58\x10\x01*\xae\x01\n\x0bUpgradeType\x12\x0e\n\nconfig_app\x10\x00\x12\x10\n\x0c\x63onfig_forge\x10\x01\x12\x0e\n\nconfig_dfs\x10\x02\x12\x14\n\x10\x63onfig_consensus\x10\x03\x12\x0e\n\nconfig_p2p\x10\x04\x12\x0b\n\x07\x65xe_app\x10\n\x12\r\n\texe_forge\x10\x0b\x12\x0b\n\x07\x65xe_dfs\x10\x0c\x12\x11\n\rexe_consensus\x10\r\x12\x0b\n\x07\x65xe_p2p\x10\x0e*\xea\x01\n\rUpgradeAction\x12\n\n\x06verify\x10\x00\x12\n\n\x06\x62\x61\x63kup\x10\x01\x12\x0b\n\x07replace\x10\x02\x12\x0f\n\x0brestart_app\x10\n\x12\x0f\n\x0brestart_dfs\x10\x0b\x12\x15\n\x11restart_consensus\x10\x0c\x12\x0f\n\x0brestart_p2p\x10\r\x12\x11\n\rrestart_forge\x10\x0e\x12\x14\n\x10rollback_if_fail\x10\x1e\x12\x17\n\x13restart_all_if_fail\x10\x1f\x12\x11\n\rcrash_if_fail\x10!\x12\x15\n\x11\x64rop_address_book\x10\x32*d\n\tStateType\x12\x11\n\rstate_account\x10\x00\x12\x0f\n\x0bstate_asset\x10\x01\x12\x11\n\rstate_channel\x10\x02\x12\x0f\n\x0bstate_forge\x10\x03\x12\x0f\n\x0bstate_stake\x10\x04*M\n\tStakeType\x12\x0e\n\nstake_node\x10\x00\x12\x0e\n\nstake_user\x10\x01\x12\x0f\n\x0bstake_asset\x10\x02\x12\x0f\n\x0bstake_chain\x10\x03\x62\x06proto3')
+  serialized_pb=_b('\n\ntype.proto\x12\tforge_abi\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x19google/protobuf/any.proto\x1a\x0cvendor.proto\x1a\nenum.proto\"\x18\n\x07\x42igUint\x12\r\n\x05value\x18\x01 \x01(\x0c\"\'\n\x07\x42igSint\x12\r\n\x05value\x18\x01 \x01(\x0c\x12\r\n\x05minus\x18\x02 \x01(\x08\"y\n\nWalletType\x12\x1e\n\x02pk\x18\x01 \x01(\x0e\x32\x12.forge_abi.KeyType\x12!\n\x04hash\x18\x02 \x01(\x0e\x32\x13.forge_abi.HashType\x12(\n\x07\x61\x64\x64ress\x18\x03 \x01(\x0e\x32\x17.forge_abi.EncodingType\"Z\n\nWalletInfo\x12#\n\x04type\x18\x01 \x01(\x0b\x32\x15.forge_abi.WalletType\x12\n\n\x02sk\x18\x02 \x01(\x0c\x12\n\n\x02pk\x18\x03 \x01(\x0c\x12\x0f\n\x07\x61\x64\x64ress\x18\x04 \x01(\t\"\x80\x02\n\tChainInfo\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0f\n\x07network\x18\x02 \x01(\t\x12\x0f\n\x07moniker\x18\x03 \x01(\t\x12\x0f\n\x07version\x18\x04 \x01(\t\x12\x0e\n\x06synced\x18\x05 \x01(\x08\x12\x10\n\x08\x61pp_hash\x18\x06 \x01(\x0c\x12\x12\n\nblock_hash\x18\x07 \x01(\x0c\x12\x14\n\x0c\x62lock_height\x18\x08 \x01(\x04\x12.\n\nblock_time\x18\t \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0f\n\x07\x61\x64\x64ress\x18\n \x01(\t\x12\x14\n\x0cvoting_power\x18\x0b \x01(\r\x12\x11\n\ttotal_txs\x18\x0c \x01(\x04\"+\n\tValidator\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\r\n\x05power\x18\x02 \x01(\x04\"\xd8\x01\n\x0f\x43onsensusParams\x12\x11\n\tmax_bytes\x18\x01 \x01(\x04\x12\x0f\n\x07max_gas\x18\x02 \x01(\x12\x12\x16\n\x0emax_validators\x18\x03 \x01(\r\x12\x16\n\x0emax_candidates\x18\x04 \x01(\r\x12\x15\n\rpub_key_types\x18\x05 \x03(\t\x12(\n\nvalidators\x18\x06 \x03(\x0b\x32\x14.forge_abi.Validator\x12\x19\n\x11validator_changed\x18\x07 \x01(\x08\x12\x15\n\rparam_changed\x18\x08 \x01(\x08\"q\n\x0bUpgradeTask\x12$\n\x04type\x18\x01 \x01(\x0e\x32\x16.forge_abi.UpgradeType\x12\x11\n\tdata_hash\x18\x02 \x01(\t\x12)\n\x07\x61\x63tions\x18\x04 \x03(\x0e\x32\x18.forge_abi.UpgradeAction\"4\n\x0cUpgradeTasks\x12$\n\x04item\x18\x01 \x03(\x0b\x32\x16.forge_abi.UpgradeTask\"d\n\x0b\x41\x62\x63iContext\x12\x0f\n\x07tx_hash\x18\x01 \x01(\t\x12\x14\n\x0c\x62lock_height\x18\x02 \x01(\x04\x12.\n\nblock_time\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\x9c\x01\n\x0bTransaction\x12\x0c\n\x04\x66rom\x18\x01 \x01(\t\x12\r\n\x05nonce\x18\x02 \x01(\x04\x12\x11\n\tsignature\x18\x03 \x01(\x0c\x12\x10\n\x08\x63hain_id\x18\x04 \x01(\r\x12(\n\nsignatures\x18\x05 \x03(\x0b\x32\x14.forge_vendor.KVPair\x12!\n\x03itx\x18\x07 \x01(\x0b\x32\x14.google.protobuf.Any\"\x86\x01\n\x0fTransactionInfo\x12\"\n\x02tx\x18\x01 \x01(\x0b\x32\x16.forge_abi.Transaction\x12\x0e\n\x06height\x18\x02 \x01(\x04\x12\r\n\x05index\x18\x03 \x01(\r\x12\x0c\n\x04hash\x18\x04 \x01(\t\x12\"\n\x04tags\x18\x05 \x03(\x0b\x32\x14.forge_vendor.KVPair\"\xb2\x01\n\tBlockInfo\x12\x0e\n\x06height\x18\x01 \x01(\x04\x12\x0f\n\x07num_txs\x18\x02 \x01(\r\x12(\n\x04time\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x10\n\x08\x61pp_hash\x18\x04 \x01(\t\x12\x10\n\x08proposer\x18\x05 \x01(\t\x12#\n\x03txs\x18\x06 \x03(\x0b\x32\x16.forge_abi.Transaction\x12\x11\n\ttotal_txs\x18\x07 \x01(\x04\"=\n\x08TxStatus\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\x0c\n\x04hash\x18\x02 \x01(\t\"y\n\rCircularQueue\x12#\n\x05items\x18\x01 \x03(\x0b\x32\x14.google.protobuf.Any\x12\x10\n\x08type_url\x18\x02 \x01(\t\x12\x11\n\tmax_items\x18\x03 \x01(\r\x12\x10\n\x08\x63ircular\x18\x04 \x01(\x08\x12\x0c\n\x04\x66ifo\x18\x05 \x01(\x08\"\xa2\x01\n\x0cStateContext\x12\x12\n\ngenesis_tx\x18\x01 \x01(\t\x12\x16\n\x0erenaissance_tx\x18\x02 \x01(\t\x12\x30\n\x0cgenesis_time\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x34\n\x10renaissance_time\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\x82\x02\n\x0cStakeContext\x12(\n\x0ctotal_stakes\x18\x01 \x01(\x0b\x32\x12.forge_abi.BigUint\x12*\n\x0etotal_unstakes\x18\x02 \x01(\x0b\x32\x12.forge_abi.BigUint\x12\x31\n\x15total_received_stakes\x18\x03 \x01(\x0b\x32\x12.forge_abi.BigUint\x12/\n\rrecent_stakes\x18\x04 \x01(\x0b\x32\x18.forge_abi.CircularQueue\x12\x38\n\x16recent_received_stakes\x18\x0f \x01(\x0b\x32\x18.forge_abi.CircularQueue\"\x8e\x01\n\x0cStakeSummary\x12(\n\x0ctotal_stakes\x18\x01 \x01(\x0b\x32\x12.forge_abi.BigUint\x12*\n\x0etotal_unstakes\x18\x02 \x01(\x0b\x32\x12.forge_abi.BigUint\x12(\n\x07\x63ontext\x18\x03 \x01(\x0b\x32\x17.forge_abi.StateContext\"D\n\x0eUnconfirmedTxs\x12\r\n\x05n_txs\x18\x01 \x01(\r\x12#\n\x03txs\x18\x02 \x03(\x0b\x32\x16.forge_abi.Transaction\"d\n\x07NetInfo\x12\x11\n\tlistening\x18\x01 \x01(\x08\x12\x11\n\tlisteners\x18\x02 \x03(\t\x12\x0f\n\x07n_peers\x18\x03 \x01(\r\x12\"\n\x05peers\x18\x04 \x03(\x0b\x32\x13.forge_abi.PeerInfo\"2\n\x08PeerInfo\x12&\n\tnode_info\x18\x01 \x01(\x0b\x32\x13.forge_abi.NodeInfo\"{\n\x08NodeInfo\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0f\n\x07network\x18\x02 \x01(\t\x12\x0f\n\x07version\x18\x03 \x01(\t\x12\x0f\n\x07moniker\x18\x04 \x01(\t\x12\n\n\x02ip\x18\x05 \x01(\t\x12$\n\x08geo_info\x18\x06 \x01(\x0b\x32\x12.forge_abi.GeoInfo\"M\n\x07GeoInfo\x12\x0c\n\x04\x63ity\x18\x01 \x01(\t\x12\x0f\n\x07\x63ountry\x18\x02 \x01(\t\x12\x10\n\x08latitude\x18\x03 \x01(\x02\x12\x11\n\tlongitude\x18\x04 \x01(\x02\"T\n\x0eValidatorsInfo\x12\x14\n\x0c\x62lock_height\x18\x01 \x01(\x04\x12,\n\nvalidators\x18\x02 \x03(\x0b\x32\x18.forge_abi.ValidatorInfo\"Q\n\rValidatorInfo\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x14\n\x0cvoting_power\x18\x03 \x01(\r\x12\x19\n\x11proposer_priority\x18\x04 \x01(\tb\x06proto3')
   ,
-  dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,google_dot_protobuf_dot_any__pb2.DESCRIPTOR,vendor__pb2.DESCRIPTOR,code__pb2.DESCRIPTOR,])
+  dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,google_dot_protobuf_dot_any__pb2.DESCRIPTOR,vendor__pb2.DESCRIPTOR,enum__pb2.DESCRIPTOR,])
 
-_KEYTYPE = _descriptor.EnumDescriptor(
-  name='KeyType',
-  full_name='forge_abi.KeyType',
-  filename=None,
-  file=DESCRIPTOR,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='ed25519', index=0, number=0,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='secp256k1', index=1, number=1,
-      serialized_options=None,
-      type=None),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=3018,
-  serialized_end=3055,
-)
-_sym_db.RegisterEnumDescriptor(_KEYTYPE)
-
-KeyType = enum_type_wrapper.EnumTypeWrapper(_KEYTYPE)
-_HASHTYPE = _descriptor.EnumDescriptor(
-  name='HashType',
-  full_name='forge_abi.HashType',
-  filename=None,
-  file=DESCRIPTOR,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='keccak', index=0, number=0,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='sha3', index=1, number=1,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='sha2', index=2, number=2,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='keccak_384', index=3, number=6,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='sha3_384', index=4, number=7,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='sha2_384', index=5, number=9,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='keccak_512', index=6, number=13,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='sha3_512', index=7, number=14,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='sha2_512', index=8, number=15,
-      serialized_options=None,
-      type=None),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=3058,
-  serialized_end=3188,
-)
-_sym_db.RegisterEnumDescriptor(_HASHTYPE)
-
-HashType = enum_type_wrapper.EnumTypeWrapper(_HASHTYPE)
-_ENCODINGTYPE = _descriptor.EnumDescriptor(
-  name='EncodingType',
-  full_name='forge_abi.EncodingType',
-  filename=None,
-  file=DESCRIPTOR,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='base16', index=0, number=0,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='base58', index=1, number=1,
-      serialized_options=None,
-      type=None),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=3190,
-  serialized_end=3228,
-)
-_sym_db.RegisterEnumDescriptor(_ENCODINGTYPE)
-
-EncodingType = enum_type_wrapper.EnumTypeWrapper(_ENCODINGTYPE)
-_UPGRADETYPE = _descriptor.EnumDescriptor(
-  name='UpgradeType',
-  full_name='forge_abi.UpgradeType',
-  filename=None,
-  file=DESCRIPTOR,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='config_app', index=0, number=0,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='config_forge', index=1, number=1,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='config_dfs', index=2, number=2,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='config_consensus', index=3, number=3,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='config_p2p', index=4, number=4,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='exe_app', index=5, number=10,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='exe_forge', index=6, number=11,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='exe_dfs', index=7, number=12,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='exe_consensus', index=8, number=13,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='exe_p2p', index=9, number=14,
-      serialized_options=None,
-      type=None),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=3231,
-  serialized_end=3405,
-)
-_sym_db.RegisterEnumDescriptor(_UPGRADETYPE)
-
-UpgradeType = enum_type_wrapper.EnumTypeWrapper(_UPGRADETYPE)
-_UPGRADEACTION = _descriptor.EnumDescriptor(
-  name='UpgradeAction',
-  full_name='forge_abi.UpgradeAction',
-  filename=None,
-  file=DESCRIPTOR,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='verify', index=0, number=0,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='backup', index=1, number=1,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='replace', index=2, number=2,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='restart_app', index=3, number=10,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='restart_dfs', index=4, number=11,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='restart_consensus', index=5, number=12,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='restart_p2p', index=6, number=13,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='restart_forge', index=7, number=14,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='rollback_if_fail', index=8, number=30,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='restart_all_if_fail', index=9, number=31,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='crash_if_fail', index=10, number=33,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='drop_address_book', index=11, number=50,
-      serialized_options=None,
-      type=None),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=3408,
-  serialized_end=3642,
-)
-_sym_db.RegisterEnumDescriptor(_UPGRADEACTION)
-
-UpgradeAction = enum_type_wrapper.EnumTypeWrapper(_UPGRADEACTION)
-_STATETYPE = _descriptor.EnumDescriptor(
-  name='StateType',
-  full_name='forge_abi.StateType',
-  filename=None,
-  file=DESCRIPTOR,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='state_account', index=0, number=0,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='state_asset', index=1, number=1,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='state_channel', index=2, number=2,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='state_forge', index=3, number=3,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='state_stake', index=4, number=4,
-      serialized_options=None,
-      type=None),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=3644,
-  serialized_end=3744,
-)
-_sym_db.RegisterEnumDescriptor(_STATETYPE)
-
-StateType = enum_type_wrapper.EnumTypeWrapper(_STATETYPE)
-_STAKETYPE = _descriptor.EnumDescriptor(
-  name='StakeType',
-  full_name='forge_abi.StakeType',
-  filename=None,
-  file=DESCRIPTOR,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='stake_node', index=0, number=0,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='stake_user', index=1, number=1,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='stake_asset', index=2, number=2,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='stake_chain', index=3, number=3,
-      serialized_options=None,
-      type=None),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=3746,
-  serialized_end=3823,
-)
-_sym_db.RegisterEnumDescriptor(_STAKETYPE)
-
-StakeType = enum_type_wrapper.EnumTypeWrapper(_STAKETYPE)
-ed25519 = 0
-secp256k1 = 1
-keccak = 0
-sha3 = 1
-sha2 = 2
-keccak_384 = 6
-sha3_384 = 7
-sha2_384 = 9
-keccak_512 = 13
-sha3_512 = 14
-sha2_512 = 15
-base16 = 0
-base58 = 1
-config_app = 0
-config_forge = 1
-config_dfs = 2
-config_consensus = 3
-config_p2p = 4
-exe_app = 10
-exe_forge = 11
-exe_dfs = 12
-exe_consensus = 13
-exe_p2p = 14
-verify = 0
-backup = 1
-replace = 2
-restart_app = 10
-restart_dfs = 11
-restart_consensus = 12
-restart_p2p = 13
-restart_forge = 14
-rollback_if_fail = 30
-restart_all_if_fail = 31
-crash_if_fail = 33
-drop_address_book = 50
-state_account = 0
-state_asset = 1
-state_channel = 2
-state_forge = 3
-state_stake = 4
-stake_node = 0
-stake_user = 1
-stake_asset = 2
-stake_chain = 3
 
 
 
@@ -1641,14 +1315,14 @@ _VALIDATORINFO = _descriptor.Descriptor(
   serialized_end=3016,
 )
 
-_WALLETTYPE.fields_by_name['pk'].enum_type = _KEYTYPE
-_WALLETTYPE.fields_by_name['hash'].enum_type = _HASHTYPE
-_WALLETTYPE.fields_by_name['address'].enum_type = _ENCODINGTYPE
+_WALLETTYPE.fields_by_name['pk'].enum_type = enum__pb2._KEYTYPE
+_WALLETTYPE.fields_by_name['hash'].enum_type = enum__pb2._HASHTYPE
+_WALLETTYPE.fields_by_name['address'].enum_type = enum__pb2._ENCODINGTYPE
 _WALLETINFO.fields_by_name['type'].message_type = _WALLETTYPE
 _CHAININFO.fields_by_name['block_time'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _CONSENSUSPARAMS.fields_by_name['validators'].message_type = _VALIDATOR
-_UPGRADETASK.fields_by_name['type'].enum_type = _UPGRADETYPE
-_UPGRADETASK.fields_by_name['actions'].enum_type = _UPGRADEACTION
+_UPGRADETASK.fields_by_name['type'].enum_type = enum__pb2._UPGRADETYPE
+_UPGRADETASK.fields_by_name['actions'].enum_type = enum__pb2._UPGRADEACTION
 _UPGRADETASKS.fields_by_name['item'].message_type = _UPGRADETASK
 _ABCICONTEXT.fields_by_name['block_time'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _TRANSACTION.fields_by_name['signatures'].message_type = vendor__pb2._KVPAIR
@@ -1657,7 +1331,7 @@ _TRANSACTIONINFO.fields_by_name['tx'].message_type = _TRANSACTION
 _TRANSACTIONINFO.fields_by_name['tags'].message_type = vendor__pb2._KVPAIR
 _BLOCKINFO.fields_by_name['time'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _BLOCKINFO.fields_by_name['txs'].message_type = _TRANSACTION
-_TXSTATUS.fields_by_name['code'].enum_type = code__pb2._STATUSCODE
+_TXSTATUS.fields_by_name['code'].enum_type = enum__pb2._STATUSCODE
 _CIRCULARQUEUE.fields_by_name['items'].message_type = google_dot_protobuf_dot_any__pb2._ANY
 _STATECONTEXT.fields_by_name['genesis_time'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _STATECONTEXT.fields_by_name['renaissance_time'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
@@ -1699,13 +1373,6 @@ DESCRIPTOR.message_types_by_name['NodeInfo'] = _NODEINFO
 DESCRIPTOR.message_types_by_name['GeoInfo'] = _GEOINFO
 DESCRIPTOR.message_types_by_name['ValidatorsInfo'] = _VALIDATORSINFO
 DESCRIPTOR.message_types_by_name['ValidatorInfo'] = _VALIDATORINFO
-DESCRIPTOR.enum_types_by_name['KeyType'] = _KEYTYPE
-DESCRIPTOR.enum_types_by_name['HashType'] = _HASHTYPE
-DESCRIPTOR.enum_types_by_name['EncodingType'] = _ENCODINGTYPE
-DESCRIPTOR.enum_types_by_name['UpgradeType'] = _UPGRADETYPE
-DESCRIPTOR.enum_types_by_name['UpgradeAction'] = _UPGRADEACTION
-DESCRIPTOR.enum_types_by_name['StateType'] = _STATETYPE
-DESCRIPTOR.enum_types_by_name['StakeType'] = _STAKETYPE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 BigUint = _reflection.GeneratedProtocolMessageType('BigUint', (_message.Message,), dict(

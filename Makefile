@@ -3,7 +3,7 @@ ENV=~/.envs
 README=$(TOP_DIR)/README.md
 
 VERSION=$(strip $(shell cat version))
-PROTOS=abi event type tx state code rpc
+PROTOS=abi enum rpc state service tx type
 CONFIGS=forge forge_release forge_test
 
 build:

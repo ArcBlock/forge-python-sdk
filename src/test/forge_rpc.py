@@ -1,27 +1,28 @@
 import unittest
+from time import sleep
 
-from forge_sdk import ForgeSdk
 from google.protobuf.any_pb2 import Any
+from rpc import ForgeRpc
 
 import protos
 from protos import BigSint
 from protos import TransferTx
 
+FORGE_TEST_SOCKET = 'unix:///tmp/.forge_test/core/socks/forge_grpc.sock'
+
 
 class RpcTest(unittest.TestCase):
 
-    def __init__(self, *args, **kwargs):
-        super(RpcTest, self).__init__(*args, **kwargs)
-        self.sdk = ForgeSdk(handlers={})
-        self.rpc = self.sdk.rpc
+    def setUp(self):
+        self.rpc = ForgeRpc(socket=FORGE_TEST_SOCKET)
         self.wallet_type = protos.WalletType(pk=0, hash=1, address=1)
-        self.wallet1 = self.init_wallet('alice')
-        self.wallet2 = self.init_wallet('bobgoodboy')
+        self.wallet1 = self.init_wallet('wallet1')
+        self.wallet2 = self.init_wallet('wallet2')
         self.trans_itx = Any(
-            type_url='tx/test',
+            type_url='fg:t:transfer',
             value=TransferTx(
                 to=self.wallet2.walletInfo.address,
-                value=BigSint(value=b'10'),
+                value=BigSint(value=b'11'),
             ).SerializeToString(),
         )
         self.test_itx = Any(
@@ -39,8 +40,6 @@ class RpcTest(unittest.TestCase):
             moniker=moniker,
             passphrase='abc123',
         )
-        print("{} wallet has been initiated!".format(moniker))
-        print(moniker, res)
         return Wallet(res.token, res.wallet)
 
     def test_create_tx(self):
@@ -52,39 +51,42 @@ class RpcTest(unittest.TestCase):
             'token': self.wallet1.token,
         }
         res = self.rpc.create_tx(**kwargs)
-        print(res)
         assert res.code == 0
 
     def test_get_tx(self):
-        hash_list = ['123', '12334']
-        res = self.rpc.get_tx(tx_hash=hash_list.__iter__())
-        print(res)
+        tx_hash = self.test_send_tx().hash
+
+        hash_list = [tx_hash]
+        print("hash to get", tx_hash)
+        sleep(1)
+
+        res = self.rpc.get_tx(tx_hash=hash_list)
+        for i in res:
+            print(i)
+            assert (i.code == 0)
 
     def test_get_block(self):
         height_list = [1, 2, 3]
-        res = self.rpc.get_block(height=height_list.__iter__())
+        res = self.rpc.get_block(height=height_list)
         for i in res:
             assert (i.code == 0)
+            print(i)
 
     def test_send_tx(self):
+        sleep(1)
         kwargs = {
-            'itx': self.test_itx,
+            'itx': self.trans_itx,
             'from_address': self.wallet1.walletInfo.address,
             'wallet': self.wallet1.walletInfo,
             'nonce': 2,
-            'token': self.rpc.load_wallet(
-                address=self.wallet1.walletInfo.address,
-                passphrase='abc123',
-            ).token,
-        }
-        res = self.rpc.create_tx(**kwargs)
-        kwargs = {
-            'tx': res.tx,
-            'wallet': self.wallet1.walletInfo,
             'token': self.wallet1.token,
         }
-        res = self.rpc.send_tx(**kwargs)
+        tx = self.rpc.create_tx(**kwargs).tx
+        print(tx)
+        res = self.rpc.send_tx(tx=tx, token=self.wallet1.token)
         print(res)
+        assert(res.code == 0)
+        return res
 
     def test_get_chain_info(self):
         res = self.rpc.get_chain_info()
@@ -104,43 +106,58 @@ class RpcTest(unittest.TestCase):
             address=self.wallet1.walletInfo.address,
             passphrase='abc123',
         )
-        print(res)
         assert (res.code == 0)
 
     def test_recover_wallet(self):
+        temp_wallet = self.rpc.create_wallet(passphrase='abcd123')
         res = self.rpc.recover_wallet(
             req=protos.RequestRecoverWallet(
                 type=self.wallet_type,
-                data=self.wallet1.walletInfo.sk,
-                passphrase='abc123',
+                data=temp_wallet.wallet.sk,
+                passphrase='abcd123',
                 moniker='bobalice',
             ),
         )
-        print('**************\nThe response is :')
-        print(res)
         assert (res.code == 0)
 
-    def test_list_wallets(self):
-        res = self.rpc.list_wallets()
+    def test_list_wallet(self):
+        res = self.rpc.list_wallet()
         for i in res:
             assert (i.code == 0)
-            print(i.address)
 
     def test_remove_wallet(self):
         res = self.rpc.remove_wallet(address=self.wallet1.walletInfo.address)
         assert (res.code == 0)
 
     def test_get_account_state(self):
+        sleep(1)
 
-        reqs = [
+        def verify_result(req):
+            res = self.rpc.get_account_state(req)
+            for i in res:
+                assert (i.code == 0)
+                assert (i.state.moniker == 'wallet1')
+
+        wallet1_addr = self.wallet1.walletInfo.address
+
+        reqs_list = [
             protos.RequestGetAccountState(
-                address=self.wallet1.walletInfo.address,
+                address=wallet1_addr,
+            ),
+            protos.RequestGetAccountState(
+                address=wallet1_addr,
             ),
         ]
-        res = self.rpc.get_account_state(req=reqs.__iter__())
-        for i in res:
-            assert (i.code == 0)
-            print(i)
+        dict_list = [{'address': wallet1_addr}, {'address': wallet1_addr}]
+        single_req = protos.RequestGetAccountState(
+            address=wallet1_addr,
+        )
+        single_dict = [{'address': wallet1_addr}]
+
+        verify_result(reqs_list)
+        verify_result(dict_list)
+        verify_result(single_req)
+        verify_result(single_dict)
 
     def test_get_asset_state(self):
 
@@ -155,39 +172,17 @@ class RpcTest(unittest.TestCase):
         res = self.rpc.get_asset_state(req=reqs.__iter__())
         for i in res:
             assert (i.code == 0)
-            print(i)
-
-    def test_get_channel_state(self):
-
-        reqs = [
-            protos.RequestGetChannelState(
-                address=self.wallet1.walletInfo.address,
-            ),
-            protos.RequestGetChannelState(
-                address=self.wallet1.walletInfo.address,
-            ),
-        ]
-        res = self.rpc.get_channel_state(req=reqs.__iter__())
-        print('**************\nThe response is :')
-        print(res.code)
 
     def test_forge_state(self):
-        res = self.rpc.get_forge_state(protos.RequestGetForgeState())
+        res = self.rpc.get_forge_state(req=protos.RequestGetForgeState())
         assert (res.code == 0)
-
-    def test_store_file(self):
-        chunks = [b'123', b'abce']
-        res = self.rpc.store_file(chunk=chunks.__iter__())
-        assert (res.code == 0)
-
-    def test_load_file(self):
-        chunks = [b'123ddfdfsf', b'abcedddd']
-        stored_files = self.rpc.store_file(chunk=chunks.__iter__())
-        res = self.rpc.load_file(file_hash=stored_files.hash)
-        print(res)
 
 
 class Wallet:
     def __init__(self, token, wallet_info):
         self.token = token
         self.walletInfo = wallet_info
+
+
+if __name__ == '__main__':
+    unittest.main()

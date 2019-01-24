@@ -1,8 +1,17 @@
-from collections import Iterator
+from collections import Iterable
 
 import grpc
 
 import protos
+
+
+def to_iter(to_req, data):
+    if isinstance(data, dict) or isinstance(data, str):
+        return iter([to_req(data)])
+    elif isinstance(data, Iterable):
+        return (to_req(i) for i in data)
+    else:
+        return iter([data])
 
 
 class ForgeRpc:
@@ -22,8 +31,8 @@ class ForgeRpc:
         self.file = protos.FileRpcStub(self.chan)
 
     def create_tx(
-            self, req=None, itx=None, from_address='', nonce=0,
-            wallet=None, token='',
+            self, itx=None, from_address='', nonce=0,
+            wallet=None, token='', req=None,
     ):
         """
         RPC call to create transaction.
@@ -56,7 +65,7 @@ class ForgeRpc:
             return self.chain.create_tx(protos.RequestCreateTx(**req_kwargs))
 
     def send_tx(
-            self, req=None, tx=None, wallet=None, token='', commit=False,
+            self, tx=None, wallet=None, token='', commit=False, req=None,
     ):
         """
         RPC call to send transaction.
@@ -86,7 +95,7 @@ class ForgeRpc:
             req = protos.RequestSendTx(**req_kwargs)
             return self.chain.send_tx(req)
 
-    def get_tx(self, req=None, tx_hash=''):
+    def get_tx(self, tx_hash='', req=None):
         """
         RPC call to get transaction.
 
@@ -105,23 +114,14 @@ class ForgeRpc:
             if isinstance(item, protos.RequestGetTx):
                 return item
             else:
-                return protos.RequestGetTx(hash=tx_hash)
+                return protos.RequestGetTx(hash=item)
 
         if req is not None:
-            return self.chain.get_tx(self.__to_iter(to_req, req))
+            return self.chain.get_tx(to_iter(to_req, req))
         else:
-            hashes = self.__to_iter(to_req, tx_hash)
-            return self.chain.get_tx(hashes)
+            return self.chain.get_tx(to_iter(to_req, tx_hash))
 
-    @staticmethod
-    def __to_iter(to_req, items):
-        if isinstance(items, Iterator):
-            return map(to_req, items)
-        else:
-            req = to_req(items)
-            return [req]
-
-    def get_block(self, req=None, height=0):
+    def get_block(self, height=0, req=None):
         """
         RPC call to get blocks.
 
@@ -143,10 +143,9 @@ class ForgeRpc:
                 return protos.RequestGetBlock(height=item)
 
         if req is not None:
-            return self.chain.get_block(self.__to_iter(to_req, req))
+            return self.chain.get_block(to_iter(to_req, req))
         else:
-            heights = self.__to_iter(to_req, height)
-            return self.chain.get_block(heights)
+            return self.chain.get_block(to_iter(to_req, height))
 
     def get_chain_info(self):
         """
@@ -159,7 +158,7 @@ class ForgeRpc:
         """
         return self.chain.get_chain_info(protos.RequestGetChainInfo())
 
-    def search(self, req=None, key='', value=''):
+    def search(self, key='', value='', req=None):
         """
 
         Parameters
@@ -183,8 +182,8 @@ class ForgeRpc:
             return self.chain.search(protos.RequestSearch(**req_kwargs))
 
     def create_wallet(
-            self, req=None, wallet_type=__wallet_type, moniker='',
-            passphrase='',
+            self, wallet_type=__wallet_type, moniker='',
+            passphrase='', req=None,
     ):
         """
 
@@ -212,7 +211,7 @@ class ForgeRpc:
                 protos.RequestCreateWallet(**req_kwargs),
             )
 
-    def load_wallet(self, req=None, address='', passphrase=''):
+    def load_wallet(self, address='', passphrase='', req=None):
         """
         rpc call to load wallet.
 
@@ -239,8 +238,8 @@ class ForgeRpc:
             )
 
     def recover_wallet(
-            self, passphrase='', moniker='', req=None, data=b'',
-            wallet_type=__wallet_type,
+            self, passphrase='', moniker='', data=b'',
+            wallet_type=__wallet_type, req=None,
     ):
         """
         rpc call to recover wallet with given passphrase.
@@ -260,7 +259,6 @@ class ForgeRpc:
 
         """
         if req is not None:
-            print(req)
             return self.wallet.recover_wallet(req)
         else:
             req_kwargs = {
@@ -270,12 +268,9 @@ class ForgeRpc:
                 'moniker': moniker,
             }
             req = protos.RequestRecoverWallet(**req_kwargs)
-            print(req)
-            return self.wallet.recover_wallet(
-                req,
-            )
+            return self.wallet.recover_wallet(req)
 
-    def list_wallets(self):
+    def list_wallet(self):
         """
         RPC call to list wallets
 
@@ -284,9 +279,9 @@ class ForgeRpc:
         stream ResponseListWallets
 
         """
-        return self.wallet.list_wallets(protos.RequestListWallets())
+        return self.wallet.list_wallet(protos.RequestListWallet())
 
-    def remove_wallet(self, req=None, address=''):
+    def remove_wallet(self, address='', req=None):
         """
         RPC call to remove wallet with given address
 
@@ -310,7 +305,7 @@ class ForgeRpc:
                 protos.RequestRemoveWallet(**req_kwargs),
             )
 
-    def get_account_state(self, req=None):
+    def get_account_state(self, req):
         """
         RPC call to get account state.
 
@@ -324,7 +319,20 @@ class ForgeRpc:
 
         """
 
-        return self.state.get_account_state(req)
+        def to_req(item):
+            if isinstance(item, protos.RequestGetAccountState):
+                return item
+            else:
+                kwargs = {
+                    'address': item.get('address'),
+                    'keys': item.get('keys', []),
+                    'app_hash': item.get('app_hash', ''),
+                }
+                return protos.RequestGetAccountState(**kwargs)
+
+        requests = to_iter(to_req, req)
+
+        return self.state.get_account_state(requests)
 
     def get_asset_state(self, req=None):
         """
@@ -340,7 +348,20 @@ class ForgeRpc:
 
         """
 
-        return self.state.get_account_state(req)
+        def to_req(item):
+            if isinstance(item, protos.RequestGetAssetState):
+                return item
+            else:
+                kwargs = {
+                    'address': item.get('address'),
+                    'keys': item.get('keys', []),
+                    'app_hash': item.get('app_hash', ''),
+                }
+                return protos.RequestGetAssetState(**kwargs)
+
+        requests = to_iter(to_req, req)
+
+        return self.state.get_asset_state(requests)
 
     def get_channel_state(self, req=None):
         """
@@ -356,9 +377,21 @@ class ForgeRpc:
 
         """
 
-        return self.state.get_channel_state(req)
+        def to_req(item):
+            if isinstance(item, protos.RequestGetChannelState):
+                return item
+            else:
+                kwargs = {
+                    'address': item.get('address'),
+                    'keys': item.get('keys', []),
+                    'app_hash': item.get('app_hash', ''),
+                }
+                return protos.RequestGetChannelState(**kwargs)
 
-    def get_forge_state(self, req=None, key='', tx_hash=''):
+        requests = to_iter(to_req, req)
+        return self.state.get_channel_state(requests)
+
+    def get_forge_state(self, keys='', app_hash='', req=None):
         """
         RPC call to get forge state.
 
@@ -375,12 +408,14 @@ class ForgeRpc:
             return self.state.get_forge_state(req)
         else:
             req_kwargs = {
-                'key': key,
-                'hash': tx_hash,
+                'keys': keys,
+                'app_hash': app_hash,
             }
-            return self.state.get_forge_state(**req_kwargs)
+            return self.state.get_forge_state(
+                protos.RequestGetForgeState(**req_kwargs),
+            )
 
-    def store_file(self, req=None, chunk=b''):
+    def store_file(self, chunk=b'', req=None):
         """
         RPC call to store file
 
@@ -402,12 +437,12 @@ class ForgeRpc:
                 return protos.RequestStoreFile(chunk=item)
 
         if req is not None:
-            return self.file.store_file(self.__to_iter(to_req, req))
+            return self.file.store_file(to_iter(to_req, req))
         else:
-            chunks = self.__to_iter(to_req, chunk)
+            chunks = to_iter(to_req, chunk)
             return self.file.store_file(chunks)
 
-    def load_file(self, req=None, file_hash=''):
+    def load_file(self, file_hash='', req=None):
         """
         RPC call to load file.
 
@@ -428,6 +463,3 @@ class ForgeRpc:
                 'hash': file_hash,
             }
             return self.file.load_file(protos.RequestLoadFile(**req_kwargs))
-
-    # def __getattr__(self, name):
-    #     print("you're calling {0} method".format(name))
