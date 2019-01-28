@@ -8,4 +8,4 @@ from .service_pb2_grpc import *
 from .state_pb2 import *
 from .tx_pb2 import *
 from .type_pb2 import *
-from .vendor_pb2 import *
+from . import vendor_pb2 as vendor

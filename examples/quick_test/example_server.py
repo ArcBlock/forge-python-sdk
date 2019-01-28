@@ -20,6 +20,7 @@ def run():
             address=itx.to,
             moniker='changedbyriley',
         )
+        print("Transaction is updated!")
         return protos.ResponseUpdateState(
             code=0,
             states=[new_account_state],

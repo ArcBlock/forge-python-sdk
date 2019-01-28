@@ -1,3 +1,4 @@
+deepmerge
 ed25519
 grpcio
 grpcio-tools

@@ -1,43 +1,28 @@
-import os
 import os.path as path
 from os.path import expanduser
 
 import toml
+from deepmerge import Merger
 
-FORGE_CONFIG_ENV = 'FORGE_CONFIG'
-FORGE_CONFIG_DEFAULT_PATH = '~/.forge/forge.toml'
-FORGE_CONFIG_FILE_NAME = 'forge_test.toml'
-
-
-def parse_config(path=None):
-    if path:
-        return parse_from_path(path)
-    else:
-        return parse_from_default()
+DEFAULT_FORGE_CONFIG_PATH = './forge_default.toml'
 
 
-def parse_from_path(file_path):
-    forge_toml = toml.load(file_path)
-    return ForgeConfig(forge_toml)
-
-
-def parse_from_default():
-    forge_env = os.getenv(FORGE_CONFIG_ENV, '')
-    file_path = path.expanduser(FORGE_CONFIG_DEFAULT_PATH)
-    cwd_path = path.join(os.getcwd(), FORGE_CONFIG_FILE_NAME)
-    priv_path = path.join(os.getcwd(), 'priv', FORGE_CONFIG_FILE_NAME)
-    print(priv_path)
-
-    if forge_env:
-        return parse_from_path(forge_env)
-    elif path.isfile(file_path):
-        return parse_from_path(file_path)
-    elif path.isfile(cwd_path):
-        return parse_from_path(cwd_path)
-    elif path.isfile(priv_path):
-        return parse_from_path(priv_path)
-    else:
-        raise FileNotFoundError("Forge Config not found!")
+def parse_config(file_path):
+    toml_dict = toml.load(DEFAULT_FORGE_CONFIG_PATH)
+    if not file_path and path.exists(file_path):
+        raise FileNotFoundError("Can't find the forge config user provided!")
+    elif path.exists(file_path):
+        user_dict = toml.load(file_path)
+        merger = Merger(
+            [
+                (list, ['override']),
+                (dict, ['merge']),
+                ['override'],
+                ['override'],
+            ],
+        )
+        merger.merge(toml_dict, user_dict)
+    return ForgeConfig(toml_dict)
 
 
 class ForgeConfig:
@@ -58,7 +43,6 @@ class ForgeConfig:
 
         Parameters
         ----------
-x
         Returns: string
             unix: "unix:///tmp/.forge_test/app/socks/abi.sock"
             tcp: "tcp://127.0.0.1:38210"

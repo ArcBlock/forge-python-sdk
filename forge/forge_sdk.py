@@ -6,7 +6,7 @@ from .server import ForgeServer
 
 
 class ForgeSdk:
-    def __init__(self, handlers=None, config_path=None):
+    def __init__(self, handlers=None, config_path=''):
         logging.basicConfig(
             level=logging.INFO,
             format='%(asctime)s-%(name)s-%(process)d-%('

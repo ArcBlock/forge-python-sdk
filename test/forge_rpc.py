@@ -1,13 +1,15 @@
 import unittest
 from time import sleep
 
-import protos
 from google.protobuf.any_pb2 import Any
-from protos import BigSint
-from protos import TransferTx
-from rpc import ForgeRpc
 
-FORGE_TEST_SOCKET = 'unix:///tmp/.forge_test/core/socks/forge_grpc.sock'
+from forge import ForgeRpc
+from forge import protos
+from forge.protos import BigSint
+from forge.protos import TransferTx
+
+FORGE_TEST_SOCKET = '127.0.0.1:27210'
+SLEEP_SECS = 5
 
 
 class RpcTest(unittest.TestCase):
@@ -20,15 +22,8 @@ class RpcTest(unittest.TestCase):
         self.trans_itx = Any(
             type_url='fg:t:transfer',
             value=TransferTx(
-                to=self.wallet2.walletInfo.address,
+                to=self.wallet2.wallet.address,
                 value=BigSint(value=b'11'),
-            ).SerializeToString(),
-        )
-        self.test_itx = Any(
-            type_url='tx/test',
-            value=protos.pythonSDKTx(
-                to='riley',
-                value=100,
             ).SerializeToString(),
         )
         self.chain_id = int(self.rpc.get_chain_info().info.network)
@@ -39,13 +34,13 @@ class RpcTest(unittest.TestCase):
             moniker=moniker,
             passphrase='abc123',
         )
-        return Wallet(res.token, res.wallet)
+        return res
 
     def test_create_tx(self):
         kwargs = {
             'itx': self.trans_itx,
-            'from_address': self.wallet1.walletInfo.address,
-            'wallet': self.wallet1.walletInfo,
+            'from_address': self.wallet1.wallet.address,
+            'wallet': self.wallet1.wallet,
             'nonce': 2,
             'token': self.wallet1.token,
         }
@@ -54,6 +49,7 @@ class RpcTest(unittest.TestCase):
 
     def test_get_tx(self):
         tx_hash = self.test_send_tx().hash
+        sleep(SLEEP_SECS)
 
         hash_list = [tx_hash]
         print("hash to get", tx_hash)
@@ -72,19 +68,16 @@ class RpcTest(unittest.TestCase):
             print(i)
 
     def test_send_tx(self):
-        sleep(1)
+        sleep(SLEEP_SECS)
         kwargs = {
             'itx': self.trans_itx,
-            'from_address': self.wallet1.walletInfo.address,
-            'wallet': self.wallet1.walletInfo,
+            'from_address': self.wallet1.wallet.address,
+            'wallet': self.wallet1.wallet,
             'nonce': 2,
             'token': self.wallet1.token,
         }
         tx = self.rpc.create_tx(**kwargs).tx
-        print(tx)
         res = self.rpc.send_tx(tx=tx, token=self.wallet1.token)
-        print(res)
-        assert(res.code == 0)
         return res
 
     def test_get_chain_info(self):
@@ -102,7 +95,7 @@ class RpcTest(unittest.TestCase):
 
     def test_load_wallet(self):
         res = self.rpc.load_wallet(
-            address=self.wallet1.walletInfo.address,
+            address=self.wallet1.wallet.address,
             passphrase='abc123',
         )
         assert (res.code == 0)
@@ -125,19 +118,20 @@ class RpcTest(unittest.TestCase):
             assert (i.code == 0)
 
     def test_remove_wallet(self):
-        res = self.rpc.remove_wallet(address=self.wallet1.walletInfo.address)
+        res = self.rpc.remove_wallet(address=self.wallet1.wallet.address)
         assert (res.code == 0)
 
     def test_get_account_state(self):
-        sleep(1)
+        sleep(SLEEP_SECS)
 
         def verify_result(req):
             res = self.rpc.get_account_state(req)
             for i in res:
+                print(i)
                 assert (i.code == 0)
                 assert (i.state.moniker == 'wallet1')
 
-        wallet1_addr = self.wallet1.walletInfo.address
+        wallet1_addr = self.wallet1.wallet.address
 
         reqs_list = [
             protos.RequestGetAccountState(
@@ -162,10 +156,10 @@ class RpcTest(unittest.TestCase):
 
         reqs = [
             protos.RequestGetAssetState(
-                address=self.wallet1.walletInfo.address,
+                address=self.wallet1.wallet.address,
             ),
             protos.RequestGetAssetState(
-                address=self.wallet1.walletInfo.address,
+                address=self.wallet1.wallet.address,
             ),
         ]
         res = self.rpc.get_asset_state(req=reqs.__iter__())
@@ -176,11 +170,16 @@ class RpcTest(unittest.TestCase):
         res = self.rpc.get_forge_state(req=protos.RequestGetForgeState())
         assert (res.code == 0)
 
-
-class Wallet:
-    def __init__(self, token, wallet_info):
-        self.token = token
-        self.walletInfo = wallet_info
+    def test_send_itx(self):
+        trans_itx = TransferTx(
+            to=self.wallet2.wallet.address,
+            value=BigSint(value=b'11'),
+        )
+        sleep(SLEEP_SECS)
+        res = self.rpc.send_itx('fg:t:transfer', trans_itx, self.wallet1)
+        sleep(SLEEP_SECS)
+        assert (res.code == 0)
+        print(res)
 
 
 if __name__ == '__main__':

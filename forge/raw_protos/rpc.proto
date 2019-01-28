@@ -228,7 +228,6 @@ message ResponseGetValidatorsInfo {
   ValidatorsInfo validators_info = 2;
 }
 
-
 // event subscription
 
 // filter could be: value.header.height > 10086 and value.byzantine_validators
@@ -267,10 +266,13 @@ message ResponseSubscribe {
   }
 }
 
-message RequestUnsubscribe {
-  string topic = 1;
-}
+message RequestUnsubscribe { string topic = 1; }
 
-message ResponseUnsubscribe {
+message ResponseUnsubscribe { StatusCode code = 1; }
+
+// get config
+message RequestGetConfig {}
+message ResponseGetConfig {
   StatusCode code = 1;
+  string config = 2;
 }

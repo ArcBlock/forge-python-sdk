@@ -1,8 +1,10 @@
+import logging
 from collections import Iterable
 
 import grpc
 
 from .. import protos
+from .. import utils
 
 
 def to_iter(to_req, data):
@@ -29,6 +31,7 @@ class ForgeRpc:
         self.wallet = protos.WalletRpcStub(self.chan)
         self.state = protos.StateRpcStub(self.chan)
         self.file = protos.FileRpcStub(self.chan)
+        self.logger = logging.getLogger(__name__)
 
     def create_tx(
             self, itx=None, from_address='', nonce=0,
@@ -463,3 +466,22 @@ class ForgeRpc:
                 'hash': file_hash,
             }
             return self.file.load_file(protos.RequestLoadFile(**req_kwargs))
+
+    def send_itx(self, type_url, itx, wallet, token=''):
+        if not token:
+            token = wallet.token
+        encoded_itx = utils.encode_to_any(type_url, itx)
+        nonce = self.get_nonce_for_address(wallet.wallet.address)
+        tx_builder = self.create_tx(
+            encoded_itx, wallet.wallet.address, nonce,
+            wallet.wallet, token,
+        )
+        return self.send_tx(tx_builder.tx)
+
+    def get_nonce_for_address(self, address):
+        accounts = self.get_account_state({'address': address})
+        account = next(accounts)
+        if not account:
+            self.logger.error("Account doesn't exist!")
+        else:
+            return account.state.nonce

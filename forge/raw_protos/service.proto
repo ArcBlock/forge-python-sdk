@@ -24,6 +24,7 @@ service ChainRpc {
   rpc get_net_info(RequestGetNetInfo) returns (ResponseGetNetInfo);
   rpc get_validators_info(RequestGetValidatorsInfo)
       returns (ResponseGetValidatorsInfo);
+  rpc get_config(RequestGetConfig) returns (ResponseGetConfig);
 }
 
 service EventRpc {

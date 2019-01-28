@@ -31,7 +31,7 @@ message ChainInfo {
   string id = 1;           // node id.
   string network = 2;      // which network the node belongs to.
   string moniker = 3;      // name of the node.
-  string version = 4;      // consensus engine version for this node.
+  string consensus_version = 4;      // consensus engine version for this node.
   bool synced = 5;         // indicate if this node is fully synced.
   bytes app_hash = 6;      // current application hash.
   bytes block_hash = 7;    // current block hash.
@@ -40,6 +40,10 @@ message ChainInfo {
   string address = 10;                      // the address of the node.
   uint32 voting_power = 11; // the voting power of the node, in integer.
   uint64 total_txs = 12;    // total number of txs up to the latest block
+  string version = 13;
+  string data_version = 14;
+  map<string, string> forge_apps_version = 15;
+  repeated string supported_txs = 16;
 }
 
 message Validator {
@@ -202,6 +206,16 @@ message ValidatorsInfo {
 
 message ValidatorInfo {
   string address = 1;
+  forge_vendor.PubKey pub_key = 2;
   uint32 voting_power = 3;
   string proposer_priority = 4;
+  string name = 5;
+}
+
+message GenesisInfo {
+  string genesis_time = 1;
+  string chain_id = 2;
+  forge_vendor.ConsensusParams consensus_params = 3;
+  repeated ValidatorInfo validators = 4;
+  string app_hash = 5;
 }

@@ -4,7 +4,7 @@ README=$(TOP_DIR)/README.md
 
 VERSION=$(strip $(shell cat version))
 PROTOS=abi enum rpc state service tx type
-CONFIGS=forge forge_release forge_test
+CONFIGS=forge forge_release forge_test forge_default
 
 build:
 	@echo "Building the software..."
@@ -72,9 +72,10 @@ run:
 	@echo "Running the software..."
 
 fetch-configs:
-	@mkdir -p forge/priv
+	@mkdir -p ./configs
 	@echo "Fetching latest configs from Forge..."
-	@$(foreach config, $(CONFIGS), curl --silent https://$(GITHUB_TOKEN)@raw.githubusercontent.com/ArcBlock/forge/master/tools/forge_sdk/priv/$(config).toml > ./forge/priv/$(config).toml;)
+	@$(foreach config, $(CONFIGS), curl --silent https://$(GITHUB_TOKEN)@raw.githubusercontent.com/ArcBlock/forge/master/tools/forge_sdk/priv/$(config).toml > ./configs/$(config).toml;)
+	@curl --silent https://$(GITHUB_TOKEN)@raw.githubusercontent.com/ArcBlock/forge/master/tools/forge_sdk/priv/forge_default.toml> ./forge/config/forge_default.toml
 	@echo "All config files are fetched and updated!"
 
 prepare-all-proto:
@@ -82,7 +83,7 @@ prepare-all-proto:
 	@mkdir -p forge/protos
 	@echo "Preparing all protobuf..."
 	@$(foreach proto, $(PROTOS), curl --silent https://$(GITHUB_TOKEN)@raw.githubusercontent.com/ArcBlock/forge/master/tools/forge_sdk/lib/forge_sdk/protobuf/$(proto).proto > ./forge/raw_protos/$(proto).proto;)
-	@curl --silent https://raw.githubusercontent.com/ArcBlock/ex_abci/master/lib/abci_protos/vendor.proto > .forge/raw_protos/vendor.proto
+	@curl --silent https://raw.githubusercontent.com/ArcBlock/ex_abci/master/lib/abci_protos/vendor.proto > ./forge/raw_protos/vendor.proto
 	@echo "All protobuf files are fetched!"
 
 rebuild-proto: prepare-all-proto

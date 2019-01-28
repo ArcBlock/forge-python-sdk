@@ -12,7 +12,7 @@ def run():
 
     wallet1 = rpc.create_wallet(moniker='aliceya', passphrase='abc123')
     print(wallet1)
-    sleep(1)
+    sleep(5)
 
     reqs = [
         protos.RequestGetAccountState(
@@ -22,7 +22,7 @@ def run():
 
     before_state = rpc.get_account_state(req=reqs.__iter__())
     for i in before_state:
-        print('before', i.state.moniker)
+        print('before', i)
 
     itx = Any(
         type_url='tx/test',
@@ -42,7 +42,7 @@ def run():
     res = rpc.send_tx(tx=tx)
     print(res)
 
-    sleep(2)
+    sleep(5)
 
     after_state = rpc.get_account_state(req=reqs.__iter__())
     for i in after_state:

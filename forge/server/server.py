@@ -27,7 +27,6 @@ class ForgeServer:
         }
 
         self.logger = logging.getLogger(__name__)
-        self.logger.info('Forge server is initiated')
 
     def register_handler(self, handler):
         if SupportedActions.has_action(handler.tx_type):
@@ -93,10 +92,12 @@ class ForgeServer:
         self.logger.info("type {} has been processed!".format(action))
 
     def __handle_info_request(self):
-        url_list = self.handlers.keys()
+        url_list = [key for key in self.handlers.keys()]
         response = utils.encode(
             protos.Response(info=protos.ResponseInfo(type_urls=url_list)),
         )
+        self.logger.info('url list: {}'.format(url_list))
+        self.logger.info('Info response: {}'.format(response))
         self.conn.send(response)
 
     def __is_type_supported(self, itx_type):
