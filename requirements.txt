@@ -1,8 +1,6 @@
 deepmerge
-ed25519
 grpcio
 grpcio-tools
 pre-commit
 pre-commit-hooks
-secp256k1
 toml
