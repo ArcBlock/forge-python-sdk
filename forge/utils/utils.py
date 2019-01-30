@@ -1,3 +1,5 @@
+from collections import Iterable
+
 from google.protobuf.any_pb2 import Any
 from google.protobuf.internal.decoder import _DecodeVarint32
 from google.protobuf.internal.encoder import _VarintBytes
@@ -50,3 +52,12 @@ def __encode_zigzag(integer):
         return _VarintBytes(integer << 1)
     else:
         return _VarintBytes(-((integer << 1) + 1))
+
+
+def to_iter(to_req, data):
+    if isinstance(data, dict) or isinstance(data, str):
+        return iter([to_req(data)])
+    elif isinstance(data, Iterable):
+        return (to_req(i) for i in data)
+    else:
+        return iter([data])

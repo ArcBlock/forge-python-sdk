@@ -176,7 +176,10 @@ class RpcTest(unittest.TestCase):
             value=BigSint(value=b'11'),
         )
         sleep(SLEEP_SECS)
-        res = self.rpc.send_itx('fg:t:transfer', trans_itx, self.wallet1)
+        res = self.rpc.send_itx(
+            'fg:t:transfer', trans_itx,
+            self.wallet1.wallet, self.wallet1.token,
+        )
         sleep(SLEEP_SECS)
         assert (res.code == 0)
         print(res)
