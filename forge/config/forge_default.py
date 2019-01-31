@@ -1,3 +1,4 @@
+DEFAULT_FORGE_CONFIG = """
 [app]
 name = "forge_kv"
 version = "0.1.0"
@@ -6,7 +7,15 @@ path = "~/.forge/app"
 executable = ""
 logfile = "logs/app.log"
 error_logfile = "logs/app_error.log"
+
+# For the ABI connection between App and Forge under TCP mode.
 sock_tcp = "tcp://127.0.0.1:27211"
+
+# For the ABI connection between App and Forge under gRPC mode.
+# sock_grpc = "tcp://127.0.0.1:27210"
+
+# For configuring the backoff time (in milliseconds) if the ABI connection is cutoff.
+sock_backoff = 500
 
 [forge]
 decimal = 16
@@ -20,7 +29,6 @@ keystore = "keystore"
 logfile = "logs/forge.log"
 
 sock_grpc = "tcp://127.0.0.1:27210"
-
 consensus_engine = "tendermint"
 storage_engine = "ipfs"
 hash = "sha3"
@@ -69,7 +77,7 @@ whitelist = "*"
 url = "http://releases.arcblock.io/forge"
 
 [tendermint]
-version = "0.28.1"
+version = "0.29.1"
 moniker = "forge"
 path = "~/.forge/tendermint"
 
@@ -115,7 +123,7 @@ upnp = false
 
 [tendermint.genesis]
 genesis_time = "2018-11-05T19:22:08.938749Z"
-chain_id = 1
+chain_id = "forge"
 max_bytes = 22020096
 max_gas = -1
 app_hash = ""
@@ -145,3 +153,4 @@ path = "~/.forge/cache/mnesia_data_dir"
 [geolix]
 mmdb_url = "https://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz"
 mmdb_path = "~/.mmdb/GeoLite2-City.tar.gz"
+"""

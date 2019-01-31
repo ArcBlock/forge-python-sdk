@@ -4,11 +4,11 @@ from os.path import expanduser
 import toml
 from deepmerge import Merger
 
-DEFAULT_FORGE_CONFIG_PATH = './forge_default.toml'
+from forge.config.forge_default import DEFAULT_FORGE_CONFIG
 
 
 def parse_config(file_path):
-    toml_dict = toml.load(DEFAULT_FORGE_CONFIG_PATH)
+    toml_dict = toml.loads(DEFAULT_FORGE_CONFIG)
     if not file_path and path.exists(file_path):
         raise FileNotFoundError("Can't find the forge config user provided!")
     elif path.exists(file_path):

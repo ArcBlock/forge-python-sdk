@@ -1,1 +1,1 @@
-from .parser import ForgeConfig
+from forge.config.parser import ForgeConfig

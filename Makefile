@@ -75,7 +75,9 @@ fetch-configs:
 	@mkdir -p ./configs
 	@echo "Fetching latest configs from Forge..."
 	@$(foreach config, $(CONFIGS), curl --silent https://$(GITHUB_TOKEN)@raw.githubusercontent.com/ArcBlock/forge/master/tools/forge_sdk/priv/$(config).toml > ./configs/$(config).toml;)
-	@curl --silent https://$(GITHUB_TOKEN)@raw.githubusercontent.com/ArcBlock/forge/master/tools/forge_sdk/priv/forge_default.toml> ./forge/config/forge_default.toml
+	@curl --silent https://$(GITHUB_TOKEN)@raw.githubusercontent.com/ArcBlock/forge/master/tools/forge_sdk/priv/forge_default.toml> ./forge/config/forge_default.py
+	@sed -i '1s/^/DEFAULT_FORGE_CONFIG= """\n/' ./forge/config/forge_default.py
+	@sed -i '$$s/$$/\n"""/' ./forge/config/forge_default.py
 	@echo "All config files are fetched and updated!"
 
 prepare-all-proto:

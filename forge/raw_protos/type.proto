@@ -89,7 +89,8 @@ message Transaction {
   string from = 1;
   uint64 nonce = 2;
   bytes signature = 3;
-  uint32 chain_id = 4;
+  // use DID for the chain. "did:" prefix is omitted
+  string chain_id = 4;
   // we will support multiple signatures in case of certain tx need multiple
   // parties' signature.
   repeated forge_vendor.KVPair signatures = 5;
