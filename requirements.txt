@@ -4,5 +4,6 @@ grpcio
 grpcio-tools
 pre-commit
 pre-commit-hooks
+pysha3
 secp256k1
 toml

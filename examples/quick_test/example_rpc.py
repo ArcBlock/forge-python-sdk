@@ -1,28 +1,12 @@
-from time import sleep
-
 from forge import ForgeRpc
 
-FORGE_TEST_SOCKET = 'unix:///tmp/.forge_test/core/socks/forge_grpc.sock'
+FORGE_TEST_SOCKET = '127.0.0.1:27210'
 
 
 def run():
-    rpc = ForgeRpc(socket=FORGE_TEST_SOCKET)
-
-    wallet1 = rpc.create_wallet(moniker='aliceya', passphrase='abc123')
-    # wallet2 = rpc.create_wallet(moniker='lucia', passphrase='abc123')
-    sleep(2)
-
-    reqs = [
-        {'address': wallet1.wallet.address},
-        {'address': 'abcdhash'},
-    ]
-    # req = {'address': wallet1.wallet.address}
-    # req2 = protos.RequestGetAccountState(
-    #     address=wallet1.wallet.address, keys=['moniker', 'num_txs'],
-    # )
-
-    states = rpc.get_account_state(reqs)
-    print([i for i in states])
+    rpc = ForgeRpc(FORGE_TEST_SOCKET)
+    wallet = rpc.create_wallet(passphrase='abdd123')
+    print(wallet)
 
 
 if __name__ == "__main__":

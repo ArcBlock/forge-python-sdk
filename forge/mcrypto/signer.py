@@ -4,22 +4,22 @@ import secp256k1
 
 class Signer:
     def __init__(self, name='ed25519'):
-        self.signer = Ed25519Signer
-
+        self.signer_type = Ed25519Signer
         if name == 'secp256k1':
-            self.signer = Secp256k1Signer
+            self.signer_type = Secp256k1Signer
 
-        self.keypair = self.signer.keypair
-        self.sk_to_pk = self.signer.sk_to_pk
-        self.sign = self.signer.sign
-        self.verify = self.signer.verify
+        self.keypair = self.signer_type.keypair
+        self.sk_to_pk = self.signer_type.sk_to_pk
+        self.sign = self.signer_type.sign
+        self.verify = self.signer_type.verify
 
 
 class Ed25519Signer:
 
     @staticmethod
     def keypair():
-        return ed25519.create_keypair()
+        sk, pk = ed25519.create_keypair()
+        return sk, pk
 
     @staticmethod
     def sk_to_pk(sk):
@@ -44,22 +44,22 @@ class Secp256k1Signer:
 
     @staticmethod
     def keypair():
-        return
+        sk = secp256k1.PrivateKey()
+        return sk, sk.pubkey
 
     @staticmethod
     def sk_to_pk(sk):
-        secret_key = secp256k1.PrivateKey(sk)
-        public_key = secret_key._gen_public_key(secret_key)
-        return public_key
+        sk = secp256k1.PrivateKey(sk)
+        return sk.pubkey
 
     @staticmethod
     def sign(data, sk):
-        secret_key = secp256k1.PrivateKey(sk)
-        signature = secret_key.ecdsa_sign(data)
+        sk = secp256k1.PrivateKey(sk)
+        signature = sk.ecdsa_sign(data)
         return signature
 
     @staticmethod
     def verify(data, signature, pk):
-        public_key = secp256k1.PublicKey(pk)
-        result = public_key.ecdsa_verify(data, signature)
+        pk = secp256k1.PublicKey(pk)
+        result = pk.ecdsa_verify(data, signature)
         return result
