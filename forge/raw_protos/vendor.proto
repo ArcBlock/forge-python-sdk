@@ -1,5 +1,5 @@
 syntax = "proto3";
-package forge_vendor;
+package abci_vendor;
 
 import "google/protobuf/timestamp.proto";
 

@@ -1,6 +1,7 @@
 syntax = "proto3";
 package forge_abi;
 import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
 import "type.proto";
 
 // Transaction definition
@@ -8,11 +9,6 @@ import "type.proto";
 message AccountMigrateTx {
   bytes pk = 1;        // new public key
   WalletType type = 2; // new wallet type
-}
-
-message ConfirmTx {
-  string sender = 1; // sender address
-  string hash = 2;   // the tx hash to be confirmed
 }
 
 message ConsensusUpgradeTx { repeated Validator validators = 1; }
@@ -32,7 +28,7 @@ message DeclareTx {
 message DeclareFileTx { string hash = 1; }
 
 message ExchangeInfo {
-  BigSint value = 1;
+  BigUint value = 1;
   repeated string assets = 2;
 }
 
@@ -44,11 +40,7 @@ message ExchangeTx {
   string to = 1;
   ExchangeInfo sender = 2;
   ExchangeInfo receiver = 3;
-}
-
-message RevokeTx {
-  string receiver = 1; // receiver address
-  string hash = 2;     // the tx hash to be revoked
+  google.protobuf.Timestamp expired_at = 4;
 }
 
 // type url: fg:x:stake_asset. Stake for Tx is the same as stake for asset.
@@ -85,16 +77,13 @@ message StakeTx {
 
 message SysUpgradeTx {
   UpgradeTask task = 1;
-  uint32 grace_period = 2; // wait for how many blocks to take the operation
+  uint64 grace_period = 2; // wait for how many blocks to take the operation
 }
 
 message TransferTx {
   string to = 1;
-  BigSint value = 2;
+  BigUint value = 2;
   repeated string assets = 3;
-  bool confirmation = 4;
-  // how long after a receiver can confirm the transfer. Will enable it later.
-  // uint32 grace_peroid = 5;
 }
 
 message UpdateAssetTx {

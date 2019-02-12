@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='forge_abi',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\nenum.proto\x12\tforge_abi*\xc7\x05\n\nStatusCode\x12\x06\n\x02ok\x10\x00\x12\x11\n\rinvalid_nonce\x10\x01\x12\x15\n\x11invalid_signature\x10\x02\x12\x18\n\x14invalid_sender_state\x10\x03\x12\x1a\n\x16invalid_receiver_state\x10\x04\x12\x15\n\x11insufficient_data\x10\x05\x12\x15\n\x11insufficient_fund\x10\x06\x12\x11\n\rinvalid_owner\x10\x07\x12\x0e\n\ninvalid_tx\x10\x08\x12\x12\n\x0eunsupported_tx\x10\t\x12\x13\n\x0finvalid_moniker\x10\x10\x12\x16\n\x12invalid_passphrase\x10\x11\x12\x13\n\x0finvalid_channel\x10\x12\x12 \n\x1cinvalid_channel_waiting_data\x10\x13\x12\x14\n\x10invalid_multisig\x10\x14\x12\x12\n\x0einvalid_wallet\x10\x15\x12\x14\n\x10invalid_chain_id\x10\x16\x12\x15\n\x11need_confirmation\x10\x17\x12\x17\n\x13\x63onsensus_rpc_error\x10\x18\x12\x15\n\x11storage_rpc_error\x10\x19\x12\t\n\x05noent\x10\x1a\x12\x14\n\x10\x61\x63\x63ount_migrated\x10\x1b\x12\x13\n\x0f\x63hannel_is_full\x10\x1c\x12\x0e\n\nrevoked_tx\x10\x1d\x12\x15\n\x11unsupported_stake\x10\x1e\x12\x16\n\x12insufficient_stake\x10\x1f\x12\x17\n\x13invalid_stake_state\x10 \x12\x18\n\x14\x65xpired_wallet_token\x10!\x12\x12\n\x0e\x62\x61nned_unstake\x10\"\x12\x11\n\rinvalid_asset\x10#\x12\x13\n\x0finvalid_tx_size\x10$\x12\x0e\n\tforbidden\x10\x93\x03\x12\r\n\x08internal\x10\xf4\x03*\xc9\x02\n\tTopicType\x12\x0c\n\x08transfer\x10\x00\x12\x13\n\x0f\x61\x63\x63ount_migrate\x10\x01\x12\x0b\n\x07\x63onfirm\x10\x02\x12\x10\n\x0c\x63reate_asset\x10\x03\x12\x0c\n\x08\x65xchange\x10\x04\x12\n\n\x06revoke\x10\x05\x12\x0f\n\x0b\x62\x65gin_block\x10\x10\x12\r\n\tend_block\x10\x11\x12\x0b\n\x07\x64\x65\x63lare\x10\x13\x12\x10\n\x0cupdate_asset\x10\x14\x12\x15\n\x11\x63onsensus_upgrade\x10\x15\x12\x10\n\x0c\x64\x65\x63lare_file\x10\x16\x12\x0f\n\x0bsys_upgrade\x10\x17\x12\t\n\x05stake\x10\x18\x12\x12\n\raccount_state\x10\x81\x01\x12\x10\n\x0b\x61sset_state\x10\x82\x01\x12\x12\n\rchannel_state\x10\x83\x01\x12\x10\n\x0b\x66orge_state\x10\x84\x01\x12\x10\n\x0bstake_state\x10\x85\x01*%\n\x07KeyType\x12\x0b\n\x07\x65\x64\x32\x35\x35\x31\x39\x10\x00\x12\r\n\tsecp256k1\x10\x01*\x82\x01\n\x08HashType\x12\n\n\x06keccak\x10\x00\x12\x08\n\x04sha3\x10\x01\x12\x08\n\x04sha2\x10\x02\x12\x0e\n\nkeccak_384\x10\x06\x12\x0c\n\x08sha3_384\x10\x07\x12\x0c\n\x08sha2_384\x10\t\x12\x0e\n\nkeccak_512\x10\r\x12\x0c\n\x08sha3_512\x10\x0e\x12\x0c\n\x08sha2_512\x10\x0f*&\n\x0c\x45ncodingType\x12\n\n\x06\x62\x61se16\x10\x00\x12\n\n\x06\x62\x61se58\x10\x01*\xae\x01\n\x0bUpgradeType\x12\x0e\n\nconfig_app\x10\x00\x12\x10\n\x0c\x63onfig_forge\x10\x01\x12\x0e\n\nconfig_dfs\x10\x02\x12\x14\n\x10\x63onfig_consensus\x10\x03\x12\x0e\n\nconfig_p2p\x10\x04\x12\x0b\n\x07\x65xe_app\x10\n\x12\r\n\texe_forge\x10\x0b\x12\x0b\n\x07\x65xe_dfs\x10\x0c\x12\x11\n\rexe_consensus\x10\r\x12\x0b\n\x07\x65xe_p2p\x10\x0e*\xea\x01\n\rUpgradeAction\x12\n\n\x06verify\x10\x00\x12\n\n\x06\x62\x61\x63kup\x10\x01\x12\x0b\n\x07replace\x10\x02\x12\x0f\n\x0brestart_app\x10\n\x12\x0f\n\x0brestart_dfs\x10\x0b\x12\x15\n\x11restart_consensus\x10\x0c\x12\x0f\n\x0brestart_p2p\x10\r\x12\x11\n\rrestart_forge\x10\x0e\x12\x14\n\x10rollback_if_fail\x10\x1e\x12\x17\n\x13restart_all_if_fail\x10\x1f\x12\x11\n\rcrash_if_fail\x10!\x12\x15\n\x11\x64rop_address_book\x10\x32*d\n\tStateType\x12\x11\n\rstate_account\x10\x00\x12\x0f\n\x0bstate_asset\x10\x01\x12\x11\n\rstate_channel\x10\x02\x12\x0f\n\x0bstate_forge\x10\x03\x12\x0f\n\x0bstate_stake\x10\x04*M\n\tStakeType\x12\x0e\n\nstake_node\x10\x00\x12\x0e\n\nstake_user\x10\x01\x12\x0f\n\x0bstake_asset\x10\x02\x12\x0f\n\x0bstake_chain\x10\x03\x62\x06proto3')
+  serialized_pb=_b('\n\nenum.proto\x12\tforge_abi*\x97\x05\n\nStatusCode\x12\x06\n\x02ok\x10\x00\x12\x11\n\rinvalid_nonce\x10\x01\x12\x15\n\x11invalid_signature\x10\x02\x12\x18\n\x14invalid_sender_state\x10\x03\x12\x1a\n\x16invalid_receiver_state\x10\x04\x12\x15\n\x11insufficient_data\x10\x05\x12\x15\n\x11insufficient_fund\x10\x06\x12\x11\n\rinvalid_owner\x10\x07\x12\x0e\n\ninvalid_tx\x10\x08\x12\x12\n\x0eunsupported_tx\x10\t\x12\x0e\n\nexpired_tx\x10\n\x12\x13\n\x0finvalid_moniker\x10\x10\x12\x16\n\x12invalid_passphrase\x10\x11\x12\x14\n\x10invalid_multisig\x10\x14\x12\x12\n\x0einvalid_wallet\x10\x15\x12\x14\n\x10invalid_chain_id\x10\x16\x12\x17\n\x13\x63onsensus_rpc_error\x10\x18\x12\x15\n\x11storage_rpc_error\x10\x19\x12\t\n\x05noent\x10\x1a\x12\x14\n\x10\x61\x63\x63ount_migrated\x10\x1b\x12\x15\n\x11unsupported_stake\x10\x1e\x12\x16\n\x12insufficient_stake\x10\x1f\x12\x17\n\x13invalid_stake_state\x10 \x12\x18\n\x14\x65xpired_wallet_token\x10!\x12\x12\n\x0e\x62\x61nned_unstake\x10\"\x12\x11\n\rinvalid_asset\x10#\x12\x13\n\x0finvalid_tx_size\x10$\x12\x18\n\x14invalid_signer_state\x10%\x12\x17\n\x13invalid_forge_state\x10&\x12\x0e\n\tforbidden\x10\x93\x03\x12\r\n\x08internal\x10\xf4\x03*\x9c\x02\n\tTopicType\x12\x0c\n\x08transfer\x10\x00\x12\x0c\n\x08\x65xchange\x10\x01\x12\x0b\n\x07\x64\x65\x63lare\x10\x02\x12\x10\n\x0c\x63reate_asset\x10\x03\x12\x10\n\x0cupdate_asset\x10\x04\x12\t\n\x05stake\x10\x05\x12\x13\n\x0f\x61\x63\x63ount_migrate\x10\x06\x12\x0f\n\x0b\x62\x65gin_block\x10\x10\x12\r\n\tend_block\x10\x11\x12\x15\n\x11\x63onsensus_upgrade\x10\x15\x12\x10\n\x0c\x64\x65\x63lare_file\x10\x16\x12\x0f\n\x0bsys_upgrade\x10\x17\x12\x12\n\raccount_state\x10\x81\x01\x12\x10\n\x0b\x61sset_state\x10\x82\x01\x12\x10\n\x0b\x66orge_state\x10\x83\x01\x12\x10\n\x0bstake_state\x10\x84\x01*%\n\x07KeyType\x12\x0b\n\x07\x65\x64\x32\x35\x35\x31\x39\x10\x00\x12\r\n\tsecp256k1\x10\x01*\\\n\x08HashType\x12\n\n\x06keccak\x10\x00\x12\x08\n\x04sha3\x10\x01\x12\x0e\n\nkeccak_384\x10\x06\x12\x0c\n\x08sha3_384\x10\x07\x12\x0e\n\nkeccak_512\x10\r\x12\x0c\n\x08sha3_512\x10\x0e*&\n\x0c\x45ncodingType\x12\n\n\x06\x62\x61se16\x10\x00\x12\n\n\x06\x62\x61se58\x10\x01*\xad\x01\n\x08RoleType\x12\x10\n\x0crole_account\x10\x00\x12\r\n\trole_node\x10\x01\x12\x0f\n\x0brole_device\x10\x02\x12\x14\n\x10role_application\x10\x03\x12\x17\n\x13role_smart_contract\x10\x04\x12\x0c\n\x08role_bot\x10\x05\x12\x0e\n\nrole_asset\x10\x06\x12\x0e\n\nrole_stake\x10\x07\x12\x12\n\x0erole_validator\x10\x08*\xae\x01\n\x0bUpgradeType\x12\x0e\n\nconfig_app\x10\x00\x12\x10\n\x0c\x63onfig_forge\x10\x01\x12\x0e\n\nconfig_dfs\x10\x02\x12\x14\n\x10\x63onfig_consensus\x10\x03\x12\x0e\n\nconfig_p2p\x10\x04\x12\x0b\n\x07\x65xe_app\x10\n\x12\r\n\texe_forge\x10\x0b\x12\x0b\n\x07\x65xe_dfs\x10\x0c\x12\x11\n\rexe_consensus\x10\r\x12\x0b\n\x07\x65xe_p2p\x10\x0e*\xea\x01\n\rUpgradeAction\x12\n\n\x06verify\x10\x00\x12\n\n\x06\x62\x61\x63kup\x10\x01\x12\x0b\n\x07replace\x10\x02\x12\x0f\n\x0brestart_app\x10\n\x12\x0f\n\x0brestart_dfs\x10\x0b\x12\x15\n\x11restart_consensus\x10\x0c\x12\x0f\n\x0brestart_p2p\x10\r\x12\x11\n\rrestart_forge\x10\x0e\x12\x14\n\x10rollback_if_fail\x10\x1e\x12\x17\n\x13restart_all_if_fail\x10\x1f\x12\x11\n\rcrash_if_fail\x10!\x12\x15\n\x11\x64rop_address_book\x10\x32*d\n\tStateType\x12\x11\n\rstate_account\x10\x00\x12\x0f\n\x0bstate_asset\x10\x01\x12\x11\n\rstate_channel\x10\x02\x12\x0f\n\x0bstate_forge\x10\x03\x12\x0f\n\x0bstate_stake\x10\x04*M\n\tStakeType\x12\x0e\n\nstake_node\x10\x00\x12\x0e\n\nstake_user\x10\x01\x12\x0f\n\x0bstake_asset\x10\x02\x12\x0f\n\x0bstake_chain\x10\x03\x62\x06proto3')
 )
 
 _STATUSCODE = _descriptor.EnumDescriptor(
@@ -70,102 +70,94 @@ _STATUSCODE = _descriptor.EnumDescriptor(
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='invalid_moniker', index=10, number=16,
+      name='expired_tx', index=10, number=10,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='invalid_passphrase', index=11, number=17,
+      name='invalid_moniker', index=11, number=16,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='invalid_channel', index=12, number=18,
+      name='invalid_passphrase', index=12, number=17,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='invalid_channel_waiting_data', index=13, number=19,
+      name='invalid_multisig', index=13, number=20,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='invalid_multisig', index=14, number=20,
+      name='invalid_wallet', index=14, number=21,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='invalid_wallet', index=15, number=21,
+      name='invalid_chain_id', index=15, number=22,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='invalid_chain_id', index=16, number=22,
+      name='consensus_rpc_error', index=16, number=24,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='need_confirmation', index=17, number=23,
+      name='storage_rpc_error', index=17, number=25,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='consensus_rpc_error', index=18, number=24,
+      name='noent', index=18, number=26,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='storage_rpc_error', index=19, number=25,
+      name='account_migrated', index=19, number=27,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='noent', index=20, number=26,
+      name='unsupported_stake', index=20, number=30,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='account_migrated', index=21, number=27,
+      name='insufficient_stake', index=21, number=31,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='channel_is_full', index=22, number=28,
+      name='invalid_stake_state', index=22, number=32,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='revoked_tx', index=23, number=29,
+      name='expired_wallet_token', index=23, number=33,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='unsupported_stake', index=24, number=30,
+      name='banned_unstake', index=24, number=34,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='insufficient_stake', index=25, number=31,
+      name='invalid_asset', index=25, number=35,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='invalid_stake_state', index=26, number=32,
+      name='invalid_tx_size', index=26, number=36,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='expired_wallet_token', index=27, number=33,
+      name='invalid_signer_state', index=27, number=37,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='banned_unstake', index=28, number=34,
+      name='invalid_forge_state', index=28, number=38,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='invalid_asset', index=29, number=35,
+      name='forbidden', index=29, number=403,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='invalid_tx_size', index=30, number=36,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='forbidden', index=31, number=403,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='internal', index=32, number=500,
+      name='internal', index=30, number=500,
       serialized_options=None,
       type=None),
   ],
   containing_type=None,
   serialized_options=None,
   serialized_start=26,
-  serialized_end=737,
+  serialized_end=689,
 )
 _sym_db.RegisterEnumDescriptor(_STATUSCODE)
 
@@ -181,11 +173,11 @@ _TOPICTYPE = _descriptor.EnumDescriptor(
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='account_migrate', index=1, number=1,
+      name='exchange', index=1, number=1,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='confirm', index=2, number=2,
+      name='declare', index=2, number=2,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
@@ -193,70 +185,58 @@ _TOPICTYPE = _descriptor.EnumDescriptor(
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='exchange', index=4, number=4,
+      name='update_asset', index=4, number=4,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='revoke', index=5, number=5,
+      name='stake', index=5, number=5,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='begin_block', index=6, number=16,
+      name='account_migrate', index=6, number=6,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='end_block', index=7, number=17,
+      name='begin_block', index=7, number=16,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='declare', index=8, number=19,
+      name='end_block', index=8, number=17,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='update_asset', index=9, number=20,
+      name='consensus_upgrade', index=9, number=21,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='consensus_upgrade', index=10, number=21,
+      name='declare_file', index=10, number=22,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='declare_file', index=11, number=22,
+      name='sys_upgrade', index=11, number=23,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='sys_upgrade', index=12, number=23,
+      name='account_state', index=12, number=129,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='stake', index=13, number=24,
+      name='asset_state', index=13, number=130,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='account_state', index=14, number=129,
+      name='forge_state', index=14, number=131,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='asset_state', index=15, number=130,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='channel_state', index=16, number=131,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='forge_state', index=17, number=132,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='stake_state', index=18, number=133,
+      name='stake_state', index=15, number=132,
       serialized_options=None,
       type=None),
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=740,
-  serialized_end=1069,
+  serialized_start=692,
+  serialized_end=976,
 )
 _sym_db.RegisterEnumDescriptor(_TOPICTYPE)
 
@@ -278,8 +258,8 @@ _KEYTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1071,
-  serialized_end=1108,
+  serialized_start=978,
+  serialized_end=1015,
 )
 _sym_db.RegisterEnumDescriptor(_KEYTYPE)
 
@@ -299,38 +279,26 @@ _HASHTYPE = _descriptor.EnumDescriptor(
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='sha2', index=2, number=2,
+      name='keccak_384', index=2, number=6,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='keccak_384', index=3, number=6,
+      name='sha3_384', index=3, number=7,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='sha3_384', index=4, number=7,
+      name='keccak_512', index=4, number=13,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='sha2_384', index=5, number=9,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='keccak_512', index=6, number=13,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='sha3_512', index=7, number=14,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='sha2_512', index=8, number=15,
+      name='sha3_512', index=5, number=14,
       serialized_options=None,
       type=None),
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1111,
-  serialized_end=1241,
+  serialized_start=1017,
+  serialized_end=1109,
 )
 _sym_db.RegisterEnumDescriptor(_HASHTYPE)
 
@@ -352,12 +320,63 @@ _ENCODINGTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1243,
-  serialized_end=1281,
+  serialized_start=1111,
+  serialized_end=1149,
 )
 _sym_db.RegisterEnumDescriptor(_ENCODINGTYPE)
 
 EncodingType = enum_type_wrapper.EnumTypeWrapper(_ENCODINGTYPE)
+_ROLETYPE = _descriptor.EnumDescriptor(
+  name='RoleType',
+  full_name='forge_abi.RoleType',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='role_account', index=0, number=0,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='role_node', index=1, number=1,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='role_device', index=2, number=2,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='role_application', index=3, number=3,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='role_smart_contract', index=4, number=4,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='role_bot', index=5, number=5,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='role_asset', index=6, number=6,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='role_stake', index=7, number=7,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='role_validator', index=8, number=8,
+      serialized_options=None,
+      type=None),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=1152,
+  serialized_end=1325,
+)
+_sym_db.RegisterEnumDescriptor(_ROLETYPE)
+
+RoleType = enum_type_wrapper.EnumTypeWrapper(_ROLETYPE)
 _UPGRADETYPE = _descriptor.EnumDescriptor(
   name='UpgradeType',
   full_name='forge_abi.UpgradeType',
@@ -407,8 +426,8 @@ _UPGRADETYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1284,
-  serialized_end=1458,
+  serialized_start=1328,
+  serialized_end=1502,
 )
 _sym_db.RegisterEnumDescriptor(_UPGRADETYPE)
 
@@ -470,8 +489,8 @@ _UPGRADEACTION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1461,
-  serialized_end=1695,
+  serialized_start=1505,
+  serialized_end=1739,
 )
 _sym_db.RegisterEnumDescriptor(_UPGRADEACTION)
 
@@ -505,8 +524,8 @@ _STATETYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1697,
-  serialized_end=1797,
+  serialized_start=1741,
+  serialized_end=1841,
 )
 _sym_db.RegisterEnumDescriptor(_STATETYPE)
 
@@ -536,8 +555,8 @@ _STAKETYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1799,
-  serialized_end=1876,
+  serialized_start=1843,
+  serialized_end=1920,
 )
 _sym_db.RegisterEnumDescriptor(_STAKETYPE)
 
@@ -552,20 +571,16 @@ insufficient_fund = 6
 invalid_owner = 7
 invalid_tx = 8
 unsupported_tx = 9
+expired_tx = 10
 invalid_moniker = 16
 invalid_passphrase = 17
-invalid_channel = 18
-invalid_channel_waiting_data = 19
 invalid_multisig = 20
 invalid_wallet = 21
 invalid_chain_id = 22
-need_confirmation = 23
 consensus_rpc_error = 24
 storage_rpc_error = 25
 noent = 26
 account_migrated = 27
-channel_is_full = 28
-revoked_tx = 29
 unsupported_stake = 30
 insufficient_stake = 31
 invalid_stake_state = 32
@@ -573,40 +588,45 @@ expired_wallet_token = 33
 banned_unstake = 34
 invalid_asset = 35
 invalid_tx_size = 36
+invalid_signer_state = 37
+invalid_forge_state = 38
 forbidden = 403
 internal = 500
 transfer = 0
-account_migrate = 1
-confirm = 2
+exchange = 1
+declare = 2
 create_asset = 3
-exchange = 4
-revoke = 5
+update_asset = 4
+stake = 5
+account_migrate = 6
 begin_block = 16
 end_block = 17
-declare = 19
-update_asset = 20
 consensus_upgrade = 21
 declare_file = 22
 sys_upgrade = 23
-stake = 24
 account_state = 129
 asset_state = 130
-channel_state = 131
-forge_state = 132
-stake_state = 133
+forge_state = 131
+stake_state = 132
 ed25519 = 0
 secp256k1 = 1
 keccak = 0
 sha3 = 1
-sha2 = 2
 keccak_384 = 6
 sha3_384 = 7
-sha2_384 = 9
 keccak_512 = 13
 sha3_512 = 14
-sha2_512 = 15
 base16 = 0
 base58 = 1
+role_account = 0
+role_node = 1
+role_device = 2
+role_application = 3
+role_smart_contract = 4
+role_bot = 5
+role_asset = 6
+role_stake = 7
+role_validator = 8
 config_app = 0
 config_forge = 1
 config_dfs = 2
@@ -645,6 +665,7 @@ DESCRIPTOR.enum_types_by_name['TopicType'] = _TOPICTYPE
 DESCRIPTOR.enum_types_by_name['KeyType'] = _KEYTYPE
 DESCRIPTOR.enum_types_by_name['HashType'] = _HASHTYPE
 DESCRIPTOR.enum_types_by_name['EncodingType'] = _ENCODINGTYPE
+DESCRIPTOR.enum_types_by_name['RoleType'] = _ROLETYPE
 DESCRIPTOR.enum_types_by_name['UpgradeType'] = _UPGRADETYPE
 DESCRIPTOR.enum_types_by_name['UpgradeAction'] = _UPGRADEACTION
 DESCRIPTOR.enum_types_by_name['StateType'] = _STATETYPE

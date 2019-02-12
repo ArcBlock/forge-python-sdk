@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='forge_abi',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\tabi.proto\x12\tforge_abi\x1a\nenum.proto\x1a\ntype.proto\x1a\x0bstate.proto\"\x87\x01\n\x0fRequestVerifyTx\x12\"\n\x02tx\x18\x01 \x01(\x0b\x32\x16.forge_abi.Transaction\x12\'\n\x06sender\x18\x02 \x01(\x0b\x32\x17.forge_abi.AccountState\x12\'\n\x06states\x18\x03 \x03(\x0b\x32\x17.forge_abi.AccountState\"7\n\x10ResponseVerifyTx\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\"\xb3\x01\n\x12RequestUpdateState\x12\"\n\x02tx\x18\x01 \x01(\x0b\x32\x16.forge_abi.Transaction\x12\'\n\x06sender\x18\x02 \x01(\x0b\x32\x17.forge_abi.AccountState\x12\'\n\x06states\x18\x03 \x03(\x0b\x32\x17.forge_abi.AccountState\x12\'\n\x07\x63ontext\x18\x04 \x01(\x0b\x32\x16.forge_abi.AbciContext\"\x86\x02\n\x13ResponseUpdateState\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\'\n\x06states\x18\x02 \x03(\x0b\x32\x17.forge_abi.AccountState\x12)\n\x08\x63hannels\x18\x03 \x03(\x0b\x32\x17.forge_abi.ChannelState\x12%\n\x06\x61ssets\x18\x04 \x03(\x0b\x32\x15.forge_abi.AssetState\x12%\n\x06stakes\x18\x05 \x03(\x0b\x32\x15.forge_abi.StakeState\x12(\n\tapp_state\x18\x0f \x01(\x0b\x32\x15.forge_abi.ForgeState\"$\n\x0bRequestInfo\x12\x15\n\rforge_version\x18\x01 \x01(\t\"!\n\x0cResponseInfo\x12\x11\n\ttype_urls\x18\x01 \x03(\t\"\xa2\x01\n\x07Request\x12/\n\tverify_tx\x18\x01 \x01(\x0b\x32\x1a.forge_abi.RequestVerifyTxH\x00\x12\x35\n\x0cupdate_state\x18\x02 \x01(\x0b\x32\x1d.forge_abi.RequestUpdateStateH\x00\x12&\n\x04info\x18\x03 \x01(\x0b\x32\x16.forge_abi.RequestInfoH\x00\x42\x07\n\x05value\"\xa6\x01\n\x08Response\x12\x30\n\tverify_tx\x18\x01 \x01(\x0b\x32\x1b.forge_abi.ResponseVerifyTxH\x00\x12\x36\n\x0cupdate_state\x18\x02 \x01(\x0b\x32\x1e.forge_abi.ResponseUpdateStateH\x00\x12\'\n\x04info\x18\x03 \x01(\x0b\x32\x17.forge_abi.ResponseInfoH\x00\x42\x07\n\x05value2}\n\x0b\x46orgeAppRpc\x12\x36\n\x0bprocess_one\x12\x12.forge_abi.Request\x1a\x13.forge_abi.Response\x12\x36\n\x07process\x12\x12.forge_abi.Request\x1a\x13.forge_abi.Response(\x01\x30\x01\x62\x06proto3')
+  serialized_pb=_b('\n\tabi.proto\x12\tforge_abi\x1a\nenum.proto\x1a\ntype.proto\x1a\x0bstate.proto\"\xff\x01\n\x0fRequestVerifyTx\x12\"\n\x02tx\x18\x01 \x01(\x0b\x32\x16.forge_abi.Transaction\x12\'\n\x06states\x18\x02 \x03(\x0b\x32\x17.forge_abi.AccountState\x12%\n\x06\x61ssets\x18\x03 \x03(\x0b\x32\x15.forge_abi.AssetState\x12%\n\x06stakes\x18\x04 \x03(\x0b\x32\x15.forge_abi.StakeState\x12\'\n\x07\x63ontext\x18\x05 \x01(\x0b\x32\x16.forge_abi.AbciContext\x12(\n\tapp_state\x18\x0f \x01(\x0b\x32\x15.forge_abi.ForgeState\"7\n\x10ResponseVerifyTx\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\"\x82\x02\n\x12RequestUpdateState\x12\"\n\x02tx\x18\x01 \x01(\x0b\x32\x16.forge_abi.Transaction\x12\'\n\x06states\x18\x02 \x03(\x0b\x32\x17.forge_abi.AccountState\x12%\n\x06\x61ssets\x18\x03 \x03(\x0b\x32\x15.forge_abi.AssetState\x12%\n\x06stakes\x18\x04 \x03(\x0b\x32\x15.forge_abi.StakeState\x12\'\n\x07\x63ontext\x18\x05 \x01(\x0b\x32\x16.forge_abi.AbciContext\x12(\n\tapp_state\x18\x0f \x01(\x0b\x32\x15.forge_abi.ForgeState\"\xdb\x01\n\x13ResponseUpdateState\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\'\n\x06states\x18\x02 \x03(\x0b\x32\x17.forge_abi.AccountState\x12%\n\x06\x61ssets\x18\x03 \x03(\x0b\x32\x15.forge_abi.AssetState\x12%\n\x06stakes\x18\x04 \x03(\x0b\x32\x15.forge_abi.StakeState\x12(\n\tapp_state\x18\x0f \x01(\x0b\x32\x15.forge_abi.ForgeState\"$\n\x0bRequestInfo\x12\x15\n\rforge_version\x18\x01 \x01(\t\"3\n\x0cResponseInfo\x12\x11\n\ttype_urls\x18\x01 \x03(\t\x12\x10\n\x08\x61pp_hash\x18\x02 \x01(\x0c\"\xa2\x01\n\x07Request\x12/\n\tverify_tx\x18\x01 \x01(\x0b\x32\x1a.forge_abi.RequestVerifyTxH\x00\x12\x35\n\x0cupdate_state\x18\x02 \x01(\x0b\x32\x1d.forge_abi.RequestUpdateStateH\x00\x12&\n\x04info\x18\x03 \x01(\x0b\x32\x16.forge_abi.RequestInfoH\x00\x42\x07\n\x05value\"\xa6\x01\n\x08Response\x12\x30\n\tverify_tx\x18\x01 \x01(\x0b\x32\x1b.forge_abi.ResponseVerifyTxH\x00\x12\x36\n\x0cupdate_state\x18\x02 \x01(\x0b\x32\x1e.forge_abi.ResponseUpdateStateH\x00\x12\'\n\x04info\x18\x03 \x01(\x0b\x32\x17.forge_abi.ResponseInfoH\x00\x42\x07\n\x05value2}\n\x0b\x46orgeAppRpc\x12\x36\n\x0bprocess_one\x12\x12.forge_abi.Request\x1a\x13.forge_abi.Response\x12\x36\n\x07process\x12\x12.forge_abi.Request\x1a\x13.forge_abi.Response(\x01\x30\x01\x62\x06proto3')
   ,
   dependencies=[enum__pb2.DESCRIPTOR,type__pb2.DESCRIPTOR,state__pb2.DESCRIPTOR,])
 
@@ -44,16 +44,37 @@ _REQUESTVERIFYTX = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='sender', full_name='forge_abi.RequestVerifyTx.sender', index=1,
-      number=2, type=11, cpp_type=10, label=1,
+      name='states', full_name='forge_abi.RequestVerifyTx.states', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='assets', full_name='forge_abi.RequestVerifyTx.assets', index=2,
+      number=3, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='stakes', full_name='forge_abi.RequestVerifyTx.stakes', index=3,
+      number=4, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='context', full_name='forge_abi.RequestVerifyTx.context', index=4,
+      number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='states', full_name='forge_abi.RequestVerifyTx.states', index=2,
-      number=3, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
+      name='app_state', full_name='forge_abi.RequestVerifyTx.app_state', index=5,
+      number=15, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -70,7 +91,7 @@ _REQUESTVERIFYTX = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=62,
-  serialized_end=197,
+  serialized_end=317,
 )
 
 
@@ -100,8 +121,8 @@ _RESPONSEVERIFYTX = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=199,
-  serialized_end=254,
+  serialized_start=319,
+  serialized_end=374,
 )
 
 
@@ -120,22 +141,36 @@ _REQUESTUPDATESTATE = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='sender', full_name='forge_abi.RequestUpdateState.sender', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
+      name='states', full_name='forge_abi.RequestUpdateState.states', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='states', full_name='forge_abi.RequestUpdateState.states', index=2,
+      name='assets', full_name='forge_abi.RequestUpdateState.assets', index=2,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='context', full_name='forge_abi.RequestUpdateState.context', index=3,
-      number=4, type=11, cpp_type=10, label=1,
+      name='stakes', full_name='forge_abi.RequestUpdateState.stakes', index=3,
+      number=4, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='context', full_name='forge_abi.RequestUpdateState.context', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='app_state', full_name='forge_abi.RequestUpdateState.app_state', index=5,
+      number=15, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -152,8 +187,8 @@ _REQUESTUPDATESTATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=257,
-  serialized_end=436,
+  serialized_start=377,
+  serialized_end=635,
 )
 
 
@@ -179,28 +214,21 @@ _RESPONSEUPDATESTATE = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='channels', full_name='forge_abi.ResponseUpdateState.channels', index=2,
+      name='assets', full_name='forge_abi.ResponseUpdateState.assets', index=2,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='assets', full_name='forge_abi.ResponseUpdateState.assets', index=3,
+      name='stakes', full_name='forge_abi.ResponseUpdateState.stakes', index=3,
       number=4, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='stakes', full_name='forge_abi.ResponseUpdateState.stakes', index=4,
-      number=5, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='app_state', full_name='forge_abi.ResponseUpdateState.app_state', index=5,
+      name='app_state', full_name='forge_abi.ResponseUpdateState.app_state', index=4,
       number=15, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -218,8 +246,8 @@ _RESPONSEUPDATESTATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=439,
-  serialized_end=701,
+  serialized_start=638,
+  serialized_end=857,
 )
 
 
@@ -249,8 +277,8 @@ _REQUESTINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=703,
-  serialized_end=739,
+  serialized_start=859,
+  serialized_end=895,
 )
 
 
@@ -268,6 +296,13 @@ _RESPONSEINFO = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='app_hash', full_name='forge_abi.ResponseInfo.app_hash', index=1,
+      number=2, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b(""),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -280,8 +315,8 @@ _RESPONSEINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=741,
-  serialized_end=774,
+  serialized_start=897,
+  serialized_end=948,
 )
 
 
@@ -328,8 +363,8 @@ _REQUEST = _descriptor.Descriptor(
       name='value', full_name='forge_abi.Request.value',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=777,
-  serialized_end=939,
+  serialized_start=951,
+  serialized_end=1113,
 )
 
 
@@ -376,21 +411,25 @@ _RESPONSE = _descriptor.Descriptor(
       name='value', full_name='forge_abi.Response.value',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=942,
-  serialized_end=1108,
+  serialized_start=1116,
+  serialized_end=1282,
 )
 
 _REQUESTVERIFYTX.fields_by_name['tx'].message_type = type__pb2._TRANSACTION
-_REQUESTVERIFYTX.fields_by_name['sender'].message_type = state__pb2._ACCOUNTSTATE
 _REQUESTVERIFYTX.fields_by_name['states'].message_type = state__pb2._ACCOUNTSTATE
+_REQUESTVERIFYTX.fields_by_name['assets'].message_type = state__pb2._ASSETSTATE
+_REQUESTVERIFYTX.fields_by_name['stakes'].message_type = state__pb2._STAKESTATE
+_REQUESTVERIFYTX.fields_by_name['context'].message_type = type__pb2._ABCICONTEXT
+_REQUESTVERIFYTX.fields_by_name['app_state'].message_type = state__pb2._FORGESTATE
 _RESPONSEVERIFYTX.fields_by_name['code'].enum_type = enum__pb2._STATUSCODE
 _REQUESTUPDATESTATE.fields_by_name['tx'].message_type = type__pb2._TRANSACTION
-_REQUESTUPDATESTATE.fields_by_name['sender'].message_type = state__pb2._ACCOUNTSTATE
 _REQUESTUPDATESTATE.fields_by_name['states'].message_type = state__pb2._ACCOUNTSTATE
+_REQUESTUPDATESTATE.fields_by_name['assets'].message_type = state__pb2._ASSETSTATE
+_REQUESTUPDATESTATE.fields_by_name['stakes'].message_type = state__pb2._STAKESTATE
 _REQUESTUPDATESTATE.fields_by_name['context'].message_type = type__pb2._ABCICONTEXT
+_REQUESTUPDATESTATE.fields_by_name['app_state'].message_type = state__pb2._FORGESTATE
 _RESPONSEUPDATESTATE.fields_by_name['code'].enum_type = enum__pb2._STATUSCODE
 _RESPONSEUPDATESTATE.fields_by_name['states'].message_type = state__pb2._ACCOUNTSTATE
-_RESPONSEUPDATESTATE.fields_by_name['channels'].message_type = state__pb2._CHANNELSTATE
 _RESPONSEUPDATESTATE.fields_by_name['assets'].message_type = state__pb2._ASSETSTATE
 _RESPONSEUPDATESTATE.fields_by_name['stakes'].message_type = state__pb2._STAKESTATE
 _RESPONSEUPDATESTATE.fields_by_name['app_state'].message_type = state__pb2._FORGESTATE
@@ -492,8 +531,8 @@ _FORGEAPPRPC = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=1110,
-  serialized_end=1235,
+  serialized_start=1284,
+  serialized_end=1409,
   methods=[
   _descriptor.MethodDescriptor(
     name='process_one',

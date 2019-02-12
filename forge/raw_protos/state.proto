@@ -2,7 +2,6 @@ syntax = "proto3";
 package forge_abi;
 import "google/protobuf/any.proto";
 
-import "vendor.proto";
 import "type.proto";
 
 // State definition
@@ -27,6 +26,7 @@ message AccountState {
   // 16-49 reserve for future
 
   StakeContext stake = 16;
+  CircularQueue pinned_files = 17;
 
   google.protobuf.Any data = 50;
 }
@@ -47,35 +47,16 @@ message AssetState {
   google.protobuf.Any data = 50;
 }
 
-// once user send a tx that requires confirmation, we will create (ore reuse) a
-// channel between the sender and receiver. When a confirm tx arrives, we will
-// do the actual transfer of ownership. Note this is more like a continuation to
-// the previous action, that the resources are not preallocated. Thus the
-// confirm operation may end up fail.
-message ChannelState {
-  string address = 1;
-  uint64 total_confirmed = 2;
-  uint32 max_waiting = 3;
-  uint32 max_confirmed = 4;
-
-  CircularQueue waiting = 5;
-  CircularQueue confirmed = 6;
-
-  // 7-8 is reserved
-
-  StateContext context = 14;
-
-  // 13-49 reserve for future
-  google.protobuf.Any data = 50;
-}
-
 message ForgeState {
+  string address = 1;
   // consensus parameters, in future we shall be able to modify it
-  ConsensusParams consensus = 1;
-  map<uint64, UpgradeTasks> tasks = 2;
-  map<uint32, StakeSummary> stake_summary = 3;
-  string version = 4;
-  string data_version = 5;
+  ConsensusParams consensus = 2;
+  map<uint64, UpgradeTasks> tasks = 3;
+  map<uint32, StakeSummary> stake_summary = 4;
+  string version = 5;
+  string data_version = 6;
+  // app state returned by forge app
+  bytes forge_app_hash = 7;
 
   // 6-14 is reserved for future
 
@@ -93,4 +74,13 @@ message StakeState {
   StateContext context = 14;
   // forge app can extend this
   google.protobuf.Any data = 15;
+}
+
+message StatisticsState {
+  string address = 1;
+  uint64 num_blocks = 2;
+  uint64 num_txs = 3;
+  BigUint num_stakes = 4;
+  uint32 num_validators = 5;
+  TxStatistics tx_statistics = 6;
 }

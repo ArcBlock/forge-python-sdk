@@ -13,9 +13,11 @@ import "rpc.proto";
 service ChainRpc {
   // tx related
   rpc create_tx(RequestCreateTx) returns (ResponseCreateTx);
+  rpc multisig(RequestMultisig) returns (ResponseMultisig);
   rpc send_tx(RequestSendTx) returns (ResponseSendTx);
   rpc get_tx(stream RequestGetTx) returns (stream ResponseGetTx);
   rpc get_block(stream RequestGetBlock) returns (stream ResponseGetBlock);
+  rpc get_blocks(RequestGetBlocks) returns (ResponseGetBlocks);
   rpc get_unconfirmed_txs(RequestGetUnconfirmedTxs)
       returns (ResponseGetUnconfirmedTxs);
   // utility
@@ -36,6 +38,7 @@ service FileRpc {
   // filesystem related
   rpc store_file(stream RequestStoreFile) returns (ResponseStoreFile);
   rpc load_file(RequestLoadFile) returns (stream ResponseLoadFile);
+  rpc pin_file(RequestPinFile) returns (ResponsePinFile);
 }
 
 service StateRpc {
@@ -44,8 +47,6 @@ service StateRpc {
       returns (stream ResponseGetAccountState);
   rpc get_asset_state(stream RequestGetAssetState)
       returns (stream ResponseGetAssetState);
-  rpc get_channel_state(stream RequestGetChannelState)
-      returns (stream ResponseGetChannelState);
   rpc get_stake_state(stream RequestGetStakeState)
       returns (stream ResponseGetStakeState);
   rpc get_forge_state(RequestGetForgeState) returns (ResponseGetForgeState);
@@ -59,4 +60,9 @@ service WalletRpc {
   rpc list_wallet(RequestListWallet) returns (stream ResponseListWallet);
   rpc remove_wallet(RequestRemoveWallet) returns (ResponseRemoveWallet);
   rpc declare_node(RequestDeclareNode) returns (ResponseDeclareNode);
+}
+
+service StatisticRpc {
+  rpc get_forge_statistics(RequestGetForgeStatistics)
+      returns (ResponseGetForgeStatistics);
 }
