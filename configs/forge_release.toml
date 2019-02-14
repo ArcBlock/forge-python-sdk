@@ -1,10 +1,10 @@
 [app]
-name = "forge"
-version = "0.1.0"
+name = ""
+version = ""
 
-path = "~/.forge_release/app"
+path = ""
 executable = ""
-sock_tcp = "tcp://127.0.0.1:28211"
+sock_tcp = ""
 
 [forge]
 decimal = 16
@@ -62,7 +62,7 @@ seed_mode = false
 [tendermint.genesis]
 genesis_time = "2018-11-05T19:22:08.938749Z"
 chain_id = "forge"
-max_bytes = 22020096
+max_bytes = 600000
 max_gas = -1
 app_hash = ""
 

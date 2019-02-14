@@ -5,7 +5,7 @@ from google.protobuf.any_pb2 import Any
 
 from forge import ForgeRpc
 from forge import protos
-from forge.protos import BigSint
+from forge.protos import BigUint
 from forge.protos import TransferTx
 
 FORGE_TEST_SOCKET = '127.0.0.1:27210'
@@ -23,10 +23,9 @@ class RpcTest(unittest.TestCase):
             type_url='fg:t:transfer',
             value=TransferTx(
                 to=self.wallet2.wallet.address,
-                value=BigSint(value=b'11'),
+                value=BigUint(value=b'11'),
             ).SerializeToString(),
         )
-        self.chain_id = int(self.rpc.get_chain_info().info.network)
 
     def init_wallet(self, moniker):
         res = self.rpc.create_wallet(
@@ -173,7 +172,7 @@ class RpcTest(unittest.TestCase):
     def test_send_itx(self):
         trans_itx = TransferTx(
             to=self.wallet2.wallet.address,
-            value=BigSint(value=b'11'),
+            value=BigUint(value=b'11'),
         )
         sleep(SLEEP_SECS)
         res = self.rpc.send_itx(

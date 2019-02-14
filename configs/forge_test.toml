@@ -1,11 +1,4 @@
 [app]
-name = "forge_test"
-version = "0.1.0"
-
-path = "/tmp/.forge_test/app"
-executable = ""
-sock_grpc = ""
-sock_tcp = "unix://socks/abi_test.sock"
 
 [forge]
 path = "/tmp/.forge_test/core"
@@ -13,9 +6,11 @@ sock_grpc = "unix://socks/forge_grpc_test.sock"
 
 [forge.stake.timeout]
 general = 1
+stake_for_node = 1
 
 [forge.web]
 enabled = true
+
 
 [tendermint]
 version = "0.29.1"
@@ -32,7 +27,7 @@ sock_grpc = "unix://socks/tm_grpc_test.sock"
 sock_p2p = "tcp://0.0.0.0:27656"
 sock_prof = ""
 
-timeout_commit = "1s"
+timeout_commit = "100ms"
 create_empty_blocks = false
 
 [ipfs]

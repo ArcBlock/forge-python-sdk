@@ -88,6 +88,7 @@ message AbciContext {
   uint64 total_txs = 4;
   // tx statistics
   TxStatistics tx_statistics = 5;
+  uint32 tx_index = 6;
 }
 
 message Transaction {
@@ -113,6 +114,7 @@ message TransactionInfo {
   uint32 index = 3;
   string hash = 4;
   repeated abci_vendor.KVPair tags = 5;
+  StatusCode code = 6;
 }
 
 message BlockInfo {
@@ -242,14 +244,14 @@ message ForgeStatistics {
 }
 
 message TxStatistics {
-  uint64  num_account_migrate_txs = 1;
-  uint64  num_create_asset_txs = 2;
-  uint32  num_consensus_upgrade_txs = 3;
-  uint64  num_declare_txs = 4;
-  uint64  num_declare_file_txs = 5;
-  uint64  num_exchange_txs = 6;
-  uint64  num_stake_txs = 7;
-  uint32  num_sys_upgrade_txs = 8;
-  uint64  num_transfer_txs = 9;
-  uint64  num_update_asset_txs = 10;
+  uint64 num_account_migrate_txs = 1;
+  uint64 num_create_asset_txs = 2;
+  uint32 num_consensus_upgrade_txs = 3;
+  uint64 num_declare_txs = 4;
+  uint64 num_declare_file_txs = 5;
+  uint64 num_exchange_txs = 6;
+  uint64 num_stake_txs = 7;
+  uint32 num_sys_upgrade_txs = 8;
+  uint64 num_transfer_txs = 9;
+  uint64 num_update_asset_txs = 10;
 }

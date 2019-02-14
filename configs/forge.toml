@@ -1,6 +1,0 @@
-[app]
-name = "forge"
-version = "0.1.0"
-
-[forge]
-pub_sub_key = "forgetothemoon!"
