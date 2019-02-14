@@ -3,22 +3,22 @@ import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
 
 //type_url: event:s:event
-message Event {
+message EventInfo {
   string title = 1;
   string description = 2; // html or markdown
-
   uint32 total = 4;
-  repeated bytes tickets = 5; // binary of varint(create_asset_tx) + varint(exchange_tx)
+  repeated bytes tickets = 5; // binary of varint(create_asset_tx)
   google.protobuf.Timestamp start_time = 7;
   google.protobuf.Timestamp end_time = 8;
+  uint32 ticket_price=9;
 
-  repeated string participants = 9; // participant address
+  repeated string participants = 1; // participant address
 
 }
 
 //type_url: eventInfo:t:eventInfo
 //extend accountState
-message eventInfo {
+message ParticipantInfo {
   repeated string hosted = 1; // hosted event addresses
   repeated string participanted = 2; // participanted event addresses
   repeated string unused=3; // unused ticket address
@@ -27,12 +27,12 @@ message eventInfo {
 
 
 //type_url: ticket:s:ticket
-message Ticket {
+message TicketInfo {
   // when we pre generate create_asset_tx, we put nonce as the id of the ticket
   uint32 id = 3;
   // creator's signature for this ticket. sign: Any(type_url: "...", )
   string token = 4;
   // once used, active = true, thus verify the token would fail
-  bool unused = 5;
-
+  bool is_used = 5;
+  bytes exchange_tx=6;
 }

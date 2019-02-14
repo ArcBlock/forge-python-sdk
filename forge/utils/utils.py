@@ -61,3 +61,7 @@ def to_iter(to_req, data):
         return (to_req(i) for i in data)
     else:
         return iter([data])
+
+
+def to_asset_address(sender_address, itx):
+    return 'asset_address_place_holder'

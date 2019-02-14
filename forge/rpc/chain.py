@@ -7,8 +7,8 @@ class RpcChain:
         self.stub = protos.ChainRpcStub(chan)
 
     def create_tx(
-            self, itx=None, from_address='', nonce=0,
-            wallet=None, token='', req=None,
+            self, itx=None, from_address='',
+            wallet=None, token='', req=None, nonce=0,
     ):
         """
         RPC call to create transaction.

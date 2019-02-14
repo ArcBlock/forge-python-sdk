@@ -62,11 +62,30 @@ class ForgeRpc:
     def send_itx(self, type_url, itx, wallet, token=''):
         encoded_itx = utils.encode_to_any(type_url, itx)
         nonce = self.get_nonce(wallet.address)
-        tx_builder = self.create_tx(
-            encoded_itx, wallet.address, nonce,
-            wallet, token,
+        tx = self.create_tx(
+            encoded_itx, wallet.address,
+            wallet, token, nonce,
         )
-        return self.send_tx(tx_builder.tx)
+        return self.send_tx(tx.tx)
+
+    def create_asset(self, type_url, asset, wallet, token=''):
+        encoded_asset = utils.encode_to_any(type_url, asset)
+        create_asset_itx = protos.CreateAssetTx(data=encoded_asset)
+        tx = self.create_tx(
+            create_asset_itx, wallet.address, wallet, token,
+        )
+        return self.send_tx(tx.tx)
+
+    def update_asset(self, type_url, address, asset, wallet, token=''):
+        encoded_asset = utils.encode_to_any(type_url, asset)
+        update_asset_itx = protos.UpdateAssetTx(
+            address=address,
+            data=encoded_asset,
+        )
+        tx = self.create_tx(
+            update_asset_itx, wallet.address, wallet, token,
+        )
+        return self.send_tx(tx.tx)
 
     def get_nonce(self, address):
         accounts = self.get_account_state({'address': address})

@@ -1,50 +1,153 @@
+from google.protobuf.timestamp_pb2 import Timestamp
+
+from . import protos
+from .simulators import forgeSdk
+from forge import Signer
+from forge import utils
+
+forgeRpc = forgeSdk.rpc
+
+
+def create_ticket_itx(id, wallet, tx=None):
+    token = Signer().sign(protos.TicketInfo(id=id), wallet.sk)
+    ticket = protos.TicketInfo(id=id, token=token, tx=tx)
+    ticket_itx = protos.CreateAssetTx(
+        data=utils.encode_to_any(
+            'ec:t:ticket',
+            ticket,
+        ),
+    )
+    return ticket_itx
+
+
+def tx_with_sig(wallet, tx):
+    signature = Signer().sign(tx, wallet.sk)
+    tx = protos.Transaction(
+        **{
+            'from': getattr(tx, 'from'),
+            'nonce': tx.nonce,
+            'signature': signature,
+            'chain_id': tx.chain_id,
+            'signatures': tx.signatures,
+            'itx': tx.itx,
+        }
+    )
+    return tx
+
+
+def to_google_timestamp(timestamp):
+    return Timestamp(timestamp)
+
+
+def gen_exchange_tx(value, asset_address):
+    receiver = protos.ExchangeInfo(
+        value=protos.BigUint(value=value.to_bytes()),
+    )
+    sender = protos.ExchangeInfo(assets=[asset_address])
+    exchange_tx = protos.ExchangeTx(sender=sender, receiver=receiver)
+    return exchange_tx
+
+
 class Event:
-    def __init__(
-            self, title, description, total, start_time, end_time, wallet,
-            token,
-    ):
-        self.title = title
-        self.description = description
-        self.total = total
-        self.start_time = start_time
-        self.end_time = end_time
+    def __init__(self, wallet, token='', **kwargs):
+        self.title = kwargs.get('title')
+        self.total = kwargs.get('total')
+        self.start_time = kwargs.get('start_time')
+        self.end_time = kwargs.get('end_time')
         self.wallet = wallet
         self.token = token
-        self.tickets = []
+        self.ticket_price = kwargs.get('ticket_price', 0)
+        self.description = kwargs.get('description', 'No description :(')
+        self.ticket_txs = []
+        self.gen_tickets()
         self.participants = []
 
-    def gen_ticket(self):
+    def event_info_builder(self):
+        event_info = protos.EventInfo(
+            title=self.title,
+            total=self.total,
+            start_time=to_google_timestamp(self.start_time),
+            end_time=to_google_timestamp(self.end_time),
+            ticket_price=self.ticket_price,
+            tickets=self.ticket_txs_bytes(),
+            participants=self.participants,
+        )
+        return event_info
+
+    def create(self):
+        event_info = self.event_info_builder()
+        forgeRpc.create_asset(
+            'ec:t:event_info', event_info, self.wallet,
+            self.token,
+        )
+
+    def update(self, address):
+        event_info = self.event_info_builder()
+        forgeRpc.update_asset(
+            'ec:t:event_info', address, event_info,
+            self.wallet,
+            self.token,
+        )
+
+    def ticket_txs_bytes(self):
+        ticket_bytes = []
+        for tx in self.ticket_txs:
+            ticket_bytes.append(tx.SerializeToString())
+        return ticket_bytes
+
+    def gen_tickets(self):
         for id in range(self.total):
-            tx_bytes = self.gen_create_tx(id, self.wallet)
-            encoded_tx = self.encode_tx(tx_bytes)
-            self.tickets.append(encoded_tx)
+            tx = self.gen_create_ticket_tx(id, self.wallet)
+            encoded_tx = utils.encode(tx)
+            self.ticket_txs.append(encoded_tx)
 
     def add_participant(self, address):
         # do we limit here?
         self.participants.append(address)
 
-    def gen_create_tx(self, id, wallet):
-        return 0
+    def gen_create_ticket_tx(self, id, wallet):
+        # create ticket asset
+        ticket_itx = create_ticket_itx(id, wallet)
 
-    def encode_tx(self, bytes):
-        return 0
+        # get asset address
+        asset_address = utils.to_asset_address(
+            wallet.address,
+            ticket_itx,
+        )
+        # use asset_address to generate exchange_tx
+        exchange_tx = gen_exchange_tx(self.ticket_price, asset_address)
+
+        # put exchange_tx back to ticket_itx, and re-generate ticket_itx
+        ticket_itx = create_ticket_itx(id, wallet, exchange_tx)
+
+        tx = tx_with_sig(
+            wallet, protos.Transaction(
+                **{
+                    'from': wallet.address,
+                    'itx': ticket_itx,
+                    'moniker': asset_address,
+                }
+            ),
+        )
+        return tx
 
 
-class Ticket:
-    def __init__(self, id, create_tx):
-        self.id = id
-        self.create_tx = create_tx
-        self.__unused = True
-        self.__bought = False
+class TicketState:
+    def __init__(self, asset_state):
+        self.ticket_info = utils.decode_to_proto(
+            asset_state.data,
+            protos.TicketInfo,
+        )
+        self.id = self.ticket_info.id
+        self.is_used = self.ticket_info.is_used
+        self.is_bought = False
+
+    def create(self):
+        forgeRpc.send_tx(self.ticket_info)
 
     def get_exchange_tx(self):
-        return self.decode_itx(self.create_tx)
-
-    def is_bought(self):
-        self.__bought = True
-
-    def is_used(self):
-        self.__unused = False
-
-    def decode_itx(self):
-        return 0
+        exchange_tx = utils.parse_to_proto(
+            self.ticket_info.tx,
+            protos.ExchangeTx,
+        )
+        return exchange_tx
