@@ -1,0 +1,5 @@
+[app]
+name = "Bazar"
+version = "0.1.0"
+sock_tcp = "tcp://127.0.0.1:27219"
+# sock_grpc = "tcp://127.0.0.1:37210"

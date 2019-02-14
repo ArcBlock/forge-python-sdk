@@ -1,0 +1,72 @@
+syntax = "proto3";
+package forge_abi;
+
+import "enum.proto";
+import "type.proto";
+import "state.proto";
+
+// verify_tx(tx, state): server send tx / state to client, and client respond
+// truy / falsy
+message RequestVerifyTx {
+  Transaction tx = 1;
+  repeated AccountState states = 2;
+  repeated AssetState assets = 3;
+  repeated StakeState stakes = 4;
+  AbciContext context = 5;
+
+  ForgeState app_state = 15;
+}
+
+message ResponseVerifyTx { StatusCode code = 1; }
+
+// update_state(tx, account_state, app_state): server send tx / account_state /
+// app_state to client, and client respond updated account / app state
+message RequestUpdateState {
+  Transaction tx = 1;
+  repeated AccountState states = 2;
+  repeated AssetState assets = 3;
+  repeated StakeState stakes = 4;
+  AbciContext context = 5;
+
+  ForgeState app_state = 15;
+}
+
+message ResponseUpdateState {
+  StatusCode code = 1;
+  repeated AccountState states = 2;
+  repeated AssetState assets = 3;
+  repeated StakeState stakes = 4;
+
+  ForgeState app_state = 15;
+}
+
+message RequestInfo { string forge_version = 1; }
+
+message ResponseInfo {
+  repeated string type_urls = 1;
+  bytes app_hash = 2;
+}
+
+// Socket / GRPC API Request & Response (Forge acts as a client for Forge
+// server)
+message Request {
+  oneof value {
+    RequestVerifyTx verify_tx = 1;
+    RequestUpdateState update_state = 2;
+    RequestInfo info = 3;
+  }
+}
+
+message Response {
+  oneof value {
+    ResponseVerifyTx verify_tx = 1;
+    ResponseUpdateState update_state = 2;
+    ResponseInfo info = 3;
+  }
+}
+// ABI for forge application
+
+service ForgeAppRpc {
+  rpc process_one(Request) returns (Response);
+  rpc process(stream Request) returns (stream Response);
+}

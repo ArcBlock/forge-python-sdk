@@ -1,0 +1,93 @@
+syntax = "proto3";
+package forge_abi;
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+import "type.proto";
+
+// Transaction definition
+
+message AccountMigrateTx {
+  bytes pk = 1;        // new public key
+  WalletType type = 2; // new wallet type
+}
+
+message ConsensusUpgradeTx { repeated Validator validators = 1; }
+
+message CreateAssetTx {
+  string moniker = 1;
+  google.protobuf.Any data = 2;
+  bool readonly = 3;
+}
+
+message DeclareTx {
+  string moniker = 1;
+  bytes pk = 2;
+  WalletType type = 3;
+}
+
+message DeclareFileTx { string hash = 1; }
+
+message ExchangeInfo {
+  BigUint value = 1;
+  repeated string assets = 2;
+}
+
+// we could support these cases (and vise versa):
+// 1. sender fungible token <-> receiver one or more assets
+// 2. sender fungible token + asset <-> receiver one or more assets
+// 3. sender one or more assets <-> receiver one or more assets
+message ExchangeTx {
+  string to = 1;
+  ExchangeInfo sender = 2;
+  ExchangeInfo receiver = 3;
+  google.protobuf.Timestamp expired_at = 4;
+}
+
+// type url: fg:x:stake_asset. Stake for Tx is the same as stake for asset.
+message stakeForAsset {}
+
+// type url: fg:x:stake_chain. So far we haven't figured out how this could be
+// done.
+message stakeForChain {}
+
+// type url: fg:x:stake_node
+message StakeForNode {}
+
+// type url: fg:x:stake_user
+message stakeForUser {}
+
+// Here we will reuse DeclareTx to declare a node.
+// DeclareTx could only be carried out by node admin. We will have an RPC
+// to ask forge to use the private key of the node and declare its identity.
+// Then an account state will be created for that node and later on people can
+// stake to that account. The top N staked nodes will be validators in the
+// chain.
+// Once a node is declared, people can use StakeTx to stake its tokens to it
+// minimun staked token is 1. stake could be very flexible, that one can stake
+// for a node, a user, an asset, a chain or a tx hash (normally a vote tx)
+message StakeTx {
+  string to = 1;
+  BigSint value = 2;
+  string message = 3;
+
+  // forge app can extend the stake if the given data cannot meet its
+  // requirement.
+  google.protobuf.Any data = 15;
+}
+
+message SysUpgradeTx {
+  UpgradeTask task = 1;
+  uint64 grace_period = 2; // wait for how many blocks to take the operation
+}
+
+message TransferTx {
+  string to = 1;
+  BigUint value = 2;
+  repeated string assets = 3;
+}
+
+message UpdateAssetTx {
+  string address = 1;
+  string moniker = 2;
+  google.protobuf.Any data = 3;
+}

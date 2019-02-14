@@ -1,0 +1,14 @@
+<!doctype html>
+<title>Hello from Event-chain</title>
+<h1>Welcome to Event Chain!</h1>
+<table>
+    {% if events %}
+        {% for event in events %}
+            <tr>
+                <td>{{ event }}</td>
+            </tr>
+        {% endfor %}
+        </table>
+    {% else %}
+        <h1>There's no events created yet!</h1>
+    {% endif %}

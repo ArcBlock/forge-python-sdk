@@ -1,0 +1,86 @@
+syntax = "proto3";
+package forge_abi;
+import "google/protobuf/any.proto";
+
+import "type.proto";
+
+// State definition
+
+message AccountState {
+  BigUint balance = 1;
+  uint64 nonce = 2;
+  uint64 num_txs = 3;
+  string address = 4;
+  bytes pk = 5;
+  WalletType type = 6;
+  string moniker = 7;
+  StateContext context = 8;
+
+  // the address that is being migrated. Once this is set this account state is
+  // read only. No further tx can alter this account state. And tx with "from"
+  // equal to the old address will be rejected by Forge
+  repeated string migrated_to = 13;
+  repeated string migrated_from = 14;
+
+  uint64 num_assets = 15;
+  // 16-49 reserve for future
+
+  StakeContext stake = 16;
+  CircularQueue pinned_files = 17;
+
+  google.protobuf.Any data = 50;
+}
+
+message AssetState {
+  string address = 1;
+  string owner = 2;
+  string moniker = 3;
+  bool readonly = 4;
+
+  // 5-8 is reserved
+
+  StakeContext stake = 13;
+  StateContext context = 14;
+
+  // 13-49 reserve for future
+
+  google.protobuf.Any data = 50;
+}
+
+message ForgeState {
+  string address = 1;
+  // consensus parameters, in future we shall be able to modify it
+  ConsensusParams consensus = 2;
+  map<uint64, UpgradeTasks> tasks = 3;
+  map<uint32, StakeSummary> stake_summary = 4;
+  string version = 5;
+  string data_version = 6;
+  // app state returned by forge app
+  bytes forge_app_hash = 7;
+
+  // 6-14 is reserved for future
+
+  google.protobuf.Any data = 15; // forge app can define their ow app state
+}
+
+message StakeState {
+  string address = 1;
+  string from = 2;
+  string to = 3;
+  BigUint balance = 4;
+  string message = 5;
+
+  // state context, replace exiting fields
+  StateContext context = 14;
+  // forge app can extend this
+  google.protobuf.Any data = 15;
+}
+
+message StatisticsState {
+  string address = 1;
+  uint64 num_blocks = 2;
+  uint64 num_txs = 3;
+  BigUint num_stakes = 4;
+  uint32 num_validators = 5;
+  TxStatistics tx_statistics = 6;
+}

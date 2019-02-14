@@ -8,7 +8,7 @@ from deepmerge import Merger
 def parse_config(file_path):
     default_config = path.join(path.dirname(__file__), "forge_default.toml")
     toml_dict = toml.load(default_config)
-    if not file_path and path.exists(file_path):
+    if file_path and not path.exists(file_path):
         raise FileNotFoundError("Can't find the forge config user provided!")
     elif path.exists(file_path):
         user_dict = toml.load(file_path)
