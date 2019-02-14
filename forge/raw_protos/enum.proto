@@ -15,24 +15,21 @@ enum StatusCode {
   invalid_owner = 7;
   invalid_tx = 8;
   unsupported_tx = 9;
+  expired_tx = 10;
 
   // 16 - 2047 various errors
   invalid_moniker = 16;
   invalid_passphrase = 17;
-  invalid_channel = 18;
-  invalid_channel_waiting_data = 19;
+
   invalid_multisig = 20;
   invalid_wallet = 21;
   invalid_chain_id = 22;
-
-  need_confirmation = 23;
 
   consensus_rpc_error = 24;
   storage_rpc_error = 25;
   noent = 26;
   account_migrated = 27;
-  channel_is_full = 28;
-  revoked_tx = 29;
+
   unsupported_stake = 30;
   insufficient_stake = 31;
   invalid_stake_state = 32;
@@ -40,6 +37,8 @@ enum StatusCode {
   banned_unstake = 34;
   invalid_asset = 35;
   invalid_tx_size = 36;
+  invalid_signer_state = 37;
+  invalid_forge_state = 38;
 
   forbidden = 403;
   internal = 500;
@@ -47,18 +46,18 @@ enum StatusCode {
   // user defined status code shall start from 600
 }
 
-
 // event happened on Forge powered chain
 enum TopicType {
   // most commonly used event
   transfer = 0;
 
   // 1-15 fequently used event
-  account_migrate = 1;
-  confirm = 2;
+  exchange = 1;
+  declare = 2;
   create_asset = 3;
-  exchange = 4;
-  revoke = 5;
+  update_asset = 4;
+  stake = 5;
+  account_migrate = 6;
 
   // 7-15 reserved for future frequent forge tx
 
@@ -66,24 +65,19 @@ enum TopicType {
   begin_block = 16;
   end_block = 17;
 
-  declare = 19;
-  update_asset = 20;
   consensus_upgrade = 21;
   declare_file = 22;
   sys_upgrade = 23;
-  stake = 24;
 
   // 24-128 reserved for future infrequent forge tx
 
   account_state = 129;
   asset_state = 130;
-  channel_state = 131;
-  forge_state = 132;
-  stake_state = 133;
+  forge_state = 131;
+  stake_state = 132;
 
   // user defined event type shall start from 256.
 }
-
 
 enum KeyType {
   ed25519 = 0;
@@ -93,24 +87,33 @@ enum KeyType {
 enum HashType {
   keccak = 0;
   sha3 = 1;
-  sha2 = 2;
 
-  // 3-5 reserved
+  // 2-5 reserved
 
   keccak_384 = 6;
   sha3_384 = 7;
-  sha2_384 = 9;
 
-  // 10-12 reserved
+  // 9-12 reserved
 
   keccak_512 = 13;
   sha3_512 = 14;
-  sha2_512 = 15;
 }
 
 enum EncodingType {
   base16 = 0;
   base58 = 1;
+}
+
+enum RoleType {
+  role_account = 0;
+  role_node = 1;
+  role_device = 2;
+  role_application = 3;
+  role_smart_contract = 4;
+  role_bot = 5;
+  role_asset = 6;
+  role_stake = 7;
+  role_validator = 8;
 }
 
 enum UpgradeType {

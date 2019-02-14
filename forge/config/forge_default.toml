@@ -1,12 +1,20 @@
 [app]
-name = "forge_kv"
-version = "0.1.0"
+name = ""
+version = ""
 
-path = "~/.forge/app"
+path = ""
 executable = ""
-logfile = "logs/app.log"
-error_logfile = "logs/app_error.log"
-sock_tcp = "tcp://127.0.0.1:27211"
+logfile = ""
+error_logfile = ""
+
+# For the ABI connection between App and Forge under TCP mode.
+sock_tcp = ""
+
+# For the ABI connection between App and Forge under gRPC mode.
+sock_grpc = ""
+
+# For configuring the backoff time (in milliseconds) if the ABI connection is cutoff.
+sock_backoff = 500
 
 [forge]
 decimal = 16
@@ -19,8 +27,10 @@ index_db = "index"
 keystore = "keystore"
 logfile = "logs/forge.log"
 
-sock_grpc = "tcp://127.0.0.1:27210"
+# index db is nondeterministic, it won't affect statesdb.
+enable_index = true
 
+sock_grpc = "tcp://127.0.0.1:27210"
 consensus_engine = "tendermint"
 storage_engine = "ipfs"
 hash = "sha3"
@@ -30,6 +40,7 @@ unlock_ttl = 300
 max_validators = 64
 max_candidates = 256
 pub_sub_key = "ABTTOTHEMOON"
+compression = "snappy"
 
 [forge.limit]
 # max grace period is 10
@@ -46,8 +57,9 @@ address_format = "base58"
 [forge.transaction]
 
 max_asset_size = 65536
-max_asset_per_transfer = 8
-max_asset_per_exchange = 16
+max_list_size = 8
+max_multisig = 4
+minimum_stake = 10000000000000000
 
 disabled_tx = ["SysUpgradeTx"]
 
@@ -68,8 +80,10 @@ whitelist = "*"
 [forge.release]
 url = "http://releases.arcblock.io/forge"
 
+[forge.security]
+anti_replay = "hash" # default is hash, but can be switched to "nonce"
+
 [tendermint]
-version = "0.28.1"
 moniker = "forge"
 path = "~/.forge/tendermint"
 
@@ -115,8 +129,8 @@ upnp = false
 
 [tendermint.genesis]
 genesis_time = "2018-11-05T19:22:08.938749Z"
-chain_id = 1
-max_bytes = 22020096
+chain_id = "forge"
+max_bytes = 1200000
 max_gas = -1
 app_hash = ""
 
@@ -124,7 +138,6 @@ app_hash = ""
 [[tendermint.genesis.validators]]
 
 [ipfs]
-version = "0.4.18"
 path = "~/.forge/ipfs"
 logfile = "logs/ipfs.log"
 storage_max = "10GB"

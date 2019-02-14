@@ -24,6 +24,18 @@ message ResponseCreateTx {
   Transaction tx = 2;
 }
 
+// multisig(tx, wallet, token)
+message RequestMultisig {
+  Transaction tx = 1;
+  WalletInfo wallet = 2;
+  string token = 3;
+}
+
+message ResponseMultisig {
+  StatusCode code = 1;
+  Transaction tx = 2;
+}
+
 // send_tx(tx, wallet, token, commit \\ false)
 message RequestSendTx {
   Transaction tx = 1;
@@ -53,6 +65,16 @@ message ResponseGetBlock {
   BlockInfo block = 2;
 }
 
+message RequestGetBlocks {
+  uint64 min_height = 1;
+  uint64 max_height = 2;
+}
+
+message ResponseGetBlocks {
+  StatusCode code = 1;
+  repeated BlockInfo blocks = 2;
+}
+
 // create_wallet(moniker, passphrase): create an account locally
 message RequestCreateWallet {
   string passphrase = 1;
@@ -76,6 +98,7 @@ message RequestLoadWallet {
 message ResponseLoadWallet {
   StatusCode code = 1;
   string token = 2;
+  WalletInfo wallet = 3;
 }
 
 // recover_wallet(data, passphrase): recover to a keystore with given
@@ -106,7 +129,7 @@ message RequestRemoveWallet { string address = 1; }
 
 message ResponseRemoveWallet { StatusCode code = 1; }
 
-message RequestDeclareNode {}
+message RequestDeclareNode { bool validator = 1; }
 
 message ResponseDeclareNode {
   StatusCode code = 1;
@@ -136,17 +159,6 @@ message RequestGetAssetState {
 message ResponseGetAssetState {
   StatusCode code = 1;
   AssetState state = 2;
-}
-
-message RequestGetChannelState {
-  string address = 1;
-  repeated string keys = 2;
-  string app_hash = 3;
-}
-
-message ResponseGetChannelState {
-  StatusCode code = 1;
-  ChannelState state = 2;
 }
 
 message RequestGetStakeState {
@@ -187,6 +199,11 @@ message ResponseLoadFile {
   StatusCode code = 1;
   bytes chunk = 2;
 }
+
+// pin_file(hash): pin a hash address into ipfs, return ok if success
+message RequestPinFile { string hash = 1; }
+
+message ResponsePinFile { StatusCode code = 1; }
 
 // get_chain_info(): retrieve the current chain information
 message RequestGetChainInfo {}
@@ -248,8 +265,8 @@ message ResponseSubscribe {
     Transaction exchange = 7;
     Transaction revoke = 8;
 
-    forge_vendor.RequestBeginBlock begin_block = 16;
-    forge_vendor.RequestEndBlock end_block = 17;
+    abci_vendor.RequestBeginBlock begin_block = 16;
+    abci_vendor.RequestEndBlock end_block = 17;
 
     Transaction declare = 19;
     Transaction update_asset = 20;
@@ -260,9 +277,8 @@ message ResponseSubscribe {
 
     Transaction account_state = 129;
     Transaction asset_state = 130;
-    Transaction channel_state = 131;
-    Transaction forge_state = 132;
-    Transaction stake_state = 133;
+    Transaction forge_state = 131;
+    Transaction stake_state = 132;
   }
 }
 
@@ -275,4 +291,26 @@ message RequestGetConfig {}
 message ResponseGetConfig {
   StatusCode code = 1;
   string config = 2;
+}
+
+message ByDay {
+  string start_date = 1;
+  string end_date = 2;
+}
+
+message ByHour {
+  string date = 1;
+}
+
+
+message RequestGetForgeStatistics {
+  oneof value {
+    ByDay day_info = 1;
+    ByHour date = 2;
+  }
+}
+
+message ResponseGetForgeStatistics {
+  StatusCode code = 1;
+  ForgeStatistics forge_statistics = 2;
 }

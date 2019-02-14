@@ -25,6 +25,11 @@ class ChainRpcStub(object):
         request_serializer=rpc__pb2.RequestCreateTx.SerializeToString,
         response_deserializer=rpc__pb2.ResponseCreateTx.FromString,
         )
+    self.multisig = channel.unary_unary(
+        '/forge_abi.ChainRpc/multisig',
+        request_serializer=rpc__pb2.RequestMultisig.SerializeToString,
+        response_deserializer=rpc__pb2.ResponseMultisig.FromString,
+        )
     self.send_tx = channel.unary_unary(
         '/forge_abi.ChainRpc/send_tx',
         request_serializer=rpc__pb2.RequestSendTx.SerializeToString,
@@ -39,6 +44,11 @@ class ChainRpcStub(object):
         '/forge_abi.ChainRpc/get_block',
         request_serializer=rpc__pb2.RequestGetBlock.SerializeToString,
         response_deserializer=rpc__pb2.ResponseGetBlock.FromString,
+        )
+    self.get_blocks = channel.unary_unary(
+        '/forge_abi.ChainRpc/get_blocks',
+        request_serializer=rpc__pb2.RequestGetBlocks.SerializeToString,
+        response_deserializer=rpc__pb2.ResponseGetBlocks.FromString,
         )
     self.get_unconfirmed_txs = channel.unary_unary(
         '/forge_abi.ChainRpc/get_unconfirmed_txs',
@@ -89,6 +99,13 @@ class ChainRpcServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def multisig(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
   def send_tx(self, request, context):
     # missing associated documentation comment in .proto file
     pass
@@ -104,6 +121,13 @@ class ChainRpcServicer(object):
     raise NotImplementedError('Method not implemented!')
 
   def get_block(self, request_iterator, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def get_blocks(self, request, context):
     # missing associated documentation comment in .proto file
     pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -160,6 +184,11 @@ def add_ChainRpcServicer_to_server(servicer, server):
           request_deserializer=rpc__pb2.RequestCreateTx.FromString,
           response_serializer=rpc__pb2.ResponseCreateTx.SerializeToString,
       ),
+      'multisig': grpc.unary_unary_rpc_method_handler(
+          servicer.multisig,
+          request_deserializer=rpc__pb2.RequestMultisig.FromString,
+          response_serializer=rpc__pb2.ResponseMultisig.SerializeToString,
+      ),
       'send_tx': grpc.unary_unary_rpc_method_handler(
           servicer.send_tx,
           request_deserializer=rpc__pb2.RequestSendTx.FromString,
@@ -174,6 +203,11 @@ def add_ChainRpcServicer_to_server(servicer, server):
           servicer.get_block,
           request_deserializer=rpc__pb2.RequestGetBlock.FromString,
           response_serializer=rpc__pb2.ResponseGetBlock.SerializeToString,
+      ),
+      'get_blocks': grpc.unary_unary_rpc_method_handler(
+          servicer.get_blocks,
+          request_deserializer=rpc__pb2.RequestGetBlocks.FromString,
+          response_serializer=rpc__pb2.ResponseGetBlocks.SerializeToString,
       ),
       'get_unconfirmed_txs': grpc.unary_unary_rpc_method_handler(
           servicer.get_unconfirmed_txs,
@@ -290,6 +324,11 @@ class FileRpcStub(object):
         request_serializer=rpc__pb2.RequestLoadFile.SerializeToString,
         response_deserializer=rpc__pb2.ResponseLoadFile.FromString,
         )
+    self.pin_file = channel.unary_unary(
+        '/forge_abi.FileRpc/pin_file',
+        request_serializer=rpc__pb2.RequestPinFile.SerializeToString,
+        response_deserializer=rpc__pb2.ResponsePinFile.FromString,
+        )
 
 
 class FileRpcServicer(object):
@@ -310,6 +349,13 @@ class FileRpcServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def pin_file(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_FileRpcServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -322,6 +368,11 @@ def add_FileRpcServicer_to_server(servicer, server):
           servicer.load_file,
           request_deserializer=rpc__pb2.RequestLoadFile.FromString,
           response_serializer=rpc__pb2.ResponseLoadFile.SerializeToString,
+      ),
+      'pin_file': grpc.unary_unary_rpc_method_handler(
+          servicer.pin_file,
+          request_deserializer=rpc__pb2.RequestPinFile.FromString,
+          response_serializer=rpc__pb2.ResponsePinFile.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(
@@ -349,11 +400,6 @@ class StateRpcStub(object):
         request_serializer=rpc__pb2.RequestGetAssetState.SerializeToString,
         response_deserializer=rpc__pb2.ResponseGetAssetState.FromString,
         )
-    self.get_channel_state = channel.stream_stream(
-        '/forge_abi.StateRpc/get_channel_state',
-        request_serializer=rpc__pb2.RequestGetChannelState.SerializeToString,
-        response_deserializer=rpc__pb2.ResponseGetChannelState.FromString,
-        )
     self.get_stake_state = channel.stream_stream(
         '/forge_abi.StateRpc/get_stake_state',
         request_serializer=rpc__pb2.RequestGetStakeState.SerializeToString,
@@ -378,13 +424,6 @@ class StateRpcServicer(object):
     raise NotImplementedError('Method not implemented!')
 
   def get_asset_state(self, request_iterator, context):
-    # missing associated documentation comment in .proto file
-    pass
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
-  def get_channel_state(self, request_iterator, context):
     # missing associated documentation comment in .proto file
     pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -417,11 +456,6 @@ def add_StateRpcServicer_to_server(servicer, server):
           servicer.get_asset_state,
           request_deserializer=rpc__pb2.RequestGetAssetState.FromString,
           response_serializer=rpc__pb2.ResponseGetAssetState.SerializeToString,
-      ),
-      'get_channel_state': grpc.stream_stream_rpc_method_handler(
-          servicer.get_channel_state,
-          request_deserializer=rpc__pb2.RequestGetChannelState.FromString,
-          response_serializer=rpc__pb2.ResponseGetChannelState.SerializeToString,
       ),
       'get_stake_state': grpc.stream_stream_rpc_method_handler(
           servicer.get_stake_state,
@@ -563,4 +597,46 @@ def add_WalletRpcServicer_to_server(servicer, server):
   }
   generic_handler = grpc.method_handlers_generic_handler(
       'forge_abi.WalletRpc', rpc_method_handlers)
+  server.add_generic_rpc_handlers((generic_handler,))
+
+
+class StatisticRpcStub(object):
+  # missing associated documentation comment in .proto file
+  pass
+
+  def __init__(self, channel):
+    """Constructor.
+
+    Args:
+      channel: A grpc.Channel.
+    """
+    self.get_forge_statistics = channel.unary_unary(
+        '/forge_abi.StatisticRpc/get_forge_statistics',
+        request_serializer=rpc__pb2.RequestGetForgeStatistics.SerializeToString,
+        response_deserializer=rpc__pb2.ResponseGetForgeStatistics.FromString,
+        )
+
+
+class StatisticRpcServicer(object):
+  # missing associated documentation comment in .proto file
+  pass
+
+  def get_forge_statistics(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+
+def add_StatisticRpcServicer_to_server(servicer, server):
+  rpc_method_handlers = {
+      'get_forge_statistics': grpc.unary_unary_rpc_method_handler(
+          servicer.get_forge_statistics,
+          request_deserializer=rpc__pb2.RequestGetForgeStatistics.FromString,
+          response_serializer=rpc__pb2.ResponseGetForgeStatistics.SerializeToString,
+      ),
+  }
+  generic_handler = grpc.method_handlers_generic_handler(
+      'forge_abi.StatisticRpc', rpc_method_handlers)
   server.add_generic_rpc_handlers((generic_handler,))

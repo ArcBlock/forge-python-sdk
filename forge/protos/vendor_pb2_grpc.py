@@ -17,57 +17,57 @@ class ABCIApplicationStub(object):
       channel: A grpc.Channel.
     """
     self.Echo = channel.unary_unary(
-        '/forge_vendor.ABCIApplication/Echo',
+        '/abci_vendor.ABCIApplication/Echo',
         request_serializer=vendor__pb2.RequestEcho.SerializeToString,
         response_deserializer=vendor__pb2.ResponseEcho.FromString,
         )
     self.Flush = channel.unary_unary(
-        '/forge_vendor.ABCIApplication/Flush',
+        '/abci_vendor.ABCIApplication/Flush',
         request_serializer=vendor__pb2.RequestFlush.SerializeToString,
         response_deserializer=vendor__pb2.ResponseFlush.FromString,
         )
     self.Info = channel.unary_unary(
-        '/forge_vendor.ABCIApplication/Info',
+        '/abci_vendor.ABCIApplication/Info',
         request_serializer=vendor__pb2.RequestInfo.SerializeToString,
         response_deserializer=vendor__pb2.ResponseInfo.FromString,
         )
     self.SetOption = channel.unary_unary(
-        '/forge_vendor.ABCIApplication/SetOption',
+        '/abci_vendor.ABCIApplication/SetOption',
         request_serializer=vendor__pb2.RequestSetOption.SerializeToString,
         response_deserializer=vendor__pb2.ResponseSetOption.FromString,
         )
     self.DeliverTx = channel.unary_unary(
-        '/forge_vendor.ABCIApplication/DeliverTx',
+        '/abci_vendor.ABCIApplication/DeliverTx',
         request_serializer=vendor__pb2.RequestDeliverTx.SerializeToString,
         response_deserializer=vendor__pb2.ResponseDeliverTx.FromString,
         )
     self.CheckTx = channel.unary_unary(
-        '/forge_vendor.ABCIApplication/CheckTx',
+        '/abci_vendor.ABCIApplication/CheckTx',
         request_serializer=vendor__pb2.RequestCheckTx.SerializeToString,
         response_deserializer=vendor__pb2.ResponseCheckTx.FromString,
         )
     self.Query = channel.unary_unary(
-        '/forge_vendor.ABCIApplication/Query',
+        '/abci_vendor.ABCIApplication/Query',
         request_serializer=vendor__pb2.RequestQuery.SerializeToString,
         response_deserializer=vendor__pb2.ResponseQuery.FromString,
         )
     self.Commit = channel.unary_unary(
-        '/forge_vendor.ABCIApplication/Commit',
+        '/abci_vendor.ABCIApplication/Commit',
         request_serializer=vendor__pb2.RequestCommit.SerializeToString,
         response_deserializer=vendor__pb2.ResponseCommit.FromString,
         )
     self.InitChain = channel.unary_unary(
-        '/forge_vendor.ABCIApplication/InitChain',
+        '/abci_vendor.ABCIApplication/InitChain',
         request_serializer=vendor__pb2.RequestInitChain.SerializeToString,
         response_deserializer=vendor__pb2.ResponseInitChain.FromString,
         )
     self.BeginBlock = channel.unary_unary(
-        '/forge_vendor.ABCIApplication/BeginBlock',
+        '/abci_vendor.ABCIApplication/BeginBlock',
         request_serializer=vendor__pb2.RequestBeginBlock.SerializeToString,
         response_deserializer=vendor__pb2.ResponseBeginBlock.FromString,
         )
     self.EndBlock = channel.unary_unary(
-        '/forge_vendor.ABCIApplication/EndBlock',
+        '/abci_vendor.ABCIApplication/EndBlock',
         request_serializer=vendor__pb2.RequestEndBlock.SerializeToString,
         response_deserializer=vendor__pb2.ResponseEndBlock.FromString,
         )
@@ -216,5 +216,5 @@ def add_ABCIApplicationServicer_to_server(servicer, server):
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(
-      'forge_vendor.ABCIApplication', rpc_method_handlers)
+      'abci_vendor.ABCIApplication', rpc_method_handlers)
   server.add_generic_rpc_handlers((generic_handler,))

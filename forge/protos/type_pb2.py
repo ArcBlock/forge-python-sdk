@@ -23,7 +23,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='forge_abi',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\ntype.proto\x12\tforge_abi\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x19google/protobuf/any.proto\x1a\x0cvendor.proto\x1a\nenum.proto\"\x18\n\x07\x42igUint\x12\r\n\x05value\x18\x01 \x01(\x0c\"\'\n\x07\x42igSint\x12\r\n\x05value\x18\x01 \x01(\x0c\x12\r\n\x05minus\x18\x02 \x01(\x08\"y\n\nWalletType\x12\x1e\n\x02pk\x18\x01 \x01(\x0e\x32\x12.forge_abi.KeyType\x12!\n\x04hash\x18\x02 \x01(\x0e\x32\x13.forge_abi.HashType\x12(\n\x07\x61\x64\x64ress\x18\x03 \x01(\x0e\x32\x17.forge_abi.EncodingType\"Z\n\nWalletInfo\x12#\n\x04type\x18\x01 \x01(\x0b\x32\x15.forge_abi.WalletType\x12\n\n\x02sk\x18\x02 \x01(\x0c\x12\n\n\x02pk\x18\x03 \x01(\x0c\x12\x0f\n\x07\x61\x64\x64ress\x18\x04 \x01(\t\"\xc9\x03\n\tChainInfo\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0f\n\x07network\x18\x02 \x01(\t\x12\x0f\n\x07moniker\x18\x03 \x01(\t\x12\x19\n\x11\x63onsensus_version\x18\x04 \x01(\t\x12\x0e\n\x06synced\x18\x05 \x01(\x08\x12\x10\n\x08\x61pp_hash\x18\x06 \x01(\x0c\x12\x12\n\nblock_hash\x18\x07 \x01(\x0c\x12\x14\n\x0c\x62lock_height\x18\x08 \x01(\x04\x12.\n\nblock_time\x18\t \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0f\n\x07\x61\x64\x64ress\x18\n \x01(\t\x12\x14\n\x0cvoting_power\x18\x0b \x01(\r\x12\x11\n\ttotal_txs\x18\x0c \x01(\x04\x12\x0f\n\x07version\x18\r \x01(\t\x12\x14\n\x0c\x64\x61ta_version\x18\x0e \x01(\t\x12\x46\n\x12\x66orge_apps_version\x18\x0f \x03(\x0b\x32*.forge_abi.ChainInfo.ForgeAppsVersionEntry\x12\x15\n\rsupported_txs\x18\x10 \x03(\t\x1a\x37\n\x15\x46orgeAppsVersionEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"+\n\tValidator\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\r\n\x05power\x18\x02 \x01(\x04\"\xd8\x01\n\x0f\x43onsensusParams\x12\x11\n\tmax_bytes\x18\x01 \x01(\x04\x12\x0f\n\x07max_gas\x18\x02 \x01(\x12\x12\x16\n\x0emax_validators\x18\x03 \x01(\r\x12\x16\n\x0emax_candidates\x18\x04 \x01(\r\x12\x15\n\rpub_key_types\x18\x05 \x03(\t\x12(\n\nvalidators\x18\x06 \x03(\x0b\x32\x14.forge_abi.Validator\x12\x19\n\x11validator_changed\x18\x07 \x01(\x08\x12\x15\n\rparam_changed\x18\x08 \x01(\x08\"q\n\x0bUpgradeTask\x12$\n\x04type\x18\x01 \x01(\x0e\x32\x16.forge_abi.UpgradeType\x12\x11\n\tdata_hash\x18\x02 \x01(\t\x12)\n\x07\x61\x63tions\x18\x04 \x03(\x0e\x32\x18.forge_abi.UpgradeAction\"4\n\x0cUpgradeTasks\x12$\n\x04item\x18\x01 \x03(\x0b\x32\x16.forge_abi.UpgradeTask\"d\n\x0b\x41\x62\x63iContext\x12\x0f\n\x07tx_hash\x18\x01 \x01(\t\x12\x14\n\x0c\x62lock_height\x18\x02 \x01(\x04\x12.\n\nblock_time\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\x9c\x01\n\x0bTransaction\x12\x0c\n\x04\x66rom\x18\x01 \x01(\t\x12\r\n\x05nonce\x18\x02 \x01(\x04\x12\x11\n\tsignature\x18\x03 \x01(\x0c\x12\x10\n\x08\x63hain_id\x18\x04 \x01(\r\x12(\n\nsignatures\x18\x05 \x03(\x0b\x32\x14.forge_vendor.KVPair\x12!\n\x03itx\x18\x07 \x01(\x0b\x32\x14.google.protobuf.Any\"\x86\x01\n\x0fTransactionInfo\x12\"\n\x02tx\x18\x01 \x01(\x0b\x32\x16.forge_abi.Transaction\x12\x0e\n\x06height\x18\x02 \x01(\x04\x12\r\n\x05index\x18\x03 \x01(\r\x12\x0c\n\x04hash\x18\x04 \x01(\t\x12\"\n\x04tags\x18\x05 \x03(\x0b\x32\x14.forge_vendor.KVPair\"\xb2\x01\n\tBlockInfo\x12\x0e\n\x06height\x18\x01 \x01(\x04\x12\x0f\n\x07num_txs\x18\x02 \x01(\r\x12(\n\x04time\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x10\n\x08\x61pp_hash\x18\x04 \x01(\t\x12\x10\n\x08proposer\x18\x05 \x01(\t\x12#\n\x03txs\x18\x06 \x03(\x0b\x32\x16.forge_abi.Transaction\x12\x11\n\ttotal_txs\x18\x07 \x01(\x04\"=\n\x08TxStatus\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\x0c\n\x04hash\x18\x02 \x01(\t\"y\n\rCircularQueue\x12#\n\x05items\x18\x01 \x03(\x0b\x32\x14.google.protobuf.Any\x12\x10\n\x08type_url\x18\x02 \x01(\t\x12\x11\n\tmax_items\x18\x03 \x01(\r\x12\x10\n\x08\x63ircular\x18\x04 \x01(\x08\x12\x0c\n\x04\x66ifo\x18\x05 \x01(\x08\"\xa2\x01\n\x0cStateContext\x12\x12\n\ngenesis_tx\x18\x01 \x01(\t\x12\x16\n\x0erenaissance_tx\x18\x02 \x01(\t\x12\x30\n\x0cgenesis_time\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x34\n\x10renaissance_time\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\x82\x02\n\x0cStakeContext\x12(\n\x0ctotal_stakes\x18\x01 \x01(\x0b\x32\x12.forge_abi.BigUint\x12*\n\x0etotal_unstakes\x18\x02 \x01(\x0b\x32\x12.forge_abi.BigUint\x12\x31\n\x15total_received_stakes\x18\x03 \x01(\x0b\x32\x12.forge_abi.BigUint\x12/\n\rrecent_stakes\x18\x04 \x01(\x0b\x32\x18.forge_abi.CircularQueue\x12\x38\n\x16recent_received_stakes\x18\x0f \x01(\x0b\x32\x18.forge_abi.CircularQueue\"\x8e\x01\n\x0cStakeSummary\x12(\n\x0ctotal_stakes\x18\x01 \x01(\x0b\x32\x12.forge_abi.BigUint\x12*\n\x0etotal_unstakes\x18\x02 \x01(\x0b\x32\x12.forge_abi.BigUint\x12(\n\x07\x63ontext\x18\x03 \x01(\x0b\x32\x17.forge_abi.StateContext\"D\n\x0eUnconfirmedTxs\x12\r\n\x05n_txs\x18\x01 \x01(\r\x12#\n\x03txs\x18\x02 \x03(\x0b\x32\x16.forge_abi.Transaction\"d\n\x07NetInfo\x12\x11\n\tlistening\x18\x01 \x01(\x08\x12\x11\n\tlisteners\x18\x02 \x03(\t\x12\x0f\n\x07n_peers\x18\x03 \x01(\r\x12\"\n\x05peers\x18\x04 \x03(\x0b\x32\x13.forge_abi.PeerInfo\"2\n\x08PeerInfo\x12&\n\tnode_info\x18\x01 \x01(\x0b\x32\x13.forge_abi.NodeInfo\"{\n\x08NodeInfo\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0f\n\x07network\x18\x02 \x01(\t\x12\x0f\n\x07version\x18\x03 \x01(\t\x12\x0f\n\x07moniker\x18\x04 \x01(\t\x12\n\n\x02ip\x18\x05 \x01(\t\x12$\n\x08geo_info\x18\x06 \x01(\x0b\x32\x12.forge_abi.GeoInfo\"M\n\x07GeoInfo\x12\x0c\n\x04\x63ity\x18\x01 \x01(\t\x12\x0f\n\x07\x63ountry\x18\x02 \x01(\t\x12\x10\n\x08latitude\x18\x03 \x01(\x02\x12\x11\n\tlongitude\x18\x04 \x01(\x02\"T\n\x0eValidatorsInfo\x12\x14\n\x0c\x62lock_height\x18\x01 \x01(\x04\x12,\n\nvalidators\x18\x02 \x03(\x0b\x32\x18.forge_abi.ValidatorInfo\"\x86\x01\n\rValidatorInfo\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12%\n\x07pub_key\x18\x02 \x01(\x0b\x32\x14.forge_vendor.PubKey\x12\x14\n\x0cvoting_power\x18\x03 \x01(\r\x12\x19\n\x11proposer_priority\x18\x04 \x01(\t\x12\x0c\n\x04name\x18\x05 \x01(\t\"\xae\x01\n\x0bGenesisInfo\x12\x14\n\x0cgenesis_time\x18\x01 \x01(\t\x12\x10\n\x08\x63hain_id\x18\x02 \x01(\t\x12\x37\n\x10\x63onsensus_params\x18\x03 \x01(\x0b\x32\x1d.forge_vendor.ConsensusParams\x12,\n\nvalidators\x18\x04 \x03(\x0b\x32\x18.forge_abi.ValidatorInfo\x12\x10\n\x08\x61pp_hash\x18\x05 \x01(\tb\x06proto3')
+  serialized_pb=_b('\n\ntype.proto\x12\tforge_abi\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x19google/protobuf/any.proto\x1a\x0cvendor.proto\x1a\nenum.proto\"\x18\n\x07\x42igUint\x12\r\n\x05value\x18\x01 \x01(\x0c\"\'\n\x07\x42igSint\x12\r\n\x05value\x18\x01 \x01(\x0c\x12\r\n\x05minus\x18\x02 \x01(\x08\"\x9c\x01\n\nWalletType\x12\x1e\n\x02pk\x18\x01 \x01(\x0e\x32\x12.forge_abi.KeyType\x12!\n\x04hash\x18\x02 \x01(\x0e\x32\x13.forge_abi.HashType\x12(\n\x07\x61\x64\x64ress\x18\x03 \x01(\x0e\x32\x17.forge_abi.EncodingType\x12!\n\x04role\x18\x04 \x01(\x0e\x32\x13.forge_abi.RoleType\"Z\n\nWalletInfo\x12#\n\x04type\x18\x01 \x01(\x0b\x32\x15.forge_abi.WalletType\x12\n\n\x02sk\x18\x02 \x01(\x0c\x12\n\n\x02pk\x18\x03 \x01(\x0c\x12\x0f\n\x07\x61\x64\x64ress\x18\x04 \x01(\t\"\xc9\x03\n\tChainInfo\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0f\n\x07network\x18\x02 \x01(\t\x12\x0f\n\x07moniker\x18\x03 \x01(\t\x12\x19\n\x11\x63onsensus_version\x18\x04 \x01(\t\x12\x0e\n\x06synced\x18\x05 \x01(\x08\x12\x10\n\x08\x61pp_hash\x18\x06 \x01(\x0c\x12\x12\n\nblock_hash\x18\x07 \x01(\x0c\x12\x14\n\x0c\x62lock_height\x18\x08 \x01(\x04\x12.\n\nblock_time\x18\t \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0f\n\x07\x61\x64\x64ress\x18\n \x01(\t\x12\x14\n\x0cvoting_power\x18\x0b \x01(\x04\x12\x11\n\ttotal_txs\x18\x0c \x01(\x04\x12\x0f\n\x07version\x18\r \x01(\t\x12\x14\n\x0c\x64\x61ta_version\x18\x0e \x01(\t\x12\x46\n\x12\x66orge_apps_version\x18\x0f \x03(\x0b\x32*.forge_abi.ChainInfo.ForgeAppsVersionEntry\x12\x15\n\rsupported_txs\x18\x10 \x03(\t\x1a\x37\n\x15\x46orgeAppsVersionEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"+\n\tValidator\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\r\n\x05power\x18\x02 \x01(\x04\"\xd8\x01\n\x0f\x43onsensusParams\x12\x11\n\tmax_bytes\x18\x01 \x01(\x04\x12\x0f\n\x07max_gas\x18\x02 \x01(\x12\x12\x16\n\x0emax_validators\x18\x03 \x01(\r\x12\x16\n\x0emax_candidates\x18\x04 \x01(\r\x12\x15\n\rpub_key_types\x18\x05 \x03(\t\x12(\n\nvalidators\x18\x06 \x03(\x0b\x32\x14.forge_abi.Validator\x12\x19\n\x11validator_changed\x18\x07 \x01(\x08\x12\x15\n\rparam_changed\x18\x08 \x01(\x08\"q\n\x0bUpgradeTask\x12$\n\x04type\x18\x01 \x01(\x0e\x32\x16.forge_abi.UpgradeType\x12\x11\n\tdata_hash\x18\x02 \x01(\t\x12)\n\x07\x61\x63tions\x18\x04 \x03(\x0e\x32\x18.forge_abi.UpgradeAction\"4\n\x0cUpgradeTasks\x12$\n\x04item\x18\x01 \x03(\x0b\x32\x16.forge_abi.UpgradeTask\"\xb9\x01\n\x0b\x41\x62\x63iContext\x12\x0f\n\x07tx_hash\x18\x01 \x01(\t\x12\x14\n\x0c\x62lock_height\x18\x02 \x01(\x04\x12.\n\nblock_time\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x11\n\ttotal_txs\x18\x04 \x01(\x04\x12.\n\rtx_statistics\x18\x05 \x01(\x0b\x32\x17.forge_abi.TxStatistics\x12\x10\n\x08tx_index\x18\x06 \x01(\r\"\x9b\x01\n\x0bTransaction\x12\x0c\n\x04\x66rom\x18\x01 \x01(\t\x12\r\n\x05nonce\x18\x02 \x01(\x04\x12\x11\n\tsignature\x18\x03 \x01(\x0c\x12\x10\n\x08\x63hain_id\x18\x04 \x01(\t\x12\'\n\nsignatures\x18\x05 \x03(\x0b\x32\x13.abci_vendor.KVPair\x12!\n\x03itx\x18\x07 \x01(\x0b\x32\x14.google.protobuf.Any\"\xaa\x01\n\x0fTransactionInfo\x12\"\n\x02tx\x18\x01 \x01(\x0b\x32\x16.forge_abi.Transaction\x12\x0e\n\x06height\x18\x02 \x01(\x04\x12\r\n\x05index\x18\x03 \x01(\r\x12\x0c\n\x04hash\x18\x04 \x01(\t\x12!\n\x04tags\x18\x05 \x03(\x0b\x32\x13.abci_vendor.KVPair\x12#\n\x04\x63ode\x18\x06 \x01(\x0e\x32\x15.forge_abi.StatusCode\"\xb2\x01\n\tBlockInfo\x12\x0e\n\x06height\x18\x01 \x01(\x04\x12\x0f\n\x07num_txs\x18\x02 \x01(\r\x12(\n\x04time\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x10\n\x08\x61pp_hash\x18\x04 \x01(\t\x12\x10\n\x08proposer\x18\x05 \x01(\t\x12#\n\x03txs\x18\x06 \x03(\x0b\x32\x16.forge_abi.Transaction\x12\x11\n\ttotal_txs\x18\x07 \x01(\x04\"=\n\x08TxStatus\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\x0c\n\x04hash\x18\x02 \x01(\t\"c\n\rCircularQueue\x12\r\n\x05items\x18\x01 \x03(\x0c\x12\x10\n\x08type_url\x18\x02 \x01(\t\x12\x11\n\tmax_items\x18\x03 \x01(\r\x12\x10\n\x08\x63ircular\x18\x04 \x01(\x08\x12\x0c\n\x04\x66ifo\x18\x05 \x01(\x08\"\xa2\x01\n\x0cStateContext\x12\x12\n\ngenesis_tx\x18\x01 \x01(\t\x12\x16\n\x0erenaissance_tx\x18\x02 \x01(\t\x12\x30\n\x0cgenesis_time\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x34\n\x10renaissance_time\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\x82\x02\n\x0cStakeContext\x12(\n\x0ctotal_stakes\x18\x01 \x01(\x0b\x32\x12.forge_abi.BigUint\x12*\n\x0etotal_unstakes\x18\x02 \x01(\x0b\x32\x12.forge_abi.BigUint\x12\x31\n\x15total_received_stakes\x18\x03 \x01(\x0b\x32\x12.forge_abi.BigUint\x12/\n\rrecent_stakes\x18\x04 \x01(\x0b\x32\x18.forge_abi.CircularQueue\x12\x38\n\x16recent_received_stakes\x18\x0f \x01(\x0b\x32\x18.forge_abi.CircularQueue\"\x8e\x01\n\x0cStakeSummary\x12(\n\x0ctotal_stakes\x18\x01 \x01(\x0b\x32\x12.forge_abi.BigUint\x12*\n\x0etotal_unstakes\x18\x02 \x01(\x0b\x32\x12.forge_abi.BigUint\x12(\n\x07\x63ontext\x18\x03 \x01(\x0b\x32\x17.forge_abi.StateContext\"D\n\x0eUnconfirmedTxs\x12\r\n\x05n_txs\x18\x01 \x01(\r\x12#\n\x03txs\x18\x02 \x03(\x0b\x32\x16.forge_abi.Transaction\"d\n\x07NetInfo\x12\x11\n\tlistening\x18\x01 \x01(\x08\x12\x11\n\tlisteners\x18\x02 \x03(\t\x12\x0f\n\x07n_peers\x18\x03 \x01(\r\x12\"\n\x05peers\x18\x04 \x03(\x0b\x32\x13.forge_abi.PeerInfo\"2\n\x08PeerInfo\x12&\n\tnode_info\x18\x01 \x01(\x0b\x32\x13.forge_abi.NodeInfo\"{\n\x08NodeInfo\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0f\n\x07network\x18\x02 \x01(\t\x12\x0f\n\x07version\x18\x03 \x01(\t\x12\x0f\n\x07moniker\x18\x04 \x01(\t\x12\n\n\x02ip\x18\x05 \x01(\t\x12$\n\x08geo_info\x18\x06 \x01(\x0b\x32\x12.forge_abi.GeoInfo\"M\n\x07GeoInfo\x12\x0c\n\x04\x63ity\x18\x01 \x01(\t\x12\x0f\n\x07\x63ountry\x18\x02 \x01(\t\x12\x10\n\x08latitude\x18\x03 \x01(\x02\x12\x11\n\tlongitude\x18\x04 \x01(\x02\"T\n\x0eValidatorsInfo\x12\x14\n\x0c\x62lock_height\x18\x01 \x01(\x04\x12,\n\nvalidators\x18\x02 \x03(\x0b\x32\x18.forge_abi.ValidatorInfo\"\x85\x01\n\rValidatorInfo\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12$\n\x07pub_key\x18\x02 \x01(\x0b\x32\x13.abci_vendor.PubKey\x12\x14\n\x0cvoting_power\x18\x03 \x01(\x04\x12\x19\n\x11proposer_priority\x18\x04 \x01(\t\x12\x0c\n\x04name\x18\x05 \x01(\t\"\xad\x01\n\x0bGenesisInfo\x12\x14\n\x0cgenesis_time\x18\x01 \x01(\t\x12\x10\n\x08\x63hain_id\x18\x02 \x01(\t\x12\x36\n\x10\x63onsensus_params\x18\x03 \x01(\x0b\x32\x1c.abci_vendor.ConsensusParams\x12,\n\nvalidators\x18\x04 \x03(\x0b\x32\x18.forge_abi.ValidatorInfo\x12\x10\n\x08\x61pp_hash\x18\x05 \x01(\t\"\x95\x03\n\x0f\x46orgeStatistics\x12\x12\n\nnum_blocks\x18\x01 \x03(\x04\x12\x0f\n\x07num_txs\x18\x02 \x03(\x04\x12&\n\nnum_stakes\x18\x03 \x03(\x0b\x32\x12.forge_abi.BigUint\x12\x16\n\x0enum_validators\x18\x04 \x03(\r\x12\x1f\n\x17num_account_migrate_txs\x18\x05 \x03(\x04\x12\x1c\n\x14num_create_asset_txs\x18\x06 \x03(\x04\x12!\n\x19num_consensus_upgrade_txs\x18\x07 \x03(\r\x12\x17\n\x0fnum_declare_txs\x18\x08 \x03(\x04\x12\x1c\n\x14num_declare_file_txs\x18\t \x03(\x04\x12\x18\n\x10num_exchange_txs\x18\n \x03(\x04\x12\x15\n\rnum_stake_txs\x18\x0b \x03(\x04\x12\x1b\n\x13num_sys_upgrade_txs\x18\x0c \x03(\r\x12\x18\n\x10num_transfer_txs\x18\r \x03(\x04\x12\x1c\n\x14num_update_asset_txs\x18\x0e \x03(\x04\"\xad\x02\n\x0cTxStatistics\x12\x1f\n\x17num_account_migrate_txs\x18\x01 \x01(\x04\x12\x1c\n\x14num_create_asset_txs\x18\x02 \x01(\x04\x12!\n\x19num_consensus_upgrade_txs\x18\x03 \x01(\r\x12\x17\n\x0fnum_declare_txs\x18\x04 \x01(\x04\x12\x1c\n\x14num_declare_file_txs\x18\x05 \x01(\x04\x12\x18\n\x10num_exchange_txs\x18\x06 \x01(\x04\x12\x15\n\rnum_stake_txs\x18\x07 \x01(\x04\x12\x1b\n\x13num_sys_upgrade_txs\x18\x08 \x01(\r\x12\x18\n\x10num_transfer_txs\x18\t \x01(\x04\x12\x1c\n\x14num_update_asset_txs\x18\n \x01(\x04\x62\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,google_dot_protobuf_dot_any__pb2.DESCRIPTOR,vendor__pb2.DESCRIPTOR,enum__pb2.DESCRIPTOR,])
 
@@ -127,6 +127,13 @@ _WALLETTYPE = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='role', full_name='forge_abi.WalletType.role', index=3,
+      number=4, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -139,8 +146,8 @@ _WALLETTYPE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=178,
-  serialized_end=299,
+  serialized_start=179,
+  serialized_end=335,
 )
 
 
@@ -191,8 +198,8 @@ _WALLETINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=301,
-  serialized_end=391,
+  serialized_start=337,
+  serialized_end=427,
 )
 
 
@@ -229,8 +236,8 @@ _CHAININFO_FORGEAPPSVERSIONENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=796,
-  serialized_end=851,
+  serialized_start=832,
+  serialized_end=887,
 )
 
 _CHAININFO = _descriptor.Descriptor(
@@ -312,7 +319,7 @@ _CHAININFO = _descriptor.Descriptor(
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='voting_power', full_name='forge_abi.ChainInfo.voting_power', index=10,
-      number=11, type=13, cpp_type=3, label=1,
+      number=11, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -364,8 +371,8 @@ _CHAININFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=394,
-  serialized_end=851,
+  serialized_start=430,
+  serialized_end=887,
 )
 
 
@@ -402,8 +409,8 @@ _VALIDATOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=853,
-  serialized_end=896,
+  serialized_start=889,
+  serialized_end=932,
 )
 
 
@@ -482,8 +489,8 @@ _CONSENSUSPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=899,
-  serialized_end=1115,
+  serialized_start=935,
+  serialized_end=1151,
 )
 
 
@@ -527,8 +534,8 @@ _UPGRADETASK = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1117,
-  serialized_end=1230,
+  serialized_start=1153,
+  serialized_end=1266,
 )
 
 
@@ -558,8 +565,8 @@ _UPGRADETASKS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1232,
-  serialized_end=1284,
+  serialized_start=1268,
+  serialized_end=1320,
 )
 
 
@@ -591,6 +598,27 @@ _ABCICONTEXT = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='total_txs', full_name='forge_abi.AbciContext.total_txs', index=3,
+      number=4, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='tx_statistics', full_name='forge_abi.AbciContext.tx_statistics', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='tx_index', full_name='forge_abi.AbciContext.tx_index', index=5,
+      number=6, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -603,8 +631,8 @@ _ABCICONTEXT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1286,
-  serialized_end=1386,
+  serialized_start=1323,
+  serialized_end=1508,
 )
 
 
@@ -638,8 +666,8 @@ _TRANSACTION = _descriptor.Descriptor(
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='chain_id', full_name='forge_abi.Transaction.chain_id', index=3,
-      number=4, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -669,8 +697,8 @@ _TRANSACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1389,
-  serialized_end=1545,
+  serialized_start=1511,
+  serialized_end=1666,
 )
 
 
@@ -716,6 +744,13 @@ _TRANSACTIONINFO = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='code', full_name='forge_abi.TransactionInfo.code', index=5,
+      number=6, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -728,8 +763,8 @@ _TRANSACTIONINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1548,
-  serialized_end=1682,
+  serialized_start=1669,
+  serialized_end=1839,
 )
 
 
@@ -801,8 +836,8 @@ _BLOCKINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1685,
-  serialized_end=1863,
+  serialized_start=1842,
+  serialized_end=2020,
 )
 
 
@@ -839,8 +874,8 @@ _TXSTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1865,
-  serialized_end=1926,
+  serialized_start=2022,
+  serialized_end=2083,
 )
 
 
@@ -853,7 +888,7 @@ _CIRCULARQUEUE = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='items', full_name='forge_abi.CircularQueue.items', index=0,
-      number=1, type=11, cpp_type=10, label=3,
+      number=1, type=12, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -898,8 +933,8 @@ _CIRCULARQUEUE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1928,
-  serialized_end=2049,
+  serialized_start=2085,
+  serialized_end=2184,
 )
 
 
@@ -950,8 +985,8 @@ _STATECONTEXT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2052,
-  serialized_end=2214,
+  serialized_start=2187,
+  serialized_end=2349,
 )
 
 
@@ -1009,8 +1044,8 @@ _STAKECONTEXT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2217,
-  serialized_end=2475,
+  serialized_start=2352,
+  serialized_end=2610,
 )
 
 
@@ -1054,8 +1089,8 @@ _STAKESUMMARY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2478,
-  serialized_end=2620,
+  serialized_start=2613,
+  serialized_end=2755,
 )
 
 
@@ -1092,8 +1127,8 @@ _UNCONFIRMEDTXS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2622,
-  serialized_end=2690,
+  serialized_start=2757,
+  serialized_end=2825,
 )
 
 
@@ -1144,8 +1179,8 @@ _NETINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2692,
-  serialized_end=2792,
+  serialized_start=2827,
+  serialized_end=2927,
 )
 
 
@@ -1175,8 +1210,8 @@ _PEERINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2794,
-  serialized_end=2844,
+  serialized_start=2929,
+  serialized_end=2979,
 )
 
 
@@ -1241,8 +1276,8 @@ _NODEINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2846,
-  serialized_end=2969,
+  serialized_start=2981,
+  serialized_end=3104,
 )
 
 
@@ -1293,8 +1328,8 @@ _GEOINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2971,
-  serialized_end=3048,
+  serialized_start=3106,
+  serialized_end=3183,
 )
 
 
@@ -1331,8 +1366,8 @@ _VALIDATORSINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3050,
-  serialized_end=3134,
+  serialized_start=3185,
+  serialized_end=3269,
 )
 
 
@@ -1359,7 +1394,7 @@ _VALIDATORINFO = _descriptor.Descriptor(
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='voting_power', full_name='forge_abi.ValidatorInfo.voting_power', index=2,
-      number=3, type=13, cpp_type=3, label=1,
+      number=3, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -1390,8 +1425,8 @@ _VALIDATORINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3137,
-  serialized_end=3271,
+  serialized_start=3272,
+  serialized_end=3405,
 )
 
 
@@ -1449,13 +1484,230 @@ _GENESISINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3274,
-  serialized_end=3448,
+  serialized_start=3408,
+  serialized_end=3581,
+)
+
+
+_FORGESTATISTICS = _descriptor.Descriptor(
+  name='ForgeStatistics',
+  full_name='forge_abi.ForgeStatistics',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='num_blocks', full_name='forge_abi.ForgeStatistics.num_blocks', index=0,
+      number=1, type=4, cpp_type=4, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='num_txs', full_name='forge_abi.ForgeStatistics.num_txs', index=1,
+      number=2, type=4, cpp_type=4, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='num_stakes', full_name='forge_abi.ForgeStatistics.num_stakes', index=2,
+      number=3, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='num_validators', full_name='forge_abi.ForgeStatistics.num_validators', index=3,
+      number=4, type=13, cpp_type=3, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='num_account_migrate_txs', full_name='forge_abi.ForgeStatistics.num_account_migrate_txs', index=4,
+      number=5, type=4, cpp_type=4, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='num_create_asset_txs', full_name='forge_abi.ForgeStatistics.num_create_asset_txs', index=5,
+      number=6, type=4, cpp_type=4, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='num_consensus_upgrade_txs', full_name='forge_abi.ForgeStatistics.num_consensus_upgrade_txs', index=6,
+      number=7, type=13, cpp_type=3, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='num_declare_txs', full_name='forge_abi.ForgeStatistics.num_declare_txs', index=7,
+      number=8, type=4, cpp_type=4, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='num_declare_file_txs', full_name='forge_abi.ForgeStatistics.num_declare_file_txs', index=8,
+      number=9, type=4, cpp_type=4, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='num_exchange_txs', full_name='forge_abi.ForgeStatistics.num_exchange_txs', index=9,
+      number=10, type=4, cpp_type=4, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='num_stake_txs', full_name='forge_abi.ForgeStatistics.num_stake_txs', index=10,
+      number=11, type=4, cpp_type=4, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='num_sys_upgrade_txs', full_name='forge_abi.ForgeStatistics.num_sys_upgrade_txs', index=11,
+      number=12, type=13, cpp_type=3, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='num_transfer_txs', full_name='forge_abi.ForgeStatistics.num_transfer_txs', index=12,
+      number=13, type=4, cpp_type=4, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='num_update_asset_txs', full_name='forge_abi.ForgeStatistics.num_update_asset_txs', index=13,
+      number=14, type=4, cpp_type=4, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3584,
+  serialized_end=3989,
+)
+
+
+_TXSTATISTICS = _descriptor.Descriptor(
+  name='TxStatistics',
+  full_name='forge_abi.TxStatistics',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='num_account_migrate_txs', full_name='forge_abi.TxStatistics.num_account_migrate_txs', index=0,
+      number=1, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='num_create_asset_txs', full_name='forge_abi.TxStatistics.num_create_asset_txs', index=1,
+      number=2, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='num_consensus_upgrade_txs', full_name='forge_abi.TxStatistics.num_consensus_upgrade_txs', index=2,
+      number=3, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='num_declare_txs', full_name='forge_abi.TxStatistics.num_declare_txs', index=3,
+      number=4, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='num_declare_file_txs', full_name='forge_abi.TxStatistics.num_declare_file_txs', index=4,
+      number=5, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='num_exchange_txs', full_name='forge_abi.TxStatistics.num_exchange_txs', index=5,
+      number=6, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='num_stake_txs', full_name='forge_abi.TxStatistics.num_stake_txs', index=6,
+      number=7, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='num_sys_upgrade_txs', full_name='forge_abi.TxStatistics.num_sys_upgrade_txs', index=7,
+      number=8, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='num_transfer_txs', full_name='forge_abi.TxStatistics.num_transfer_txs', index=8,
+      number=9, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='num_update_asset_txs', full_name='forge_abi.TxStatistics.num_update_asset_txs', index=9,
+      number=10, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3992,
+  serialized_end=4293,
 )
 
 _WALLETTYPE.fields_by_name['pk'].enum_type = enum__pb2._KEYTYPE
 _WALLETTYPE.fields_by_name['hash'].enum_type = enum__pb2._HASHTYPE
 _WALLETTYPE.fields_by_name['address'].enum_type = enum__pb2._ENCODINGTYPE
+_WALLETTYPE.fields_by_name['role'].enum_type = enum__pb2._ROLETYPE
 _WALLETINFO.fields_by_name['type'].message_type = _WALLETTYPE
 _CHAININFO_FORGEAPPSVERSIONENTRY.containing_type = _CHAININFO
 _CHAININFO.fields_by_name['block_time'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
@@ -1465,14 +1717,15 @@ _UPGRADETASK.fields_by_name['type'].enum_type = enum__pb2._UPGRADETYPE
 _UPGRADETASK.fields_by_name['actions'].enum_type = enum__pb2._UPGRADEACTION
 _UPGRADETASKS.fields_by_name['item'].message_type = _UPGRADETASK
 _ABCICONTEXT.fields_by_name['block_time'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
+_ABCICONTEXT.fields_by_name['tx_statistics'].message_type = _TXSTATISTICS
 _TRANSACTION.fields_by_name['signatures'].message_type = vendor__pb2._KVPAIR
 _TRANSACTION.fields_by_name['itx'].message_type = google_dot_protobuf_dot_any__pb2._ANY
 _TRANSACTIONINFO.fields_by_name['tx'].message_type = _TRANSACTION
 _TRANSACTIONINFO.fields_by_name['tags'].message_type = vendor__pb2._KVPAIR
+_TRANSACTIONINFO.fields_by_name['code'].enum_type = enum__pb2._STATUSCODE
 _BLOCKINFO.fields_by_name['time'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _BLOCKINFO.fields_by_name['txs'].message_type = _TRANSACTION
 _TXSTATUS.fields_by_name['code'].enum_type = enum__pb2._STATUSCODE
-_CIRCULARQUEUE.fields_by_name['items'].message_type = google_dot_protobuf_dot_any__pb2._ANY
 _STATECONTEXT.fields_by_name['genesis_time'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _STATECONTEXT.fields_by_name['renaissance_time'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _STAKECONTEXT.fields_by_name['total_stakes'].message_type = _BIGUINT
@@ -1491,6 +1744,7 @@ _VALIDATORSINFO.fields_by_name['validators'].message_type = _VALIDATORINFO
 _VALIDATORINFO.fields_by_name['pub_key'].message_type = vendor__pb2._PUBKEY
 _GENESISINFO.fields_by_name['consensus_params'].message_type = vendor__pb2._CONSENSUSPARAMS
 _GENESISINFO.fields_by_name['validators'].message_type = _VALIDATORINFO
+_FORGESTATISTICS.fields_by_name['num_stakes'].message_type = _BIGUINT
 DESCRIPTOR.message_types_by_name['BigUint'] = _BIGUINT
 DESCRIPTOR.message_types_by_name['BigSint'] = _BIGSINT
 DESCRIPTOR.message_types_by_name['WalletType'] = _WALLETTYPE
@@ -1517,6 +1771,8 @@ DESCRIPTOR.message_types_by_name['GeoInfo'] = _GEOINFO
 DESCRIPTOR.message_types_by_name['ValidatorsInfo'] = _VALIDATORSINFO
 DESCRIPTOR.message_types_by_name['ValidatorInfo'] = _VALIDATORINFO
 DESCRIPTOR.message_types_by_name['GenesisInfo'] = _GENESISINFO
+DESCRIPTOR.message_types_by_name['ForgeStatistics'] = _FORGESTATISTICS
+DESCRIPTOR.message_types_by_name['TxStatistics'] = _TXSTATISTICS
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 BigUint = _reflection.GeneratedProtocolMessageType('BigUint', (_message.Message,), dict(
@@ -1708,6 +1964,20 @@ GenesisInfo = _reflection.GeneratedProtocolMessageType('GenesisInfo', (_message.
   # @@protoc_insertion_point(class_scope:forge_abi.GenesisInfo)
   ))
 _sym_db.RegisterMessage(GenesisInfo)
+
+ForgeStatistics = _reflection.GeneratedProtocolMessageType('ForgeStatistics', (_message.Message,), dict(
+  DESCRIPTOR = _FORGESTATISTICS,
+  __module__ = 'type_pb2'
+  # @@protoc_insertion_point(class_scope:forge_abi.ForgeStatistics)
+  ))
+_sym_db.RegisterMessage(ForgeStatistics)
+
+TxStatistics = _reflection.GeneratedProtocolMessageType('TxStatistics', (_message.Message,), dict(
+  DESCRIPTOR = _TXSTATISTICS,
+  __module__ = 'type_pb2'
+  # @@protoc_insertion_point(class_scope:forge_abi.TxStatistics)
+  ))
+_sym_db.RegisterMessage(TxStatistics)
 
 
 _CHAININFO_FORGEAPPSVERSIONENTRY._options = None

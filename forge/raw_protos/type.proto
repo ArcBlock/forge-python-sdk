@@ -18,6 +18,7 @@ message WalletType {
   KeyType pk = 1;
   HashType hash = 2;
   EncodingType address = 3;
+  RoleType role = 4;
 }
 
 message WalletInfo {
@@ -28,17 +29,17 @@ message WalletInfo {
 }
 
 message ChainInfo {
-  string id = 1;           // node id.
-  string network = 2;      // which network the node belongs to.
-  string moniker = 3;      // name of the node.
-  string consensus_version = 4;      // consensus engine version for this node.
-  bool synced = 5;         // indicate if this node is fully synced.
-  bytes app_hash = 6;      // current application hash.
-  bytes block_hash = 7;    // current block hash.
-  uint64 block_height = 8; // latest block height, in integer.
+  string id = 1;                // node id.
+  string network = 2;           // which network the node belongs to.
+  string moniker = 3;           // name of the node.
+  string consensus_version = 4; // consensus engine version for this node.
+  bool synced = 5;              // indicate if this node is fully synced.
+  bytes app_hash = 6;           // current application hash.
+  bytes block_hash = 7;         // current block hash.
+  uint64 block_height = 8;      // latest block height, in integer.
   google.protobuf.Timestamp block_time = 9; // latest block time.
   string address = 10;                      // the address of the node.
-  uint32 voting_power = 11; // the voting power of the node, in integer.
+  uint64 voting_power = 11; // the voting power of the node, in integer.
   uint64 total_txs = 12;    // total number of txs up to the latest block
   string version = 13;
   string data_version = 14;
@@ -83,16 +84,22 @@ message AbciContext {
   // the deterministic time (in google protobuf timestamp format) of the current
   // block.
   google.protobuf.Timestamp block_time = 3;
+  // the total txs of the chain.
+  uint64 total_txs = 4;
+  // tx statistics
+  TxStatistics tx_statistics = 5;
+  uint32 tx_index = 6;
 }
 
 message Transaction {
   string from = 1;
   uint64 nonce = 2;
   bytes signature = 3;
-  uint32 chain_id = 4;
+  // use DID for the chain. "did:" prefix is omitted
+  string chain_id = 4;
   // we will support multiple signatures in case of certain tx need multiple
   // parties' signature.
-  repeated forge_vendor.KVPair signatures = 5;
+  repeated abci_vendor.KVPair signatures = 5;
   // at current version we don't have a VM to process byte
   // code so this should always be empty. Forge will reject
   // tx with non-empty byte_code
@@ -106,7 +113,8 @@ message TransactionInfo {
   uint64 height = 2;
   uint32 index = 3;
   string hash = 4;
-  repeated forge_vendor.KVPair tags = 5;
+  repeated abci_vendor.KVPair tags = 5;
+  StatusCode code = 6;
 }
 
 message BlockInfo {
@@ -125,8 +133,8 @@ message TxStatus {
 }
 
 message CircularQueue {
-  // all items has type_url = "" to save space
-  repeated google.protobuf.Any items = 1;
+  // each item is the value of the Any
+  repeated bytes items = 1;
   // data inserted into the queue shall have same type_url
   string type_url = 2;
   // if max_items is 0, meaning the queue has no size limit (use it cautious).
@@ -179,9 +187,7 @@ message NetInfo {
   repeated PeerInfo peers = 4;
 }
 
-message PeerInfo {
-  NodeInfo node_info = 1;
-}
+message PeerInfo { NodeInfo node_info = 1; }
 
 message NodeInfo {
   string id = 1;
@@ -206,8 +212,8 @@ message ValidatorsInfo {
 
 message ValidatorInfo {
   string address = 1;
-  forge_vendor.PubKey pub_key = 2;
-  uint32 voting_power = 3;
+  abci_vendor.PubKey pub_key = 2;
+  uint64 voting_power = 3;
   string proposer_priority = 4;
   string name = 5;
 }
@@ -215,7 +221,37 @@ message ValidatorInfo {
 message GenesisInfo {
   string genesis_time = 1;
   string chain_id = 2;
-  forge_vendor.ConsensusParams consensus_params = 3;
+  abci_vendor.ConsensusParams consensus_params = 3;
   repeated ValidatorInfo validators = 4;
   string app_hash = 5;
+}
+
+message ForgeStatistics {
+  repeated uint64 num_blocks = 1;
+  repeated uint64 num_txs = 2;
+  repeated BigUint num_stakes = 3;
+  repeated uint32 num_validators = 4;
+  repeated uint64 num_account_migrate_txs = 5;
+  repeated uint64 num_create_asset_txs = 6;
+  repeated uint32 num_consensus_upgrade_txs = 7;
+  repeated uint64 num_declare_txs = 8;
+  repeated uint64 num_declare_file_txs = 9;
+  repeated uint64 num_exchange_txs = 10;
+  repeated uint64 num_stake_txs = 11;
+  repeated uint32 num_sys_upgrade_txs = 12;
+  repeated uint64 num_transfer_txs = 13;
+  repeated uint64 num_update_asset_txs = 14;
+}
+
+message TxStatistics {
+  uint64 num_account_migrate_txs = 1;
+  uint64 num_create_asset_txs = 2;
+  uint32 num_consensus_upgrade_txs = 3;
+  uint64 num_declare_txs = 4;
+  uint64 num_declare_file_txs = 5;
+  uint64 num_exchange_txs = 6;
+  uint64 num_stake_txs = 7;
+  uint32 num_sys_upgrade_txs = 8;
+  uint64 num_transfer_txs = 9;
+  uint64 num_update_asset_txs = 10;
 }

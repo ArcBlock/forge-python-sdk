@@ -12,7 +12,7 @@ repos:
   - id: name-tests-test
   - id: requirements-txt-fixer
   - id: flake8
-    exclude: ^(forge/protos/.*|examples/kvstore/kv_protos/.*|__init__|.*/__init__|.*/.*/__init__)\.py$
+    exclude: ^(forge/config/forge_default|forge/protos/.*|examples/kvstore/kv_protos/.*|__init__|.*/__init__|.*/.*/__init__)\.py$
 - repo: https://github.com/pre-commit/mirrors-autopep8
   rev: v1.4.3
   hooks:
