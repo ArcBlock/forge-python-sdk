@@ -8,7 +8,7 @@ class RpcChain:
 
     def create_tx(
             self, itx=None, from_address='',
-            wallet=None, token='', req=None, nonce=1,
+            wallet=None, token='', req=None, nonce=0,
     ):
         """
         RPC call to create transaction.
@@ -237,5 +237,3 @@ class RpcChain:
             return self.stub.get_config(
                 protos.RequestGetConfig(),
             )
-
-    # def multisig(selfself, req=None, tx=):

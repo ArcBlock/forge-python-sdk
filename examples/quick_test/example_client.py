@@ -25,7 +25,7 @@ def run():
         print('before', i)
 
     itx = Any(
-        type_url='tx/test',
+        type_url='test:t:test',
         value=protos.pythonSDKTx(
             to=wallet1.wallet.address,
             value=100,
@@ -38,8 +38,8 @@ def run():
         'nonce': 2,
         'token': wallet1.token,
     }
-    tx = rpc.create_tx(**kwargs).tx
-    res = rpc.send_tx(tx=tx)
+    tx = rpc.create_tx(**kwargs)
+    res = rpc.send_tx(tx=tx.tx, token=wallet1.token)
     print(res)
 
     sleep(5)

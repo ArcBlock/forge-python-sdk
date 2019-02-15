@@ -12,6 +12,7 @@ src/_trial_temp/*
 _trial_temp/
 src/test/quick_test/*
 examples/kvstore/forge
+examples/event-chain/forge
 build/
 dist/
 forge_python_sdk.egg-info/

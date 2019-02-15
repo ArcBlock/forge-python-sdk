@@ -12,7 +12,7 @@ message EventInfo {
   google.protobuf.Timestamp end_time = 8;
   uint32 ticket_price=9;
 
-  repeated string participants = 1; // participant address
+  repeated string participants = 10; // participant address
 
 }
 

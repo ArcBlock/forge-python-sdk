@@ -65,6 +65,4 @@ service WalletRpc {
 service StatisticRpc {
   rpc get_forge_statistics(RequestGetForgeStatistics)
       returns (ResponseGetForgeStatistics);
-  rpc list_transactions(RequestListTransactions)
-      returns (ResponseListTransactions);
 }

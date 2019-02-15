@@ -314,16 +314,3 @@ message ResponseGetForgeStatistics {
   StatusCode code = 1;
   ForgeStatistics forge_statistics = 2;
 }
-
-message RequestListTransactions {
-  PageInput paging = 1;
-  TimeFilter time_filter = 2;
-  AddressFilter address_filter = 3;
-  TypeFilter type_filter = 4;
-}
-
-message ResponseListTransactions {
-  StatusCode code = 1;
-  PageInfo page = 2;
-  repeated IndexedTransaction transactions = 3;
-}
