@@ -49,13 +49,14 @@ def gen_exchange_tx(value, asset_address):
 
 
 class Event:
-    def __init__(self, wallet, token='', **kwargs):
+    def __init__(self, wallet=None, token='', **kwargs):
+        self.wallet = wallet
+        self.token = token
+
         self.title = kwargs.get('title')
         self.total = kwargs.get('total')
         self.start_time = kwargs.get('start_time')
         self.end_time = kwargs.get('end_time')
-        self.wallet = wallet
-        self.token = token
         self.ticket_price = kwargs.get('ticket_price', 0)
         self.description = kwargs.get('description', 'No description :(')
         self.ticket_txs = []
@@ -125,14 +126,61 @@ class Event:
                 **{
                     'from': wallet.address,
                     'itx': ticket_itx,
-                    'moniker': asset_address,
                 }
             ),
         )
         return tx
 
 
-class TicketState:
+class EventAssetState:
+    def __init__(self, asset_state, wallet=None, token=''):
+        self.wallet = wallet,
+        self.token = token,
+        self.address = asset_state.address
+        self.owner = asset_state.owner
+        self.monier = asset_state.moniker
+        self.read_only = asset_state.read_only
+        self.context = asset_state.context
+        self.stake = asset_state.stake
+        self.event_info = utils.parse_to_proto(
+            asset_state.data.value,
+            protos.EventInfo,
+        )
+
+        self.tickets = list(self.event_info.tickets)
+        self.participants = list(self.event_info.participants)
+
+    def execute_next_ticket(self):
+        if len(self.tickets) < 1:
+            raise ValueError("There is not ticket left for this event!")
+        else:
+            next_tx = utils.parse_to_proto(self.tickets[0], protos.Transaction)
+            res = forgeRpc.send_tx(next_tx)
+            if res.code == 0:
+                self.tickets = self.tickets[1:]
+                self.update()
+
+    def update(self, **kwargs):
+        event_info = protos.EventInfo(
+            title=kwargs.get('title'),
+            total=kwargs.get('total'),
+            start_time=kwargs.get('start_time'),
+            end_time=kwargs.get('end_time'),
+            ticket_price=kwargs.get('ticket_price', 0),
+            description=kwargs.get('description', 'No description :('),
+            tickets=map(
+                lambda ticket: ticket.SerializeToString(),
+                self.tickets,
+            ),
+            participants=self.participants,
+        )
+        forgeRpc.update_asset(
+            'ec:s:event_info', self.address, event_info,
+            self.wallet, self.token,
+        )
+
+
+class TicketAssetState:
     def __init__(self, asset_state):
         self.ticket_info = utils.decode_to_proto(
             asset_state.data,
@@ -142,12 +190,14 @@ class TicketState:
         self.is_used = self.ticket_info.is_used
         self.is_bought = False
 
-    def create(self):
-        forgeRpc.send_tx(self.ticket_info)
 
-    def get_exchange_tx(self):
-        exchange_tx = utils.parse_to_proto(
-            self.ticket_info.tx,
-            protos.ExchangeTx,
-        )
-        return exchange_tx
+def create(self):
+    forgeRpc.send_tx(self.ticket_info)
+
+
+def get_exchange_tx(self):
+    exchange_tx = utils.parse_to_proto(
+        self.ticket_info.tx,
+        protos.ExchangeTx,
+    )
+    return exchange_tx
