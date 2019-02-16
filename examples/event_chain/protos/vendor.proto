@@ -1,0 +1,24 @@
+syntax = "proto3";
+import "google/protobuf/any.proto";
+
+message Transaction {
+  string from = 1;
+  uint64 nonce = 2;
+  bytes signature = 3;
+  // use DID for the chain. "did:" prefix is omitted
+  string chain_id = 4;
+  // we will support multiple signatures in case of certain tx need multiple
+  // parties' signature.
+  repeated KVPair signatures = 5;
+  // at current version we don't have a VM to process byte
+  // code so this should always be empty. Forge will reject
+  // tx with non-empty byte_code
+  // bytes byte_code = 6;
+
+  google.protobuf.Any itx = 7;
+}
+
+message KVPair {
+  bytes key = 1;
+  bytes value = 2;
+}

@@ -238,4 +238,25 @@ class RpcChain:
                 protos.RequestGetConfig(),
             )
 
-    # def multisig(selfself, req=None, tx=):
+    def multisig(self, req=None, tx=None, wallet=None, token=''):
+
+        if req is not None:
+            return self.stub.multisig(req)
+        else:
+            return self.stub.multisig(
+                protos.RequestMultisig(tx=tx, wallet=wallet, token=token),
+            )
+
+    def get_asset_address(
+            self, req=None, sender_address='', itx=None,
+            wallet_type=None,
+    ):
+        if req is not None:
+            return self.stub.get_asset_address(req)
+        else:
+            return self.stub.get_asset_address(
+                protos.RequestGetAssetAddress(
+                    sender_address=sender_address, itx=itx,
+                    wallet_type=wallet_type,
+                ),
+            )

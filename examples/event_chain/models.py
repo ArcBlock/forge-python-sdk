@@ -54,7 +54,7 @@ class Event:
         self.end_time = kwargs.get('end_time')
         self.ticket_price = kwargs.get('ticket_price', 0)
         self.description = kwargs.get('description', 'No description :(')
-        self.ticket_txs = []
+        self.tickets = []
         self.gen_tickets()
         self.participants = []
 
@@ -65,7 +65,7 @@ class Event:
             start_time=to_google_timestamp(self.start_time),
             end_time=to_google_timestamp(self.end_time),
             ticket_price=self.ticket_price,
-            tickets=self.ticket_txs_bytes(),
+            tickets=self.tickets,
             participants=self.participants,
         )
         forgeRpc.create_asset(
@@ -73,51 +73,46 @@ class Event:
             self.token,
         )
 
-    def ticket_txs_bytes(self):
-        ticket_bytes = []
-        for tx in self.ticket_txs:
-            ticket_bytes.append(tx.SerializeToString())
-        return ticket_bytes
-
     def gen_tickets(self):
-        for id in range(self.total):
-            tx = self.gen_create_ticket_tx(id, self.wallet)
-            encoded_tx = utils.encode(tx)
-            self.ticket_txs.append(encoded_tx)
+        for ticket_id in range(self.total):
+            ticket_holder = self.gen_ticket_holder(ticket_id)
+            self.tickets.append(ticket_holder)
 
     def add_participant(self, address):
         # do we limit here?
         self.participants.append(address)
 
-    def gen_create_ticket_tx(self, id, wallet):
-        # create ticket asset
-        ticket_itx = create_ticket_itx(id, wallet)
-
-        # get asset address
+    def gen_ticket_holder(self, ticket_id):
+        create_asset_itx = create_ticket_itx(ticket_id, self.wallet)
         asset_address = utils.to_asset_address(
-            wallet.address,
-            ticket_itx,
+            self.wallet.address,
+            create_asset_itx,
         )
-        # use asset_address to generate exchange_tx
+        ticket_create_tx = forgeRpc.create_tx(
+            itx=create_asset_itx,
+            from_address=self.wallet.address,
+            token=self.token,
+        )
+
         exchange_tx = gen_exchange_tx(self.ticket_price, asset_address)
-
-        # put exchange_tx back to ticket_itx, and re-generate ticket_itx
-        ticket_itx = create_ticket_itx(id, wallet, exchange_tx)
-
-        tx = forgeRpc.create_tx(
-            itx=ticket_itx,
+        ticket_exchange_tx = forgeRpc.create_tx(
+            itx=exchange_tx,
             from_address=self.wallet.address,
             wallet=self.wallet, token=self.token,
         )
 
-        return tx
+        ticket_holder = protos.TicketHolder(
+            ticket_create=ticket_create_tx,
+            ticket_exchange=ticket_exchange_tx,
+        )
+        return ticket_holder
 
 
 class EventAssetState:
     def __init__(self, asset_state):
         self.address = asset_state.address
         self.owner = asset_state.owner
-        self.monier = asset_state.moniker
+        self.moniker = asset_state.moniker
         self.read_only = asset_state.read_only
         self.context = asset_state.context
         self.stake = asset_state.stake
@@ -129,10 +124,13 @@ class EventAssetState:
         self.tickets = list(self.event_info.tickets)
         self.participants = list(self.event_info.participants)
 
-    def execute_next_ticket(self):
+    def execute_next_ticket(self, buy_wallet):
         if len(self.tickets) < 1:
             raise ValueError("There is not ticket left for this event!")
         else:
+            self.create_ticket()
+            self.exchange_ticket()
+            self.update_token()
             tx = utils.parse_to_proto(self.tickets[0], protos.Transaction)
             # ticket_creation
             res = forgeRpc.send_tx(tx)

@@ -1,38 +1,36 @@
 syntax = "proto3";
-import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
+import "vendor.proto";
 
-//type_url: event:s:event
+//type_url: ec:s:event_info
 message EventInfo {
-  string title = 1;
-  string description = 2; // html or markdown
-  uint32 total = 4;
-  repeated bytes tickets = 5; // binary of tx ->create_asset_tx)
-  google.protobuf.Timestamp start_time = 7;
-  google.protobuf.Timestamp end_time = 8;
-  uint32 ticket_price=9;
-
-  repeated string participants = 10; // participant address
-
+    string title = 1;
+    string description = 2;
+    uint32 total = 4;
+    repeated TicketHolder tickets = 5;
+    google.protobuf.Timestamp start_time = 7;
+    google.protobuf.Timestamp end_time = 8;
+    uint32 ticket_price = 9;
+    repeated string participants = 10;
 }
 
 //type_url: eventInfo:t:eventInfo
 //extend accountState
 message ParticipantInfo {
-  repeated string hosted = 1; // hosted event addresses
-  repeated string participanted = 2; // participanted event addresses
-  repeated string unused=3; // unused ticket address
-  repeated string used=4;  // used ticket address
+    repeated string hosted = 1;
+    repeated string participanted = 2;
+    repeated string unused = 3;
+    repeated string used = 4;
 }
 
-
-//type_url: ticket:s:ticket
+//type_url: ec:s:ticket_info
 message TicketInfo {
-  // when we pre generate create_asset_tx, we put nonce as the id of the ticket
-  uint32 id = 3;
-  // creator's signature for this ticket. sign: Any(type_url: "...", )
-  string token = 4;
-  // once used, active = true, thus verify the token would fail
-  bool is_used = 5;
-  bytes exchange_tx=6;
+    uint32 id = 3;
+    string token = 4;
+    bool is_used = 5;
+}
+
+message TicketHolder {
+    Transaction ticket_create = 1;
+    Transaction ticket_exchange = 2;
 }

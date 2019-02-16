@@ -2,12 +2,13 @@
 # source: event-chain.proto
 import sys
 
-from google.protobuf import any_pb2 as google_dot_protobuf_dot_any__pb2
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
 from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
+
+from . import vendor_pb2 as vendor__pb2
 _b = sys.version_info[0] < 3 and (
     lambda x: x
 ) or (lambda x: x.encode('latin1'))
@@ -21,10 +22,10 @@ DESCRIPTOR = _descriptor.FileDescriptor(
     package='',
     syntax='proto3',
     serialized_options=None,
-    serialized_pb=_b('\n\x11\x65vent-chain.proto\x1a\x19google/protobuf/any.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xd9\x01\n\tEventInfo\x12\r\n\x05title\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\r\n\x05total\x18\x04 \x01(\r\x12\x0f\n\x07tickets\x18\x05 \x03(\x0c\x12.\n\nstart_time\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\x08 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x14\n\x0cticket_price\x18\t \x01(\r\x12\x14\n\x0cparticipants\x18\n \x03(\t\"V\n\x0fParticipantInfo\x12\x0e\n\x06hosted\x18\x01 \x03(\t\x12\x15\n\rparticipanted\x18\x02 \x03(\t\x12\x0e\n\x06unused\x18\x03 \x03(\t\x12\x0c\n\x04used\x18\x04 \x03(\t\"M\n\nTicketInfo\x12\n\n\x02id\x18\x03 \x01(\r\x12\r\n\x05token\x18\x04 \x01(\t\x12\x0f\n\x07is_used\x18\x05 \x01(\x08\x12\x13\n\x0b\x65xchange_tx\x18\x06 \x01(\x0c\x62\x06proto3'),
+    serialized_pb=_b('\n\x11\x65vent-chain.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x0cvendor.proto\"\xe8\x01\n\tEventInfo\x12\r\n\x05title\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\r\n\x05total\x18\x04 \x01(\r\x12\x1e\n\x07tickets\x18\x05 \x03(\x0b\x32\r.TicketHolder\x12.\n\nstart_time\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\x08 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x14\n\x0cticket_price\x18\t \x01(\r\x12\x14\n\x0cparticipants\x18\n \x03(\t\"V\n\x0fParticipantInfo\x12\x0e\n\x06hosted\x18\x01 \x03(\t\x12\x15\n\rparticipanted\x18\x02 \x03(\t\x12\x0e\n\x06unused\x18\x03 \x03(\t\x12\x0c\n\x04used\x18\x04 \x03(\t\"8\n\nTicketInfo\x12\n\n\x02id\x18\x03 \x01(\r\x12\r\n\x05token\x18\x04 \x01(\t\x12\x0f\n\x07is_used\x18\x05 \x01(\x08\"Z\n\x0cTicketHolder\x12#\n\rticket_create\x18\x01 \x01(\x0b\x32\x0c.Transaction\x12%\n\x0fticket_exchange\x18\x02 \x01(\x0b\x32\x0c.Transactionb\x06proto3'),
     dependencies=[
-        google_dot_protobuf_dot_any__pb2.DESCRIPTOR,
-        google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR, ],
+        google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,
+        vendor__pb2.DESCRIPTOR, ],
 )
 
 
@@ -61,7 +62,7 @@ _EVENTINFO = _descriptor.Descriptor(
         ),
         _descriptor.FieldDescriptor(
             name='tickets', full_name='EventInfo.tickets', index=3,
-            number=5, type=12, cpp_type=9, label=3,
+            number=5, type=11, cpp_type=10, label=3,
             has_default_value=False, default_value=[],
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
@@ -111,8 +112,8 @@ _EVENTINFO = _descriptor.Descriptor(
     extension_ranges=[],
     oneofs=[
     ],
-    serialized_start=82,
-    serialized_end=299,
+    serialized_start=69,
+    serialized_end=301,
 )
 
 
@@ -167,8 +168,8 @@ _PARTICIPANTINFO = _descriptor.Descriptor(
     extension_ranges=[],
     oneofs=[
     ],
-    serialized_start=301,
-    serialized_end=387,
+    serialized_start=303,
+    serialized_end=389,
 )
 
 
@@ -203,10 +204,42 @@ _TICKETINFO = _descriptor.Descriptor(
             is_extension=False, extension_scope=None,
             serialized_options=None, file=DESCRIPTOR,
         ),
+    ],
+    extensions=[
+    ],
+    nested_types=[],
+    enum_types=[
+    ],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto3',
+    extension_ranges=[],
+    oneofs=[
+    ],
+    serialized_start=391,
+    serialized_end=447,
+)
+
+
+_TICKETHOLDER = _descriptor.Descriptor(
+    name='TicketHolder',
+    full_name='TicketHolder',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
         _descriptor.FieldDescriptor(
-            name='exchange_tx', full_name='TicketInfo.exchange_tx', index=3,
-            number=6, type=12, cpp_type=9, label=1,
-            has_default_value=False, default_value=_b(""),
+            name='ticket_create', full_name='TicketHolder.ticket_create', index=0,
+            number=1, type=11, cpp_type=10, label=1,
+            has_default_value=False, default_value=None,
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR,
+        ),
+        _descriptor.FieldDescriptor(
+            name='ticket_exchange', full_name='TicketHolder.ticket_exchange', index=1,
+            number=2, type=11, cpp_type=10, label=1,
+            has_default_value=False, default_value=None,
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
             serialized_options=None, file=DESCRIPTOR,
@@ -223,15 +256,19 @@ _TICKETINFO = _descriptor.Descriptor(
     extension_ranges=[],
     oneofs=[
     ],
-    serialized_start=389,
-    serialized_end=466,
+    serialized_start=449,
+    serialized_end=539,
 )
 
+_EVENTINFO.fields_by_name['tickets'].message_type = _TICKETHOLDER
 _EVENTINFO.fields_by_name['start_time'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _EVENTINFO.fields_by_name['end_time'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
+_TICKETHOLDER.fields_by_name['ticket_create'].message_type = vendor__pb2._TRANSACTION
+_TICKETHOLDER.fields_by_name['ticket_exchange'].message_type = vendor__pb2._TRANSACTION
 DESCRIPTOR.message_types_by_name['EventInfo'] = _EVENTINFO
 DESCRIPTOR.message_types_by_name['ParticipantInfo'] = _PARTICIPANTINFO
 DESCRIPTOR.message_types_by_name['TicketInfo'] = _TICKETINFO
+DESCRIPTOR.message_types_by_name['TicketHolder'] = _TICKETHOLDER
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 EventInfo = _reflection.GeneratedProtocolMessageType(
@@ -260,6 +297,15 @@ TicketInfo = _reflection.GeneratedProtocolMessageType(
     ),
 )
 _sym_db.RegisterMessage(TicketInfo)
+
+TicketHolder = _reflection.GeneratedProtocolMessageType(
+    'TicketHolder', (_message.Message,), dict(
+        DESCRIPTOR=_TICKETHOLDER,
+        __module__='event_chain_pb2',
+        # @@protoc_insertion_point(class_scope:TicketHolder)
+    ),
+)
+_sym_db.RegisterMessage(TicketHolder)
 
 
 # @@protoc_insertion_point(module_scope)

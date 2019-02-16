@@ -255,3 +255,43 @@ message TxStatistics {
   uint64 num_transfer_txs = 9;
   uint64 num_update_asset_txs = 10;
 }
+
+message PageOrder {
+  string field = 1;
+  string type = 2;
+}
+
+message PageInput {
+  string cursor = 1;
+  uint32 size = 2;
+  repeated PageOrder order = 3;
+}
+
+message TypeFilter {
+  repeated string types = 1;
+}
+
+message TimeFilter {
+  string start_date_time = 1;
+  string end_date_time = 2;
+}
+
+message AddressFilter {
+  string sender = 1;
+  string receiver = 2;
+}
+
+message PageInfo {
+  string cursor = 1;
+  bool next = 2;
+  uint32 total = 3;
+}
+
+message IndexedTransaction {
+  string hash = 1;
+  string sender = 2;
+  string receiver = 3;
+  string time = 4;
+  string type = 5;
+  Transaction tx = 6;
+}

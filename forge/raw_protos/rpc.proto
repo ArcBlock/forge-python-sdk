@@ -7,6 +7,7 @@ import "vendor.proto";
 import "enum.proto";
 import "type.proto";
 import "state.proto";
+import "tx.proto";
 
 // Request / Response message definition
 
@@ -313,4 +314,28 @@ message RequestGetForgeStatistics {
 message ResponseGetForgeStatistics {
   StatusCode code = 1;
   ForgeStatistics forge_statistics = 2;
+}
+
+message RequestListTransactions {
+  PageInput paging = 1;
+  TimeFilter time_filter = 2;
+  AddressFilter address_filter = 3;
+  TypeFilter type_filter = 4;
+}
+
+message ResponseListTransactions {
+  StatusCode code = 1;
+  PageInfo page = 2;
+  repeated IndexedTransaction transactions = 3;
+}
+
+message RequestGetAssetAddress {
+  string sender_address = 1;
+  CreateAssetTx itx = 2;
+  WalletType wallet_type = 3;
+}
+
+message ResponseGetAssetAddress {
+  StatusCode code = 1;
+  string asset_address = 2;
 }
