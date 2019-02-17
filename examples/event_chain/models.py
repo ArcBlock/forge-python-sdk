@@ -1,3 +1,5 @@
+import logging
+
 from google.protobuf.timestamp_pb2 import Timestamp
 
 from . import protos
@@ -6,6 +8,7 @@ from forge import Signer
 from forge import utils
 
 forgeRpc = forgeSdk.rpc
+logger = logging.getLogger(__name__)
 
 
 def gen_ticket_token(id, wallet):
@@ -50,6 +53,7 @@ class Event:
 
         self.title = kwargs.get('title')
         self.total = kwargs.get('total')
+        self.remaining = self.total
         self.start_time = kwargs.get('start_time')
         self.end_time = kwargs.get('end_time')
         self.ticket_price = kwargs.get('ticket_price', 0)
@@ -120,38 +124,42 @@ class EventAssetState:
             asset_state.data.value,
             protos.EventInfo,
         )
-
+        self.id = self.event_info.id
         self.tickets = list(self.event_info.tickets)
         self.participants = list(self.event_info.participants)
 
-    def execute_next_ticket(self, buy_wallet):
-        if len(self.tickets) < 1:
-            raise ValueError("There is not ticket left for this event!")
-        else:
-            self.create_ticket()
-            self.exchange_ticket()
-            self.update_token()
-            tx = utils.parse_to_proto(self.tickets[0], protos.Transaction)
-            # ticket_creation
-            res = forgeRpc.send_tx(tx)
-            if res.code == 0:
-                self.tickets = self.tickets[1:]
-                self.update()
-            # exchange_tx and multisig
-            # itx = utils.parse_to_proto(tx.itx.value, protos.CreateAssetTx)
-            # ticket_info = utils.parse_to_proto(
-            #     itx.data.value,
-            #     protos.TicketInfo,
-            # )
-            # # exchange_tx = utils.parse_to_proto(
-            # #     ticket_info.tx,
-            # #     protos.Transaction,
-            # # )
+    def unexecuted_ticket_holder(self):
+        for ticket_holder in self.tickets:
+            if not ticket_holder.executed:
+                return ticket_holder
+
+    def create_ticket(self):
+        ticket_holder = self.unexecuted_ticket_holder()
+        create_tx = ticket_holder.ticket_create
+        res = forgeRpc.send_tx(create_tx)
+        return res.code
+
+    def exchange_ticket(self, buyer_wallet, buyer_token):
+        ticket_holder = self.unexecuted_ticket_holder()
+        exchange_tx = ticket_holder.ticket_exchange
+        res = forgeRpc.send_tx(exchange_tx)
+        return res.code
+
+    def update_token(self, buyer_wallet, buyer_token=''):
+        ticket_info = protos.TicketInfo(
+            id=self.id,
+            token=gen_ticket_token,
+        )
+        res = forgeRpc.update_asset(
+            'ec:s:ticket_info', self.address,
+            ticket_info,
+            buyer_wallet, buyer_token,
+        )
+        return res.code
 
     def update(self, wallet, token, **kwargs):
         event_info = protos.EventInfo(
             title=kwargs.get('title', self.event_info.title),
-            # total=kwargs.get('total', self.event_info.total),
             start_time=kwargs.get(
                 'start_time',
                 self.event_info.start_time,
@@ -175,6 +183,22 @@ class EventAssetState:
             'ec:s:event_info', self.address, event_info,
             wallet, token,
         )
+
+    def execute_next_ticket_holder(self, buyer_wallet, buyer_token):
+        if len(self.tickets) < 1:
+            raise ValueError("There is not ticket left for this event!")
+        else:
+            if self.create_ticket() == 0:
+                logger.info("ticket {} has been created.".format(self.id))
+                if self.exchange_ticket(buyer_wallet, buyer_token) == 0:
+                    logger.info(
+                        "ticket {} has been exchanged with buyer.".format(
+                            self.id,
+                        ),
+                    )
+                if self.update_token(buyer_wallet, buyer_token) == 0:
+                    self.tickets = self.tickets[1:]
+                    self.update()
 
 
 class TicketAssetState:

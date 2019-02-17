@@ -35,6 +35,8 @@ class ForgeRpc:
         self.get_net_info = self.chain.get_net_info
         self.get_validators_info = self.chain.get_validators_info
         self.get_config = self.chain.get_config
+        self.multisig = self.chain.multisig
+        self.get_asset_address = self.chain.get_asset_address
 
         self.event = RpcEvent(self.chan)
         self.subscribe = self.event.subscribe
