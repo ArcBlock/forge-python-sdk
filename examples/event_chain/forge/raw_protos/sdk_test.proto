@@ -1,9 +1,0 @@
-syntax = "proto3";
-package forge_abi;
-import "google/protobuf/any.proto";
-
-
-message pythonSDKTx {
-    string to = 1;
-    uint32 value = 2;
-}

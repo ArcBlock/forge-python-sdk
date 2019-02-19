@@ -27,6 +27,8 @@ service ChainRpc {
   rpc get_validators_info(RequestGetValidatorsInfo)
       returns (ResponseGetValidatorsInfo);
   rpc get_config(RequestGetConfig) returns (ResponseGetConfig);
+  rpc get_asset_address(RequestGetAssetAddress)
+      returns (ResponseGetAssetAddress);
 }
 
 service EventRpc {
@@ -65,4 +67,6 @@ service WalletRpc {
 service StatisticRpc {
   rpc get_forge_statistics(RequestGetForgeStatistics)
       returns (ResponseGetForgeStatistics);
+  rpc list_transactions(RequestListTransactions)
+      returns (ResponseListTransactions);
 }

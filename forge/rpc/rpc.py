@@ -65,14 +65,17 @@ class ForgeRpc:
         encoded_itx = utils.encode_to_any(type_url, itx)
         nonce = self.get_nonce(wallet.address)
         tx = self.create_tx(
-            encoded_itx, wallet.address,
-            wallet, token, nonce,
+            itx=encoded_itx, from_address=wallet.address,
+            wallet=wallet, token=token, nonce=nonce,
         )
         return self.send_tx(tx.tx)
 
     def create_asset(self, type_url, asset, wallet, token):
         encoded_asset = utils.encode_to_any(type_url, asset)
-        create_asset_itx = protos.CreateAssetTx(data=encoded_asset)
+        create_asset_itx = utils.encode_to_any(
+            type_url='fg:t:create_asset',
+            data=protos.CreateAssetTx(data=encoded_asset),
+        )
         tx = self.create_tx(
             create_asset_itx, wallet.address, wallet, token,
         )
@@ -80,19 +83,34 @@ class ForgeRpc:
 
     def update_asset(self, type_url, address, asset, wallet, token):
         encoded_asset = utils.encode_to_any(type_url, asset)
-        update_asset_itx = protos.UpdateAssetTx(
-            address=address,
-            data=encoded_asset,
+        update_asset_itx = utils.encode_to_any(
+            type_url='fg:t:update_asset',
+            data=protos.UpdateAssetTx(
+                address=address,
+                data=encoded_asset,
+            ),
         )
         tx = self.create_tx(
             update_asset_itx, wallet.address, wallet, token,
         )
         return self.send_tx(tx.tx)
 
-    def get_nonce(self, address):
+    def get_single_account_state(self, address):
         accounts = self.get_account_state({'address': address})
         account = next(accounts)
         if not account:
             self.logger.error("Account doesn't exist!")
         else:
-            return account.state.nonce
+            return account.state
+
+    def get_single_asset_state(self, address):
+        assets = self.get_asset_state({'address': address})
+        asset = next(assets)
+        if not asset:
+            self.logger.error("Asset doesn't exist!")
+        else:
+            return asset.state
+
+    def get_nonce(self, address):
+        account = self.get_single_account_state(address)
+        return account.nonce

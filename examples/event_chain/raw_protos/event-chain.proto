@@ -1,6 +1,6 @@
 syntax = "proto3";
 import "google/protobuf/timestamp.proto";
-import "vendor.proto";
+import "type.proto";
 
 //type_url: ec:s:event_info
 message EventInfo {
@@ -27,12 +27,14 @@ message ParticipantInfo {
 //type_url: ec:s:ticket_info
 message TicketInfo {
     uint32 id = 3;
-    string token = 4;
+    bytes token = 4;
     bool is_used = 5;
 }
 
 message TicketHolder {
-    Transaction ticket_create = 1;
-    Transaction ticket_exchange = 2;
+    forge_abi.Transaction ticket_create = 1;
+    forge_abi.Transaction ticket_exchange = 2;
     bool executed = 3;
+    uint32 id =4;
+    string address =5;
 }

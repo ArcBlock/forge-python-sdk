@@ -5,6 +5,7 @@ from google.protobuf.any_pb2 import Any
 
 from forge import ForgeRpc
 from forge import protos
+from forge import utils
 from forge.protos import BigUint
 from forge.protos import TransferTx
 
@@ -181,6 +182,30 @@ class RpcTest(unittest.TestCase):
         )
         sleep(SLEEP_SECS)
         assert (res.code == 0)
+        print(res)
+
+    def test_send_exchange_itx(self):
+        exchange_itx = protos.ExchangeTx(
+            sender=protos.ExchangeInfo(value=protos.BigUint(value=bytes(3))),
+            receiver=protos.ExchangeInfo(value=protos.BigUint(value=bytes(3))),
+        )
+        sleep(SLEEP_SECS)
+        sender_signed = self.rpc.create_tx(
+            itx=utils.encode_to_any('fg:t:exchange', exchange_itx),
+            from_address=self.wallet1.wallet.address,
+            wallet=self.wallet1.wallet,
+            token=self.wallet1.token,
+        ).tx
+        receiver_signed = self.rpc.multisig(
+            tx=sender_signed, wallet=self.wallet2.wallet,
+            token=self.wallet2.token,
+        ).tx
+        res = self.rpc.send_tx(
+            tx=receiver_signed,
+            wallet=self.wallet2.wallet,
+            token=self.wallet2.token,
+        )
+        assert(res.code == 0)
         print(res)
 
 

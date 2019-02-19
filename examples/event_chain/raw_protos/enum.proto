@@ -68,6 +68,7 @@ enum TopicType {
   consensus_upgrade = 21;
   declare_file = 22;
   sys_upgrade = 23;
+  application = 24;
 
   // 24-128 reserved for future infrequent forge tx
 

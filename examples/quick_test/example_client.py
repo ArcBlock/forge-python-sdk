@@ -5,12 +5,12 @@ from google.protobuf.any_pb2 import Any
 from forge import ForgeSdk
 from forge import protos
 
+sdk = ForgeSdk(handlers={})
+rpc = sdk.rpc
+
 
 def run():
-    sdk = ForgeSdk(handlers={})
-    rpc = sdk.rpc
-
-    wallet1 = rpc.create_wallet(moniker='aliceya', passphrase='abc123')
+    wallet1 = rpc.create_wallet(passphrase='abc123')
     print(wallet1)
     sleep(5)
 
@@ -49,5 +49,20 @@ def run():
         print('after', i.state.moniker)
 
 
+def wallet_test():
+    wallet = rpc.create_wallet(passphrase='abcde1234')
+    # wallet1 = rpc.create_wallet(moniker='alice', passphrase='abcde1234')
+    print(wallet)
+
+    recovered_wallet = rpc.recover_wallet(
+        passphrase='abcde1234', moniker='alice',
+        data=wallet.wallet.sk,
+    )
+    print(recovered_wallet)
+    sleep(5)
+    account = rpc.get_single_account_state(wallet.wallet.address)
+    print(account)
+
+
 if __name__ == "__main__":
-    run()
+    wallet_test()

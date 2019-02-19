@@ -54,9 +54,22 @@ watch:
 run:
 	@echo "Running the software..."
 
+prepare-all-proto:
+	@mkdir -p ./raw_protos
+	@mkdir -p ./protos
+	@echo "Preparing all protobuf..."
+	@$(foreach proto, $(PROTOS), curl --silent https://$(GITHUB_TOKEN)@raw.githubusercontent.com/ArcBlock/forge-abi/master/lib/protobuf/$(proto).proto > ./raw_protos/$(proto).proto;)
+	@curl --silent https://raw.githubusercontent.com/ArcBlock/ex-abci-proto/master/lib/protos/vendor.proto > ./raw_protos/vendor.proto
+	@echo "All protobuf files are fetched!"
 
-rebuild-proto:
+rebuild-proto: prepare-all-proto
 	@echo "Buiding all protobuf files..."
-	@python -m grpc_tools.protoc -I ./protos --python_out=./protos  ./protos/*.proto
+	@python -m grpc_tools.protoc -I ./raw_protos --python_out=./protos --grpc_python_out=./protos ./raw_protos/*.proto
+	@sed -i -E 's/^import.*_pb2/from . \0/' ./protos/*.py
+	@echo "All protobuf files are built and ready to use!.."
+
+rebuild-ec-proto:
+	@echo "Buiding all protobuf files..."
+	@python -m grpc_tools.protoc -I ./raw_protos --python_out=./protos  ./raw_protos/event-chain.proto
 	@sed -i -E 's/^import.*_pb2/from . \0/' ./protos/*.py
 	@echo "All protobuf files are built and ready to use!.."

@@ -238,7 +238,7 @@ class RpcChain:
                 protos.RequestGetConfig(),
             )
 
-    def multisig(self, req=None, tx=None, wallet=None, token=''):
+    def multisig(self, tx=None, wallet=None, token='', req=None):
 
         if req is not None:
             return self.stub.multisig(req)
