@@ -29,10 +29,7 @@ class ForgeServer:
         self.logger = logging.getLogger(__name__)
 
     def register_handler(self, handler):
-        if SupportedActions.has_action(handler.tx_type):
-            self.handlers[handler.tx_type] = handler
-        else:
-            raise ValueError('Transaction type is not supported!')
+        self.handlers[handler.tx_type] = handler
 
     def start(self):
         self.server.bind(self.address)
@@ -61,7 +58,7 @@ class ForgeServer:
                 self.buffer,
             )
             request = utils.parse_to_proto(request_bytes, protos.Request)
-            self.logger.info("request parsed: {}".format(request))
+            # self.logger.info("request parsed: {}".format(request))
             action = request.WhichOneof('value')
             self.__handle_request(request, action)
             self.__update_buffer(pos, len)
@@ -85,7 +82,7 @@ class ForgeServer:
                 )
                 self.conn.send(res)
 
-                self.logger.info("Response sent: {}".format(res))
+                # self.logger.info("Response sent: {}".format(res))
             else:
                 self.conn.send(self.__reply(action=action, unsupported=True))
 

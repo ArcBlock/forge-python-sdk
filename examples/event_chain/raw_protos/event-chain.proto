@@ -15,6 +15,11 @@ message EventInfo {
     uint32 remaining = 11;
 }
 
+//type_url: ec:t:update_event
+message UpdateEventTx{
+    string address=1;
+}
+
 //type_url: eventInfo:t:eventInfo
 //extend accountState
 message ParticipantInfo {

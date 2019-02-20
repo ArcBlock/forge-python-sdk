@@ -11,10 +11,20 @@ message AccountMigrateTx {
   WalletType type = 2; // new wallet type
 }
 
-message ConsensusUpgradeTx { repeated Validator validators = 1; }
+message ConsensusUpgradeTx {
+  repeated Validator validators = 1;
+  uint64 max_bytes = 2;
+  sint64 max_gas = 3;
+  uint32 max_validators = 4;
+  uint32 max_candidates = 5;
+
+  // forge won't touch this field. Only forge app shall handle it.
+  google.protobuf.Any data = 15;
+}
 
 message CreateAssetTx {
   string moniker = 1;
+  // forge won't update data into state if app is interested in this tx.
   google.protobuf.Any data = 2;
   bool readonly = 3;
 }
@@ -23,6 +33,9 @@ message DeclareTx {
   string moniker = 1;
   bytes pk = 2;
   WalletType type = 3;
+
+  // forge won't update data into state if app is interested in this tx.
+  google.protobuf.Any data = 15;
 }
 
 message DeclareFileTx { string hash = 1; }
@@ -41,6 +54,9 @@ message ExchangeTx {
   ExchangeInfo sender = 2;
   ExchangeInfo receiver = 3;
   google.protobuf.Timestamp expired_at = 4;
+
+  // forge won't touch this field. Only forge app shall handle it.
+  google.protobuf.Any data = 15;
 }
 
 // type url: fg:x:stake_asset. Stake for Tx is the same as stake for asset.
@@ -70,6 +86,7 @@ message StakeTx {
   BigSint value = 2;
   string message = 3;
 
+  // forge won't touch this field. Only forge app shall handle it.
   // forge app can extend the stake if the given data cannot meet its
   // requirement.
   google.protobuf.Any data = 15;
@@ -78,16 +95,24 @@ message StakeTx {
 message SysUpgradeTx {
   UpgradeTask task = 1;
   uint64 grace_period = 2; // wait for how many blocks to take the operation
+
+  // forge won't touch this field. Only forge app shall handle it.
+  google.protobuf.Any data = 15;
 }
 
 message TransferTx {
   string to = 1;
   BigUint value = 2;
   repeated string assets = 3;
+
+  // forge won't touch this field. Only forge app shall handle it.
+  google.protobuf.Any data = 15;
 }
 
 message UpdateAssetTx {
   string address = 1;
   string moniker = 2;
+
+  // forge won't update data into state if app is interested in this tx.
   google.protobuf.Any data = 3;
 }

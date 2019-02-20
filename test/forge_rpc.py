@@ -175,12 +175,10 @@ class RpcTest(unittest.TestCase):
             to=self.wallet2.wallet.address,
             value=BigUint(value=b'11'),
         )
-        sleep(SLEEP_SECS)
         res = self.rpc.send_itx(
             'fg:t:transfer', trans_itx,
             self.wallet1.wallet, self.wallet1.token,
         )
-        sleep(SLEEP_SECS)
         assert (res.code == 0)
         print(res)
 
@@ -189,13 +187,13 @@ class RpcTest(unittest.TestCase):
             sender=protos.ExchangeInfo(value=protos.BigUint(value=bytes(3))),
             receiver=protos.ExchangeInfo(value=protos.BigUint(value=bytes(3))),
         )
-        sleep(SLEEP_SECS)
         sender_signed = self.rpc.create_tx(
             itx=utils.encode_to_any('fg:t:exchange', exchange_itx),
             from_address=self.wallet1.wallet.address,
             wallet=self.wallet1.wallet,
             token=self.wallet1.token,
         ).tx
+        sleep(5)
         receiver_signed = self.rpc.multisig(
             tx=sender_signed, wallet=self.wallet2.wallet,
             token=self.wallet2.token,

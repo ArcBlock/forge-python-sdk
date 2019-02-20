@@ -10,8 +10,8 @@ rpc = sdk.rpc
 
 
 def run():
-    wallet1 = rpc.create_wallet(passphrase='abc123')
-    print(wallet1)
+    wallet1 = rpc.create_wallet(moniker='aliceya', passphrase='abc123')
+    print(wallet1.wallet)
     sleep(5)
 
     reqs = [
@@ -39,7 +39,7 @@ def run():
         'token': wallet1.token,
     }
     tx = rpc.create_tx(**kwargs)
-    res = rpc.send_tx(tx=tx.tx, token=wallet1.token)
+    res = rpc.send_tx(tx=tx.tx)
     print(res)
 
     sleep(5)
@@ -65,4 +65,4 @@ def wallet_test():
 
 
 if __name__ == "__main__":
-    wallet_test()
+    run()

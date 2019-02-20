@@ -1,17 +1,13 @@
-# from flask import Flask
-# from flask import render_template
-# app = Flask(__name__)
-#
-# @app.route('/')
-# def hello_world():
-#     events = ['event1', 'event2', 'event3']
-#     return render_template('event_list.html', events=events)
+import logging
+
 import models
 
 from forge import ForgeSdk
 
+logger = logging.getLogger(__name__)
+
 forgeSdk = ForgeSdk()
-forgeRPC = forgeSdk.rpc
+forgeRpc = forgeSdk.rpc
 
 events = []
 users = []
@@ -43,7 +39,7 @@ def create_event(
 
 def list_events():
     req_list = [{'address': addr} for addr in events]
-    event_states = forgeRPC.get_asset_state(req_list)
+    event_states = forgeRpc.get_asset_state(req_list)
     for res in event_states:
         list_event_detail(res.state)
 
@@ -71,7 +67,7 @@ def list_unused_ticket():
 
 
 def buy_ticket(event_address, wallet, token):
-    res = forgeRPC.get_single_asset_state(event_address)
+    res = forgeRpc.get_single_asset_state(event_address)
     event_asset = models.EventAssetState(res)
     return event_asset.buy_ticket(wallet, token)
 

@@ -63,10 +63,9 @@ class ForgeRpc:
 
     def send_itx(self, type_url, itx, wallet, token):
         encoded_itx = utils.encode_to_any(type_url, itx)
-        nonce = self.get_nonce(wallet.address)
         tx = self.create_tx(
             itx=encoded_itx, from_address=wallet.address,
-            wallet=wallet, token=token, nonce=nonce,
+            wallet=wallet, token=token,
         )
         return self.send_tx(tx.tx)
 

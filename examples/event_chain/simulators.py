@@ -9,7 +9,6 @@ import helpers
 def simulate():
     echo = app.register_user('echoHuan')
     riley = app.register_user('rileyshu')
-    sleep(5)
 
     app.create_event(
         'study together',

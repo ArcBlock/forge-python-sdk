@@ -339,3 +339,14 @@ message ResponseGetAssetAddress {
   StatusCode code = 1;
   string asset_address = 2;
 }
+
+message RequestSignData {
+  bytes data = 1;
+  WalletInfo wallet = 2;
+  string token = 3;
+}
+
+message ResponseSignData {
+  StatusCode code = 1;
+  bytes signed_data = 2;
+}

@@ -85,6 +85,11 @@ class ChainRpcStub(object):
             request_serializer=rpc__pb2.RequestGetAssetAddress.SerializeToString,
             response_deserializer=rpc__pb2.ResponseGetAssetAddress.FromString,
         )
+        self.sign_data = channel.unary_unary(
+            '/forge_abi.ChainRpc/sign_data',
+            request_serializer=rpc__pb2.RequestSignData.SerializeToString,
+            response_deserializer=rpc__pb2.ResponseSignData.FromString,
+        )
 
 
 class ChainRpcServicer(object):
@@ -188,6 +193,13 @@ class ChainRpcServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def sign_data(self, request, context):
+        # missing associated documentation comment in .proto file
+        pass
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_ChainRpcServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -255,6 +267,11 @@ def add_ChainRpcServicer_to_server(servicer, server):
             servicer.get_asset_address,
             request_deserializer=rpc__pb2.RequestGetAssetAddress.FromString,
             response_serializer=rpc__pb2.ResponseGetAssetAddress.SerializeToString,
+        ),
+        'sign_data': grpc.unary_unary_rpc_method_handler(
+            servicer.sign_data,
+            request_deserializer=rpc__pb2.RequestSignData.FromString,
+            response_serializer=rpc__pb2.ResponseSignData.SerializeToString,
         ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
