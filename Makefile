@@ -99,7 +99,7 @@ event-chain-test:
 
 event_chain-server:
 	@echo "Starting server for Event-Chain"
-	@python -m examples.event_chain.event_chain_server
+	@python -m examples.event_chain.server
 
 
 include .makefiles/*.mk
