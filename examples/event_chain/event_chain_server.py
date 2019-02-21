@@ -1,14 +1,12 @@
 import logging
 
-import models
-import protos
-
+from . import models
+from . import protos
 from forge import ForgeSdk
 from forge import helper as forge_helper
 from forge import utils as forge_utils
 
 logger = logging.getLogger(__name__)
-
 forgeSdk = ForgeSdk()
 forgeRpc = forgeSdk.rpc
 
@@ -43,4 +41,5 @@ exchange_tx_handler = forge_helper.TxHandler(
 forgeSdk.register_handler(exchange_tx_handler)
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.DEBUG)
     forgeSdk.server.start()

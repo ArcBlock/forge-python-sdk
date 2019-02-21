@@ -1,2 +1,1 @@
-from .app import *
-from .simulators import *
+from . import app

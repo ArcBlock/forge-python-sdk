@@ -1,13 +1,18 @@
 import logging
 
-import protos as protos
-
+from . import protos as protos
 from forge import ForgeSdk
 from forge import Signer
 from forge import utils
 
-logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger('ec-models')
 forgeRpc = ForgeSdk().rpc
+
+
+def is_asset_exist(address):
+    state = forgeRpc.get_single_asset_state(address)
+    return True if state else False
 
 
 def gen_ticket_token(id, wallet):
@@ -27,18 +32,6 @@ def create_ticket_itx(id, wallet):
         ),
     )
     return ticket_itx
-
-
-def is_proto_empty(proto_message):
-    if proto_message.SerializeToString() == b'':
-        return True
-    else:
-        return False
-
-
-def is_asset_exist(address):
-    state = forgeRpc.get_single_asset_state(address)
-    return not is_proto_empty(state)
 
 
 def gen_exchange_tx(value, asset_address):
@@ -96,17 +89,16 @@ class EventInfo:
         )
         assert (res.code == 0)
         logger.info(
-            "Event '{}' has been created successfully! The asset address "
-            "is: {}".format(
+            "Event '{}' has been created successfully!".format(
                 self.title,
-                self.address,
             ),
         )
+        logger.debug("Event asset address is : {}".format(self.address))
         return res
 
     def gen_tickets(self):
         logger.info("Generating tickets for event '{}...".format(self.title))
-        for ticket_id in range(self.total):
+        for ticket_id in range(1, self.total + 1):
             ticket_holder = self.gen_ticket_holder(ticket_id)
             self.tickets.append(ticket_holder)
         logger.info(
@@ -181,10 +173,17 @@ class EventAssetState:
         ticket_holder = self.next_ticket_holder
         create_tx = ticket_holder.ticket_create
         res = forgeRpc.send_tx(create_tx)
-        assert (res.code == 0)
-        logger.info("ticket has been created.")
+        logger.debug("About to create ticket with ticketInfo: {info}".format(
+            info=utils.data_of_create_asset(
+                create_tx,
+                protos.TicketInfo,
+            ),
+        ))
+        logger.debug("executing-ticket: ticket_create_tx has been sent.")
         if res.code != 0:
             logger.error(res)
+            logger.error('Error ticket tx: {tx}'.format(tx=create_tx))
+            assert (res.code == 0)
 
     def exchange_ticket(self, buyer_wallet, buyer_token):
         ticket_holder = self.next_ticket_holder
@@ -194,7 +193,7 @@ class EventAssetState:
             buyer_token,
         ).tx
         res = forgeRpc.send_tx(buyer_signed)
-        logger.info("ticket has been exchanged with buyer.")
+        logger.debug("executing-ticket:ticket_exchange_tx has been sent.")
         if res.code != 0:
             logger.error(res)
 
@@ -211,7 +210,10 @@ class EventAssetState:
             ticket_info,
             buyer_wallet, buyer_token,
         )
-        logger.info("ticket has been updated with new buyer's token.")
+        logger.debug(
+            "executing-ticket: ticket has been updated with the new "
+            "token.",
+        )
         if res.code != 0:
             logger.error(res)
 
@@ -269,7 +271,6 @@ class EventAssetState:
                 event_info,
             ),
         )
-        logger.info("Current asset state has been converted to proto")
         return state
 
     def execute_next_ticket_holder(self, buyer_wallet, buyer_token):
@@ -277,9 +278,7 @@ class EventAssetState:
             raise ValueError("There is no ticket left for this event!")
         else:
             if not is_asset_exist(self.next_ticket_holder.address):
-                logger.info("Ticket has not been created. Creating ticket...")
                 self.create_ticket()
-            logger.info("Ticket is already there. Exchanging...")
             self.exchange_ticket(buyer_wallet, buyer_token)
             self.update_token(buyer_wallet, buyer_token)
             forgeRpc.send_itx(
@@ -288,20 +287,23 @@ class EventAssetState:
                 buyer_wallet,
                 buyer_token,
             )
-            logger.info("Update_Event itx has been sent.")
+            logger.debug("Update_Event itx has been sent.")
 
     def buy_ticket(self, wallet, token):
-        logger.info("User is buying ticket {address}".format(
+        logger.info("User {user} is buying ticket {address}".format(
             address=self.next_ticket_holder.address,
+            user=wallet.address,
         ))
         self.execute_next_ticket_holder(wallet, token)
-        logger.info("Ticket is bought.")
+        logger.info(
+            "Ticket {} is bought successfully.".format(wallet.address),
+        )
         return self.next_ticket_holder.address
 
     def pop_executed_ticket(self):
-        logger.info("Number before pop ticket: {}".format(len(self.tickets)))
+        logger.debug("Number before pop ticket: {}".format(len(self.tickets)))
         self.tickets = self.tickets[1:]
-        logger.info("Number after pop ticket: {}".format(len(self.tickets)))
+        logger.debug("Number after pop ticket: {}".format(len(self.tickets)))
         return self.to_state()
 
 
@@ -310,10 +312,11 @@ class TicketAssetState:
         self.address = asset_state.address
         self.owner = asset_state.owner
         self.moniker = asset_state.moniker
-        self.read_only = asset_state.read_only
+        self.readonly = asset_state.readonly
         self.context = asset_state.context
         self.stake = asset_state.stake
-        self.ticket_info = utils.decode_to_proto(
+
+        self.ticket_info = utils.parse_to_proto(
             asset_state.data.value,
             protos.TicketInfo,
         )
@@ -321,7 +324,7 @@ class TicketAssetState:
         self.token = self.ticket_info.token
         self.is_used = self.ticket_info.is_used
 
-    def verify_owner(self, wallet):
+    def _verify_owner(self, wallet):
         token = gen_ticket_token(self.id, wallet)
         if token == self.token:
             return True
@@ -329,20 +332,34 @@ class TicketAssetState:
             return False
 
     def use(self, wallet, token):
-        if self.verify_owner(wallet):
+        if self._verify_owner(wallet):
+            logger.info("Ticket owner has been verified successfully.")
             self.is_used = True
             self.update(wallet, token)
+        else:
+            logger.error(
+                "Ticket owner verified failed. {user} doesn't not own ticket "
+                "{ticket}".format(
+                    user=wallet.address,
+                    ticket=self.address,
+                ),
+            )
 
     def update(self, wallet, token):
+        logger.info("Updating ticket state as used...")
         ticket_info = protos.TicketInfo(
             id=self.id,
             token=self.token,
-            used=self.is_used,
+            is_used=self.is_used,
         )
-        forgeRpc.update_asset(
+        res = forgeRpc.update_asset(
             'ec:s:ticket',
             self.address, ticket_info, wallet, token,
         )
+        logger.info("Ticket state has been changed to used.")
+        if (res.code != 0):
+            logger.error(res)
+        assert (res.code == 0)
 
 
 class DeclaredUser:

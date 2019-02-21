@@ -92,6 +92,16 @@ rebuild-proto: prepare-all-proto
 	@sed -i -E 's/^import.*_pb2/from . \0/' ./forge/protos/*.py
 	@echo "All protobuf files are built and ready to use!.."
 
+# Event Chain related commands
+event-chain-test:
+	@echo "Running flow test for event-chain..."
+	@python -m examples.event_chain.flow-test
+
+event_chain-server:
+	@echo "Starting server for Event-Chain"
+	@python -m examples.event_chain.event_chain_server
+
+
 include .makefiles/*.mk
 
 .PHONY: build init travis-init install dep pre-build post-build all test doc precommit travis clean watch run bump-version create-pr

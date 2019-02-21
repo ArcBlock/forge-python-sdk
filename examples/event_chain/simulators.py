@@ -2,8 +2,8 @@
 # create products
 from time import sleep
 
-import app
-import helpers
+from . import app
+from . import helpers
 
 
 def simulate():

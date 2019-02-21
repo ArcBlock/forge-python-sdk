@@ -105,8 +105,8 @@ class ForgeRpc:
     def get_single_asset_state(self, address):
         assets = self.get_asset_state({'address': address})
         asset = next(assets)
-        if not asset:
-            self.logger.error("Asset doesn't exist!")
+        if utils.is_proto_empty(asset):
+            self.logger.warn("Asset {} doesn't exist".format(address))
         else:
             return asset.state
 

@@ -1,10 +1,9 @@
 import logging
 
-import models
-
+from . import models
 from forge import ForgeSdk
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('Event-Chain')
 
 forgeSdk = ForgeSdk()
 forgeRpc = forgeSdk.rpc
@@ -16,6 +15,7 @@ users = []
 def register_user(name, passphrase='abcde1234'):
     user = models.DeclaredUser(moniker=name, passphrase=passphrase)
     user.declare()
+    logger.info("User {} created successfully!".format(name))
     users.append(user)
     return user
 
@@ -45,32 +45,48 @@ def list_events():
 
 
 def list_users():
-    print('****************************')
     for user in users:
         print("User Name: ", user.moniker)
         print("User Address:", user.address)
-    print('****************************')
 
 
 def list_event_detail(state):
     event_asset = models.EventAssetState(state)
-    print('****************************')
-    print('Title:', event_asset.event_info.title)
-    print('Start Time:', event_asset.event_info.start_time)
-    print('Total Tickets: ', event_asset.event_info.total)
+    event_info = event_asset.event_info
+    print('Title:', event_info.title)
+    print('Total Tickets: ', event_info.total)
     print("Created by: ", event_asset.owner)
-    print('****************************')
 
 
 def list_unused_ticket():
     return
 
 
+def get_event_state(event_address):
+    state = forgeRpc.get_single_asset_state(event_address)
+    if not state:
+        logger.error("Event {} doesn't exist.".format(event_address))
+    else:
+        return models.EventAssetState(state)
+
+
+def get_ticket(ticket_address):
+    state = forgeRpc.get_single_asset_state(ticket_address)
+    if not state:
+        logger.error("Ticket {} doesn't exist.".format(ticket_address))
+    else:
+        return models.TicketAssetState(state)
+
+
 def buy_ticket(event_address, wallet, token):
     res = forgeRpc.get_single_asset_state(event_address)
+    # if models.is_asset_exist(res):
+    #     logger.error("Event doesn't exist.")
     event_asset = models.EventAssetState(res)
     return event_asset.buy_ticket(wallet, token)
 
 
-def use_ticket():
-    return
+def use_ticket(ticket_address, user_wallet, user_token):
+    state = forgeRpc.get_single_asset_state(ticket_address)
+    ticket_asset = models.TicketAssetState(state)
+    return ticket_asset.use(user_wallet, user_token)

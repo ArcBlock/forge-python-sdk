@@ -1,7 +1,8 @@
 from datetime import datetime
 
-import models as models
 from google.protobuf.timestamp_pb2 import Timestamp
+
+from . import models
 
 
 def gen_timestamp(year, month, day, hour):
