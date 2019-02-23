@@ -25,7 +25,7 @@ def gen_ticket_token(id, wallet):
     return token
 
 
-def create_asset_ticket_info(id, event_address):
+def create_asset_ticket_info(id, event_address, expire_time):
     ticket_info = protos.TicketInfo(
         id=id, event_address=event_address,
         is_used=False,
@@ -36,6 +36,7 @@ def create_asset_ticket_info(id, event_address):
             ticket_info,
         ),
         readonly=True,
+        expired_at=expire_time,
     )
     return ticket_itx
 
@@ -119,7 +120,11 @@ class EventInfo:
         return tickets
 
     def gen_ticket_holder(self, ticket_id):
-        create_asset_ticket = create_asset_ticket_info(ticket_id, self.address)
+        create_asset_ticket = create_asset_ticket_info(
+            ticket_id,
+            self.address,
+            self.end_time,
+        )
 
         ticket__address = forgeRpc.get_asset_address(
             sender_address=self.wallet.address,

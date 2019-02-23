@@ -12,7 +12,6 @@ class SupportedActions(Enum):
 
 class ForgeTxType(Enum):
     ACTIVATE_ASSET = 'fg:t:activate_asset'
-
     EXCHANGE = 'fg:t:exchange'
 
 

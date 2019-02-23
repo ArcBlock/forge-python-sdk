@@ -63,7 +63,7 @@ def exchange_update(request):
 
 
 exchange_tx_handler = forge_helper.TxHandler(
-    'fg:t:exchange',
+    forge_helper.ForgeTxType.EXCHANGE,
     exchange_verify,
     exchange_update,
 )
@@ -96,7 +96,7 @@ def activate_asset_update(request):
 
 
 activate_tx_handler = forge_helper.TxHandler(
-    'fg:t:activate_asset',
+    forge_helper.ForgeTxType.ACTIVATE_ASSET,
     activate_asset_verify,
     activate_asset_update,
 )
