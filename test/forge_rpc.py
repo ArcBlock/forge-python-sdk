@@ -184,8 +184,12 @@ class RpcTest(unittest.TestCase):
 
     def test_send_exchange_itx(self):
         exchange_itx = protos.ExchangeTx(
-            sender=protos.ExchangeInfo(value=protos.BigUint(value=bytes(3))),
-            receiver=protos.ExchangeInfo(value=protos.BigUint(value=bytes(3))),
+            sender=protos.ExchangeInfo(
+                value=protos.BigUint(value=bytes(3)),
+            ),
+            receiver=protos.ExchangeInfo(
+                value=protos.BigUint(value=bytes(3)),
+            ),
         )
         sender_signed = self.rpc.create_tx(
             itx=utils.encode_to_any('fg:t:exchange', exchange_itx),
@@ -203,8 +207,63 @@ class RpcTest(unittest.TestCase):
             wallet=self.wallet2.wallet,
             token=self.wallet2.token,
         )
-        assert(res.code == 0)
+        assert (res.code == 0)
         print(res)
+
+    def test_activate_asset(self):
+        sleep(5)
+        asset_create_itx = protos.CreateAssetTx(
+            moniker='TestAsset',
+            data=Any(
+                type_url='test',
+                value=b'hello',
+            ),
+        )
+        asset = self.rpc.get_asset_address(
+            self.wallet1.wallet.address,
+            asset_create_itx,
+            self.wallet1.wallet.type,
+        ) \
+            .asset_address
+        res = self.rpc.send_itx(
+            'fg:t:create_asset', asset_create_itx,
+            self.wallet1.wallet,
+            self.wallet1.token,
+        )
+        assert (res.code == 0)
+        asset_activate_itx = protos.ActivateAssetTx(address=asset)
+
+        # with only sender's signature should fail
+        res = self.rpc.send_itx(
+            'fg:t:activate_asset', asset_activate_itx,
+            self.wallet1.wallet, self.wallet1.token,
+        )
+        assert (res.code != 0)
+
+        # with both sender's signature, and another person's signature,
+        # should succeed
+        res_sender_sig = self.rpc.create_tx(
+            from_address=self.wallet1.wallet.address,
+            wallet=self.wallet1.wallet,
+            token=self.wallet1.token,
+            itx=utils.encode_to_any(
+                'fg:t:activate_asset',
+                asset_activate_itx,
+            ),
+        )
+        if res_sender_sig.code != 0:
+            print(res)
+        assert (res_sender_sig.code == 0)
+
+        res_both_sig = self.rpc.multisig(
+            tx=res_sender_sig.tx,
+            wallet=self.wallet2.wallet,
+            token=self.wallet2.token,
+        )
+        assert (res_both_sig.code == 0)
+        res = self.rpc.send_tx(res_both_sig.tx)
+        assert (res.code == 0)
+        print("Final tx res:", res)
 
 
 if __name__ == '__main__':

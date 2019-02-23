@@ -2,7 +2,7 @@ TOP_DIR=.
 README=$(TOP_DIR)/README.md
 
 VERSION=$(strip $(shell cat version))
-PROTOS=abi enum rpc state service tx type
+PROTOS=abi enum rpc state service tx type trace_type
 
 build:
 	@echo "Building the software..."

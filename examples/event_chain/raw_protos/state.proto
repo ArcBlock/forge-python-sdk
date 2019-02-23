@@ -1,6 +1,7 @@
 syntax = "proto3";
 package forge_abi;
 import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
 
 import "type.proto";
 
@@ -36,8 +37,10 @@ message AssetState {
   string owner = 2;
   string moniker = 3;
   bool readonly = 4;
+  bool activated = 5; // once it is activated, it is untransferrable
+  google.protobuf.Timestamp expired_at = 6;
 
-  // 5-8 is reserved
+  // 7-12 is reserved
 
   StakeContext stake = 13;
   StateContext context = 14;
@@ -57,6 +60,7 @@ message ForgeState {
   string data_version = 6;
   // app state returned by forge app
   bytes forge_app_hash = 7;
+  StateRoot root_hashes = 8;
 
   // 6-14 is reserved for future
 

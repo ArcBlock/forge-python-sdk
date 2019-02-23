@@ -70,4 +70,7 @@ service StatisticRpc {
       returns (ResponseGetForgeStatistics);
   rpc list_transactions(RequestListTransactions)
       returns (ResponseListTransactions);
+  rpc get_assets(RequestGetAssets) returns (ResponseGetAssets);
+  rpc get_stakes(RequestGetStakes) returns (ResponseGetStakes);
+  rpc get_top_accounts(RequestGetTopAccounts) returns (ResponseGetTopAccounts);
 }
