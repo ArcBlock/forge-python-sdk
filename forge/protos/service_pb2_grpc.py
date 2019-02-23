@@ -80,6 +80,16 @@ class ChainRpcStub(object):
         request_serializer=rpc__pb2.RequestGetConfig.SerializeToString,
         response_deserializer=rpc__pb2.ResponseGetConfig.FromString,
         )
+    self.get_asset_address = channel.unary_unary(
+        '/forge_abi.ChainRpc/get_asset_address',
+        request_serializer=rpc__pb2.RequestGetAssetAddress.SerializeToString,
+        response_deserializer=rpc__pb2.ResponseGetAssetAddress.FromString,
+        )
+    self.sign_data = channel.unary_unary(
+        '/forge_abi.ChainRpc/sign_data',
+        request_serializer=rpc__pb2.RequestSignData.SerializeToString,
+        response_deserializer=rpc__pb2.ResponseSignData.FromString,
+        )
 
 
 class ChainRpcServicer(object):
@@ -176,6 +186,20 @@ class ChainRpcServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def get_asset_address(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def sign_data(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_ChainRpcServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -238,6 +262,16 @@ def add_ChainRpcServicer_to_server(servicer, server):
           servicer.get_config,
           request_deserializer=rpc__pb2.RequestGetConfig.FromString,
           response_serializer=rpc__pb2.ResponseGetConfig.SerializeToString,
+      ),
+      'get_asset_address': grpc.unary_unary_rpc_method_handler(
+          servicer.get_asset_address,
+          request_deserializer=rpc__pb2.RequestGetAssetAddress.FromString,
+          response_serializer=rpc__pb2.ResponseGetAssetAddress.SerializeToString,
+      ),
+      'sign_data': grpc.unary_unary_rpc_method_handler(
+          servicer.sign_data,
+          request_deserializer=rpc__pb2.RequestSignData.FromString,
+          response_serializer=rpc__pb2.ResponseSignData.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(
@@ -615,6 +649,11 @@ class StatisticRpcStub(object):
         request_serializer=rpc__pb2.RequestGetForgeStatistics.SerializeToString,
         response_deserializer=rpc__pb2.ResponseGetForgeStatistics.FromString,
         )
+    self.list_transactions = channel.unary_unary(
+        '/forge_abi.StatisticRpc/list_transactions',
+        request_serializer=rpc__pb2.RequestListTransactions.SerializeToString,
+        response_deserializer=rpc__pb2.ResponseListTransactions.FromString,
+        )
 
 
 class StatisticRpcServicer(object):
@@ -628,6 +667,13 @@ class StatisticRpcServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def list_transactions(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_StatisticRpcServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -635,6 +681,11 @@ def add_StatisticRpcServicer_to_server(servicer, server):
           servicer.get_forge_statistics,
           request_deserializer=rpc__pb2.RequestGetForgeStatistics.FromString,
           response_serializer=rpc__pb2.ResponseGetForgeStatistics.SerializeToString,
+      ),
+      'list_transactions': grpc.unary_unary_rpc_method_handler(
+          servicer.list_transactions,
+          request_deserializer=rpc__pb2.RequestListTransactions.FromString,
+          response_serializer=rpc__pb2.ResponseListTransactions.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

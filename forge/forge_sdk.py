@@ -6,7 +6,7 @@ from .server import ForgeServer
 
 
 class ForgeSdk:
-    def __init__(self, handlers=None, config_path=''):
+    def __init__(self, handlers=[], config_path=''):
         logging.basicConfig(
             level=logging.INFO,
             format='%(asctime)s-%(name)s-%(process)d-%('
@@ -17,16 +17,18 @@ class ForgeSdk:
         self.config = parser.parse_config(config_path)
         self.rpc = ForgeRpc(self.config.sock_grpc)
 
-        if handlers:
-            self.server = ForgeServer(
-                handlers=handlers,
-                address=self.config.sock_tcp,
-            )
+        self.server = ForgeServer(
+            handlers=handlers,
+            address=self.config.sock_tcp,
+        )
 
     def register_handler(self, handler):
         # sanity check
         # add to server
         self.server.register_handler(handler)
+
+    def start(self):
+        self.server.start()
 
 
 class TxHandler:

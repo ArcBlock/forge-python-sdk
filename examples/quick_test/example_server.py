@@ -27,7 +27,7 @@ def run():
         )
 
     test_handler = helper.TxHandler(
-        tx_type='tx/test',
+        tx_type='test:t:test',
         verify_tx_func=tx_test_verify_tx,
         update_state_func=tx_test_update_state,
     )
