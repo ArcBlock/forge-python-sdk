@@ -97,8 +97,8 @@ class ForgeRpc:
     def get_single_account_state(self, address):
         accounts = self.get_account_state({'address': address})
         account = next(accounts)
-        if not account:
-            self.logger.error("Account doesn't exist!")
+        if utils.is_proto_empty(account):
+            return None
         else:
             return account.state
 

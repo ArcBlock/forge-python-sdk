@@ -151,6 +151,9 @@ class RpcTest(unittest.TestCase):
         verify_result(dict_list)
         verify_result(single_req)
         verify_result(single_dict)
+        res = self.rpc.get_account_state(single_req)
+        for i in res:
+            print(type(i.state.pk))
 
     def test_get_asset_state(self):
 

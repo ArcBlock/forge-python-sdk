@@ -1,4 +1,5 @@
 import logging
+from time import sleep
 
 from google.protobuf.any_pb2 import Any
 
@@ -11,6 +12,10 @@ from forge import utils
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger('ec-models')
 forgeRpc = ForgeSdk().rpc
+
+
+def wait():
+    sleep(5)
 
 
 def is_asset_exist(address):
@@ -97,13 +102,22 @@ class EventInfo:
             self.type_url, event_info, self.wallet,
             self.token,
         )
-        assert (res.code == 0)
+        if res.code != 0:
+            logger.error(res)
         logger.info(
             "Event '{}' has been created successfully!".format(
                 self.title,
             ),
         )
-        logger.debug("Event asset address is : {}".format(event_address))
+        wait()
+        update_hosted_itx = protos.UpdateHostedTx(address=event_address)
+        res = forgeRpc.send_itx(
+            'ec:t:update_hosted', update_hosted_itx,
+            self.wallet, self.token,
+        )
+        if res.code != 0:
+            logger.error(res)
+        logger.debug("Sender hosted events has been updated!")
         return event_address
 
     def gen_tickets(self):
@@ -402,28 +416,29 @@ class TicketAssetState:
             logger.error(res)
         return res.tx
 
+    def activate(self):
+        self.is_used = True
+        self.activated = True
 
-class DeclaredUser:
-    def __init__(self, moniker, passphrase='abcde1234', wallet=None, token=''):
+
+class User:
+    def __init__(self, moniker, passphrase='abcde1234'):
         self.moniker = moniker
         self.passphrase = passphrase
-        if not wallet:
-            self.wallet = self.init_wallet()
-        else:
-            self.wallet = wallet
+        self.wallet, self.token = self.__init_wallet()
         self.address = self.wallet.address
-        self.sk = self.wallet.sk
-        self.token = token
+        self.account_state = None
 
     def declare(self):
-        res = self.declare_wallet()
+        res = self.__declare_wallet()
         self.token = res.token
+        self.account_state = self.__get_state()
 
-    def init_wallet(self):
+    def __init_wallet(self):
         res = forgeRpc.create_wallet(passphrase=self.passphrase)
-        return res.wallet
+        return res.wallet, res.token
 
-    def declare_wallet(self):
+    def __declare_wallet(self):
         res = forgeRpc.recover_wallet(
             passphrase=self.passphrase,
             moniker='EC{}'.format(self.moniker),
@@ -433,13 +448,23 @@ class DeclaredUser:
             print(res)
         return res
 
-    def refresh(self):
+    def __get_state(self):
+        wait()
+        state = forgeRpc.get_single_account_state(self.address)
+        return ParticipantAccountState(state)
+
+    def refresh_token(self):
         res = forgeRpc.load_wallet(
             address=self.address, passphrase=self.passphrase,
         )
         self.token = res.token
         if not res.code == 0:
             print(res)
+
+    def current_state(self):
+        state = get_participant_state(self.address)
+        self.account_state = state
+        return state
 
 
 class ParticipantAccountState:
@@ -449,7 +474,7 @@ class ParticipantAccountState:
         self.nonce = state.nonce
         self.num_txs = state.num_txs
         self.address = state.address
-        self.pk = state.pk,
+        self.pk = state.pk
         self.type = state.type
         self.moniker = state.moniker
         self.context = state.context
@@ -468,14 +493,75 @@ class ParticipantAccountState:
         self.unused = self.participant_info.unused
         self.used = self.participant_info.used
 
-    def new_participant_info(self):
+    def to_state(self):
         participant_info = protos.ParticipantInfo(
             hosted=self.hosted,
             participated=self.participated,
             unused=self.unused,
             used=self.used,
         )
-        return utils.encode_to_any(
-            'ec:s:participant_info',
-            participant_info,
+
+        state = protos.AccountState(
+            balance=self.balance,
+            nonce=self.nonce,
+            num_txs=self.num_txs,
+            address=self.address,
+            pk=self.pk,
+            type=self.type,
+            moniker=self.moniker,
+            context=self.context,
+            migrated_to=self.migrated_to,
+            migrated_from=self.migrated_from,
+            num_assets=self.num_assets,
+            stake=self.stake,
+            pinned_files=self.pinned_files,
+            data=utils.encode_to_any(
+                'ec:s:participant_info',
+                participant_info,
+            ),
         )
+        return state
+
+    def add_hosted(self, address):
+        self.hosted = helpers.add_to_proto_list(address, self.hosted)
+
+    def add_participated(self, address):
+        self.participated = helpers.add_to_proto_list(
+            address,
+            self.participated,
+        )
+
+    def add_unused_ticket(self, address):
+        self.unused = helpers.add_to_proto_list(address, self.unused)
+
+    def remove_unused_ticket(self, address):
+        self.unused = helpers.remove_from_proto_list(address, self.unused)
+
+    def add_used_ticket(self, address):
+        self.used = helpers.add_to_proto_list(address, self.used)
+
+
+def get_event_state(event_address):
+    state = forgeRpc.get_single_asset_state(event_address)
+    if not state:
+        logger.error("Event {} doesn't exist.".format(event_address))
+    else:
+        return EventAssetState(state)
+
+
+def get_ticket_state(ticket_address):
+    state = forgeRpc.get_single_asset_state(ticket_address)
+    if not state:
+        logger.error("Ticket {} doesn't exist.".format(ticket_address))
+    else:
+        return TicketAssetState(state)
+
+
+def get_participant_state(participant_address):
+    state = forgeRpc.get_single_account_state(participant_address)
+    if not state:
+        logger.error(
+            "Participant {} doesn't exist.".format(participant_address),
+        )
+    else:
+        return ParticipantAccountState(state)

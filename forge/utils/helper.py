@@ -10,11 +10,6 @@ class SupportedActions(Enum):
         return any(value == item.value for item in cls)
 
 
-class ForgeTxType(Enum):
-    ACTIVATE_ASSET = 'fg:t:activate_asset'
-    EXCHANGE = 'fg:t:exchange'
-
-
 class TxHandler:
     def __init__(self, tx_type, verify_tx_func, update_state_func):
         self.tx_type = tx_type

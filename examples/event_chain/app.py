@@ -15,7 +15,7 @@ users = []
 
 
 def register_user(name, passphrase):
-    user = models.DeclaredUser(moniker=name, passphrase=passphrase)
+    user = models.User(moniker=name, passphrase=passphrase)
     user.declare()
     logger.info("User {} created successfully!".format(name))
     users.append(user)
@@ -66,19 +66,15 @@ def list_unused_ticket():
 
 
 def get_event_state(event_address):
-    state = forgeRpc.get_single_asset_state(event_address)
-    if not state:
-        logger.error("Event {} doesn't exist.".format(event_address))
-    else:
-        return models.EventAssetState(state)
+    return models.get_event_state(event_address)
 
 
 def get_ticket_state(ticket_address):
-    state = forgeRpc.get_single_asset_state(ticket_address)
-    if not state:
-        logger.error("Ticket {} doesn't exist.".format(ticket_address))
-    else:
-        return models.TicketAssetState(state)
+    return models.get_ticket_state(ticket_address)
+
+
+def get_participant_state(address):
+    return models.get_participant_state(address)
 
 
 def buy_ticket(event_address, user):
