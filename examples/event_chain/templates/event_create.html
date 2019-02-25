@@ -1,0 +1,13 @@
+<!doctype html>
+
+{% block content %}
+    <h1>Page2: Create Event</h1>
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.title.label }}<br>
+            {{ form.title(size=32) }}
+        </p>
+        <p>{{ form.confirm() }}</p>
+    </form>
+{% endblock %}

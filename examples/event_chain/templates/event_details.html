@@ -1,0 +1,30 @@
+<!doctype html>
+<title>Event-chain</title>
+<h1>Event Details</h1>
+<body>
+<p>
+    <a href=/><input type="button" value="Home"></a>
+</p>
+
+<table>
+    {% if event %}
+    <tr>
+        <td>Title: {{ event.event_info.title }}</td>
+    </tr>
+    <tr>
+        <td>Total Tickets: {{ event.event_info.total }}</td>
+    </tr>
+    <tr>
+        <td>Remaining Tickets: {{ event.event_info.remaining }}</td>
+    </tr>
+</table>
+<form action="" method="post" novalidate>
+    <p>
+        <input type="submit" name="Buy" value="Buy">
+    </p>
+</form>
+
+{% else %}
+<h1>There's no events created yet!</h1>
+{% endif %}
+</body>

@@ -1,8 +1,8 @@
 import logging
 
-from . import helpers
-from . import models
-from . import protos
+from examples.event_chain import helpers
+from examples.event_chain import models
+from examples.event_chain import protos
 from forge import ForgeSdk
 from forge import helper as forge_helper
 from forge import utils as forge_utils

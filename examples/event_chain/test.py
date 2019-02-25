@@ -38,7 +38,7 @@ def test():
     logger.info("First ticket is bought successfully.")
     app.refresh()
 
-    assert(alice.current_state().unused[0] == ticket1_address)
+    assert (alice.current_state().unused[0] == ticket1_address)
     assert (len(alice.account_state.used) == 0)
     assert (len(alice.account_state.participated) == 0)
 
@@ -47,7 +47,7 @@ def test():
     logger.info("Second ticket is bought successfully.")
     app.refresh()
 
-    assert(frank.current_state().unused[0] == ticket2_address)
+    assert (frank.current_state().unused[0] == ticket2_address)
     assert (len(frank.account_state.used) == 0)
     assert (len(frank.account_state.participated) == 0)
 
@@ -69,8 +69,8 @@ def test():
     ticket1 = app.get_ticket_state(ticket1_address)
     assert ticket1.is_used
     assert ticket1.activated
-    assert(alice.current_state().used[0] == ticket1.address)
-    assert(alice.account_state.participated[0] == event_address)
+    assert (alice.current_state().used[0] == ticket1.address)
+    assert (alice.account_state.participated[0] == event_address)
     assert (len(alice.account_state.unused) == 0)
 
     logger.info("Ticket is used successfully.")

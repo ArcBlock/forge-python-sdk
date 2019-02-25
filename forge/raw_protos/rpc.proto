@@ -352,7 +352,7 @@ message RequestSignData {
 
 message ResponseSignData {
   StatusCode code = 1;
-  bytes signed_data = 2;
+  bytes signature = 2;
 }
 
 message RequestGetAssets{

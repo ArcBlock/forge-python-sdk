@@ -7,9 +7,9 @@ from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
 
-from . import enum_pb2 as enum__pb2
-from . import state_pb2 as state__pb2
-from . import type_pb2 as type__pb2
+from examples.event_chain.protos import enum_pb2 as enum__pb2
+from examples.event_chain.protos import state_pb2 as state__pb2
+from examples.event_chain.protos import type_pb2 as type__pb2
 _b = sys.version_info[0] < 3 and (
     lambda x: x
 ) or (lambda x: x.encode('latin1'))

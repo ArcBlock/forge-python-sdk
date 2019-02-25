@@ -1,14 +1,38 @@
 <!doctype html>
-<title>Hello from Event-chain</title>
-<h1>Welcome to Event Chain!</h1>
+<title>Event-chain</title>
+<h1>All Events</h1>
+<p>
+    <a href=/><input type="button" value="Home"></a>
+</p>
+<p>
+    <a href=/tickets><input type="button" value="My tickets"></a>
+</p>
+<p>
+    <a href=/login><input type="button" value="Login"></a>
+</p>
+
+
 <table>
     {% if events %}
-        {% for event in events %}
-            <tr>
-                <td>{{ event }}</td>
-            </tr>
-        {% endfor %}
-        </table>
-    {% else %}
-        <h1>There's no events created yet!</h1>
-    {% endif %}
+    {% for event in events %}
+    <form action="" method="post" novalidate>
+
+        <tr>
+            <td>Title: {{ event.event_info.title }}</td>
+        </tr>
+        <tr>
+            <td>Total Tickets: {{ event.event_info.total }}</td>
+        </tr>
+        <tr>
+            <td>Remaining Tickets: {{ event.event_info.remaining }}</td>
+        </tr>
+        <tr>
+            <td><a href=/details?address={{event.address}}><input type="button" value="Click to Buy"></a></td>
+        </tr>
+    </form>
+
+    {% endfor %}
+</table>
+{% else %}
+<h1>There's no events created yet!</h1>
+{% endif %}

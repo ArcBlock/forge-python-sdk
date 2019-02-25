@@ -101,6 +101,11 @@ event-chain-server:
 	@echo "Starting server for Event-Chain"
 	@python -m examples.event_chain.server
 
+init-event-chain:
+	@echo "Initializing db for Event-Chain..."
+	@python -m examples.event_chain.app
+	@echo "DB for Event-Chain has been initialized!"
+
 
 include .makefiles/*.mk
 

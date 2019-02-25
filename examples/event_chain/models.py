@@ -3,8 +3,8 @@ from time import sleep
 
 from google.protobuf.any_pb2 import Any
 
-from . import helpers
-from . import protos as protos
+from examples.event_chain import helpers
+from examples.event_chain import protos as protos
 from forge import ForgeSdk
 from forge import Signer
 from forge import utils
@@ -15,7 +15,7 @@ forgeRpc = ForgeSdk().rpc
 
 
 def wait():
-    sleep(5)
+    sleep(6)
 
 
 def is_asset_exist(address):
@@ -109,15 +109,15 @@ class EventInfo:
                 self.title,
             ),
         )
-        wait()
-        update_hosted_itx = protos.UpdateHostedTx(address=event_address)
-        res = forgeRpc.send_itx(
-            'ec:t:update_hosted', update_hosted_itx,
-            self.wallet, self.token,
-        )
-        if res.code != 0:
-            logger.error(res)
-        logger.debug("Sender hosted events has been updated!")
+        # wait()
+        # update_hosted_itx = protos.UpdateHostedTx(address=event_address)
+        # res = forgeRpc.send_itx(
+        #         'ec:t:update_hosted', update_hosted_itx,
+        #         self.wallet, self.token,
+        # )
+        # if res.code != 0:
+        #     logger.error(res)
+        # logger.debug("Sender hosted events has been updated!")
         return event_address
 
     def gen_tickets(self):
@@ -215,7 +215,6 @@ class EventAssetState:
         self.remaining = self.event_info.remaining
         self.tickets = self.event_info.tickets
         self.participants = self.event_info.participants
-        self.next_ticket_holder = self.get_next_ticket()
 
     def get_next_ticket(self):
         if len(self.tickets) > 0:
@@ -224,7 +223,7 @@ class EventAssetState:
             logger.error("No tickets left!")
 
     def create_ticket(self):
-        ticket_holder = self.next_ticket_holder
+        ticket_holder = self.get_next_ticket()
         create_tx = ticket_holder.ticket_create
         res = forgeRpc.send_tx(create_tx)
         logger.debug("About to create ticket with ticketInfo: {info}".format(
@@ -240,7 +239,7 @@ class EventAssetState:
             assert (res.code == 0)
 
     def exchange_ticket(self, buyer_wallet, buyer_token):
-        ticket_holder = self.next_ticket_holder
+        ticket_holder = self.get_next_ticket()
         exchange_tx = ticket_holder.ticket_exchange
         buyer_signed = forgeRpc.multisig(
             exchange_tx, buyer_wallet,
@@ -252,15 +251,16 @@ class EventAssetState:
             logger.error(res)
 
     def update_token(self, buyer_wallet, buyer_token=''):
+        next_ticket = self.get_next_ticket()
         ticket_info = protos.TicketInfo(
-            id=self.next_ticket_holder.id,
+            id=next_ticket.id,
             token=gen_ticket_token(
-                self.next_ticket_holder.id,
+                next_ticket.id,
                 buyer_wallet,
             ),
         )
         res = forgeRpc.update_asset(
-            'ec:s:ticket_info', self.next_ticket_holder.address,
+            'ec:s:ticket_info', next_ticket.address,
             ticket_info,
             buyer_wallet, buyer_token,
         )
@@ -330,24 +330,25 @@ class EventAssetState:
         return state
 
     def execute_next_ticket_holder(self, buyer_wallet, buyer_token):
+        next_ticket = self.get_next_ticket()
         if len(self.tickets) < 1:
             logger.error("There is no ticket left for this event!")
         else:
-            if not is_asset_exist(self.next_ticket_holder.address):
+            if not is_asset_exist(next_ticket.address):
                 self.create_ticket()
             self.exchange_ticket(buyer_wallet, buyer_token)
             logger.debug("Update_Event itx has been sent.")
 
     def buy_ticket(self, wallet, token):
         logger.info("User {user} is buying ticket {address}".format(
-            address=self.next_ticket_holder.address,
+            address=self.get_next_ticket().address,
             user=wallet.address,
         ))
         self.execute_next_ticket_holder(wallet, token)
         logger.info(
             "Ticket {} is bought successfully.".format(wallet.address),
         )
-        return self.next_ticket_holder.address
+        return self.get_next_ticket().address
 
     def pop_executed_ticket(self):
         logger.debug("Number before pop ticket: {}".format(len(self.tickets)))
@@ -422,16 +423,24 @@ class TicketAssetState:
 
 
 class User:
-    def __init__(self, moniker, passphrase='abcde1234'):
+    def __init__(self, moniker, passphrase, address=None):
         self.moniker = moniker
         self.passphrase = passphrase
-        self.wallet, self.token = self.__init_wallet()
-        self.address = self.wallet.address
-        self.account_state = None
+        if not address:
+            self.wallet, self.token = self.__init_wallet()
+            self.address = self.wallet.address
+            self.account_state = None
+        else:
+            self.address = address
+            self.wallet = None
+            self.token = None
+            self.account_state = None
+            self.refresh()
 
     def declare(self):
         res = self.__declare_wallet()
         self.token = res.token
+        wait()
         self.account_state = self.__get_state()
 
     def __init_wallet(self):
@@ -449,15 +458,16 @@ class User:
         return res
 
     def __get_state(self):
-        wait()
         state = forgeRpc.get_single_account_state(self.address)
         return ParticipantAccountState(state)
 
-    def refresh_token(self):
+    def refresh(self):
         res = forgeRpc.load_wallet(
             address=self.address, passphrase=self.passphrase,
         )
         self.token = res.token
+        self.wallet = res.wallet
+        self.account_state = self.__get_state()
         if not res.code == 0:
             print(res)
 

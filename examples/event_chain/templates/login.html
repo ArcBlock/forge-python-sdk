@@ -1,0 +1,22 @@
+<!doctype html>
+
+{% block content %}
+    <h1>Login</h1>
+    <h1>Enter your name and passphrase to login</h1>
+<p>
+    <a href=/register><input type="button" value="Register"></a>
+</p>
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.name.label }}<br>
+            {{ form.name(size=32) }}
+        </p>
+        <p>
+            {{ form.passphrase.label }}<br>
+            {{ form.passphrase(size=32) }}
+        </p>
+        <p>{{ form.confirm() }}</p>
+    </form>
+
+{% endblock %}

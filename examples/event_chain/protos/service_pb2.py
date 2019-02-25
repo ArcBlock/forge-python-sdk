@@ -7,7 +7,7 @@ from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
 
-from . import rpc_pb2 as rpc__pb2
+from examples.event_chain.protos import rpc_pb2 as rpc__pb2
 _b = sys.version_info[0] < 3 and (
     lambda x: x
 ) or (lambda x: x.encode('latin1'))
