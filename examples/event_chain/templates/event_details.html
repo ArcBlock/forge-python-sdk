@@ -1,30 +1,40 @@
-<!doctype html>
-<title>Event-chain</title>
-<h1>Event Details</h1>
-<body>
-<p>
-    <a href=/><input type="button" value="Home"></a>
-</p>
+{% extends "layout.html" %}
+{% block content %}
+<section class="hero">
+  <figure class="image">
+    <img src="https://unsplash.it/1200/600?<%=@product.address %>" style>
+  </figure>
+</section>
 
-<table>
-    {% if event %}
-    <tr>
-        <td>Title: {{ event.event_info.title }}</td>
-    </tr>
-    <tr>
-        <td>Total Tickets: {{ event.event_info.total }}</td>
-    </tr>
-    <tr>
-        <td>Remaining Tickets: {{ event.event_info.remaining }}</td>
-    </tr>
-</table>
-<form action="" method="post" novalidate>
-    <p>
-        <input type="submit" name="Buy" value="Buy">
-    </p>
-</form>
+<section class="section">
+  <div class="container">
+    <h2 class="title">
+      {{ event.event_info.title }}
+    </h2>
+    <div class="tags are-large">
+      <span class="tag are-large is-primary">Total tickets：
+        {{ event.event_info.total }}</span>
+      <span class="tag are-large is-danger">Tickets left：
+        {{ event.event_info.remaining }}</span>
 
-{% else %}
-<h1>There's no events created yet!</h1>
-{% endif %}
-</body>
+    </div>
+    <div class="tags are-large">
+      {% for tag in event.event_info.tags %}
+      <span class="tag">
+        {{ tag }}</span>
+      {% endfor %}
+    </div>
+
+    <div class="content">
+      {{ event.event_info.description }}
+    </div>
+
+
+
+    <form method="POST" action="">
+      <p class=""><button class="button is-info" drab-click="buy">Buy it now！</button></p>
+    </form>
+
+  </div>
+</section>
+{% endblock %}

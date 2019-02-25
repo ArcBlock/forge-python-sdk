@@ -1,13 +1,86 @@
-<!doctype html>
-
+{% extends "layout.html" %}
 {% block content %}
-    <h1>Page2: Create Event</h1>
-    <form action="" method="post" novalidate>
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.title.label }}<br>
-            {{ form.title(size=32) }}
-        </p>
-        <p>{{ form.confirm() }}</p>
-    </form>
+
+<section class="hero is-info is-small">
+  <div class="hero-body">
+    <div class="container has-text-centered">
+      <p class="title">
+        Publish an event！
+      </p>
+      <p class="subtitle">
+        Publish an event and sell tickets, just few inputs! All you need is to install (or connect) to an ABT full
+        node, you can create and publish your events! The whole process is protected by distributed ledger so you don't
+        need to worry about anything!
+      </p>
+    </div>
+  </div>
+</section>
+<hr />
+<section class="container">
+  <h3 class="title">Fill in the following information and create your shiny event！</h3>
+  <form id="create-product" action="/create" method="POST">
+    <div class="field">
+      <p class="control has-icons-left has-icons-right">
+        <input class="input is-large" type="text" name="title" placeholder="Event name">
+        <span class="icon is-small is-left">
+          <i class="fa fa-align-justify"></i>
+        </span>
+        <span class="icon is-small is-right">
+          <i class="fa fa-check"></i>
+        </span>
+      </p>
+    </div>
+    <div class="field">
+      <p class="control has-icons-left has-icons-right">
+        <input class="input is-large" type="text" name="value" placeholder="Ticket price (in ABT, e.g. 1.5)">
+        <span class="icon is-small is-left">
+          <i class="fa fa-dollar"></i>
+        </span>
+        <span class="icon is-small is-right">
+          <i class="fa fa-check"></i>
+        </span>
+      </p>
+    </div>
+    <div class="field">
+      <p class="control has-icons-left has-icons-right">
+        <input class="input is-large" type="text" name="expired_at" placeholder="Event start time (yyyy-mm-dd)">
+        <span class="icon is-small is-left">
+          <i class="fa fa-calendar"></i>
+        </span>
+        <span class="icon is-small is-right">
+          <i class="fa fa-check"></i>
+        </span>
+      </p>
+    </div>
+    <div class="field">
+      <p class="control has-icons-left has-icons-right">
+        <input class="input is-large" type="text" name="tags" placeholder="Tags for event (please use comma to separate tags)">
+        <span class="icon is-small is-left">
+          <i class="fa fa-tags"></i>
+        </span>
+        <span class="icon is-small is-right">
+          <i class="fa fa-check"></i>
+        </span>
+      </p>
+    </div>
+    <div class="field">
+      <p class="control">
+        <textarea class="textarea is-large" name="content" placeholder="Event Description" style="height: 500px"></textarea>
+      </p>
+    </div>
+    {{ form.hidden_tag() }}
+    <div class="field is-grouped">
+
+      <p class="control">
+        <button class="button is-block is-primary is-large" drab="click:create">Create Now！</button>
+
+      </p>
+      <p class="control"><input class="button is-block is-warning is-large" type="reset" value="reset！"></input></p>
+      <p class="help is-success result-text">
+    </div>
+
+
+  </form>
+
+</section>
 {% endblock %}

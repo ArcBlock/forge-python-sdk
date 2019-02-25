@@ -61,7 +61,8 @@ def event_detail():
 @application.route("/", methods=['GET', 'POST'])
 def event_list():
     events = app.list_events(g.db)
-    return render_template('event_list.html', events=events)
+    event_lists = chunks(events, 3)
+    return render_template('event_list.html', event_lists=event_lists)
 
 
 @application.route("/tickets")
@@ -136,6 +137,12 @@ def login():
         session['cur_user'] = user_info
         return redirect('/')
     return render_template('login.html', form=form)
+
+
+def chunks(l, n):
+    """Yield successive n-sized chunks from l."""
+    for i in range(0, len(l), n):
+        yield l[i:i + n]
 
 
 if __name__ == '__main__':

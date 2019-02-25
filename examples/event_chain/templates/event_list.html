@@ -1,38 +1,61 @@
-<!doctype html>
-<title>Event-chain</title>
-<h1>All Events</h1>
-<p>
-    <a href=/><input type="button" value="Home"></a>
-</p>
-<p>
-    <a href=/tickets><input type="button" value="My tickets"></a>
-</p>
-<p>
-    <a href=/login><input type="button" value="Login"></a>
-</p>
+{% extends "layout.html" %}
+{% block content %}
+<section class="hero is-info is-small">
+  <div class="hero-body">
+    <div class="container has-text-centered">
+      <p class="title">
+        Hottest Events (0)
+      </p>
+      <p class="subtitle">
+        In Math We Trust! All events and tickets can be transferred and traced without any issue!
+      </p>
+    </div>
+  </div>
+</section>
 
-
-<table>
-    {% if events %}
+<section class="container">
+  {% if event_lists %}
+  {% for events in event_lists %}
+  <div class="columns features">
     {% for event in events %}
-    <form action="" method="post" novalidate>
+    <div class="column is-4">
+      <div class="card is-shady">
+        <div class="card-image">
+          <figure class="image is-2by1">
+            <img src="https://unsplash.it/1200/600?<%=@product.address %>" alt="
+{{ event.event_info.title }}" />
+          </figure>
+        </div>
+        <div class="card-content">
+          <div class="content">
+            <h4>{{ event.event_info.title }}</h4>
+            <div class="tags are-large">
+              <span class="tag are-large is-primary">Total tickets：
+                {{ event.event_info.total }}</span>
+              <span class="tag are-large is-danger">Tickets left：
+                {{ event.event_info.remaining }}</span>
 
-        <tr>
-            <td>Title: {{ event.event_info.title }}</td>
-        </tr>
-        <tr>
-            <td>Total Tickets: {{ event.event_info.total }}</td>
-        </tr>
-        <tr>
-            <td>Remaining Tickets: {{ event.event_info.remaining }}</td>
-        </tr>
-        <tr>
-            <td><a href=/details?address={{event.address}}><input type="button" value="Click to Buy"></a></td>
-        </tr>
-    </form>
+            </div>
+            <p class="teaser">
+              <!-- {{ event.event_info.description }} -->
+              These tickets are for Capitol Hill Block Party 2019, not for a specific artist. Artist, venue, and
+              schedule are subject
+              to change without notice. Tickets are non-refundable for any reason including artist cancellation. This
+              festival takes
+              place rain or shine. In the event of festival cancellation, all tickets will be automatically refunded.
+            </p>
+
+
+            <a class="button is-info" href="/details?address={{event.address}}"> I want to buy!</a>
+          </div>
+        </div>
+      </div>
+    </div>
 
     {% endfor %}
-</table>
-{% else %}
-<h1>There's no events created yet!</h1>
-{% endif %}
+  </div>
+  {% endfor %}
+  {% else %} <h1>There's no events created yet!</h1>
+  {% endif %}
+</section>
+{% endblock %}
