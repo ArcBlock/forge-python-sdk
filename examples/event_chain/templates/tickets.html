@@ -1,0 +1,25 @@
+<!doctype html>
+<title>Event-chain</title>
+<h1>Tickets</h1>
+
+<table>
+    {% if tickets %}
+    {% for ticket in tickets %}
+    <form action="" method="post" novalidate>
+
+        <tr>
+            <td>Address: {{ ticket.address }}</td>
+        </tr>
+        <tr>
+            <td>Owner: {{ ticket.owner }}</td>
+        </tr>
+        <tr>
+            <td>Event: {{ ticket.ticket_info.event_address }}</td>
+        </tr>
+    </form>
+
+    {% endfor %}
+</table>
+{% else %}
+<h1>There's no tickets for current user yet!</h1>
+{% endif %}

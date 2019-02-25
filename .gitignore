@@ -10,9 +10,8 @@ __pycache__
 src/test/_trial_temp
 src/_trial_temp/*
 _trial_temp/
-src/test/quick_test/*
-examples/kvstore/forge
-examples/event-chain/forge
+examples/event-chain/priv
 build/
 dist/
 forge_python_sdk.egg-info/
+flask_session

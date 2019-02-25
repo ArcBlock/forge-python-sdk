@@ -654,6 +654,21 @@ class StatisticRpcStub(object):
         request_serializer=rpc__pb2.RequestListTransactions.SerializeToString,
         response_deserializer=rpc__pb2.ResponseListTransactions.FromString,
         )
+    self.get_assets = channel.unary_unary(
+        '/forge_abi.StatisticRpc/get_assets',
+        request_serializer=rpc__pb2.RequestGetAssets.SerializeToString,
+        response_deserializer=rpc__pb2.ResponseGetAssets.FromString,
+        )
+    self.get_stakes = channel.unary_unary(
+        '/forge_abi.StatisticRpc/get_stakes',
+        request_serializer=rpc__pb2.RequestGetStakes.SerializeToString,
+        response_deserializer=rpc__pb2.ResponseGetStakes.FromString,
+        )
+    self.get_top_accounts = channel.unary_unary(
+        '/forge_abi.StatisticRpc/get_top_accounts',
+        request_serializer=rpc__pb2.RequestGetTopAccounts.SerializeToString,
+        response_deserializer=rpc__pb2.ResponseGetTopAccounts.FromString,
+        )
 
 
 class StatisticRpcServicer(object):
@@ -674,6 +689,27 @@ class StatisticRpcServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def get_assets(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def get_stakes(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def get_top_accounts(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_StatisticRpcServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -686,6 +722,21 @@ def add_StatisticRpcServicer_to_server(servicer, server):
           servicer.list_transactions,
           request_deserializer=rpc__pb2.RequestListTransactions.FromString,
           response_serializer=rpc__pb2.ResponseListTransactions.SerializeToString,
+      ),
+      'get_assets': grpc.unary_unary_rpc_method_handler(
+          servicer.get_assets,
+          request_deserializer=rpc__pb2.RequestGetAssets.FromString,
+          response_serializer=rpc__pb2.ResponseGetAssets.SerializeToString,
+      ),
+      'get_stakes': grpc.unary_unary_rpc_method_handler(
+          servicer.get_stakes,
+          request_deserializer=rpc__pb2.RequestGetStakes.FromString,
+          response_serializer=rpc__pb2.ResponseGetStakes.SerializeToString,
+      ),
+      'get_top_accounts': grpc.unary_unary_rpc_method_handler(
+          servicer.get_top_accounts,
+          request_deserializer=rpc__pb2.RequestGetTopAccounts.FromString,
+          response_serializer=rpc__pb2.ResponseGetTopAccounts.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

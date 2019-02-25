@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<section class="hero is-info is-small">
+  <div class="hero-body">
+    <div class="container has-text-centered">
+      <p class="title">
+        Join Event Chain Community!
+      </p>
+      <p class="subtitle">
+        No registration required! You can create a wallet immediately, or import your existing wallet to start your
+        journey! We recommend you to run a local full node to use all functionalities of event chain!
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="container">
+  <div class="columns features">
+    <div class="column is-4 is-offset-1">
+      <h3 class="title has-text-grey">Register a wallet</h3>
+      <p class="subtitle has-text-grey">Create a passphrase protected wallet in this node</p>
+      <div class="box">
+        <figure class="avatar">
+          <img src="/static/images/digit.jpg" style="width: 128px;height: 128px">
+        </figure>
+        <form class="login-form" action="/register" method="POST">
+          <div class="field">
+            <div class="control">
+              <input class="input is-large" type="text" name="name" placeholder=" Wallet name" autofocus="">
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="control">
+              <input class="input is-large" name="passphrase" type="password" placeholder=" Unlock passphrase">
+            </div>
+          </div>
+          <p class="help is-danger error-text">
+          </p>
+          <button class="button is-block is-info is-large is-fullwidth">create！</button>
+          <p class="help is-success success-text">
+          </p>
+          {{ form.hidden_tag() }}
+        </form>
+      </div>
+    </div>
+    <div class="column is-4 is-offset-2">
+
+      <h3 class="title has-text-grey">Unlock</h3>
+      <p class="subtitle has-text-grey">You need to unlock your existing wallet to use Event Chain</p>
+      <div class="box">
+        <figure class="avatar">
+          <img src="/static/images/key.jpg" style="width: 128px;height: 128px">
+        </figure>
+        <form action="/login" class="login-form" method="POST">
+          <div class="field">
+            <div class="control">
+              <input class="input is-large" name="name" type="text" placeholder=" Please input name">
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="control">
+              <input class="input is-large" name="passphrase" type="password" placeholder=" Please input passphrase">
+            </div>
+          </div>
+          {{ form.hidden_tag() }}
+          <input type="submit" class="button is-block is-info is-large is-fullwidth" value="unlock！" />
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+</section>
+
+
+{% endblock %}

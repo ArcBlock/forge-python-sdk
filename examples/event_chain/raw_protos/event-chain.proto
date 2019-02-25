@@ -15,16 +15,17 @@ message EventInfo {
     uint32 remaining = 11;
 }
 
-//type_url: ec:t:update_event
-message UpdateEventTx{
-    string address=1;
+//type_url: ec:t:update_hosted
+//event host send this itx when creating new event to add this event to account.hosted
+message UpdateHostedTx {
+    string address = 1;
 }
 
 //type_url: eventInfo:t:eventInfo
 //extend accountState
 message ParticipantInfo {
     repeated string hosted = 1;
-    repeated string participanted = 2;
+    repeated string participated = 2;
     repeated string unused = 3;
     repeated string used = 4;
 }
@@ -32,14 +33,18 @@ message ParticipantInfo {
 //type_url: ec:s:ticket_info
 message TicketInfo {
     uint32 id = 3;
-    bytes token = 4;
+    string event_address = 4;
     bool is_used = 5;
 }
 
 message TicketHolder {
     forge_abi.Transaction ticket_create = 1;
     forge_abi.Transaction ticket_exchange = 2;
-    bool executed = 3;
-    uint32 id =4;
-    string address =5;
+    uint32 id = 4;
+    string address = 5;
+}
+
+message UseTicketTx {
+    bytes signature = 1;
+    string ticket_address = 2;
 }

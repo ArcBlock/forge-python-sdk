@@ -39,6 +39,10 @@ enum StatusCode {
   invalid_tx_size = 36;
   invalid_signer_state = 37;
   invalid_forge_state = 38;
+  expired_asset = 39;
+  untransferrable_asset = 40;
+  readonly_asset = 41;
+  activated_asset = 42;
 
   forbidden = 403;
   internal = 500;
@@ -69,6 +73,7 @@ enum TopicType {
   declare_file = 22;
   sys_upgrade = 23;
   application = 24;
+  activate_asset = 25;
 
   // 24-128 reserved for future infrequent forge tx
 

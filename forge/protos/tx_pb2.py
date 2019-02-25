@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='forge_abi',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x08tx.proto\x12\tforge_abi\x1a\x19google/protobuf/any.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\ntype.proto\"C\n\x10\x41\x63\x63ountMigrateTx\x12\n\n\x02pk\x18\x01 \x01(\x0c\x12#\n\x04type\x18\x02 \x01(\x0b\x32\x15.forge_abi.WalletType\"\xb6\x01\n\x12\x43onsensusUpgradeTx\x12(\n\nvalidators\x18\x01 \x03(\x0b\x32\x14.forge_abi.Validator\x12\x11\n\tmax_bytes\x18\x02 \x01(\x04\x12\x0f\n\x07max_gas\x18\x03 \x01(\x12\x12\x16\n\x0emax_validators\x18\x04 \x01(\r\x12\x16\n\x0emax_candidates\x18\x05 \x01(\r\x12\"\n\x04\x64\x61ta\x18\x0f \x01(\x0b\x32\x14.google.protobuf.Any\"V\n\rCreateAssetTx\x12\x0f\n\x07moniker\x18\x01 \x01(\t\x12\"\n\x04\x64\x61ta\x18\x02 \x01(\x0b\x32\x14.google.protobuf.Any\x12\x10\n\x08readonly\x18\x03 \x01(\x08\"q\n\tDeclareTx\x12\x0f\n\x07moniker\x18\x01 \x01(\t\x12\n\n\x02pk\x18\x02 \x01(\x0c\x12#\n\x04type\x18\x03 \x01(\x0b\x32\x15.forge_abi.WalletType\x12\"\n\x04\x64\x61ta\x18\x0f \x01(\x0b\x32\x14.google.protobuf.Any\"\x1d\n\rDeclareFileTx\x12\x0c\n\x04hash\x18\x01 \x01(\t\"A\n\x0c\x45xchangeInfo\x12!\n\x05value\x18\x01 \x01(\x0b\x32\x12.forge_abi.BigUint\x12\x0e\n\x06\x61ssets\x18\x02 \x03(\t\"\xc0\x01\n\nExchangeTx\x12\n\n\x02to\x18\x01 \x01(\t\x12\'\n\x06sender\x18\x02 \x01(\x0b\x32\x17.forge_abi.ExchangeInfo\x12)\n\x08receiver\x18\x03 \x01(\x0b\x32\x17.forge_abi.ExchangeInfo\x12.\n\nexpired_at\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\"\n\x04\x64\x61ta\x18\x0f \x01(\x0b\x32\x14.google.protobuf.Any\"\x0f\n\rstakeForAsset\"\x0f\n\rstakeForChain\"\x0e\n\x0cStakeForNode\"\x0e\n\x0cstakeForUser\"m\n\x07StakeTx\x12\n\n\x02to\x18\x01 \x01(\t\x12!\n\x05value\x18\x02 \x01(\x0b\x32\x12.forge_abi.BigSint\x12\x0f\n\x07message\x18\x03 \x01(\t\x12\"\n\x04\x64\x61ta\x18\x0f \x01(\x0b\x32\x14.google.protobuf.Any\"n\n\x0cSysUpgradeTx\x12$\n\x04task\x18\x01 \x01(\x0b\x32\x16.forge_abi.UpgradeTask\x12\x14\n\x0cgrace_period\x18\x02 \x01(\x04\x12\"\n\x04\x64\x61ta\x18\x0f \x01(\x0b\x32\x14.google.protobuf.Any\"o\n\nTransferTx\x12\n\n\x02to\x18\x01 \x01(\t\x12!\n\x05value\x18\x02 \x01(\x0b\x32\x12.forge_abi.BigUint\x12\x0e\n\x06\x61ssets\x18\x03 \x03(\t\x12\"\n\x04\x64\x61ta\x18\x0f \x01(\x0b\x32\x14.google.protobuf.Any\"U\n\rUpdateAssetTx\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x0f\n\x07moniker\x18\x02 \x01(\t\x12\"\n\x04\x64\x61ta\x18\x03 \x01(\x0b\x32\x14.google.protobuf.Anyb\x06proto3')
+  serialized_pb=_b('\n\x08tx.proto\x12\tforge_abi\x1a\x19google/protobuf/any.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\ntype.proto\"C\n\x10\x41\x63\x63ountMigrateTx\x12\n\n\x02pk\x18\x01 \x01(\x0c\x12#\n\x04type\x18\x02 \x01(\x0b\x32\x15.forge_abi.WalletType\"R\n\x0f\x41\x63tivateAssetTx\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\n\n\x02to\x18\x02 \x01(\t\x12\"\n\x04\x64\x61ta\x18\x0f \x01(\x0b\x32\x14.google.protobuf.Any\"\xb6\x01\n\x12\x43onsensusUpgradeTx\x12(\n\nvalidators\x18\x01 \x03(\x0b\x32\x14.forge_abi.Validator\x12\x11\n\tmax_bytes\x18\x02 \x01(\x04\x12\x0f\n\x07max_gas\x18\x03 \x01(\x12\x12\x16\n\x0emax_validators\x18\x04 \x01(\r\x12\x16\n\x0emax_candidates\x18\x05 \x01(\r\x12\"\n\x04\x64\x61ta\x18\x0f \x01(\x0b\x32\x14.google.protobuf.Any\"\x86\x01\n\rCreateAssetTx\x12\x0f\n\x07moniker\x18\x01 \x01(\t\x12\"\n\x04\x64\x61ta\x18\x02 \x01(\x0b\x32\x14.google.protobuf.Any\x12\x10\n\x08readonly\x18\x03 \x01(\x08\x12.\n\nexpired_at\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"q\n\tDeclareTx\x12\x0f\n\x07moniker\x18\x01 \x01(\t\x12\n\n\x02pk\x18\x02 \x01(\x0c\x12#\n\x04type\x18\x03 \x01(\x0b\x32\x15.forge_abi.WalletType\x12\"\n\x04\x64\x61ta\x18\x0f \x01(\x0b\x32\x14.google.protobuf.Any\"\x1d\n\rDeclareFileTx\x12\x0c\n\x04hash\x18\x01 \x01(\t\"A\n\x0c\x45xchangeInfo\x12!\n\x05value\x18\x01 \x01(\x0b\x32\x12.forge_abi.BigUint\x12\x0e\n\x06\x61ssets\x18\x02 \x03(\t\"\xc0\x01\n\nExchangeTx\x12\n\n\x02to\x18\x01 \x01(\t\x12\'\n\x06sender\x18\x02 \x01(\x0b\x32\x17.forge_abi.ExchangeInfo\x12)\n\x08receiver\x18\x03 \x01(\x0b\x32\x17.forge_abi.ExchangeInfo\x12.\n\nexpired_at\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\"\n\x04\x64\x61ta\x18\x0f \x01(\x0b\x32\x14.google.protobuf.Any\"\x0f\n\rstakeForAsset\"\x0f\n\rstakeForChain\"\x0e\n\x0cStakeForNode\"\x0e\n\x0cstakeForUser\"m\n\x07StakeTx\x12\n\n\x02to\x18\x01 \x01(\t\x12!\n\x05value\x18\x02 \x01(\x0b\x32\x12.forge_abi.BigSint\x12\x0f\n\x07message\x18\x03 \x01(\t\x12\"\n\x04\x64\x61ta\x18\x0f \x01(\x0b\x32\x14.google.protobuf.Any\"n\n\x0cSysUpgradeTx\x12$\n\x04task\x18\x01 \x01(\x0b\x32\x16.forge_abi.UpgradeTask\x12\x14\n\x0cgrace_period\x18\x02 \x01(\x04\x12\"\n\x04\x64\x61ta\x18\x0f \x01(\x0b\x32\x14.google.protobuf.Any\"o\n\nTransferTx\x12\n\n\x02to\x18\x01 \x01(\t\x12!\n\x05value\x18\x02 \x01(\x0b\x32\x12.forge_abi.BigUint\x12\x0e\n\x06\x61ssets\x18\x03 \x03(\t\x12\"\n\x04\x64\x61ta\x18\x0f \x01(\x0b\x32\x14.google.protobuf.Any\"U\n\rUpdateAssetTx\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x0f\n\x07moniker\x18\x02 \x01(\t\x12\"\n\x04\x64\x61ta\x18\x0f \x01(\x0b\x32\x14.google.protobuf.Anyb\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_any__pb2.DESCRIPTOR,google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,type__pb2.DESCRIPTOR,])
 
@@ -64,6 +64,51 @@ _ACCOUNTMIGRATETX = _descriptor.Descriptor(
   ],
   serialized_start=95,
   serialized_end=162,
+)
+
+
+_ACTIVATEASSETTX = _descriptor.Descriptor(
+  name='ActivateAssetTx',
+  full_name='forge_abi.ActivateAssetTx',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='address', full_name='forge_abi.ActivateAssetTx.address', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='to', full_name='forge_abi.ActivateAssetTx.to', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='data', full_name='forge_abi.ActivateAssetTx.data', index=2,
+      number=15, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=164,
+  serialized_end=246,
 )
 
 
@@ -128,8 +173,8 @@ _CONSENSUSUPGRADETX = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=165,
-  serialized_end=347,
+  serialized_start=249,
+  serialized_end=431,
 )
 
 
@@ -161,6 +206,13 @@ _CREATEASSETTX = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='expired_at', full_name='forge_abi.CreateAssetTx.expired_at', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -173,8 +225,8 @@ _CREATEASSETTX = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=349,
-  serialized_end=435,
+  serialized_start=434,
+  serialized_end=568,
 )
 
 
@@ -225,8 +277,8 @@ _DECLARETX = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=437,
-  serialized_end=550,
+  serialized_start=570,
+  serialized_end=683,
 )
 
 
@@ -256,8 +308,8 @@ _DECLAREFILETX = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=552,
-  serialized_end=581,
+  serialized_start=685,
+  serialized_end=714,
 )
 
 
@@ -294,8 +346,8 @@ _EXCHANGEINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=583,
-  serialized_end=648,
+  serialized_start=716,
+  serialized_end=781,
 )
 
 
@@ -353,8 +405,8 @@ _EXCHANGETX = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=651,
-  serialized_end=843,
+  serialized_start=784,
+  serialized_end=976,
 )
 
 
@@ -377,8 +429,8 @@ _STAKEFORASSET = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=845,
-  serialized_end=860,
+  serialized_start=978,
+  serialized_end=993,
 )
 
 
@@ -401,8 +453,8 @@ _STAKEFORCHAIN = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=862,
-  serialized_end=877,
+  serialized_start=995,
+  serialized_end=1010,
 )
 
 
@@ -425,8 +477,8 @@ _STAKEFORNODE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=879,
-  serialized_end=893,
+  serialized_start=1012,
+  serialized_end=1026,
 )
 
 
@@ -449,8 +501,8 @@ _STAKEFORUSER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=895,
-  serialized_end=909,
+  serialized_start=1028,
+  serialized_end=1042,
 )
 
 
@@ -501,8 +553,8 @@ _STAKETX = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=911,
-  serialized_end=1020,
+  serialized_start=1044,
+  serialized_end=1153,
 )
 
 
@@ -546,8 +598,8 @@ _SYSUPGRADETX = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1022,
-  serialized_end=1132,
+  serialized_start=1155,
+  serialized_end=1265,
 )
 
 
@@ -598,8 +650,8 @@ _TRANSFERTX = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1134,
-  serialized_end=1245,
+  serialized_start=1267,
+  serialized_end=1378,
 )
 
 
@@ -626,7 +678,7 @@ _UPDATEASSETTX = _descriptor.Descriptor(
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='data', full_name='forge_abi.UpdateAssetTx.data', index=2,
-      number=3, type=11, cpp_type=10, label=1,
+      number=15, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -643,14 +695,16 @@ _UPDATEASSETTX = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1247,
-  serialized_end=1332,
+  serialized_start=1380,
+  serialized_end=1465,
 )
 
 _ACCOUNTMIGRATETX.fields_by_name['type'].message_type = type__pb2._WALLETTYPE
+_ACTIVATEASSETTX.fields_by_name['data'].message_type = google_dot_protobuf_dot_any__pb2._ANY
 _CONSENSUSUPGRADETX.fields_by_name['validators'].message_type = type__pb2._VALIDATOR
 _CONSENSUSUPGRADETX.fields_by_name['data'].message_type = google_dot_protobuf_dot_any__pb2._ANY
 _CREATEASSETTX.fields_by_name['data'].message_type = google_dot_protobuf_dot_any__pb2._ANY
+_CREATEASSETTX.fields_by_name['expired_at'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _DECLARETX.fields_by_name['type'].message_type = type__pb2._WALLETTYPE
 _DECLARETX.fields_by_name['data'].message_type = google_dot_protobuf_dot_any__pb2._ANY
 _EXCHANGEINFO.fields_by_name['value'].message_type = type__pb2._BIGUINT
@@ -666,6 +720,7 @@ _TRANSFERTX.fields_by_name['value'].message_type = type__pb2._BIGUINT
 _TRANSFERTX.fields_by_name['data'].message_type = google_dot_protobuf_dot_any__pb2._ANY
 _UPDATEASSETTX.fields_by_name['data'].message_type = google_dot_protobuf_dot_any__pb2._ANY
 DESCRIPTOR.message_types_by_name['AccountMigrateTx'] = _ACCOUNTMIGRATETX
+DESCRIPTOR.message_types_by_name['ActivateAssetTx'] = _ACTIVATEASSETTX
 DESCRIPTOR.message_types_by_name['ConsensusUpgradeTx'] = _CONSENSUSUPGRADETX
 DESCRIPTOR.message_types_by_name['CreateAssetTx'] = _CREATEASSETTX
 DESCRIPTOR.message_types_by_name['DeclareTx'] = _DECLARETX
@@ -688,6 +743,13 @@ AccountMigrateTx = _reflection.GeneratedProtocolMessageType('AccountMigrateTx', 
   # @@protoc_insertion_point(class_scope:forge_abi.AccountMigrateTx)
   ))
 _sym_db.RegisterMessage(AccountMigrateTx)
+
+ActivateAssetTx = _reflection.GeneratedProtocolMessageType('ActivateAssetTx', (_message.Message,), dict(
+  DESCRIPTOR = _ACTIVATEASSETTX,
+  __module__ = 'tx_pb2'
+  # @@protoc_insertion_point(class_scope:forge_abi.ActivateAssetTx)
+  ))
+_sym_db.RegisterMessage(ActivateAssetTx)
 
 ConsensusUpgradeTx = _reflection.GeneratedProtocolMessageType('ConsensusUpgradeTx', (_message.Message,), dict(
   DESCRIPTOR = _CONSENSUSUPGRADETX,

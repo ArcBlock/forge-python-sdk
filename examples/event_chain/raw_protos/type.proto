@@ -81,14 +81,15 @@ message AbciContext {
   string tx_hash = 1;
   // the height of the current block.
   uint64 block_height = 2;
-  // the deterministic time (in google protobuf timestamp format) of the current
-  // block.
+  // the deterministic time of the current block.
   google.protobuf.Timestamp block_time = 3;
   // the total txs of the chain.
   uint64 total_txs = 4;
   // tx statistics
   TxStatistics tx_statistics = 5;
   uint32 tx_index = 6;
+  // the deterministic time of the last block.
+  google.protobuf.Timestamp last_block_time = 7;
 }
 
 message Transaction {
@@ -256,42 +257,9 @@ message TxStatistics {
   uint64 num_update_asset_txs = 10;
 }
 
-message PageOrder {
-  string field = 1;
-  string type = 2;
-}
-
-message PageInput {
-  string cursor = 1;
-  uint32 size = 2;
-  repeated PageOrder order = 3;
-}
-
-message TypeFilter {
-  repeated string types = 1;
-}
-
-message TimeFilter {
-  string start_date_time = 1;
-  string end_date_time = 2;
-}
-
-message AddressFilter {
-  string sender = 1;
-  string receiver = 2;
-}
-
-message PageInfo {
-  string cursor = 1;
-  bool next = 2;
-  uint32 total = 3;
-}
-
-message IndexedTransaction {
-  string hash = 1;
-  string sender = 2;
-  string receiver = 3;
-  string time = 4;
-  string type = 5;
-  Transaction tx = 6;
+// keep a list of state root for different dbs (column families).
+message StateRoot {
+  bytes account = 2;
+  bytes asset = 3;
+  bytes receipt = 4;
 }

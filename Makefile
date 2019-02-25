@@ -3,7 +3,7 @@ ENV=~/.envs
 README=$(TOP_DIR)/README.md
 
 VERSION=$(strip $(shell cat version))
-PROTOS=abi enum rpc state service tx type
+PROTOS=abi enum rpc state service tx type trace_type
 CONFIGS=forge forge_release forge_test forge_default
 
 build:
@@ -95,11 +95,16 @@ rebuild-proto: prepare-all-proto
 # Event Chain related commands
 event-chain-test:
 	@echo "Running flow test for event-chain..."
-	@python -m examples.event_chain.flow-test
+	@python -m examples.event_chain.test
 
-event_chain-server:
+event-chain-server:
 	@echo "Starting server for Event-Chain"
 	@python -m examples.event_chain.server
+
+init-event-chain:
+	@echo "Initializing db for Event-Chain..."
+	@python -m examples.event_chain.app
+	@echo "DB for Event-Chain has been initialized!"
 
 
 include .makefiles/*.mk

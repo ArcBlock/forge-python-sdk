@@ -34,7 +34,7 @@ class ForgeServer:
     def start(self):
         self.server.bind(self.address)
         self.server.listen(1)
-        self.logger.info("socket type is : {}".format(self.server))
+        self.logger.debug("socket type is : {}".format(self.server))
         self.logger.info(
             "server has binded to address {}".format(self.address),
         )
@@ -45,7 +45,7 @@ class ForgeServer:
 
             while True:
                 data = self.conn.recv(1024)
-                self.logger.info("bytes received: {}".format(data))
+                self.logger.debug("bytes received: {}".format(data))
                 if data:
                     self.buffer = self.buffer + data
                     self.__process_buffer()
@@ -67,7 +67,7 @@ class ForgeServer:
         self.buffer = self.buffer[start + length:]
 
     def __handle_request(self, request, action):
-        self.logger.info("Received a {} request!".format(action))
+        self.logger.debug("Received a {} request!".format(action))
         action_request = getattr(request, action)
         if action == 'info':
             self.__handle_info_request()
@@ -86,15 +86,15 @@ class ForgeServer:
             else:
                 self.conn.send(self.__reply(action=action, unsupported=True))
 
-        self.logger.info("type {} has been processed!".format(action))
+        self.logger.debug("type {} has been processed!".format(action))
 
     def __handle_info_request(self):
         url_list = [key for key in self.handlers.keys()]
         response = utils.encode(
             protos.Response(info=protos.ResponseInfo(type_urls=url_list)),
         )
-        self.logger.info('url list: {}'.format(url_list))
-        self.logger.info('Info response: {}'.format(response))
+        self.logger.debug('url list: {}'.format(url_list))
+        self.logger.debug('Info response: {}'.format(response))
         self.conn.send(response)
 
     def __is_type_supported(self, itx_type):
@@ -130,13 +130,13 @@ class ForgeServer:
         if len(self.buffer) > 0:
             req, req_len, start_pos = utils.decode(self.buffer)
             if req_len + start_pos <= len(self.buffer):
-                self.logger.info(
+                self.logger.debug(
                     "Buffer contains a full request. Processing the "
                     "request..",
                 )
                 return True
             else:
-                self.logger.info(
+                self.logger.debug(
                     "Buffer doesn't contain a full request! request "
                     "length "
                     "is {}, start position is {}, the length of buffer "
@@ -153,8 +153,8 @@ class ForgeServer:
                     code=protos.StatusCode.UNSUPPORTED_TX,
                 )}
             )
-            self.logger.info("Response is {}".format(result))
+            self.logger.debug("Response is {}".format(result))
         else:
             result = protos.Response(**{action: response})
-            self.logger.info("Response is {}".format(result))
+            self.logger.debug("Response is {}".format(result))
         return utils.encode(result)

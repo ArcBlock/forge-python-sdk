@@ -8,7 +8,6 @@ from .server import ForgeServer
 class ForgeSdk:
     def __init__(self, handlers=[], config_path=''):
         logging.basicConfig(
-            level=logging.INFO,
             format='%(asctime)s-%(name)s-%(process)d-%('
             'levelname)s-%(message)s',
         )

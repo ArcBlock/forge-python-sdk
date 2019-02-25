@@ -1,0 +1,82 @@
+syntax = "proto3";
+package forge_abi;
+
+import "type.proto";
+
+// indexed type definition
+
+message PageOrder {
+  string field = 1;
+  string type = 2;
+}
+
+message PageInput {
+  string cursor = 1;
+  uint32 size = 2;
+  repeated PageOrder order = 3;
+}
+
+message TypeFilter {
+  repeated string types = 1;
+}
+
+message TimeFilter {
+  string start_date_time = 1;
+  string end_date_time = 2;
+}
+
+message AddressFilter {
+  string sender = 1;
+  string receiver = 2;
+}
+
+message PageInfo {
+  string cursor = 1;
+  bool next = 2;
+  uint32 total = 3;
+}
+
+message IndexedTransaction {
+  string hash = 1;
+  string sender = 2;
+  string receiver = 3;
+  string time = 4;
+  string type = 5;
+  Transaction tx = 6;
+}
+
+message IndexedAccountState {
+  string address = 1;
+  BigUint balance = 2;
+  uint64 num_assets = 3;
+  uint64 num_txs = 4;
+  uint64 nonce = 5;
+  string genesis_time = 6;
+  string renaissance_time = 7;
+  string moniker = 8;
+  string migrated_from = 9;
+  string migrated_to = 10;
+  BigUint total_received_stakes = 11;
+  BigUint total_stakes = 12;
+  BigUint total_unstakes = 13;
+}
+
+message IndexedAssetState {
+  string address = 1;
+  string owner = 2;
+  string genesis_time = 3;
+  string renaissance_time = 4;
+  string moniker = 5;
+  bool readonly = 6;
+}
+
+message IndexedStakeState {
+  string address = 1;
+  BigUint balance = 2;
+  string sender = 3;
+  string receiver = 4;
+  string genesis_time = 5;
+  string renaissance_time = 6;
+  string message = 7;
+  uint32 type = 8;
+}

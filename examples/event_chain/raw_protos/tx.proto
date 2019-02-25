@@ -11,6 +11,16 @@ message AccountMigrateTx {
   WalletType type = 2; // new wallet type
 }
 
+message ActivateAssetTx {
+  string address = 1;
+  // who shall be able to activate this tx - if empty we use the address of 1st
+  // signature in the signatures field of tx.
+  string to = 2;
+
+  // forge won't update data into state if app is interested in this tx.
+  google.protobuf.Any data = 15;
+}
+
 message ConsensusUpgradeTx {
   repeated Validator validators = 1;
   uint64 max_bytes = 2;
@@ -27,6 +37,7 @@ message CreateAssetTx {
   // forge won't update data into state if app is interested in this tx.
   google.protobuf.Any data = 2;
   bool readonly = 3;
+  google.protobuf.Timestamp expired_at = 4;
 }
 
 message DeclareTx {
@@ -114,5 +125,5 @@ message UpdateAssetTx {
   string moniker = 2;
 
   // forge won't update data into state if app is interested in this tx.
-  google.protobuf.Any data = 3;
+  google.protobuf.Any data = 15;
 }

@@ -248,8 +248,8 @@ class RpcChain:
             )
 
     def get_asset_address(
-            self, req=None, sender_address='', itx=None,
-            wallet_type=None,
+            self, sender_address='', itx=None,
+            wallet_type=None, req=None,
     ):
         if req is not None:
             return self.stub.get_asset_address(req)

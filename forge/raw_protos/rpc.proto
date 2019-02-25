@@ -8,6 +8,7 @@ import "enum.proto";
 import "type.proto";
 import "state.proto";
 import "tx.proto";
+import "trace_type.proto";
 
 // Request / Response message definition
 
@@ -67,13 +68,16 @@ message ResponseGetBlock {
 }
 
 message RequestGetBlocks {
-  uint64 min_height = 1;
-  uint64 max_height = 2;
+  PageInput paging = 1;
+  uint64 min_height = 2;
+  uint64 max_height = 3;
+  bool empty_excluded = 4;
 }
 
 message ResponseGetBlocks {
   StatusCode code = 1;
-  repeated BlockInfo blocks = 2;
+  PageInfo page = 2;
+  repeated BlockInfo blocks = 3;
 }
 
 // create_wallet(moniker, passphrase): create an account locally
@@ -348,5 +352,37 @@ message RequestSignData {
 
 message ResponseSignData {
   StatusCode code = 1;
-  bytes signed_data = 2;
+  bytes signature = 2;
+}
+
+message RequestGetAssets{
+  PageInput paging = 1;
+  string owner_address = 2;
+}
+
+message ResponseGetAssets {
+  StatusCode code = 1;
+  PageInfo page = 2;
+  repeated IndexedAssetState assets = 3;
+}
+
+message RequestGetStakes{
+  PageInput paging = 1;
+  AddressFilter address_filter = 2;
+}
+
+message ResponseGetStakes {
+  StatusCode code = 1;
+  PageInfo page = 2;
+  repeated IndexedStakeState stakes = 3;
+}
+
+message RequestGetTopAccounts{
+  PageInput paging = 1;
+}
+
+message ResponseGetTopAccounts {
+  StatusCode code = 1;
+  PageInfo page = 2;
+  repeated IndexedAccountState accounts = 3;
 }
