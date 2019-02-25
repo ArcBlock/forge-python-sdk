@@ -1,4 +1,3 @@
-import os.path as path
 import sqlite3
 from time import sleep
 
@@ -16,6 +15,7 @@ from wtforms import SubmitField
 from wtforms.validators import DataRequired
 
 from examples.event_chain import app
+from examples.event_chain import config
 
 application = Flask(__name__)
 application.config['SECRET_KEY'] = 'you-will-never-guess'
@@ -23,7 +23,7 @@ SESSION_TYPE = 'filesystem'
 application.config.from_object(__name__)
 Session(application)
 
-DB_PATH = path.join(path.dirname(__file__), "priv", "sqlite.db")
+DB_PATH = config.db_path
 
 
 def wait():
@@ -52,26 +52,37 @@ def event_detail():
     if not session.get('cur_user', None):
         flash('Please register first!')
         return redirect('/register')
-    if request.method == "POST" and 'Buy' in request.form:
+    if request.method == "POST" and 'Buy it now' in request.form:
         app.buy_ticket(event_address, session['cur_user'], g.db)
         return redirect('/')
     return render_template('event_details.html', event=event)
+
+
+@application.route("/buy", methods=['POST'])
+def buy():
+    event_address = request.args.get('address')
+    app.buy_ticket(event_address, session['cur_user'], g.db)
+    return redirect('/')
 
 
 @application.route("/", methods=['GET', 'POST'])
 def event_list():
     events = app.list_events(g.db)
     event_lists = chunks(events, 3)
-    return render_template('event_list.html', event_lists=event_lists)
+    return render_template(
+        'event_list.html', event_lists=event_lists,
+        session=session, number=len(events),
+    )
 
 
 @application.route("/tickets")
 def ticket_list():
-    if not session.get('cur_user', None):
-        flash('Please register first!')
-        return redirect('/register')
     tickets = app.list_unused_tickets(session['cur_user']['address'])
-    return render_template('tickets.html', tickets=tickets)
+    ticket_lists = chunks(tickets, 3)
+    return render_template(
+        'tickets.html', ticket_lists=ticket_lists,
+        number=len(tickets),
+    )
 
 
 class EventCreateForm(FlaskForm):
@@ -135,6 +146,7 @@ def login():
         user_info['passphrase'] = user.passphrase
         user_info['address'] = user.address
         session['cur_user'] = user_info
+        session['logged_in'] = True
         return redirect('/')
     return render_template('login.html', form=form)
 

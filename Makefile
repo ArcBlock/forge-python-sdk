@@ -103,7 +103,8 @@ event-chain-server:
 
 init-event-chain:
 	@echo "Initializing db for Event-Chain..."
-	@python -m examples.event_chain.app
+	@mkdir -p ~/.forge/event_chain
+	@python -m examples.event_chain.db_helper
 	@echo "DB for Event-Chain has been initialized!"
 
 

@@ -2,7 +2,7 @@ import os.path as path
 import sqlite3
 from sqlite3 import Error
 
-DB_PATH = path.join(path.dirname(__file__), "priv", "sqlite.db")
+from examples.event_chain.config import config
 
 
 def create_connection(db_path):
@@ -100,7 +100,8 @@ def select_user_address(conn, name, passphrase):
 
 
 if __name__ == '__main__':
-    conn = create_connection(DB_PATH)
-    res = select_all_users(conn)
-    for i in res:
-        print(i)
+    print(config.db_path)
+    if not path.exists(config.db_path):
+        conn = create_connection(config.db_path)
+        init_db(conn)
+        conn.close()

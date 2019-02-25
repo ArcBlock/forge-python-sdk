@@ -10,7 +10,7 @@ __pycache__
 src/test/_trial_temp
 src/_trial_temp/*
 _trial_temp/
-examples/event-chain/priv
+examples/event_chain/priv
 build/
 dist/
 forge_python_sdk.egg-info/

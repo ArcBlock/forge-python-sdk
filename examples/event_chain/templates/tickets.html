@@ -1,25 +1,50 @@
-<!doctype html>
-<title>Event-chain</title>
-<h1>Tickets</h1>
+{% extends "layout.html" %}
+{% block content %}
+<section class="hero is-info is-small">
+  <div class="hero-body">
+    <div class="container has-text-centered">
+      <p class="title">
+        My tickets ({{number}})
+      </p>
+      <p class="subtitle">
+        In Math We Trust! All events and tickets can be transferred and traced without any issue!
+      </p>
+    </div>
+  </div>
+</section>
 
-<table>
-    {% if tickets %}
+<section class="container">
+  {% if ticket_lists %}
+  {% for tickets in ticket_lists %}
+  <div class="columns features">
     {% for ticket in tickets %}
-    <form action="" method="post" novalidate>
+    <div class="column is-4">
+      <div class="card is-shady">
+        <div class="card-image">
+          <figure class="image is-2by1">
+            <img src="https://unsplash.it/1200/600?<%=@product.address %>" alt="
+{{ ticket.address }}" />
+          </figure>
+        </div>
+        <div class="card-content">
+          <div class="content">
+            <h4>{{ ticket.address }}</h4>
+            <div class="tags are-large">
+              <span class="tag are-large is-primary">Event：
+                {{ ticket.ticket_info.event_address }}</span>
 
-        <tr>
-            <td>Address: {{ ticket.address }}</td>
-        </tr>
-        <tr>
-            <td>Owner: {{ ticket.owner }}</td>
-        </tr>
-        <tr>
-            <td>Event: {{ ticket.ticket_info.event_address }}</td>
-        </tr>
-    </form>
+            </div>
+
+            <a class="button is-info" href="/use?address={{ticket.address}}"> Use It</a>
+          </div>
+        </div>
+      </div>
+    </div>
 
     {% endfor %}
-</table>
-{% else %}
-<h1>There's no tickets for current user yet!</h1>
-{% endif %}
+  </div>
+  {% endfor %}
+  {% else %} <h1>There's no tickets created yet!</h1>
+  {% endif %}
+</section>
+{% endblock %}

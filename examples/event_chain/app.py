@@ -2,13 +2,14 @@ import logging
 from datetime import datetime
 from time import sleep
 
+import examples.event_chain.config as config
 from examples.event_chain import db_helper as db
 from examples.event_chain import models
 from forge import ForgeSdk
 
 logger = logging.getLogger('ec-app')
 
-forgeSdk = ForgeSdk()
+forgeSdk = ForgeSdk(config=config.forge_config)
 forgeRpc = forgeSdk.rpc
 
 

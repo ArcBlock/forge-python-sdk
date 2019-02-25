@@ -6,14 +6,14 @@ from .server import ForgeServer
 
 
 class ForgeSdk:
-    def __init__(self, handlers=[], config_path=None):
+    def __init__(self, handlers=[], config=None):
         logging.basicConfig(
             format='%(asctime)s-%(name)s-%(process)d-%('
             'levelname)s-%(message)s',
         )
         self.handlers = handlers
         self.logger = logging.getLogger(__name__)
-        self.config = ForgeConfig(config_path)
+        self.config = config if config else ForgeConfig()
         self.rpc = ForgeRpc(self.config.sock_grpc)
 
         self.server = ForgeServer(

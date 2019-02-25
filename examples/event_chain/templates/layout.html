@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="shortcut icon" href="/images/fav_icon.png" type="image/x-icon">
-  <title>Bazar</title>
+  <title>Event Chain</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}" />
@@ -35,10 +35,13 @@
     <div id="navbar-basic" class="navbar-menu">
       <div class="navbar-start">
         <a class="navbar-item" href="/">
-          Hot Events
+          All Events
+        </a>
+        <a class="navbar-item" href="/create">
+          Create Event
         </a>
 
-        {% if not session.logged_in %}
+        {% if not session['cur_user'] %}
         <a class="navbar-item" href="/login">log in</a>
         {% else %}
         <a class="navbar-item" href="/tickets">My tickets</a>

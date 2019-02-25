@@ -37,8 +37,8 @@ class ForgeConfig:
 
     def __init__(self, file_path=None):
         self.toml_dict = parse_config(file_path)
-        self.app_path = self.toml_dict['app']['path']
-        self.forge_path = self.toml_dict['forge']['path']
+        self.app_path = expanduser(self.toml_dict['app']['path'])
+        self.forge_path = expanduser(self.toml_dict['forge']['path'])
         self.sock_grpc = self.__parse_socket_grpc(
             self.forge_path,
             self.toml_dict['forge']['sock_grpc'],
@@ -60,13 +60,12 @@ class ForgeConfig:
         -------
 
         """
-        expanded_forge_path = expanduser(forge_path)
         socket_type = forge_socket.split("://")[0]
         parsed_socket = forge_socket.split("://")[1]
         if socket_type == 'unix':
             socket_target = '/'.join([
                 'unix:/',
-                expanded_forge_path, parsed_socket,
+                forge_path, parsed_socket,
             ])
         else:
             socket_target = forge_socket
