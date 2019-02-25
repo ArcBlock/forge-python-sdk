@@ -1,4 +1,5 @@
 import logging
+import os.path as path
 from time import sleep
 
 from google.protobuf.any_pb2 import Any
@@ -9,9 +10,10 @@ from forge import ForgeSdk
 from forge import Signer
 from forge import utils
 
+APP_CONFIG = path.join(path.dirname(__file__), "priv", "forge.toml")
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger('ec-models')
-forgeRpc = ForgeSdk().rpc
+forgeRpc = ForgeSdk(config_path=APP_CONFIG).rpc
 
 
 def wait():

@@ -1,19 +1,19 @@
 import logging
 
-from .config import parser
+from .config import ForgeConfig
 from .rpc import ForgeRpc
 from .server import ForgeServer
 
 
 class ForgeSdk:
-    def __init__(self, handlers=[], config_path=''):
+    def __init__(self, handlers=[], config_path=None):
         logging.basicConfig(
             format='%(asctime)s-%(name)s-%(process)d-%('
             'levelname)s-%(message)s',
         )
         self.handlers = handlers
         self.logger = logging.getLogger(__name__)
-        self.config = parser.parse_config(config_path)
+        self.config = ForgeConfig(config_path)
         self.rpc = ForgeRpc(self.config.sock_grpc)
 
         self.server = ForgeServer(

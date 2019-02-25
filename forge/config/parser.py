@@ -8,33 +8,44 @@ from deepmerge import Merger
 def parse_config(file_path):
     default_config = path.join(path.dirname(__file__), "forge_default.toml")
     toml_dict = toml.load(default_config)
-    if file_path and not path.exists(file_path):
+    if not file_path:
+        return toml_dict
+    elif file_path and not path.exists(file_path):
         raise FileNotFoundError("Can't find the forge config user provided!")
     elif path.exists(file_path):
         user_dict = toml.load(file_path)
         merger = Merger(
+            # pass in a list of tuple, with the
+            # strategies you are looking to apply
+            # to each type.
             [
-                (list, ['override']),
-                (dict, ['merge']),
-                ['override'],
-                ['override'],
+                (list, ["append"]),
+                (dict, ["merge"]),
             ],
+            # next, choose the fallback strategies,
+            # applied to all other types:
+            ["override"],
+            # finally, choose the strategies in
+            # the case where the types conflict:
+            ["override"],
         )
         merger.merge(toml_dict, user_dict)
-    return ForgeConfig(toml_dict)
+    return toml_dict
 
 
 class ForgeConfig:
 
-    def __init__(self, toml_dict):
-        self.toml_dict = toml_dict
+    def __init__(self, file_path=None):
+        self.toml_dict = parse_config(file_path)
+        self.app_path = self.toml_dict['app']['path']
+        self.forge_path = self.toml_dict['forge']['path']
         self.sock_grpc = self.__parse_socket_grpc(
-            toml_dict['forge']['path'],
-            toml_dict['forge']['sock_grpc'],
+            self.forge_path,
+            self.toml_dict['forge']['sock_grpc'],
         )
         self.sock_tcp = self.__parse_socket(
-            toml_dict['app']['path'],
-            toml_dict['app']['sock_tcp'],
+            self.app_path,
+            self.toml_dict['app']['sock_tcp'],
         )
 
     def __parse_socket(self, forge_path, forge_socket):
