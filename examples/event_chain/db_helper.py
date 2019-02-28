@@ -21,20 +21,84 @@ def create_connection(db_path):
 
 def init_db(conn):
     c = conn
-    c.execute("drop table if exists Events")
-    c.execute("drop table if exists Tickets")
-    c.execute("drop table if exists Users")
+    c.execute("drop table if exists events;")
+    c.execute("drop table if exists tickets;")
+    c.execute("drop table if exists users;")
 
-    c.execute('''create table Events
+    c.execute('''create table events
                   (address text, owner text);''')
 
-    c.execute('''create table Tickets
-                  (address text, event_address text, owner text);''')
+    c.execute('''create table tickets
+                  (address text,
+                  event_address text,
+                  owner text,
+                  create_hash,
+                  exchange_hash);''')
 
-    c.execute('''create table Users
+    c.execute('''create table users
                   (address text, moniker text, passphrase text);''')
 
     conn.commit()
+
+
+def insert_ticket(conn, ticket, event, owner, create_hash, exchange_hash):
+    if create_hash:
+        conn.execute(
+            ''' INSERT INTO tickets
+                (address, event_address, owner, create_hash, exchange_hash)
+                VALUES(?,?,?,?,?);''',
+            (ticket, event, owner, create_hash, exchange_hash),
+        )
+    else:
+        conn.execute(
+            '''
+                UPDATE ticket_txs
+                SET exchange_hash=?
+                WHERE address=?
+                ''', (ticket, exchange_hash),
+        )
+    conn.commit()
+
+
+def select_tickets(conn, owner=None, event=None):
+    conn.row_factory = sqlite3.Row
+    c = conn.cursor()
+    if owner and event:
+        c.execute(
+            '''select * from tickets
+                    WHERE owner = ? and event_address=?''', (owner, event),
+        )
+    elif owner:
+        c.execute(
+            '''select * from tickets
+                    WHERE owner = ? ''', [owner],
+        )
+    elif event:
+        c.execute(
+            '''select * from tickets
+                    WHERE event = ? ''', [event],
+        )
+    return to_dict(c.fetchall())
+
+
+def select_ticket_hash(conn, ticket):
+    conn.row_factory = sqlite3.Row
+    c = conn.cursor()
+    c.execute(
+        '''
+        select create_hash, exchange_hash from tickets
+        where address=?''', [ticket],
+    )
+    row = c.fetchone()
+    return {item[0]: item[1] for item in list(zip(row.keys(), row))}
+
+
+def to_dict(all_rows):
+    res = []
+    for row in all_rows:
+        params = {item[0]: item[1] for item in list(zip(row.keys(), row))}
+        res.append(params)
+    return res
 
 
 def insert_event(conn, event, owner):
@@ -46,21 +110,11 @@ def insert_event(conn, event, owner):
     conn.commit()
 
 
-def insert_ticket(conn, ticket_address, event_address, owner):
-    c = conn
-    c.execute(
-        ''' INSERT INTO Tickets(address, event_address, owner) VALUES(?,?,
-            ?); ''',
-        (ticket_address, event_address, owner),
-    )
-    conn.commit()
-
-
 def insert_user(conn, address, moniker, passphrase):
     c = conn
     c.execute(
         ''' INSERT INTO Users(address, moniker, passphrase) VALUES(?,?,
-            ?); ''',
+                ?); ''',
         (address, moniker, passphrase),
     )
     conn.commit()
@@ -68,7 +122,7 @@ def insert_user(conn, address, moniker, passphrase):
 
 def select_all_events(conn):
     c = conn.cursor()
-    c.execute('''select address from Events;''')
+    c.execute('''select address from events;''')
     return [row[0] for row in c.fetchall()]
 
 
@@ -76,12 +130,6 @@ def select_all_users(conn):
     c = conn.cursor()
     c.execute('''select * from Users;''')
     return c.fetchall()
-
-
-def select_tickets_by_owner(conn, owner):
-    c = conn.cursor()
-    c.execute("select address from Tickets where owner=?", owner)
-    return [row[0] for row in c.fetchall()]
 
 
 def select_events_by_creator(conn, creator):

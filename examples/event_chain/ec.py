@@ -1,3 +1,4 @@
+import logging
 import sqlite3
 from time import sleep
 
@@ -9,6 +10,7 @@ from flask import render_template
 from flask import request
 from flask import session
 from flask.ext.session import Session
+from flask_qrcode import QRcode
 from flask_wtf import FlaskForm
 from wtforms import StringField
 from wtforms import SubmitField
@@ -22,8 +24,15 @@ application.config['SECRET_KEY'] = 'you-will-never-guess'
 SESSION_TYPE = 'filesystem'
 application.config.from_object(__name__)
 Session(application)
+QRcode(application)
 
 DB_PATH = config.db_path
+
+
+class EventForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    confirm = SubmitField('Confirm')
+    address = StringField('Address')
 
 
 def wait():
@@ -37,6 +46,8 @@ def connect_db():
 @application.before_request
 def before_request():
     g.db = connect_db()
+    g.logger = logging.getLogger('app')
+    g.logger.setLevel(level=logging.DEBUG)
 
 
 @application.teardown_request
@@ -45,23 +56,36 @@ def teardown_request(exception):
         g.db.close()
 
 
-@application.route("/details", methods=['GET', 'POST'])
-def event_detail():
-    event_address = request.args.get('address')
-    event = app.get_event_state(event_address)
+@application.route("/details/<address>", methods=['GET', 'POST'])
+def event_detail(address):
+    if address and address != '':
+        event = app.get_event_state(address)
+        form = EventForm()
     if not session.get('cur_user', None):
         flash('Please register first!')
         return redirect('/register')
-    if request.method == "POST" and 'Buy it now' in request.form:
-        app.buy_ticket(event_address, session['cur_user'], g.db)
-        return redirect('/')
-    return render_template('event_details.html', event=event)
+    return render_template('event_details.html', event=event, form=form)
 
 
 @application.route("/buy", methods=['POST'])
 def buy():
-    event_address = request.args.get('address')
-    app.buy_ticket(event_address, session['cur_user'], g.db)
+    form = EventForm()
+    address = form.address.data
+    g.logger.debug('address: {}'.format(form.address))
+    g.logger.debug('submit: {}'.format(form.confirm))
+    if not address or address == '':
+        g.logger.error("No event address.")
+    else:
+        app.buy_ticket(address, session['cur_user'], g.db)
+    return redirect('/')
+
+
+@application.route("/activate", methods=['GET', 'POST'])
+def use():
+    ticket_address = request.args.get('address')
+    ticket = app.get_ticket_state(ticket_address)
+    activate_tx = ticket.gen_activate_asset_tx(session['cur_user'])
+    app.activate(activate_tx, session['cur_user'])
     return redirect('/')
 
 
@@ -77,7 +101,9 @@ def event_list():
 
 @application.route("/tickets")
 def ticket_list():
-    tickets = app.list_unused_tickets(session['cur_user']['address'])
+    # unused_tickets = app.list_unused_tickets(session['cur_user']['address'])
+    # used_tickets = app.list_used_tickets(session['cur_user']['address'])
+    tickets = app.list_tickets(g.db, session['cur_user']['address'])
     ticket_lists = chunks(tickets, 3)
     return render_template(
         'tickets.html', ticket_lists=ticket_lists,
@@ -85,14 +111,9 @@ def ticket_list():
     )
 
 
-class EventCreateForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired()])
-    confirm = SubmitField('Confirm')
-
-
 @application.route("/create", methods=['GET', 'POST'])
 def create_event():
-    form = EventCreateForm()
+    form = EventForm()
     if form.validate_on_submit():
         if not session.get('cur_user', None):
             flash('Please register first!')
@@ -114,10 +135,14 @@ class RegisterForm(FlaskForm):
     confirm = SubmitField('Confirm')
 
 
-@application.route("/register", methods=['GET', 'POST'])
+@application.route("/register", methods=['POST'])
 def register():
     form = RegisterForm()
+    g.logger.debug("{}".format(form.name))
+
     if form.validate_on_submit():
+        g.logger.debug("{}".format(form.name))
+
         user_info = {}
         user = app.register_user(
             form.name.data,
@@ -128,8 +153,21 @@ def register():
         user_info['passphrase'] = user.passphrase
         user_info['address'] = user.address
         session['cur_user'] = user_info
+        g.logger.debug("form is validated!!")
         return redirect('/')
-    return render_template('register.html', form=form)
+
+
+@application.route("/ticket_details", methods=['GET', 'POST'])
+def ticket_detail():
+    address = request.args.get('address')
+    g.logger.debug('about to get ticket exchange tx for {}'.format(address))
+    if address and address != '':
+        event = app.get_event_state(address)
+        exchange_tx = app.get_ticket_exchange_tx(address, g.db)
+        return render_template(
+            'ticket_details.html', tx=exchange_tx,
+            event=event,
+        )
 
 
 @application.route("/login", methods=['GET', 'POST'])

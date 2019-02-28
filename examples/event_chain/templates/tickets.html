@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
 {% block content %}
-<section class="hero is-info is-small">
+<section class="hero is-link is-small">
   <div class="hero-body">
     <div class="container has-text-centered">
       <p class="title">
-        My tickets ({{number}})
+        You have {{number}} tickets
       </p>
       <p class="subtitle">
         In Math We Trust! All events and tickets can be transferred and traced without any issue!
@@ -21,21 +21,31 @@
     <div class="column is-4">
       <div class="card is-shady">
         <div class="card-image">
+          {% if ticket.activated == True %}
+          <figure class="watermarked image is-2by1">
+            <img src="https://unsplash.it/1200/600?<%=@product.address %>" alt="
+{{ ticket.address }}" />
+          </figure>
+          {% else %}
           <figure class="image is-2by1">
             <img src="https://unsplash.it/1200/600?<%=@product.address %>" alt="
 {{ ticket.address }}" />
           </figure>
+          {% endif %}
+
         </div>
         <div class="card-content">
           <div class="content">
-            <h4>{{ ticket.address }}</h4>
+            <h4>Event：Study Party Event</h4>
             <div class="tags are-large">
-              <span class="tag are-large is-primary">Event：
-                {{ ticket.ticket_info.event_address }}</span>
+              <span class="tag are-large is-primary">2019-02-21</span>
 
             </div>
-
-            <a class="button is-info" href="/use?address={{ticket.address}}"> Use It</a>
+            {% if ticket.activated!=True %}
+            <a class="button is-info" href="/activate?address={{ticket.address}}"> Use It</a>
+            {% else %}
+            <a class="button is-info" href="/ticket_details?address={{ticket.address}}"> See Transaction</a>
+            {% endif %}
           </div>
         </div>
       </div>

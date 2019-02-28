@@ -238,6 +238,7 @@ class EventAssetState:
             logger.error(res)
             logger.error('Error ticket tx: {tx}'.format(tx=create_tx))
             assert (res.code == 0)
+        return res.hash
 
     def exchange_ticket(self, buyer_wallet, buyer_token):
         ticket_holder = self.get_next_ticket()
@@ -250,6 +251,7 @@ class EventAssetState:
         logger.debug("executing-ticket: ticket_exchange_tx has been sent.")
         if res.code != 0:
             logger.error(res)
+        return res.hash
 
     def update_token(self, buyer_wallet, buyer_token=''):
         next_ticket = self.get_next_ticket()
@@ -331,25 +333,30 @@ class EventAssetState:
         return state
 
     def execute_next_ticket_holder(self, buyer_wallet, buyer_token):
-        next_ticket = self.get_next_ticket()
+        ticket_address = self.get_next_ticket().address
         if len(self.tickets) < 1:
             logger.error("There is no ticket left for this event!")
         else:
-            if not is_asset_exist(next_ticket.address):
-                self.create_ticket()
-            self.exchange_ticket(buyer_wallet, buyer_token)
+            create_hash = None if is_asset_exist(
+                ticket_address,
+            ) else self.create_ticket()
+            exchange_hash = self.exchange_ticket(buyer_wallet, buyer_token)
             logger.debug("Update_Event itx has been sent.")
+            return create_hash, exchange_hash
 
     def buy_ticket(self, wallet, token):
         logger.info("User {user} is buying ticket {address}".format(
             address=self.get_next_ticket().address,
             user=wallet.address,
         ))
-        self.execute_next_ticket_holder(wallet, token)
+        create_hash, exchange_hash = self.execute_next_ticket_holder(
+            wallet,
+            token,
+        )
         logger.info(
             "Ticket {} is bought successfully.".format(wallet.address),
         )
-        return self.get_next_ticket().address
+        return self.get_next_ticket().address, create_hash, exchange_hash
 
     def pop_executed_ticket(self):
         logger.debug("Number before pop ticket: {}".format(len(self.tickets)))
@@ -404,12 +411,17 @@ class TicketAssetState:
         logger.debug("state: {}".format(state))
         return state
 
-    def gen_activate_asset_tx(self, wallet, token):
+    def gen_activate_asset_tx(self, user_info):
+        user = User(
+            moniker=user_info['moniker'],
+            passphrase=user_info['passphrase'],
+            address=user_info['address'],
+        )
         itx = utils.encode_to_any(
             'fg:t:activate_asset',
             protos.ActivateAssetTx(address=self.address),
         )
-        res = forgeRpc.create_tx(itx, wallet.address, wallet, token)
+        res = forgeRpc.create_tx(itx, user.address, user.wallet, user.token)
         logger.debug(
             "ticket_activate tx is generated successfully "
             "for ticket {}".format(self.address),

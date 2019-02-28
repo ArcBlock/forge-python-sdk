@@ -102,6 +102,14 @@ class ForgeRpc:
         else:
             return account.state
 
+    def get_single_tx_info(self, hash):
+        infos = self.get_tx(hash)
+        info = next(infos)
+        if utils.is_proto_empty(info):
+            return None
+        else:
+            return info.info
+
     def get_single_asset_state(self, address):
         assets = self.get_asset_state({'address': address})
         asset = next(assets)

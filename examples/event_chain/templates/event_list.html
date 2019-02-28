@@ -1,61 +1,64 @@
 {% extends "layout.html" %}
 {% block content %}
-<section class="hero is-info is-small">
-  <div class="hero-body">
-    <div class="container has-text-centered">
-      <p class="title">
-        Hottest Events ({{number}})
-      </p>
-      <p class="subtitle">
-        In Math We Trust! All events and tickets can be transferred and traced without any issue!
-      </p>
+<section class="hero is-link is-small">
+    <div class="hero-body">
+        <div class="container has-text-centered">
+            <p class="title">
+                Here are all {{number}} events!
+            </p>
+            <p class="subtitle">
+                In Math We Trust! All events and tickets can be transferred and traced without any issue!
+            </p>
+        </div>
     </div>
-  </div>
 </section>
 
 <section class="container">
-  {% if event_lists %}
-  {% for events in event_lists %}
-  <div class="columns features">
-    {% for event in events %}
-    <div class="column is-4">
-      <div class="card is-shady">
-        <div class="card-image">
-          <figure class="image is-2by1">
-            <img src="https://unsplash.it/1200/600?<%=@product.address %>" alt="
-{{ event.event_info.title }}" />
-          </figure>
-        </div>
-        <div class="card-content">
-          <div class="content">
-            <h4>{{ event.event_info.title }}</h4>
-            <div class="tags are-large">
-              <span class="tag are-large is-primary">Total tickets：
-                {{ event.event_info.total }}</span>
-              <span class="tag are-large is-danger">Tickets left：
-                {{ event.event_info.remaining }}</span>
+    {% if event_lists %}
+    {% for events in event_lists %}
+    <div class="columns features">
+        {% for event in events %}
+        <div class="column is-4">
+            <div class="card is-shady">
+                <div class="card-image">
+                    {% if event.event_info.remaining==0 %}
+                    <figure class="watermarked image is-2by1">
+                        <img src="https://unsplash.it/1200/600?{{ event.address }}" alt="
+{{ event.event_info.title }}"/>
+                    </figure>
+                    {% else %}
+                    <figure class="image is-2by1">
+                        <img src="https://unsplash.it/1200/600?{{ event.address }}" alt="
+{{ event.event_info.title }}"/>
+                    </figure>
+                    {% endif %}
 
+                </div>
+                <div class="card-content">
+                    <div class="content">
+                        <h2>{{ event.event_info.title }}</h2>
+                        <div class="tags are-large">
+              <span class="tag are-large is-warning">Tickets：
+                {{ event.event_info.remaining }}/{{event.event_info.total}}</span>
+                        </div>
+                        <div class="tags are-large">
+                        <span class="tag are-large is-danger">Price：
+                {{ event.event_info.ticket_price}}</span>
+                        </div>
+                        <p>Place: 3150 Richards, Bellevue</p>
+                        <p >
+                            Description: {{event.event_info.description}}
+                        </p>
+                        <a class="button is-link" href={{url_for('event_detail',address=event.address)}}> Join Event</a>
+                    </div>
+                </div>
             </div>
-            <p class="teaser">
-              <!-- {{ event.event_info.description }} -->
-              These tickets are for Capitol Hill Block Party 2019, not for a specific artist. Artist, venue, and
-              schedule are subject
-              to change without notice. Tickets are non-refundable for any reason including artist cancellation. This
-              festival takes
-              place rain or shine. In the event of festival cancellation, all tickets will be automatically refunded.
-            </p>
-
-
-            <a class="button is-info" href="/details?address={{event.address}}"> I want to buy!</a>
-          </div>
         </div>
-      </div>
-    </div>
 
+        {% endfor %}
+    </div>
     {% endfor %}
-  </div>
-  {% endfor %}
-  {% else %} <h1>There's no events created yet!</h1>
-  {% endif %}
+    {% else %} <h1>There's no events created yet!</h1>
+    {% endif %}
 </section>
 {% endblock %}

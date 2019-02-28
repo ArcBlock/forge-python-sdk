@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block content %}
+<section class="hero">
+
+</section>
+
+<section class="section"></section>
+<div class="column is-4">
+    <div class="card is-shady">
+        <div class="card-image">
+            <figure class="image is-2by1">
+                <img src="https://unsplash.it/1200/600?{{ tx.hash }}" alt="
+{{ tx.hash }}"/>
+            </figure>
+        </div>
+        <div class="card-content">
+            <div class="content">
+                <h4>Included in block: {{tx.height}}</h4>
+                <div class="tags are-large">
+                    <span class="tag are-large is-info">Transaction</span>
+                    <span class="tag are-large is-warning">chain id: {{tx.tx.chain_id}}</span>
+                </div>
+                <p>
+                    ITX Type: {{tx.tx.itx.type_url}}
+                </p>
+                <p class="teaser">
+                    Hash: {{tx.hash}}
+                </p>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</section>
+{% endblock %}
