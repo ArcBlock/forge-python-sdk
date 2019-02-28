@@ -1,25 +1,60 @@
-<!doctype html>
-<title>Event-chain</title>
-<h1>Tickets</h1>
+{% extends "layout.html" %}
+{% block content %}
+<section class="hero is-link is-small">
+  <div class="hero-body">
+    <div class="container has-text-centered">
+      <p class="title">
+        You have {{number}} tickets
+      </p>
+      <p class="subtitle">
+        In Math We Trust! All events and tickets can be transferred and traced without any issue!
+      </p>
+    </div>
+  </div>
+</section>
 
-<table>
-    {% if tickets %}
+<section class="container">
+  {% if ticket_lists %}
+  {% for tickets in ticket_lists %}
+  <div class="columns features">
     {% for ticket in tickets %}
-    <form action="" method="post" novalidate>
+    <div class="column is-4">
+      <div class="card is-shady">
+        <div class="card-image">
+          {% if ticket.activated == True %}
+          <figure class="watermarked image is-2by1">
+            <img src="https://unsplash.it/1200/600?<%=@product.address %>" alt="
+{{ ticket.address }}" />
+          </figure>
+          {% else %}
+          <figure class="image is-2by1">
+            <img src="https://unsplash.it/1200/600?<%=@product.address %>" alt="
+{{ ticket.address }}" />
+          </figure>
+          {% endif %}
 
-        <tr>
-            <td>Address: {{ ticket.address }}</td>
-        </tr>
-        <tr>
-            <td>Owner: {{ ticket.owner }}</td>
-        </tr>
-        <tr>
-            <td>Event: {{ ticket.ticket_info.event_address }}</td>
-        </tr>
-    </form>
+        </div>
+        <div class="card-content">
+          <div class="content">
+            <h4>Event：Study Party Event</h4>
+            <div class="tags are-large">
+              <span class="tag are-large is-primary">2019-02-21</span>
+
+            </div>
+            {% if ticket.activated!=True %}
+            <a class="button is-info" href="/activate?address={{ticket.address}}"> Use It</a>
+            {% else %}
+            <a class="button is-info" href="/ticket_details?address={{ticket.address}}"> See Transaction</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
 
     {% endfor %}
-</table>
-{% else %}
-<h1>There's no tickets for current user yet!</h1>
-{% endif %}
+  </div>
+  {% endfor %}
+  {% else %} <h1>There's no tickets created yet!</h1>
+  {% endif %}
+</section>
+{% endblock %}

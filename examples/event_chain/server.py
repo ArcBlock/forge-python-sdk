@@ -1,5 +1,6 @@
 import logging
 
+from examples.event_chain import config
 from examples.event_chain import helpers
 from examples.event_chain import models
 from examples.event_chain import protos
@@ -8,7 +9,7 @@ from forge import helper as forge_helper
 from forge import utils as forge_utils
 
 logger = logging.getLogger('ec-server')
-forgeSdk = ForgeSdk()
+forgeSdk = ForgeSdk(config=config.forge_config)
 forgeRpc = forgeSdk.rpc
 
 INVALID_SENDER_STATE = protos.StatusCode.Value('invalid_sender_state')

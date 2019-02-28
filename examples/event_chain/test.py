@@ -1,7 +1,9 @@
 import logging
+import os.path as path
 from time import sleep
 
-from . import app
+from examples.event_chain import app
+from forge import ForgeConfig
 from forge import ForgeSdk
 
 logging.basicConfig(level=logging.DEBUG)
@@ -76,5 +78,12 @@ def test():
     logger.info("Ticket is used successfully.")
 
 
+def test_config():
+    app_config = path.join(path.dirname(__file__), "priv", "forge.toml")
+    print(app_config)
+    config = ForgeConfig(file_path=app_config)
+    print(config.app_path)
+
+
 if __name__ == "__main__":
-    test()
+    test_config()
