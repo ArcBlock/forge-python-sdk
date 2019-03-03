@@ -3,8 +3,9 @@ from datetime import datetime
 from time import sleep
 
 import examples.event_chain.config as config
-from examples.event_chain import db_helper as db
-from examples.event_chain import models
+from . import db_helper as db
+from . import helpers
+from . import models
 from forge import ForgeSdk
 
 logger = logging.getLogger('ec-app')
@@ -143,6 +144,25 @@ def buy_ticket(event_address, user_info, conn=None):
     if conn:
         db.insert_ticket(
             conn, ticket_address, event_address, user.address,
+            create_hash, exchange_hash,
+        )
+    return
+
+
+def buy_ticket_mobile(event_address, response, conn=None):
+    wallet_response = helpers.WalletResponse(response)
+    address = wallet_response.get_address()
+    signature = wallet_response.get_signature()
+    state = forgeRpc.get_single_asset_state(event_address)
+    if not state:
+        logger.error("Event doesn't exist.")
+    event_asset = models.EventAssetState(state)
+    ticket_address, create_hash, exchange_hash = event_asset.buy_ticket_mobile(
+        address, signature,
+    )
+    if conn:
+        db.insert_ticket(
+            conn, ticket_address, event_address, address,
             create_hash, exchange_hash,
         )
     return

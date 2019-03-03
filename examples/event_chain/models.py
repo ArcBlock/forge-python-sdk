@@ -1,3 +1,4 @@
+import base64
 import logging
 from time import sleep
 
@@ -253,6 +254,23 @@ class EventAssetState:
             logger.error(res)
         return res.hash
 
+    def exchange_ticket_mobile(self, buyer_address, buyer_signature):
+        ticket_holder = self.get_next_ticket()
+        exchange_tx = ticket_holder.ticket_exchange
+        buyer_signed = helpers.add_multi_sig_to_tx(
+            exchange_tx,
+            buyer_address,
+            buyer_signature,
+        )
+        logger.debug(
+            "Buyer multisig kv pair has been inserted into tx "
+            "successfully. ",
+        )
+        res = forgeRpc.send_tx(buyer_signed)
+        if res.code != 0:
+            logger.error(res)
+        return res.hash
+
     def update_token(self, buyer_wallet, buyer_token=''):
         next_ticket = self.get_next_ticket()
         ticket_info = protos.TicketInfo(
@@ -334,15 +352,25 @@ class EventAssetState:
 
     def execute_next_ticket_holder(self, buyer_wallet, buyer_token):
         ticket_address = self.get_next_ticket().address
-        if len(self.tickets) < 1:
-            logger.error("There is no ticket left for this event!")
-        else:
-            create_hash = None if is_asset_exist(
-                ticket_address,
-            ) else self.create_ticket()
-            exchange_hash = self.exchange_ticket(buyer_wallet, buyer_token)
-            logger.debug("Update_Event itx has been sent.")
-            return create_hash, exchange_hash
+        create_hash = None if is_asset_exist(
+            ticket_address,
+        ) else self.create_ticket()
+        exchange_hash = self.exchange_ticket(buyer_wallet, buyer_token)
+        return create_hash, exchange_hash
+
+    def execute_next_ticket_holder_mobile(
+        self, buyer_address,
+        buyer_signature,
+    ):
+        ticket_address = self.get_next_ticket().address
+        create_hash = None if is_asset_exist(
+            ticket_address,
+        ) else self.create_ticket()
+        exchange_hash = self.exchange_ticket_mobile(
+            buyer_address,
+            buyer_signature,
+        )
+        return create_hash, exchange_hash
 
     def buy_ticket(self, wallet, token):
         logger.info("User {user} is buying ticket {address}".format(
@@ -355,6 +383,27 @@ class EventAssetState:
         )
         logger.info(
             "Ticket {} is bought successfully.".format(wallet.address),
+        )
+        return self.get_next_ticket().address, create_hash, exchange_hash
+
+    def get_encoded_exchange_tx(self):
+        exchange_tx = self.get_next_ticket().ticket_exchange
+        encoded = base64.b64encode(exchange_tx.SerializeToString())
+        logger.debug(
+            "Exchange tx for next ticket has been fetched and encoded "
+            "successfully.",
+        )
+        return base64.b64encode(encoded)
+
+    def buy_ticket_mobile(self, buyer_address, buyer_signature):
+        logger.debug(
+            "User {} is buying ticket from mobile.".format(buyer_address),
+        )
+        create_hash, exchange_hash = self.execute_next_ticket_holder_mobile(
+            buyer_address, buyer_signature,
+        )
+        logger.info(
+            "Ticket {} is bought successfully.".format(buyer_address),
         )
         return self.get_next_ticket().address, create_hash, exchange_hash
 
