@@ -359,8 +359,8 @@ class EventAssetState:
         return create_hash, exchange_hash
 
     def execute_next_ticket_holder_mobile(
-        self, buyer_address,
-        buyer_signature,
+            self, buyer_address,
+            buyer_signature,
     ):
         ticket_address = self.get_next_ticket().address
         create_hash = None if is_asset_exist(
@@ -460,17 +460,15 @@ class TicketAssetState:
         logger.debug("state: {}".format(state))
         return state
 
-    def gen_activate_asset_tx(self, user_info):
-        user = User(
-            moniker=user_info['moniker'],
-            passphrase=user_info['passphrase'],
-            address=user_info['address'],
-        )
+    def gen_activate_asset_tx(self, user):
         itx = utils.encode_to_any(
             'fg:t:activate_asset',
             protos.ActivateAssetTx(address=self.address),
         )
-        res = forgeRpc.create_tx(itx, user.address, user.wallet, user.token)
+        res = forgeRpc.create_tx(
+            itx, user.address, user.get_wallet(),
+            user.token,
+        )
         logger.debug(
             "ticket_activate tx is generated successfully "
             "for ticket {}".format(self.address),
@@ -485,43 +483,44 @@ class TicketAssetState:
 
 
 class User:
-    def __init__(self, moniker, passphrase, address=None):
+    def __init__(self, moniker, passphrase, address=None, data=None):
         self.moniker = moniker
         self.passphrase = passphrase
-        if not address:
-            self.wallet, self.token = self.__init_wallet()
-            self.address = self.wallet.address
-            self.account_state = None
-        else:
+        if data:
+            self.address, self.wallet, self.token = self.__recover_wallet(
+                passphrase, moniker, data,
+            )
+        elif address:
+            self.wallet, self.token = self.__load_wallet(address, passphrase)
             self.address = address
-            self.wallet = None
-            self.token = None
-            self.account_state = None
-            self.refresh()
+        else:
+            self.address, self.wallet, self.token = self.__init_wallet()
 
-    def declare(self):
-        res = self.__declare_wallet()
-        self.token = res.token
-        wait()
-        self.account_state = self.__get_state()
+    def __recover_wallet(self, passphrase, moniker, data):
+        res = forgeRpc.recover_wallet(passphrase, moniker, data)
+        if res.code != 0:
+            logger.error(res)
+        return res.wallet.address, res.wallet.SerializeToString(), res.token
+
+    def get_wallet(self):
+        wallet = protos.WalletInfo()
+        wallet.ParseFromString(self.wallet)
+        return wallet
 
     def __init_wallet(self):
-        res = forgeRpc.create_wallet(passphrase=self.passphrase)
-        return res.wallet, res.token
-
-    def __declare_wallet(self):
-        res = forgeRpc.recover_wallet(
+        res = forgeRpc.create_wallet(
+            moniker=self.moniker,
             passphrase=self.passphrase,
-            moniker='EC{}'.format(self.moniker),
-            data=self.wallet.sk,
         )
-        if not res.code == 0:
-            print(res)
-        return res
+        if res.code != 0:
+            logger.error(res)
+        return res.wallet.address, res.wallet.SerializeToString(), res.token
 
-    def __get_state(self):
-        state = forgeRpc.get_single_account_state(self.address)
-        return ParticipantAccountState(state)
+    def __load_wallet(self, address, passphrase):
+        res = forgeRpc.load_wallet(address, passphrase)
+        if res.code != 0:
+            logger.error(res)
+        return res.wallet.SerializeToString(), res.token
 
     def refresh(self):
         res = forgeRpc.load_wallet(
@@ -529,13 +528,11 @@ class User:
         )
         self.token = res.token
         self.wallet = res.wallet
-        self.account_state = self.__get_state()
         if not res.code == 0:
             print(res)
 
-    def current_state(self):
+    def get_state(self):
         state = get_participant_state(self.address)
-        self.account_state = state
         return state
 
 
@@ -637,3 +634,16 @@ def get_participant_state(participant_address):
         )
     else:
         return ParticipantAccountState(state)
+
+
+class LoginInfo:
+    def __init__(self, moniker, address, wallet, token):
+        self.moniker = moniker
+        self.address = address
+        self.wallet = wallet.SerializeToString()
+        self.token = token
+
+    def get_wallet(self):
+        wallet = protos.WalletInfo()
+        wallet.ParseFromString(self.wallet)
+        return wallet

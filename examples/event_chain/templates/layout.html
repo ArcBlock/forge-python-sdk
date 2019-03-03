@@ -41,11 +41,10 @@
           Create Event
         </a>
 
-        {% if not session['cur_user'] %}
+        {% if not session.user %}
         <a class="navbar-item" href="/login">log in</a>
         {% else %}
-        <a class="navbar-item" href="/tickets">My tickets</a>
-        <a class="navbar-item" href="/login">log out</a>
+        <a class="navbar-item" href="/tickets">User: {{session.user.moniker}}</a>
         {% endif %}
 
       </div>

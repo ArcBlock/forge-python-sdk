@@ -14,26 +14,37 @@ forgeSdk = ForgeSdk(config=config.forge_config)
 forgeRpc = forgeSdk.rpc
 
 
-def register_user(name, passphrase, conn=None):
-    user = models.User(moniker=name, passphrase=passphrase)
-    user.declare()
-    logger.info("User {} created successfully!".format(name))
+def register_user(moniker, passphrase, conn=None):
+    user = models.User(moniker, passphrase)
+    logger.info("User {} created successfully!".format(moniker))
     if conn:
-        db.insert_user(conn, user.address, name, passphrase)
+        db.insert_user(conn, user.address, moniker, passphrase)
+    return user
+
+
+def load_user(moniker, passphrase):
+    address = db.select_address_by_moniker(moniker)
+    user = models.User(moniker=moniker, passphrase=passphrase, address=address)
+    logger.info("User {} loaded successfully!".format(moniker))
+    return user
+
+
+def recover_user(data, passphrase, moniker, conn=None):
+    user = models.User(moniker=moniker, passphrase=passphrase, data=data)
+    if conn:
+        db.insert_user(conn, user.address, moniker, passphrase)
     return user
 
 
 def get_user_from_info(user_info):
     return models.User(
         user_info['moniker'], user_info['passphrase'],
-        address=user_info['address'],
     )
 
 
-def create_event(user_info, conn=None, **kwargs):
-    user = get_user_from_info(user_info)
+def create_event(user, conn=None, **kwargs):
     event_info = models.EventInfo(
-        wallet=user.wallet,
+        wallet=user.get_wallet(),
         token=user.token,
         title=kwargs.get('title'),
         total=kwargs.get('total'),
@@ -69,12 +80,6 @@ def list_event_detail(addr):
     print("Remaining ticket number: ", event_info.remaining)
 
 
-def load_user(name, passphrase, conn=None):
-    addr = db.select_user_address(conn, name, passphrase)
-    user = models.User(name, passphrase, addr)
-    return user
-
-
 class TransactionInfo:
     def __init__(self, state):
         self.height = state.height
@@ -99,8 +104,8 @@ def get_ticket_exchange_tx(ticket_address, conn):
     return get_tx_info(hash)
 
 
-def list_tickets(conn, user_address):
-    lst = db.select_tickets(conn, owner=user_address)
+def list_tickets(conn, user):
+    lst = db.select_tickets(conn, owner=user.address)
     logger.debug("Ticket list: {}".format(lst))
     ticket_states = [get_ticket_state(row['address']) for row in lst]
     return ticket_states
@@ -132,21 +137,20 @@ def get_participant_state(address):
     return models.get_participant_state(address)
 
 
-def buy_ticket(event_address, user_info, conn=None):
-    user = get_user_from_info(user_info)
+def buy_ticket(event_address, user, conn=None):
     state = forgeRpc.get_single_asset_state(event_address)
     if not state:
         logger.error("Event doesn't exist.")
     event_asset = models.EventAssetState(state)
     ticket_address, create_hash, exchange_hash = event_asset.buy_ticket(
-        user.wallet, user.token,
+        user.get_wallet(), user.token,
     )
     if conn:
         db.insert_ticket(
             conn, ticket_address, event_address, user.address,
             create_hash, exchange_hash,
         )
-    return
+    return ticket_address
 
 
 def buy_ticket_mobile(event_address, response, conn=None):
@@ -165,12 +169,12 @@ def buy_ticket_mobile(event_address, response, conn=None):
             conn, ticket_address, event_address, address,
             create_hash, exchange_hash,
         )
-    return
+    return ticket_address
 
 
-def create_sample_event(user_info, title, conn=None):
+def create_sample_event(user, title, conn=None):
     return create_event(
-        user_info=user_info,
+        user=user,
         conn=conn,
         title=title,
         total=20,
@@ -181,9 +185,8 @@ def create_sample_event(user_info, title, conn=None):
     )
 
 
-def activate(owner_signed_tx, user_info):
-    user = get_user_from_info(user_info)
-    tx = forgeRpc.multisig(owner_signed_tx, user.wallet, user.token).tx
+def activate(owner_signed_tx, user):
+    tx = forgeRpc.multisig(owner_signed_tx, user.get_wallet(), user.token).tx
     res = forgeRpc.send_tx(tx)
     if res.code != 0:
         logger.error(res)

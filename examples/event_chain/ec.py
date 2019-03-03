@@ -77,10 +77,13 @@ def event_detail(address):
     if address and address != '':
         event = app.get_event_state(address)
         form = EventForm()
-    if not session.get('cur_user', None):
-        flash('Please register first!')
-        return redirect('/register')
-    return render_template('event_details.html', event=event, form=form)
+        if not session.get('user', None):
+            flash('Please register first!')
+            return redirect('/login')
+        return render_template('event_details.html', event=event, form=form)
+    else:
+        g.logger.error("No event address provided.")
+        redirect('/')
 
 
 @application.route("/buy", methods=['POST'])
@@ -92,7 +95,7 @@ def buy():
     if not address or address == '':
         g.logger.error("No event address.")
     else:
-        app.buy_ticket(address, session['cur_user'], g.db)
+        app.buy_ticket(address, session['user'], g.db)
     return redirect('/')
 
 
@@ -100,8 +103,8 @@ def buy():
 def use():
     ticket_address = request.args.get('address')
     ticket = app.get_ticket_state(ticket_address)
-    activate_tx = ticket.gen_activate_asset_tx(session['cur_user'])
-    app.activate(activate_tx, session['cur_user'])
+    activate_tx = ticket.gen_activate_asset_tx(session['user'])
+    app.activate(activate_tx, session['user'])
     return redirect('/')
 
 
@@ -119,7 +122,7 @@ def event_list():
 def ticket_list():
     # unused_tickets = app.list_unused_tickets(session['cur_user']['address'])
     # used_tickets = app.list_used_tickets(session['cur_user']['address'])
-    tickets = app.list_tickets(g.db, session['cur_user']['address'])
+    tickets = app.list_tickets(g.db, session['user'])
     ticket_lists = chunks(tickets, 3)
     return render_template(
         'tickets.html', ticket_lists=ticket_lists,
@@ -131,12 +134,12 @@ def ticket_list():
 def create_event():
     form = EventForm()
     if form.validate_on_submit():
-        if not session.get('cur_user', None):
+        if not session.get('user', None):
             flash('Please register first!')
-            return redirect('/register')
+            return redirect('/login')
         elif request.method == "POST":
             app.create_sample_event(
-                user_info=session['cur_user'],
+                user=session['user'],
                 title=form.title.data,
                 conn=g.db,
             )
@@ -151,24 +154,25 @@ class RegisterForm(FlaskForm):
     confirm = SubmitField('Confirm')
 
 
-@application.route("/register", methods=['POST'])
+@application.route("/register", methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
     g.logger.debug("{}".format(form.name))
 
     if form.validate_on_submit():
         g.logger.debug("{}".format(form.name))
-
-        user_info = {}
         user = app.register_user(
             form.name.data,
             form.passphrase.data,
             g.db,
         )
-        user_info['moniker'] = user.moniker
-        user_info['passphrase'] = user.passphrase
-        user_info['address'] = user.address
-        session['cur_user'] = user_info
+        session['user'] = user
+        g.logger.debug(
+            'New User registered! wallet: {}, token: {}'.format(
+                user.wallet,
+                user.token,
+            ),
+        )
         g.logger.debug("form is validated!!")
         return redirect('/')
 

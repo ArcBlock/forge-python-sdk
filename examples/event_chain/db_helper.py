@@ -1,8 +1,11 @@
+import logging
 import os.path as path
 import sqlite3
 from sqlite3 import Error
 
 from examples.event_chain.config import config
+
+logger = logging.getLogger('db-helper')
 
 
 def create_connection(db_path):
@@ -45,17 +48,17 @@ def insert_ticket(conn, ticket, event, owner, create_hash, exchange_hash):
     if create_hash:
         conn.execute(
             ''' INSERT INTO tickets
-                (address, event_address, owner, create_hash, exchange_hash)
-                VALUES(?,?,?,?,?);''',
+                    (address, event_address, owner, create_hash, exchange_hash)
+                    VALUES(?,?,?,?,?);''',
             (ticket, event, owner, create_hash, exchange_hash),
         )
     else:
         conn.execute(
             '''
-                UPDATE ticket_txs
-                SET exchange_hash=?
-                WHERE address=?
-                ''', (ticket, exchange_hash),
+                    UPDATE ticket_txs
+                    SET exchange_hash=?
+                    WHERE address=?
+                    ''', (ticket, exchange_hash),
         )
     conn.commit()
 
@@ -66,17 +69,17 @@ def select_tickets(conn, owner=None, event=None):
     if owner and event:
         c.execute(
             '''select * from tickets
-                    WHERE owner = ? and event_address=?''', (owner, event),
+                        WHERE owner = ? and event_address=?''', (owner, event),
         )
     elif owner:
         c.execute(
             '''select * from tickets
-                    WHERE owner = ? ''', [owner],
+                        WHERE owner = ? ''', [owner],
         )
     elif event:
         c.execute(
             '''select * from tickets
-                    WHERE event = ? ''', [event],
+                        WHERE event = ? ''', [event],
         )
     return to_dict(c.fetchall())
 
@@ -86,8 +89,8 @@ def select_ticket_hash(conn, ticket):
     c = conn.cursor()
     c.execute(
         '''
-        select create_hash, exchange_hash from tickets
-        where address=?''', [ticket],
+            select create_hash, exchange_hash from tickets
+            where address=?''', [ticket],
     )
     row = c.fetchone()
     return {item[0]: item[1] for item in list(zip(row.keys(), row))}
@@ -114,10 +117,35 @@ def insert_user(conn, address, moniker, passphrase):
     c = conn
     c.execute(
         ''' INSERT INTO Users(address, moniker, passphrase) VALUES(?,?,
-                ?); ''',
+                    ?); ''',
         (address, moniker, passphrase),
     )
     conn.commit()
+
+
+def if_moniker_exists(conn, moniker):
+    c = conn.cursor()
+    c.execute(
+        '''SELECT * from Users where moniker=?''',
+        [moniker],
+    )
+    if c.fetchone():
+        return True
+    else:
+        return False
+
+
+def select_address_by_moniker(conn, moniker):
+    c = conn.cursor()
+    c.execute(
+        '''SELECT address from Users where moniker=?''',
+        [moniker],
+    )
+    res = c.fetchone()
+    if res:
+        return c.fetchone()[0]
+    else:
+        logger.error("User name doesn't exist for {}".format(moniker))
 
 
 def select_all_events(conn):
