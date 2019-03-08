@@ -2,16 +2,23 @@ import logging
 from datetime import datetime
 from time import sleep
 
-import examples.event_chain.config as config
-from . import db_helper as db
-from . import helpers
-from . import models
+import event_chain.config.config as config
+import event_chain.db.utils as db
+from event_chain.application import models
+from event_chain.utils import helpers
+
 from forge import ForgeSdk
 
 logger = logging.getLogger('ec-app')
 
 forgeSdk = ForgeSdk(config=config.forge_config)
 forgeRpc = forgeSdk.rpc
+
+
+def connect(db_path):
+    conn = db.create_connection()
+    logger.info("DB connected: {}.".format(db_path))
+    return conn
 
 
 def register_user(moniker, passphrase, conn=None):
@@ -22,8 +29,11 @@ def register_user(moniker, passphrase, conn=None):
     return user
 
 
-def load_user(moniker, passphrase):
-    address = db.select_address_by_moniker(moniker)
+def load_user(moniker, passphrase, conn=None, address=None):
+    address = address if address else db.select_address_by_moniker(
+        conn,
+        moniker,
+    )
     user = models.User(moniker=moniker, passphrase=passphrase, address=address)
     logger.info("User {} loaded successfully!".format(moniker))
     return user
@@ -42,18 +52,28 @@ def get_user_from_info(user_info):
     )
 
 
+def parse_date(str_date):
+    logger.debug(str_date)
+    data = str_date.split('/')
+    return datetime(
+        int(data[0]),
+        int(data[1]),
+        int(data[2]),
+    )
+
+
 def create_event(user, conn=None, **kwargs):
     event_info = models.EventInfo(
         wallet=user.get_wallet(),
         token=user.token,
         title=kwargs.get('title'),
-        total=kwargs.get('total'),
+        total=int(kwargs.get('total')),
         description=kwargs.get('description'),
-        start_time=kwargs.get('start_time'),
-        end_time=kwargs.get('end_time'),
-        ticket_price=kwargs.get('ticket_price'),
+        start_time=parse_date(kwargs.get('start_time')),
+        end_time=parse_date(kwargs.get('end_time')),
+        ticket_price=int(kwargs.get('ticket_price')),
     )
-    if conn:
+    if event_info.finished and conn:
         db.insert_event(conn, event_info.address, user.address)
         logger.debug(
             'Event {} has been added to database!'.format(
@@ -65,7 +85,11 @@ def create_event(user, conn=None, **kwargs):
 
 def list_events(conn):
     addr_list = db.select_all_events(conn)
-    event_states = [get_event_state(addr) for addr in addr_list]
+    event_states = []
+    for addr in addr_list:
+        state = get_event_state(addr)
+        if state:
+            event_states.append(state)
     return event_states
 
 
@@ -106,7 +130,7 @@ def get_ticket_exchange_tx(ticket_address, conn):
 
 def list_tickets(conn, user):
     lst = db.select_tickets(conn, owner=user.address)
-    logger.debug("Ticket list: {}".format(lst))
+    logger.debug('ticket list:{}'.format(lst))
     ticket_states = [get_ticket_state(row['address']) for row in lst]
     return ticket_states
 
@@ -138,36 +162,39 @@ def get_participant_state(address):
 
 
 def buy_ticket(event_address, user, conn=None):
-    state = forgeRpc.get_single_asset_state(event_address)
-    if not state:
-        logger.error("Event doesn't exist.")
-    event_asset = models.EventAssetState(state)
+    event_asset = get_event_state(event_address)
+    logger.debug('user wallet: {}'.format(user.get_wallet()))
+    logger.debug('user token: {}'.format(user.token))
     ticket_address, create_hash, exchange_hash = event_asset.buy_ticket(
         user.get_wallet(), user.token,
     )
-    if conn:
+    logger.debug("Tick is bought. create hash:{}, exchange hash{}".format(
+        create_hash, exchange_hash,
+    ))
+    if ticket_address and conn:
         db.insert_ticket(
             conn, ticket_address, event_address, user.address,
             create_hash, exchange_hash,
         )
-    return ticket_address
+    return None
 
 
 def buy_ticket_mobile(event_address, response, conn=None):
     wallet_response = helpers.WalletResponse(response)
     address = wallet_response.get_address()
+    logger.debug('mobile wallet address:{}'.format(address))
+
     signature = wallet_response.get_signature()
-    state = forgeRpc.get_single_asset_state(event_address)
-    if not state:
-        logger.error("Event doesn't exist.")
-    event_asset = models.EventAssetState(state)
-    ticket_address, create_hash, exchange_hash = event_asset.buy_ticket_mobile(
+    logger.debug('mobile wallet signature:{}'.format(signature))
+
+    state = get_event_state(event_address)
+    ticket_address = state.buy_ticket_mobile(
         address, signature,
     )
-    if conn:
+    logger.debug("Returned ticket addr {}: ".format(ticket_address))
+    if ticket_address and conn:
         db.insert_ticket(
             conn, ticket_address, event_address, address,
-            create_hash, exchange_hash,
         )
     return ticket_address
 
@@ -185,13 +212,19 @@ def create_sample_event(user, title, conn=None):
     )
 
 
-def activate(owner_signed_tx, user):
-    tx = forgeRpc.multisig(owner_signed_tx, user.get_wallet(), user.token).tx
-    res = forgeRpc.send_tx(tx)
-    if res.code != 0:
+def consume(ticket_address, user):
+    ticket = get_ticket_state(ticket_address)
+    consume_tx = get_event_state(ticket.event_address).event_info.consume_tx
+
+    logger.debug("consume tx: {}".format(consume_tx))
+
+    res = ticket.consume(consume_tx, user.get_wallet(), user.token)
+
+    if res.code != 0 or res.hash is None:
         logger.error(res)
-    logger.info("Ticket has been activated!")
-    return res
+        logger.error('Fail to consume ticket {}'.format(ticket_address))
+    logger.info("Ticket has been consumed!")
+    return res.hash
 
 
 def refresh():

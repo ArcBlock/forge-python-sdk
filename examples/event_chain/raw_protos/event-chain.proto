@@ -13,6 +13,8 @@ message EventInfo {
     uint32 ticket_price = 9;
     repeated string participants = 10;
     uint32 remaining = 11;
+    string location = 12;
+    forge_abi.Transaction consume_tx=13;
 }
 
 //type_url: ec:t:update_hosted
@@ -42,9 +44,4 @@ message TicketHolder {
     forge_abi.Transaction ticket_exchange = 2;
     uint32 id = 4;
     string address = 5;
-}
-
-message UseTicketTx {
-    bytes signature = 1;
-    string ticket_address = 2;
 }

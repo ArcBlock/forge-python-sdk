@@ -20,8 +20,9 @@ service ChainRpc {
   rpc get_blocks(RequestGetBlocks) returns (ResponseGetBlocks);
   rpc get_unconfirmed_txs(RequestGetUnconfirmedTxs)
       returns (ResponseGetUnconfirmedTxs);
-  // utility
+   // utility
   rpc get_chain_info(RequestGetChainInfo) returns (ResponseGetChainInfo);
+  rpc get_node_info(RequestGetNodeInfo) returns (ResponseGetNodeInfo);
   rpc search(RequestSearch) returns (ResponseSearch);
   rpc get_net_info(RequestGetNetInfo) returns (ResponseGetNetInfo);
   rpc get_validators_info(RequestGetValidatorsInfo)
@@ -73,4 +74,5 @@ service StatisticRpc {
   rpc get_assets(RequestGetAssets) returns (ResponseGetAssets);
   rpc get_stakes(RequestGetStakes) returns (ResponseGetStakes);
   rpc get_top_accounts(RequestGetTopAccounts) returns (ResponseGetTopAccounts);
+  rpc list_asset_transactions(RequestListAssetTransactions) returns (ResponseListAssetTransactions);
 }

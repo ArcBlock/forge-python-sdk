@@ -2,7 +2,7 @@ import logging
 import os.path as path
 from time import sleep
 
-from examples.event_chain import app
+from . import app
 from forge import ForgeConfig
 from forge import ForgeSdk
 
@@ -78,11 +78,11 @@ def test():
 
 
 def test_config():
-    app_config = path.join(path.dirname(__file__), "priv", "forge.toml")
+    app_config = path.join(path.dirname(__file__), "config", "forge.toml")
     print(app_config)
     config = ForgeConfig(file_path=app_config)
-    print(config.app_path)
+    print(config.get_app_path())
 
 
 if __name__ == "__main__":
-    test()
+    test_config()

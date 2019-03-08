@@ -28,9 +28,12 @@ message ResponseCreateTx {
 
 // multisig(tx, wallet, token)
 message RequestMultisig {
-  Transaction tx = 1;
-  WalletInfo wallet = 2;
-  string token = 3;
+	Transaction tx = 1;
+	// extra data for multisig
+	google.protobuf.Any data = 2;
+  WalletInfo wallet = 3;
+	string token = 4;
+
 }
 
 message ResponseMultisig {
@@ -147,7 +150,7 @@ message ResponseDeclareNode {
 message RequestGetAccountState {
   string address = 1;
   repeated string keys = 2;
-  string app_hash = 3;
+  uint64 height = 3;
 }
 
 message ResponseGetAccountState {
@@ -158,7 +161,7 @@ message ResponseGetAccountState {
 message RequestGetAssetState {
   string address = 1;
   repeated string keys = 2;
-  string app_hash = 3;
+  uint64 height = 3;
 }
 
 message ResponseGetAssetState {
@@ -169,7 +172,7 @@ message ResponseGetAssetState {
 message RequestGetStakeState {
   string address = 1;
   repeated string keys = 2;
-  string app_hash = 3;
+  uint64 height = 3;
 }
 
 message ResponseGetStakeState {
@@ -181,7 +184,7 @@ message ResponseGetStakeState {
 // entire Forge state
 message RequestGetForgeState {
   repeated string keys = 1;
-  string app_hash = 2;
+  uint64 height = 3;
 }
 
 message ResponseGetForgeState {
@@ -216,6 +219,14 @@ message RequestGetChainInfo {}
 message ResponseGetChainInfo {
   StatusCode code = 1;
   ChainInfo info = 2;
+}
+
+// get_node_info(): retrieve the current node information
+message RequestGetNodeInfo {}
+
+message ResponseGetNodeInfo {
+  StatusCode code = 1;
+  NodeInfo info = 2;
 }
 
 // search(term): retrieve related transactions by a search term (prefix match)
@@ -355,7 +366,7 @@ message ResponseSignData {
   bytes signature = 2;
 }
 
-message RequestGetAssets{
+message RequestGetAssets {
   PageInput paging = 1;
   string owner_address = 2;
 }
@@ -366,7 +377,7 @@ message ResponseGetAssets {
   repeated IndexedAssetState assets = 3;
 }
 
-message RequestGetStakes{
+message RequestGetStakes {
   PageInput paging = 1;
   AddressFilter address_filter = 2;
 }
@@ -377,7 +388,7 @@ message ResponseGetStakes {
   repeated IndexedStakeState stakes = 3;
 }
 
-message RequestGetTopAccounts{
+message RequestGetTopAccounts {
   PageInput paging = 1;
 }
 
@@ -385,4 +396,15 @@ message ResponseGetTopAccounts {
   StatusCode code = 1;
   PageInfo page = 2;
   repeated IndexedAccountState accounts = 3;
+}
+
+message RequestListAssetTransactions {
+  PageInput paging = 1;
+  string address = 2;
+}
+
+message ResponseListAssetTransactions {
+  StatusCode code = 1;
+  PageInfo page = 2;
+  repeated IndexedTransaction transactions = 3;
 }

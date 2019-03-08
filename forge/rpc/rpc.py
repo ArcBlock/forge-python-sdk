@@ -45,7 +45,6 @@ class ForgeRpc:
         self.state = RpcState(self.chan)
         self.get_account_state = self.state.get_account_state
         self.get_asset_state = self.state.get_asset_state
-        self.get_channel_state = self.state.get_channel_state
         self.get_forge_state = self.state.get_forge_state
         self.get_stake_state = self.state.get_stake_state  # test
 
@@ -95,29 +94,35 @@ class ForgeRpc:
         return self.send_tx(tx.tx)
 
     def get_single_account_state(self, address):
-        accounts = self.get_account_state({'address': address})
-        account = next(accounts)
-        if utils.is_proto_empty(account):
-            return None
-        else:
-            return account.state
+        if address:
+            accounts = self.get_account_state({'address': address})
+            account = next(accounts)
+            if utils.is_proto_empty(account):
+                return None
+            else:
+                return account.state
 
     def get_single_tx_info(self, hash):
-        infos = self.get_tx(hash)
-        info = next(infos)
-        if utils.is_proto_empty(info):
-            return None
-        else:
-            return info.info
+        if hash:
+            infos = self.get_tx(hash)
+            info = next(infos)
+            if utils.is_proto_empty(info):
+                return None
+            else:
+                return info.info
 
     def get_single_asset_state(self, address):
-        assets = self.get_asset_state({'address': address})
-        asset = next(assets)
-        if utils.is_proto_empty(asset):
-            return None
-        else:
-            return asset.state
+        if address:
+            assets = self.get_asset_state({'address': address})
+            asset = next(assets)
+            if utils.is_proto_empty(asset):
+                return None
+            else:
+                return asset.state
 
     def get_nonce(self, address):
         account = self.get_single_account_state(address)
         return account.nonce
+
+    def multisig_consume_asset_tx(self, tx, wallet, token, data):
+        return self.multisig(tx, wallet, token, data=data)

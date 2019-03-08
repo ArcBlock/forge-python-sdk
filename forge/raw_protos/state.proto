@@ -16,6 +16,7 @@ message AccountState {
   WalletType type = 6;
   string moniker = 7;
   StateContext context = 8;
+  string issuer = 9;
 
   // the address that is being migrated. Once this is set this account state is
   // read only. No further tx can alter this account state. And tx with "from"
@@ -37,10 +38,14 @@ message AssetState {
   string owner = 2;
   string moniker = 3;
   bool readonly = 4;
-  bool activated = 5; // once it is activated, it is untransferrable
-  google.protobuf.Timestamp expired_at = 6;
+  bool transferrable = 5;
+  uint32 ttl = 6;
+  // once it is consumed, it is untransferrable
+  google.protobuf.Timestamp consumed_time = 7;
+  // who issued the asset
+  string issuer = 8;
 
-  // 7-12 is reserved
+  // 10-12 is reserved
 
   StakeContext stake = 13;
   StateContext context = 14;
@@ -60,11 +65,21 @@ message ForgeState {
   string data_version = 6;
   // app state returned by forge app
   bytes forge_app_hash = 7;
-  StateRoot root_hashes = 8;
 
-  // 6-14 is reserved for future
+  // 8-14 is reserved for future
 
   google.protobuf.Any data = 15; // forge app can define their ow app state
+}
+
+// keep a list of state root for different dbs (column families).
+// RootState will be stored in the default column family, and we return the
+// root hash for default column family, thus our app_state would contain all
+// hashes from different column families.
+message RootState {
+  string address = 1;
+  bytes account = 2;
+  bytes asset = 3;
+  bytes receipt = 4;
 }
 
 message StakeState {

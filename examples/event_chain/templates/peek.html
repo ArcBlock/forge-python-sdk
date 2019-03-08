@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+{% block content %}
+    <section class="hero">
+        <br>
+        <br>
+        <section class="hero is-light">
+            <div class="hero-body">
+                <div class="container has-text-centered">
+                    <h1 class="title">Let's Peek Others</h1>
+                    <br>
+                    <h2 class="subtitle">Reveal their secrets ...</h2>
+                </div>
+                <br>
+            </div>
+        </section>
+        <br>
+        <section class="section">
+            <section class="container">
+                        <p class="control">
+                            <form method="POST" action="/peek">
+                            <div class="columns">
+                                <div class="column">
+                                    <input class="input" name="address" type="text" placeholder="Address">
+                                </div>
+                                <div class="column">
+                                     <input type=submit value="Peek" class="button is-link"/>
+                                </div>
+                            </div>
+                        </form>
+                <div class="container">
+                    <br>
+                    <hr>
+                    <h4 class="subtitle">{{ msg }}</h4>
+                </div>
+            </section>
+        </section>
+
+
+        <section class="section">
+            <section class="container">
+                {% if ticket_lists %}
+                    {% for tickets in ticket_lists %}
+                        <section class="section">
+                            <div class="columns features">
+                                {% for ticket in tickets %}
+                                    <div class="column is-4">
+                                        <div class="card is-shady">
+                                            <div class="card-image">
+                                                {% if ticket.transferrable == False %}
+                                                    <figure class="watermarked image is-2by1">
+                                                        <img src="https://unsplash.it/1200/600?{{ ticket.address }}"
+                                                             alt="pic"/>
+                                                    </figure>
+                                                {% else %}
+                                                    <figure class="image is-2by1">
+                                                        <img src="https://unsplash.it/1200/600?{{ ticket.address }}"
+                                                             alt="pic"/>
+                                                    </figure>
+                                                {% endif %}
+
+                                            </div>
+                                            <div class="card-content">
+                                                <div class="content">
+                                                    <h4>Event: {{ events.get(ticket.address).event_info.title }}</h4>
+                                                    <div class="tags are-large">
+                                                        <span class="tag are-large is-warning">2019-02-21</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </section>
+                    {% endfor %}
+                {% else %}
+                {% endif %}
+            </section>
+        </section>
+    </section>
+
+{% endblock %}
