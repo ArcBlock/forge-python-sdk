@@ -8,8 +8,8 @@ from time import sleep
 
 import event_chain.application.app as app
 import event_chain.config.config as config
-import event_chain.protos as protos
 import requests
+from event_chain.utils import helpers
 from flask import flash
 from flask import Flask
 from flask import g
@@ -44,17 +44,9 @@ APP_SK = "Usi5RHoF/YGoGvbt7TQMaz55p3" \
          "+dl4HUi6M9mHkLuzpJLJxpXrvfQ3ZS189YWlieMik3TKqQuk9hhFLcg/WM8A=="
 APP_PK = "SSycaV6730N2UtfPWFpYnjIpN0yqkLpPYYRS3IP1jPA="
 APP_ADDR = "z1gJMDjiA9HfbXw9YD2DWKkKWaBJAAMttGu"
-TEST_TX = "CiN6MVNNTDM5UjNrNTRNcTY1ZFF1dlU0NkxXOWdMVzVWb2JIRhABGkC8aslX+7N" \
-          "/H8DafgxFwRlsYLGa1iRWduWpJ7rkjrRXh/gNttlOzSWEOiLm+MBR3f5S5NZcJW2" \
-          "/FH8BDBGxTlYJIgtmb3JnZS1sb2NhbDq7AgoNZmc6dDpleGNoYW5nZRKpAhImEi" \
-          "R6amRvYjRXNEFkc2NIU1Y5OWlYRnA5bnBHWkI3WU5SMlVKNEEawgEKvwEKvAEAAAA" \
-          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" \
-          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" \
-          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" \
-          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHo6C" \
-          "hJlYzp4OmV2ZW50X2FkZHJlc3MSJHpqZHFSNlB6TjRKdFNLTjdaZnJOdlZ4RThM" \
-          "Ymp5aEVwZWJZQQ=="
+
 HOST = 'http://did-workshop.arcblock.co:5000/'
+ARC = 'https://arcwallet.io/i/'
 
 
 class EventForm(FlaskForm):
@@ -91,15 +83,31 @@ def teardown_request(exception):
 
 
 def gen_mobile_url(event_address):
-    arc = 'https://arcwallet.io/i/'
     params = {
         'appPk': APP_PK,
         'appDid': 'did:abt:' + APP_ADDR,
         'action:': 'requestAuth',
         'url': HOST + 'api/mobile-buy-ticket/{}'.format(event_address),
     }
-    r = requests.Request('GET', arc, params=params).prepare()
+    r = requests.Request('GET', ARC, params=params).prepare()
     g.logger.info('Url generated {}'.format(r.url))
+    return r.url
+
+
+def gen_did_url(url):
+    g.logger.debug(
+        "Generating url for DID call. Call back url provided is {}".format(
+            url,
+        ),
+    )
+    params = {
+        'appPk': APP_PK,
+        'appDid': 'did:abt:' + APP_ADDR,
+        'action:': 'requestAuth',
+        'url': url,
+    }
+    r = requests.Request('GET', ARC, params=params).prepare()
+    g.logger.info('DID Url generated {}'.format(r.url))
     return r.url
 
 
@@ -121,6 +129,34 @@ def event_detail(address):
         redirect('/')
 
 
+@application.route("/ticket-detail", methods=['GET', 'POST'])
+def ticket_detail():
+    form = EventForm()
+    address = request.args.get('address', None)
+    if not address:
+        flash("/tickets")
+        return redirect('/')
+    ticket = app.get_ticket_state(address)
+    if not ticket:
+        flash("Ticket is not available.")
+        return redirect('/')
+
+    event = app.get_event_state(ticket.ticket_info.event_address)
+    if not event:
+        flash("Event is not availlable")
+        return redirect('/')
+    call_back_url = HOST + "api/mobile-consume-ticket/{}".format(
+        address,
+    )
+    url = gen_did_url(call_back_url)
+
+    return render_template(
+        "ticket_details.html", ticket=ticket, event=event,
+        url=url,
+        form=form,
+    )
+
+
 @application.route("/buy", methods=['POST'])
 def buy():
     refresh_token()
@@ -135,11 +171,10 @@ def buy():
     return redirect('/')
 
 
-@application.route("/activate", methods=['GET', 'POST'])
-def use():
+@application.route("/activate/<address>", methods=['GET', 'POST'])
+def use(address):
     refresh_token()
-    ticket_address = request.args.get('address')
-    app.consume(ticket_address, session['user'])
+    app.consume(address, session['user'])
     return redirect('/')
 
 
@@ -163,7 +198,7 @@ def get_event_for_ticket(tickets):
 
 @application.route("/tickets")
 def ticket_list():
-    tickets = app.list_used_tickets(session['user'].address)
+    tickets = app.list_unused_tickets(session['user'].address)
     events = get_event_for_ticket(tickets)
     ticket_lists = chunks(tickets, 3)
     return render_template(
@@ -226,18 +261,6 @@ def peek():
     )
 
 
-@application.route("/ticket_details", methods=['GET', 'POST'])
-def ticket_detail():
-    address = request.args.get('address')
-    g.logger.debug('about to get ticket exchange tx for {}'.format(address))
-    if address and address != '':
-        event = app.get_event_state(address)
-        exchange_tx = 1
-        return render_template(
-            'ticket_details.html', tx=exchange_tx, event=event,
-        )
-
-
 def refresh_token():
     user = session['user']
     user = app.load_user(
@@ -282,6 +305,7 @@ def register():
             ),
         )
         g.logger.debug("form is validated!!")
+        wait()
         return redirect('/')
 
 
@@ -308,42 +332,119 @@ def recover():
 
 
 @application.route(
+    "/api/mobile-consume-ticket/<ticket_address>",
+    methods=['GET', 'POST'],
+)
+def mobile_consume_ticket(ticket_address):
+    user_did = request.args.get('userDid', None)
+    if not user_did:
+        return response_error("Please provide a valid user did.")
+    user_address = user_did.split(":")[2]
+    g.logger.debug(
+        "user address parsed from request {}".format(user_address),
+    )
+    ticket = app.get_ticket_state(ticket_address)
+    if not ticket:
+        return response_error("Requested ticket is not available.")
+
+    event = app.get_event_state(ticket.ticket_info.event_address)
+    if not event:
+        return response_error("Requested event is not available.")
+
+    if request.method == 'GET':
+        consume_tx = event.event_info.consume_tx
+        multisig_data = helpers.encode_string_to_any(
+            'fg:x:address',
+            ticket_address,
+        )
+
+        new_tx = helpers.update_tx_multisig(
+            tx=consume_tx, signer=user_address,
+            data=multisig_data,
+        )
+        g.logger.debug('new tx {}:'.format(new_tx))
+        call_back_url = HOST + \
+            "api//mobile-consume-ticket/{}".format(ticket_address)
+        response = send_did_request(new_tx, gen_did_url(call_back_url))
+
+        json_response = json.loads(response.content)
+        g.logger.debug('Response: {}'.format(json_response))
+        return json_response
+
+    if request.method == 'POST':
+        req = ast.literal_eval(request.get_data(as_text=True))
+        g.logger.debug("Receives data from wallet {}".format(req))
+        hash = app.consume_ticket_mobile(ticket_address, req)
+        if hash:
+            g.logger.info(
+                "Ticket {} is consumed successfully by mobile, hash: {"
+                "}.".format(
+                    ticket_address, hash,
+                ),
+            )
+            js = json.dumps({'hash': hash})
+            resp = Response(js, status=200, mimetype='application/json')
+            return resp
+        else:
+            return response_error('error in consumming ticket.')
+
+
+def send_did_request(tx, url):
+    base64_encoded = base64.b64encode(tx)
+    g.logger.debug(
+        "Sending request to DID with base64 encoded tx: {} and url {"
+        "}".format(
+            base64_encoded, url,
+        ),
+    )
+    params = {
+        'sk': APP_SK,
+        'pk': APP_PK,
+        'address': APP_ADDR,
+        'tx': base64_encoded,
+        'url': url,
+    }
+    headers = {'content-type': 'application/json'}
+    return requests.post(
+        'http://did-workshop.arcblock.co:4000/api/authinfo',
+        json=params,
+        headers=headers,
+    )
+
+
+@application.route(
     "/api/mobile-buy-ticket/<event_address>",
     methods=['GET', 'POST'],
 )
 def mobile_buy_ticket(event_address):
     if request.method == 'GET':
-        user_did = request.args.get('userDid')
+        user_did = request.args.get('userDid', None)
+        if not user_did:
+            return response_error("Please provide a valid user did.")
         user_address = user_did.split(":")[2]
         g.logger.debug(
             "user address parsed from request {}".format(user_address),
         )
-
         event = app.get_event_state(event_address)
-        exchange_tx = event.get_exchange_tx()
-        g.logger.debug("mobile-buy-ticket receives a request")
-
-        multisig = protos.Multisig(signer=user_address)
-        parmas = {
-            'from': getattr(exchange_tx, 'from'),
-            'nonce': exchange_tx.nonce,
-            'signature': exchange_tx.signature,
-            'chain_id': exchange_tx.chain_id,
-            'signatures': [multisig],
-            'itx': exchange_tx.itx,
-        }
-        new_tx = protos.Transaction(**parmas)
+        #
+        # multisig = protos.Multisig(signer=user_address)
+        # parmas = {
+        #     'from': getattr(exchange_tx, 'from'),
+        #     'nonce': exchange_tx.nonce,
+        #     'signature': exchange_tx.signature,
+        #     'chain_id': exchange_tx.chain_id,
+        #     'signatures': [multisig],
+        #     'itx': exchange_tx.itx,
+        # }
+        # new_tx = protos.Transaction(**parmas)
+        new_tx = helpers.update_tx_multisig(
+            event.get_exchange_tx(),
+            user_address,
+        )
         g.logger.debug('new tx {}:'.format(new_tx))
 
         base64_encoded = base64.b64encode(new_tx.SerializeToString())
-        url_base64_encoded = base64.urlsafe_b64encode(
-            new_tx.SerializeToString(),
-        )
-
         g.logger.debug("Sent tx base64 encoded: {}".format(base64_encoded))
-        g.logger.debug(
-            "Sent tx base64 url encoded: {}".format(url_base64_encoded),
-        )
 
         params = {
             'sk': APP_SK,
@@ -377,8 +478,12 @@ def mobile_buy_ticket(event_address):
             return resp
         else:
             g.logger.error('No valid address.')
-            error = json.dumps({'error': 'error in buying ticket'})
-            return Response(error, status=400, mimetype='application/json')
+            return response_error('error in buying ticket.')
+
+
+def response_error(msg):
+    error = json.dumps({'error': msg})
+    return Response(error, status=400, mimetype='application/json')
 
 
 @application.route("/error", methods=['GET', 'POST'])
@@ -386,11 +491,12 @@ def error():
     return "Sorry there's something wrong in purchasing your ticket."
 
 
-@application.route("/test", methods=['GET', 'POST'])
-def test():
+@application.route("/test/<str>", methods=['GET', 'POST'])
+def test(str=None):
     data = {
         'hello': 'world',
         'number': 3,
+        'str': str,
     }
     js = json.dumps(data)
 

@@ -1,32 +1,56 @@
 {% extends "layout.html" %}
 {% block content %}
-<section class="hero">
-    <section class="section">
-        <div class="column is-4">
-            <div class="card is-shady">
-                <div class="card-image">
-                    <figure class="image is-4by3">
-                        <img src="https://unsplash.it/1200/600?{{ tx.hash }}" alt="pic"/>
-                    </figure>
+    <section class="hero">
+        <section class="session">
+            <br>
+            <br>
+            <section class="hero is-light">
+                <div class="hero-body">
+                    <div class="container has-text-centered">
+                        <h1 class="title">Ticket Details</h1>
+                    </div>
                 </div>
-                <div class="card-content">
-                    <div class="content">
-                        <br>
-                        <h4>Included in block: {{tx.height}}</h4>
-                        <hr>
-                        <div class="tags are-large">
-                            <span class="tag are-large is-info">Transaction</span>
-                            <span class="tag are-large is-warning">chain id: {{tx.tx.chain_id}}</span>
-                        </div>
-                        <br>
-                        <div class="content" style="word-wrap: break-word;">
-                            <p>Hash: {{tx.hash}}</p>
+            </section>
+            <br>
+            <br>
+            <div class="columns">
+                <div class="column">
+                    <div class="card" style="height: 350px; width: 380px;">
+
+                        <figure class="image">
+                            <img src="{{ qrcode(url) }}" alt="Image">
+                        </figure>
+
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="media">
+                                <div class="media-left">
+                                    <figure class="image" style="height: 50px; width: 50px;"><img
+                                            src="https://source.unsplash.com/random/96x96" alt="Image"></figure>
+                                </div>
+                                <div class="media-content">
+                                    <p class="title is-4">{{ event.event_info.title }}</p>
+                                    <p class="subtitle is-6">@Bellevue @2019-01-02</p>
+                                </div>
+                            </div>
+                            <div class="content">
+                                <p>{{ event.event_info.description }} </p>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis
+                                    mauris</p>
+                                <br>
+                                {% if ticket.transferrable == True %}
+                                <a class="button is-link"
+                                   href={{ url_for('use',address=ticket.address) }}> Use Ticket</a>
+                                {% else %}
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        </div>
+        </section>
     </section>
-</section>
 {% endblock %}

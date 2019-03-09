@@ -26,7 +26,7 @@
                                             <div class="card-image">
                                                 {% if event.event_info.remaining==0 %}
                                                     <figure class="watermarked image is-2by1">
-                                                        <img src="https://unsplash.it/1200/600?{{ event.address }}"
+                                                        <img src="https://unsplash.it/1200/900?{{ event.address }}"
                                                              alt="
                             {{ event.event_info.title }}"/>
                                                     </figure>
@@ -46,9 +46,11 @@
               <span class="tag are-large is-warning">Tickets：
                                 {{ event.event_info.remaining }}/{{ event.event_info.total }}</span>
                                                         <span class="tag are-large is-danger">Price：
-                                {{ event.event_info.ticket_price }} ABT</span>
+                                {{ event.event_info.ticket_price/10000000000000000  }}ABT</span>
                                                     </div>
-                                                    <p>Place: 3150 Richards, Bellevue</p>
+                                                    <p>Place: {{ event.event_info.location }}</p>
+                                                    <p>Start Time: {{ event.event_info.start_time }}</p>
+                                                    <p>End Time: {{ event.event_info.end_time }}</p>
                                                     <p>
                                                         Description: {{ event.event_info.description }}
                                                     </p>

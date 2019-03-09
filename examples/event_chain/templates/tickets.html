@@ -46,9 +46,12 @@
                                                     </div>
                                                     {% if ticket.transferrable==True %}
                                                         <a class="button is-info"
-                                                           href="/activate?address={{ ticket.address }}">
-                                                            Use It</a>
+                                                           href="/ticket-detail?address={{ ticket.address }}">
+                                                            Click to Use</a>
                                                     {% else %}
+                                                        <a class="button is-info"
+                                                           href="/ticket-detail?address={{ ticket.address }}">
+                                                            Click to View</a>
                                                     {% endif %}
                                                 </div>
                                             </div>

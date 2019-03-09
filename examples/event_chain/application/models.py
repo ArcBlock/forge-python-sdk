@@ -49,7 +49,7 @@ def create_asset_ticket_info(id, event_address):
 
 def gen_exchange_tx(value, ticket_address, event_address):
     receiver = protos.ExchangeInfo(
-        value=protos.BigUint(value=bytes(value)),
+        value=protos.BigUint(value=bin(value).encode()),
     )
     sender = protos.ExchangeInfo(assets=[ticket_address])
     exchange_tx = protos.ExchangeTx(
@@ -73,7 +73,7 @@ class EventInfo:
         self.remaining = self.total
         self.start_time = helpers.gen_timestamp(kwargs.get('start_time'))
         self.end_time = helpers.gen_timestamp(kwargs.get('end_time'))
-        self.ticket_price = kwargs.get('ticket_price')
+        self.ticket_price = kwargs.get('ticket_price') * 10000000000000000
         self.location = kwargs.get('location')
         self.description = kwargs.get('description', 'No description :(')
         self.type_url = 'ec:s:event_info'
@@ -565,6 +565,19 @@ class TicketAssetState:
             logger.error("Fail to multisig consume tx.")
         else:
             return forgeRpc.send_tx(res.tx)
+
+    def consume_mobile(self, consume_tx, address, signature):
+        multisig_data = helpers.encode_string_to_any(
+            'fg:x:address',
+            self.address,
+        )
+
+        tx = helpers.update_tx_multisig(
+            tx=consume_tx, signer=address,
+            signature=signature,
+            data=multisig_data,
+        )
+        return forgeRpc.send_tx(tx)
 
 
 class User:

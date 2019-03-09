@@ -5,9 +5,8 @@ import logging
 import base58
 import event_chain.protos as protos
 from enum import Enum
+from google.protobuf.any_pb2 import Any
 from google.protobuf.timestamp_pb2 import Timestamp
-
-import forge.utils as forge_utils
 
 logger = logging.getLogger('ec-helpers')
 
@@ -99,14 +98,35 @@ def add_multi_sig_to_tx(tx, address, signature):
     logger.debug("tx: {}".format(tx))
     logger.debug("address: {}".format(address))
     logger.debug("signature: {}".format(signature))
-    #
-    # parsed_address = tx.signatures[0].signer
-    # assert (address == parsed_address)
+    # #
+    # # parsed_address = tx.signatures[0].signer
+    # # assert (address == parsed_address)
+    # multisig = protos.Multisig(
+    #     signer=address,
+    #     signature=signature,
+    # )
+    # parmas = {
+    #     'from': getattr(tx, 'from'),
+    #     'nonce': tx.nonce,
+    #     'signature': tx.signature,
+    #     'chain_id': tx.chain_id,
+    #     'signatures': [multisig],
+    #     'itx': tx.itx,
+    # }
+    new_tx = update_tx_multisig(tx, address, signature)
+    logger.debug("Address and signature has been added to tx: ")
+    logger.debug("new tx: {}".format(new_tx))
+
+    return new_tx
+
+
+def update_tx_multisig(tx, signer, signature='', data=None):
     multisig = protos.Multisig(
-        signer=address,
+        signer=signer,
         signature=signature,
+        data=data,
     )
-    parmas = {
+    params = {
         'from': getattr(tx, 'from'),
         'nonce': tx.nonce,
         'signature': tx.signature,
@@ -114,11 +134,15 @@ def add_multi_sig_to_tx(tx, address, signature):
         'signatures': [multisig],
         'itx': tx.itx,
     }
-    new_tx = protos.Transaction(**parmas)
-    logger.debug("Address and signature has been added to tx: ")
-    logger.debug("new tx: {}".format(new_tx))
-
+    new_tx = protos.Transaction(**params)
     return new_tx
+
+
+def encode_string_to_any(type_url, str):
+    return Any(
+        type_url=type_url,
+        value=str.encode(),
+    )
 
 
 class ForgeTxType(Enum):

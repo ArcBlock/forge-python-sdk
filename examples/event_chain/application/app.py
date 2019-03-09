@@ -72,6 +72,7 @@ def create_event(user, conn=None, **kwargs):
         start_time=parse_date(kwargs.get('start_time')),
         end_time=parse_date(kwargs.get('end_time')),
         ticket_price=int(kwargs.get('ticket_price')),
+        location=kwargs.get('location'),
     )
     if event_info.finished and conn:
         db.insert_event(conn, event_info.address, user.address)
@@ -137,16 +138,12 @@ def list_tickets(conn, user):
 
 def list_unused_tickets(user_address):
     user_state = get_participant_state(user_address)
-    addr_list = user_state.unused
-    ticket_states = [get_ticket_state(addr) for addr in addr_list]
-    return ticket_states
-
-
-def list_used_tickets(user_address):
-    user_state = get_participant_state(user_address)
-    addr_list = user_state.used
-    ticket_states = [get_ticket_state(addr) for addr in addr_list]
-    return ticket_states
+    if not user_state:
+        return []
+    else:
+        addr_list = user_state.unused
+        ticket_states = [get_ticket_state(addr) for addr in addr_list]
+        return ticket_states
 
 
 def get_event_state(event_address):
@@ -213,8 +210,14 @@ def create_sample_event(user, title, conn=None):
 
 
 def consume(ticket_address, user):
+    logger.debug("Consuming ticket {}".format(ticket_address))
     ticket = get_ticket_state(ticket_address)
-    consume_tx = get_event_state(ticket.event_address).event_info.consume_tx
+    logger.debug("Event is  {}".format(ticket.ticket_info.event_address))
+    consume_tx = get_event_state(
+        ticket.ticket_info.event_address,
+    ).event_info.consume_tx
+    if not consume_tx:
+        return None
 
     logger.debug("consume tx: {}".format(consume_tx))
 
@@ -223,7 +226,27 @@ def consume(ticket_address, user):
     if res.code != 0 or res.hash is None:
         logger.error(res)
         logger.error('Fail to consume ticket {}'.format(ticket_address))
-    logger.info("Ticket has been consumed!")
+    else:
+        logger.info("Ticket has been consumed!")
+    return res.hash
+
+
+def consume_ticket_mobile(ticket, consume_tx, response):
+    wallet_response = helpers.WalletResponse(response)
+
+    address = wallet_response.get_address()
+    logger.debug('Consuming ticket: mobile address:{}'.format(address))
+
+    signature = wallet_response.get_signature()
+    logger.debug('Consuming ticket: mobile signature:{}'.format(signature))
+
+    res = ticket.consume_mobile(consume_tx, address, signature)
+
+    if res.code != 0 or res.hash is None:
+        logger.error(res)
+        logger.error('Fail to consume ticket {}'.format(ticket.address))
+    else:
+        logger.info("Ticket has been consumed!")
     return res.hash
 
 
