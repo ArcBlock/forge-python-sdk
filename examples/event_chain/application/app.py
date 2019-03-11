@@ -227,7 +227,11 @@ def consume(ticket_address, user):
         logger.error(res)
         logger.error('Fail to consume ticket {}'.format(ticket_address))
     else:
-        logger.info("Ticket has been consumed!")
+        logger.info(
+            "ConsumeTx has been sent              by tx: {}!".format(
+                res.hash,
+            ),
+        )
     return res.hash
 
 
@@ -246,8 +250,27 @@ def consume_ticket_mobile(ticket, consume_tx, response):
         logger.error(res)
         logger.error('Fail to consume ticket {}'.format(ticket.address))
     else:
-        logger.info("Ticket has been consumed!")
+        logger.info("ConsumeTx has been sent   ,]llllllllm  by tx: {}!".format(
+            res.hash,
+        ))
     return res.hash
+
+
+def list_ticket_exchange_tx(event_address):
+    res = forgeRpc.list_asset_transactions(event_address)
+    if res.code != 0:
+        logger.error(
+            "Fail to get transactions for event {}".format(event_address),
+        )
+        logger.error(res)
+        return []
+    elif len(res.transactions) == 0:
+        logger.debug("rpc returned Empty exchange txs for event {}".format(
+            event_address,
+        ))
+        return []
+    else:
+        return [tx for tx in res.transactions if tx.type == 'exchange']
 
 
 def refresh():

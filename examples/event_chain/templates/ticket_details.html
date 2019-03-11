@@ -33,13 +33,13 @@
                                 </div>
                                 <div class="media-content">
                                     <p class="title is-4">{{ event.event_info.title }}</p>
-                                    <p class="subtitle is-6">@Bellevue @2019-01-02</p>
+                                    <p class="subtitle is-6">Location: {{ event.event_info.location }}</p>
+                                    <p class="subtitle is-6">Start: {{ event.display_start_time }}</p>
+                                    <p class="subtitle is-6">End: {{ event.display_end_time }}</p>
                                 </div>
                             </div>
                             <div class="content">
                                 <p>{{ event.event_info.description }} </p>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis
-                                    mauris</p>
                                 <br>
                                 {% if ticket.transferrable == True %}
                                 <a class="button is-link"

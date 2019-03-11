@@ -25,14 +25,14 @@
                                         <div class="card is-shady">
                                             <div class="card-image">
                                                 {% if event.event_info.remaining==0 %}
-                                                    <figure class="watermarked image is-2by1">
+                                                    <figure class="watermarked image is-4by3">
                                                         <img src="https://unsplash.it/1200/900?{{ event.address }}"
                                                              alt="
                             {{ event.event_info.title }}"/>
                                                     </figure>
                                                 {% else %}
                                                     <figure class="image is-4by3">
-                                                        <img src="https://unsplash.it/1200/600?{{ event.address }}"
+                                                        <img src="https://unsplash.it/1200/900?{{ event.address }}"
                                                              alt="
                                 {{ event.event_info.title }}"/>
                                                     </figure>
@@ -46,14 +46,11 @@
               <span class="tag are-large is-warning">Tickets：
                                 {{ event.event_info.remaining }}/{{ event.event_info.total }}</span>
                                                         <span class="tag are-large is-danger">Price：
-                                {{ event.event_info.ticket_price/10000000000000000  }}ABT</span>
+                                {{ event.display_price }}ABT</span>
                                                     </div>
-                                                    <p>Place: {{ event.event_info.location }}</p>
-                                                    <p>Start Time: {{ event.event_info.start_time }}</p>
-                                                    <p>End Time: {{ event.event_info.end_time }}</p>
-                                                    <p>
-                                                        Description: {{ event.event_info.description }}
-                                                    </p>
+                                                    <p>Location: {{ event.event_info.location }}</p>
+                                                    <p>Start Time: {{ event.display_start_time }}</p>
+                                                    <p>End Time: {{ event.display_end_time }}</p>
                                                     <a class="button is-link"
                                                        href={{ url_for('event_detail',address=event.address) }}> Join
                                                         Event</a>
@@ -61,7 +58,7 @@
                                             </div>
                                         </div>
                                     </div>
-
+                                    <br>
                                 {% endfor %}
                             </div>
                         </section>

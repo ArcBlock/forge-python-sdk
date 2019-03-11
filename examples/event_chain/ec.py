@@ -120,9 +120,11 @@ def event_detail(address):
             flash('Please register first!')
             return redirect('/login')
         url = gen_mobile_url(address)
+        txs = app.list_ticket_exchange_tx(address)
+        tx_lists = chunks(txs, 3)
         return render_template(
             'event_details.html', event=event, form=form,
-            url=url,
+            url=url, tx_lists=tx_lists,
         )
     else:
         g.logger.error("No event address provided.")
@@ -222,7 +224,7 @@ def create_event():
                 description=form.description.data,
                 start_time=form.start_time.data,
                 end_time=form.end_time.data,
-                ticket_price=form.ticket_price.data,
+                ticket_price=form.ticket_price.data * 10000000000000000,
                 location=form.location.data,
                 conn=g.db,
             )
@@ -341,7 +343,7 @@ def mobile_consume_ticket(ticket_address):
         return response_error("Please provide a valid user did.")
     user_address = user_did.split(":")[2]
     g.logger.debug(
-        "user address parsed from request {}".format(user_address),
+        "user address parsed from consume request {}".format(user_address),
     )
     ticket = app.get_ticket_state(ticket_address)
     if not ticket:
@@ -363,8 +365,9 @@ def mobile_consume_ticket(ticket_address):
             data=multisig_data,
         )
         g.logger.debug('new tx {}:'.format(new_tx))
-        call_back_url = HOST + \
-            "api//mobile-consume-ticket/{}".format(ticket_address)
+        call_back_url = HOST + "api/mobile-consume-ticket/{}".format(
+            ticket_address,
+        )
         response = send_did_request(new_tx, gen_did_url(call_back_url))
 
         json_response = json.loads(response.content)

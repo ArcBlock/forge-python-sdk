@@ -54,7 +54,17 @@ def exchange_update(request):
         )
         # update event state
         asset_state = models.get_event_state(event_address)
+        logger.debug("Price before popping: {}".format(
+            asset_state.event_info.ticket_price,
+        ))
         updated_event_state = asset_state.pop_executed_ticket()
+        updated_event_info = forge_utils.parse_to_proto(
+            updated_event_state.data.value,
+            protos.EventInfo,
+        )
+        logger.debug("Price after popping: {}".format(
+            updated_event_info.ticket_price,
+        ))
         logger.debug("Event state update is prepared.")
 
         # update buyer state

@@ -49,7 +49,9 @@ def create_asset_ticket_info(id, event_address):
 
 def gen_exchange_tx(value, ticket_address, event_address):
     receiver = protos.ExchangeInfo(
-        value=protos.BigUint(value=bin(value).encode()),
+        # TODO: convert long to bytes
+        # ctypes.c_uint32(value).value.encode()
+        value=protos.BigUint(value=b'0', ),
     )
     sender = protos.ExchangeInfo(assets=[ticket_address])
     exchange_tx = protos.ExchangeTx(
@@ -73,7 +75,7 @@ class EventInfo:
         self.remaining = self.total
         self.start_time = helpers.gen_timestamp(kwargs.get('start_time'))
         self.end_time = helpers.gen_timestamp(kwargs.get('end_time'))
-        self.ticket_price = kwargs.get('ticket_price') * 10000000000000000
+        self.ticket_price = kwargs.get('ticket_price')
         self.location = kwargs.get('location')
         self.description = kwargs.get('description', 'No description :(')
         self.type_url = 'ec:s:event_info'
@@ -93,18 +95,18 @@ class EventInfo:
             token=self.token,
         )
         if res.code != 0 or res.tx is None:
-            logger.error("Fail to generate consume tx for event.")
+            logger.error(u'Fail to generate consume tx for event.')
             return None
         else:
             logger.debug(
-                "Consume tx generated for event {}".format(self.title),
+                u"Consume tx generated for event {}".format(self.title),
             )
             return res.tx
 
     def create(self):
-        logger.debug("Creating event...")
+        logger.debug(u"Creating event...")
         if not self.consume_tx:
-            logger.error("Consume tx not generated!")
+            logger.error(u"Consume tx not generated!")
         event_info = protos.EventInfo(
             title=self.title,
             total=self.total,
@@ -126,7 +128,7 @@ class EventInfo:
             wallet_type=self.wallet.type,
         ).asset_address
         logger.debug(
-            "Event address has been calculated: {}".format(event_address),
+            u"Event address has been calculated: {}".format(event_address),
         )
         res = forgeRpc.create_asset(
             self.type_url, event_info, self.wallet,
@@ -136,7 +138,7 @@ class EventInfo:
             logger.error(res)
         else:
             logger.info(
-                "Event '{0}' has been created successfully by tx {"
+                u"Event '{0}' has been created successfully by tx {"
                 "1}!".format(
                     self.title, res.hash,
                 ),
@@ -150,7 +152,7 @@ class EventInfo:
             ticket_holder = self.gen_ticket_holder(ticket_id)
             tickets.append(ticket_holder)
         logger.info(
-            "All {} tickets have been generated successfully!".format(
+            u"All {} tickets have been generated successfully!".format(
                 self.total,
             ),
         )
@@ -196,7 +198,7 @@ class EventInfo:
 
     def update_generated_tickets(self):
         if not self.address:
-            logger.error("No event address available.")
+            logger.error(u"No event address available.")
         else:
             tickets = self.gen_tickets()
             event_info = protos.EventInfo(
@@ -220,8 +222,8 @@ class EventInfo:
                 self.token,
             )
 
-            logger.debug("Event has been updated with generated tickets. ")
-            logger.info("Event {} is ready!".format(self.title))
+            logger.debug(u"Event has been updated with generated tickets. ")
+            logger.info(u"Event {} is ready!".format(self.title))
             if res.hash:
                 return True
             else:
@@ -247,6 +249,13 @@ class EventAssetState:
         self.remaining = self.event_info.remaining
         self.tickets = self.event_info.tickets
         self.participants = self.event_info.participants
+        self.display_start_time = helpers.to_display_time(
+            self.event_info.start_time,
+        )
+        self.display_end_time = helpers.to_display_time(
+            self.event_info.end_time,
+        )
+        self.display_price = self.event_info.ticket_price / 10000000000000000
 
     def get_next_ticket(self):
         if not self.tickets:
@@ -260,7 +269,7 @@ class EventAssetState:
         ticket_holder = self.get_next_ticket()
         create_tx = ticket_holder.ticket_create
         res = forgeRpc.send_tx(create_tx)
-        logger.debug("About to create ticket with ticketInfo: {info}".format(
+        logger.debug(u"About to create ticket with ticketInfo: {info}".format(
             info=utils.data_of_create_asset(
                 create_tx,
                 protos.TicketInfo,
@@ -268,7 +277,7 @@ class EventAssetState:
         ))
         if res.code != 0:
             logger.error(res)
-            logger.error('Fail to create ticket: {tx}'.format(tx=create_tx))
+            logger.error(u'Fail to create ticket: {tx}'.format(tx=create_tx))
         return res.hash
 
     def exchange_ticket(self, buyer_wallet, buyer_token):
@@ -279,7 +288,7 @@ class EventAssetState:
             buyer_token,
         )
         if res1.code != 0:
-            logger.error("Buyer multisig failed!")
+            logger.error(u"Buyer multisig failed!")
             logger.error(res1)
         else:
             buyer_signed = res1.tx
@@ -288,14 +297,14 @@ class EventAssetState:
                 logger.error(res)
             else:
                 logger.debug(
-                    "Ticket {} has been exchanged.".format(
+                    u"Ticket {} has been exchanged.".format(
                         ticket_holder.address,
                     ),
                 )
                 return res.hash
 
     def exchange_ticket_mobile(self, buyer_address, buyer_signature):
-        logger.debug("Preparing to send exchange_tx with mobile data.")
+        logger.debug(u"Preparing to send exchange_tx with mobile data.")
         ticket_holder = self.get_next_ticket()
         exchange_tx = ticket_holder.ticket_exchange
         buyer_signed = helpers.add_multi_sig_to_tx(
@@ -374,7 +383,7 @@ class EventAssetState:
             total=self.event_info.total,
             start_time=self.event_info.start_time,
             end_time=self.event_info.end_time,
-            ticket_price=self.event_info.ticket_price,
+            ticket_price=int(self.event_info.ticket_price),
             remaining=self.remaining,
             tickets=self.tickets,
             participants=self.participants,

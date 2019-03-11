@@ -8,6 +8,7 @@ from forge.rpc.chain import RpcChain
 from forge.rpc.event import RpcEvent
 from forge.rpc.file import RpcFile
 from forge.rpc.state import RpcState
+from forge.rpc.statistic import RpcStatistic
 from forge.rpc.wallet import RpcWallet
 
 
@@ -59,6 +60,10 @@ class ForgeRpc:
         self.remove_wallet = self.wallet.remove_wallet
         self.list_wallet = self.wallet.list_wallet
         self.declare_node = self.wallet.declare_node
+
+        self.statistic = RpcStatistic(self.chan)
+        self.list_asset_transactions = self.statistic.list_asset_transactions
+        self.list_transactions = self.statistic.list_transactions
 
     def send_itx(self, type_url, itx, wallet, token):
         encoded_itx = utils.encode_to_any(type_url, itx)

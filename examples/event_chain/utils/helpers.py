@@ -120,6 +120,11 @@ def add_multi_sig_to_tx(tx, address, signature):
     return new_tx
 
 
+def to_display_time(timestamp):
+    dt = timestamp.ToDatetime()
+    return dt.strftime("%Y/%m/%d")
+
+
 def update_tx_multisig(tx, signer, signature='', data=None):
     multisig = protos.Multisig(
         signer=signer,
