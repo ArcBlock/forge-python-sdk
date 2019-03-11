@@ -49,9 +49,7 @@ def create_asset_ticket_info(id, event_address):
 
 def gen_exchange_tx(value, ticket_address, event_address):
     receiver = protos.ExchangeInfo(
-        # TODO: convert long to bytes
-        # ctypes.c_uint32(value).value.encode()
-        value=protos.BigUint(value=b'0', ),
+        value=protos.BigUint(value=utils.int_to_bytes(int(value))),
     )
     sender = protos.ExchangeInfo(assets=[ticket_address])
     exchange_tx = protos.ExchangeTx(
@@ -666,6 +664,8 @@ class ParticipantAccountState:
         self.num_assets = state.num_assets
         self.stake = state.stake
         self.pinned_files = state.pinned_files
+
+        self.display_balance = utils.bytes_to_int(self.balance.value)/1e16
 
         self.participant_info = utils.parse_to_proto(
             state.data.value,

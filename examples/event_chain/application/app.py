@@ -142,7 +142,10 @@ def list_unused_tickets(user_address):
         return []
     else:
         addr_list = user_state.unused
-        ticket_states = [get_ticket_state(addr) for addr in addr_list]
+        ticket_states = [
+            get_ticket_state(addr) for addr in addr_list if
+            get_ticket_state(addr) is not None
+        ]
         return ticket_states
 
 
@@ -173,7 +176,9 @@ def buy_ticket(event_address, user, conn=None):
             conn, ticket_address, event_address, user.address,
             create_hash, exchange_hash,
         )
-    return None
+        return ticket_address
+    else:
+        return None
 
 
 def buy_ticket_mobile(event_address, response, conn=None):

@@ -1,10 +1,13 @@
 import base64
+import codecs
 import json
 import logging
+import math
 
 import base58
 import event_chain.protos as protos
 from enum import Enum
+from event_chain.application import app
 from google.protobuf.any_pb2 import Any
 from google.protobuf.timestamp_pb2 import Timestamp
 
@@ -148,6 +151,26 @@ def encode_string_to_any(type_url, str):
         type_url=type_url,
         value=str.encode(),
     )
+
+
+def is_event_address_valid(event_address):
+    event = app.get_event_state(event_address)
+    if not event:
+        logger.error(u'Event {} does not exist.'.format(event_address))
+        return False
+    user = app.get_participant_state(event.owner)
+    if not user:
+        logger.error(u'User {} does not exist.'.format(event.owner))
+        return False
+    return True
+
+
+def is_ticket_address_valid(ticket_address):
+    ticket = app.get_ticket_state(ticket_address)
+    if not ticket:
+        logger.error(u'Ticket {} does not exist.'.format(ticket_address))
+        return False
+    return is_event_address_valid(ticket.event_address)
 
 
 class ForgeTxType(Enum):

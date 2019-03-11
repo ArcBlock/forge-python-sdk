@@ -1,3 +1,5 @@
+import codecs
+import math
 from collections import Iterable
 
 from google.protobuf.any_pb2 import Any
@@ -76,3 +78,26 @@ def is_proto_empty(proto_message):
         return True
     else:
         return False
+
+
+def _to_bytes(n, length, endianess='big'):
+    b = '%x' % n
+    h = ('0' * (len(b) % 2) + b).zfill(length * 2)
+    s = codecs.decode(h, "hex")
+    return s if endianess == 'big' else s[::-1]
+
+
+def _bytes_size(n):
+    return math.ceil(len(hex(n)) / 2 - 1)
+
+
+def int_to_bytes(n):
+    size = int(_bytes_size(n))
+    return _to_bytes(n, size)
+
+
+def bytes_to_int(bytes):
+    result = 0
+    for b in bytes:
+        result = result * 256 + int(b)
+    return result
