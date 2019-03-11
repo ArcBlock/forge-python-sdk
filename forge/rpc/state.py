@@ -27,7 +27,7 @@ class RpcState:
                 kwargs = {
                     'address': item.get('address'),
                     'keys': item.get('keys', []),
-                    'app_hash': item.get('app_hash', ''),
+                    # 'height': item.get('height', ''),
                 }
                 return protos.RequestGetAccountState(**kwargs)
 
@@ -56,41 +56,14 @@ class RpcState:
                 kwargs = {
                     'address': item.get('address'),
                     'keys': item.get('keys', []),
-                    'app_hash': item.get('app_hash', ''),
+                    # 'app_hash': item.get('app_hash', ''),
                 }
-                return protos.RequestGetAssetState(**kwargs)
+                req = protos.RequestGetAssetState(**kwargs)
+                return req
 
         requests = utils.to_iter(to_req, req)
 
         return self.stub.get_asset_state(requests)
-
-    def get_channel_state(self, req=None):
-        """
-        RPC call to get channel state.
-
-        Parameters
-        ----------
-        req: stream RequestGetChannelState
-
-        Returns
-        -------
-        stream ResponseGetChannelState
-
-        """
-
-        def to_req(item):
-            if isinstance(item, protos.RequestGetChannelState):
-                return item
-            else:
-                kwargs = {
-                    'address': item.get('address'),
-                    'keys': item.get('keys', []),
-                    'app_hash': item.get('app_hash', ''),
-                }
-                return protos.RequestGetChannelState(**kwargs)
-
-        requests = utils.to_iter(to_req, req)
-        return self.stub.get_channel_state(requests)
 
     def get_stake_state(self, req=None):
         """
@@ -113,7 +86,7 @@ class RpcState:
                 kwargs = {
                     'address': item.get('address'),
                     'keys': item.get('keys', []),
-                    'app_hash': item.get('app_hash', ''),
+                    # 'app_hash': item.get('app_hash', ''),
                 }
                 return protos.RequestGetStakeState(**kwargs)
 
@@ -138,7 +111,7 @@ class RpcState:
         else:
             req_kwargs = {
                 'keys': keys,
-                'app_hash': app_hash,
+                # 'app_hash': app_hash,
             }
             return self.stub.get_forge_state(
                 protos.RequestGetForgeState(**req_kwargs),

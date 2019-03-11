@@ -1,0 +1,19 @@
+include *.py
+  recursive-include event_chain *.py
+
+recursive-include event_chain *.css
+recursive-include event_chain *.html
+recursive-include event_chain *.ico
+recursive-include event_chain *.jpg
+recursive-include event_chain *.js
+recursive-include event_chain *.json
+recursive-include event_chain *.png
+recursive-include event_chain *.proto
+recursive-include event_chain *.toml
+recursive-include event_chain *.txt
+recursive-include event_chain Makefile
+include event_chain/config/forge.toml
+include event_chain/simulation/sample_data.json
+recursive-exclude kvstore *
+recursive-exclude quick_test *
+recursive-exclude example *

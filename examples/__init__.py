@@ -1,1 +1,1 @@
-from .event_chain import app
+from examples import event_chain

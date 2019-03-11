@@ -41,10 +41,31 @@ message ChainInfo {
   string address = 10;                      // the address of the node.
   uint64 voting_power = 11; // the voting power of the node, in integer.
   uint64 total_txs = 12;    // total number of txs up to the latest block
-  string version = 13;
-  string data_version = 14;
+  string version = 13;      // current forge version
+  string data_version = 14; // current data version
   map<string, string> forge_apps_version = 15;
   repeated string supported_txs = 16;
+}
+
+message NodeInfo {
+  string id = 1;                // node id.
+  string network = 2;           // which network the node belongs to.
+  string moniker = 3;           // name of the node.
+  string consensus_version = 4; // consensus engine version for this node.
+  bool synced = 5;              // indicate if this node is fully synced.
+  bytes app_hash = 6;           // current application hash.
+  bytes block_hash = 7;         // current block hash.
+  uint64 block_height = 8;      // latest block height, in integer.
+  google.protobuf.Timestamp block_time = 9; // latest block time.
+  string address = 10;                      // the address of the node.
+  uint64 voting_power = 11; // the voting power of the node, in integer.
+  uint64 total_txs = 12;    // total number of txs up to the latest block
+  string version = 13;      // current forge version
+  string data_version = 14; // current data version
+  map<string, string> forge_apps_version = 15;
+  repeated string supported_txs = 16;
+  string ip = 17;        // self node ip
+  GeoInfo geo_info = 18; // self node geo info
 }
 
 message Validator {
@@ -91,6 +112,11 @@ message AbciContext {
   // the deterministic time of the last block.
   google.protobuf.Timestamp last_block_time = 7;
 }
+message Multisig {
+  string signer = 1;
+  bytes signature = 2;
+  google.protobuf.Any data = 3;
+}
 
 message Transaction {
   string from = 1;
@@ -100,7 +126,7 @@ message Transaction {
   string chain_id = 4;
   // we will support multiple signatures in case of certain tx need multiple
   // parties' signature.
-  repeated abci_vendor.KVPair signatures = 5;
+  repeated Multisig signatures = 5;
   // at current version we don't have a VM to process byte
   // code so this should always be empty. Forge will reject
   // tx with non-empty byte_code
@@ -188,22 +214,20 @@ message NetInfo {
   repeated PeerInfo peers = 4;
 }
 
-message PeerInfo { NodeInfo node_info = 1; }
+message GeoInfo {
+  string city = 1;
+  string country = 2;
+  float latitude = 3;
+  float longitude = 4;
+}
 
-message NodeInfo {
+message PeerInfo {
   string id = 1;
   string network = 2;
   string consensus_version = 3;
   string moniker = 4;
   string ip = 5;
   GeoInfo geo_info = 6;
-}
-
-message GeoInfo {
-  string city = 1;
-  string country = 2;
-  float latitude = 3;
-  float longitude = 4;
 }
 
 message ValidatorsInfo {
@@ -242,6 +266,7 @@ message ForgeStatistics {
   repeated uint32 num_sys_upgrade_txs = 12;
   repeated uint64 num_transfer_txs = 13;
   repeated uint64 num_update_asset_txs = 14;
+  repeated uint64 num_consume_asset_txs = 15;
 }
 
 message TxStatistics {
@@ -255,11 +280,5 @@ message TxStatistics {
   uint32 num_sys_upgrade_txs = 8;
   uint64 num_transfer_txs = 9;
   uint64 num_update_asset_txs = 10;
-}
-
-// keep a list of state root for different dbs (column families).
-message StateRoot {
-  bytes account = 2;
-  bytes asset = 3;
-  bytes receipt = 4;
+  uint64 num_consume_asset_txs = 11;
 }

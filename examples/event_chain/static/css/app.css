@@ -1,6 +1,7 @@
-@import url(https://fonts.googleapis.com/css?family=Lato:400,700,400italic);
 /*! bulmaswatch v0.7.2 | MIT License */
 /*! bulma.io v0.7.2 | MIT License | github.com/jgthms/bulma */
+@import url(https://fonts.googleapis.com/css?family=Lato:400,700,400italic);
+
 @keyframes spinAround {
     from {
         transform: rotate(0deg);
@@ -5299,7 +5300,7 @@ a.tag:hover {
 
 .breadcrumb li + li::before {
     color: #a9afb7;
-    content: "/";
+    content: "\0002f";
 }
 
 .breadcrumb ul,
@@ -5341,19 +5342,19 @@ a.tag:hover {
 }
 
 .breadcrumb.has-arrow-separator li + li::before {
-    content: "\2192";
+    content: "\02192";
 }
 
 .breadcrumb.has-bullet-separator li + li::before {
-    content: "\2022";
+    content: "\02022";
 }
 
 .breadcrumb.has-dot-separator li + li::before {
-    content: "\B7";
+    content: "\000b7";
 }
 
 .breadcrumb.has-succeeds-separator li + li::before {
-    content: "\227B";
+    content: "\0227B";
 }
 
 .card {
@@ -11152,163 +11153,7 @@ body > .navbar {
     }
 }
 
-html,
-body {
-    background: #EFF3F4;
-    font-family: 'Open Sans', serif;
-}
-
-.hero-body .container {
-    max-width: 700px;
-}
-
-.hero-body .title {
-    color: hsl(192, 17%, 99%) !important;
-}
-
-.hero-body .subtitle {
-    color: hsl(192, 17%, 99%) !important;
-    padding-top: 2rem;
-    line-height: 1.5;
-}
-
-.features {
-    padding: 5rem 0;
-}
-
-.box.cta {
-    border-radius: 0;
-    border-left: none;
-    border-right: none;
-}
-
-.card-image > .fa {
-    font-size: 8rem;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-    color: #209cee;
-}
-
-.card-content .content {
-    font-size: 14px;
-    margin: 1rem 1rem;
-}
-
-.card-content .content h4 {
-    font-size: 16px;
-    font-weight: 700;
-}
-
-.card {
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.18);
-    margin-bottom: 2rem;
-}
-
-.intro {
-    padding: 5rem 0;
-    text-align: center;
-}
-
-.sandbox {
-    padding: 5rem 0;
-}
-
-.tile.notification {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-}
-
-.is-shady {
-    animation: flyintoright .4s backwards;
-    background: #fff;
-    box-shadow: rgba(0, 0, 0, .1) 0 1px 0;
-    border-radius: 4px;
-    display: inline-block;
-    margin: 10px;
-    position: relative;
-    transition: all .2s ease-in-out;
-}
-
-.is-shady:hover {
-    box-shadow: 0 10px 16px rgba(0, 0, 0, .13), 0 6px 6px rgba(0, 0, 0, .19);
-}
-
-/*adds font awesome stars*/
-footer li:before {
-    content: '\F1B2';
-    font-family: 'FontAwesome';
-    float: left;
-    margin-left: -1.5em;
-    color: #147efb;
-}
-
-.hero.is-success {
-    background: #F2F6FA;
-}
-
-.hero .nav,
-.hero.is-success .nav {
-    -webkit-box-shadow: none;
-    box-shadow: none;
-}
-
-.box {
-    margin-top: 5rem;
-}
-
-.avatar {
-    margin-top: -70px;
-    padding-bottom: 20px;
-}
-
-.avatar img {
-    padding: 5px;
-    background: #fff;
-    border-radius: 50%;
-    -webkit-box-shadow: 0 2px 3px rgba(10, 10, 10, .1), 0 0 0 1px rgba(10, 10, 10, .1);
-    box-shadow: 0 2px 3px rgba(10, 10, 10, .1), 0 0 0 1px rgba(10, 10, 10, .1);
-}
-
-input {
-    font-weight: 300;
-}
-
-p {
-    font-weight: 700;
-}
-
-p.subtitle {
-    padding-top: 1rem;
-}
-
-.navbar-item img {
-    max-height: 2.75rem;
-}
-
-.navbar {
-    margin-bottom: 20px;
-}
-
-p.teaser {
-    height: 105px;
-    overflow: hidden;
-}
-
-.wrap {
-    white-space: pre-wrap;
-    /* CSS3 */
-    white-space: -moz-pre-wrap;
-    /* Firefox */
-    white-space: -pre-wrap;
-    /* Opera <7 */
-    white-space: -o-pre-wrap;
-    /* Opera 7 */
-    word-wrap: break-word;
-    /* IE */
-}
-
-/* This file is for your main application css. */
+/*# sourceMappingURL=bulmaswatch.min.css.map */
 .watermarked {
     position: relative;
 }

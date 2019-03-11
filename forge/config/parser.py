@@ -1,19 +1,22 @@
+import logging
+import os
 import os.path as path
 from os.path import expanduser
 
 import toml
 from deepmerge import Merger
 
+logger = logging.getLogger('Forge-Parser')
+
 
 def parse_config(file_path):
     default_config = path.join(path.dirname(__file__), "forge_default.toml")
     toml_dict = toml.load(default_config)
-    if not file_path:
+    custom_path = get_config_path(file_path)
+
+    if not custom_path:
         return toml_dict
-    elif file_path and not path.exists(file_path):
-        raise FileNotFoundError("Can't find the forge config user provided!")
-    elif path.exists(file_path):
-        user_dict = toml.load(file_path)
+    else:
         merger = Merger(
             # pass in a list of tuple, with the
             # strategies you are looking to apply
@@ -29,24 +32,44 @@ def parse_config(file_path):
             # the case where the types conflict:
             ["override"],
         )
+
+        user_dict = toml.load(custom_path)
         merger.merge(toml_dict, user_dict)
     return toml_dict
+
+
+def get_config_path(user_file=None):
+    env = os.environ.get('FORGE_CONFIG')
+    if env:
+        if path.exists(env):
+            logger.info('Using config in {}'.format(env))
+            return env
+        else:
+            logger.error('Config file {} not found.'.format(env))
+    if user_file:
+        if path.exists(user_file):
+            logger.info('Using config in {}'.format(user_file))
+            return user_file
+        else:
+            logger.error('Config file {} not found.'.format(user_file))
 
 
 class ForgeConfig:
 
     def __init__(self, file_path=None):
         self.toml_dict = parse_config(file_path)
-        self.app_path = expanduser(self.toml_dict['app']['path'])
         self.forge_path = expanduser(self.toml_dict['forge']['path'])
         self.sock_grpc = self.__parse_socket_grpc(
             self.forge_path,
             self.toml_dict['forge']['sock_grpc'],
         )
         self.sock_tcp = self.__parse_socket(
-            self.app_path,
+            self.get_app_path(),
             self.toml_dict['app']['sock_tcp'],
         )
+
+    def get_app_path(self):
+        return expanduser(self.toml_dict['app']['path'])
 
     def __parse_socket(self, forge_path, forge_socket):
         """

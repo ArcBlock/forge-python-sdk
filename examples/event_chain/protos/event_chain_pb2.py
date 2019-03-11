@@ -8,7 +8,7 @@ from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
 from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 
-from examples.event_chain.protos import type_pb2 as type__pb2
+from . import type_pb2 as type__pb2
 _b = sys.version_info[0] < 3 and (
     lambda x: x
 ) or (lambda x: x.encode('latin1'))
@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
     package='',
     syntax='proto3',
     serialized_options=None,
-    serialized_pb=_b('\n\x11\x65vent-chain.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\ntype.proto\"\xfb\x01\n\tEventInfo\x12\r\n\x05title\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\r\n\x05total\x18\x04 \x01(\r\x12\x1e\n\x07tickets\x18\x05 \x03(\x0b\x32\r.TicketHolder\x12.\n\nstart_time\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\x08 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x14\n\x0cticket_price\x18\t \x01(\r\x12\x14\n\x0cparticipants\x18\n \x03(\t\x12\x11\n\tremaining\x18\x0b \x01(\r\"!\n\x0eUpdateHostedTx\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\"U\n\x0fParticipantInfo\x12\x0e\n\x06hosted\x18\x01 \x03(\t\x12\x14\n\x0cparticipated\x18\x02 \x03(\t\x12\x0e\n\x06unused\x18\x03 \x03(\t\x12\x0c\n\x04used\x18\x04 \x03(\t\"@\n\nTicketInfo\x12\n\n\x02id\x18\x03 \x01(\r\x12\x15\n\revent_address\x18\x04 \x01(\t\x12\x0f\n\x07is_used\x18\x05 \x01(\x08\"\x8b\x01\n\x0cTicketHolder\x12-\n\rticket_create\x18\x01 \x01(\x0b\x32\x16.forge_abi.Transaction\x12/\n\x0fticket_exchange\x18\x02 \x01(\x0b\x32\x16.forge_abi.Transaction\x12\n\n\x02id\x18\x04 \x01(\r\x12\x0f\n\x07\x61\x64\x64ress\x18\x05 \x01(\t\"8\n\x0bUseTicketTx\x12\x11\n\tsignature\x18\x01 \x01(\x0c\x12\x16\n\x0eticket_address\x18\x02 \x01(\tb\x06proto3'),
+    serialized_pb=_b('\n\x11\x65vent-chain.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\ntype.proto\"\xb9\x02\n\tEventInfo\x12\r\n\x05title\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\r\n\x05total\x18\x04 \x01(\r\x12\x1e\n\x07tickets\x18\x05 \x03(\x0b\x32\r.TicketHolder\x12.\n\nstart_time\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\x08 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x14\n\x0cticket_price\x18\t \x01(\x04\x12\x14\n\x0cparticipants\x18\n \x03(\t\x12\x11\n\tremaining\x18\x0b \x01(\r\x12\x10\n\x08location\x18\x0c \x01(\t\x12*\n\nconsume_tx\x18\r \x01(\x0b\x32\x16.forge_abi.Transaction\"!\n\x0eUpdateHostedTx\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\"U\n\x0fParticipantInfo\x12\x0e\n\x06hosted\x18\x01 \x03(\t\x12\x14\n\x0cparticipated\x18\x02 \x03(\t\x12\x0e\n\x06unused\x18\x03 \x03(\t\x12\x0c\n\x04used\x18\x04 \x03(\t\"@\n\nTicketInfo\x12\n\n\x02id\x18\x03 \x01(\r\x12\x15\n\revent_address\x18\x04 \x01(\t\x12\x0f\n\x07is_used\x18\x05 \x01(\x08\"\x8b\x01\n\x0cTicketHolder\x12-\n\rticket_create\x18\x01 \x01(\x0b\x32\x16.forge_abi.Transaction\x12/\n\x0fticket_exchange\x18\x02 \x01(\x0b\x32\x16.forge_abi.Transaction\x12\n\n\x02id\x18\x04 \x01(\r\x12\x0f\n\x07\x61\x64\x64ress\x18\x05 \x01(\tb\x06proto3'),
     dependencies=[
         google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR, type__pb2.DESCRIPTOR, ],
 )
@@ -85,7 +85,7 @@ _EVENTINFO = _descriptor.Descriptor(
         ),
         _descriptor.FieldDescriptor(
             name='ticket_price', full_name='EventInfo.ticket_price', index=6,
-            number=9, type=13, cpp_type=3, label=1,
+            number=9, type=4, cpp_type=4, label=1,
             has_default_value=False, default_value=0,
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
@@ -107,6 +107,22 @@ _EVENTINFO = _descriptor.Descriptor(
             is_extension=False, extension_scope=None,
             serialized_options=None, file=DESCRIPTOR,
         ),
+        _descriptor.FieldDescriptor(
+            name='location', full_name='EventInfo.location', index=9,
+            number=12, type=9, cpp_type=9, label=1,
+            has_default_value=False, default_value=_b("").decode('utf-8'),
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR,
+        ),
+        _descriptor.FieldDescriptor(
+            name='consume_tx', full_name='EventInfo.consume_tx', index=10,
+            number=13, type=11, cpp_type=10, label=1,
+            has_default_value=False, default_value=None,
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR,
+        ),
     ],
     extensions=[
     ],
@@ -120,7 +136,7 @@ _EVENTINFO = _descriptor.Descriptor(
     oneofs=[
     ],
     serialized_start=67,
-    serialized_end=318,
+    serialized_end=380,
 )
 
 
@@ -151,8 +167,8 @@ _UPDATEHOSTEDTX = _descriptor.Descriptor(
     extension_ranges=[],
     oneofs=[
     ],
-    serialized_start=320,
-    serialized_end=353,
+    serialized_start=382,
+    serialized_end=415,
 )
 
 
@@ -207,8 +223,8 @@ _PARTICIPANTINFO = _descriptor.Descriptor(
     extension_ranges=[],
     oneofs=[
     ],
-    serialized_start=355,
-    serialized_end=440,
+    serialized_start=417,
+    serialized_end=502,
 )
 
 
@@ -255,8 +271,8 @@ _TICKETINFO = _descriptor.Descriptor(
     extension_ranges=[],
     oneofs=[
     ],
-    serialized_start=442,
-    serialized_end=506,
+    serialized_start=504,
+    serialized_end=568,
 )
 
 
@@ -311,53 +327,14 @@ _TICKETHOLDER = _descriptor.Descriptor(
     extension_ranges=[],
     oneofs=[
     ],
-    serialized_start=509,
-    serialized_end=648,
-)
-
-
-_USETICKETTX = _descriptor.Descriptor(
-    name='UseTicketTx',
-    full_name='UseTicketTx',
-    filename=None,
-    file=DESCRIPTOR,
-    containing_type=None,
-    fields=[
-        _descriptor.FieldDescriptor(
-            name='signature', full_name='UseTicketTx.signature', index=0,
-            number=1, type=12, cpp_type=9, label=1,
-            has_default_value=False, default_value=_b(""),
-            message_type=None, enum_type=None, containing_type=None,
-            is_extension=False, extension_scope=None,
-            serialized_options=None, file=DESCRIPTOR,
-        ),
-        _descriptor.FieldDescriptor(
-            name='ticket_address', full_name='UseTicketTx.ticket_address', index=1,
-            number=2, type=9, cpp_type=9, label=1,
-            has_default_value=False, default_value=_b("").decode('utf-8'),
-            message_type=None, enum_type=None, containing_type=None,
-            is_extension=False, extension_scope=None,
-            serialized_options=None, file=DESCRIPTOR,
-        ),
-    ],
-    extensions=[
-    ],
-    nested_types=[],
-    enum_types=[
-    ],
-    serialized_options=None,
-    is_extendable=False,
-    syntax='proto3',
-    extension_ranges=[],
-    oneofs=[
-    ],
-    serialized_start=650,
-    serialized_end=706,
+    serialized_start=571,
+    serialized_end=710,
 )
 
 _EVENTINFO.fields_by_name['tickets'].message_type = _TICKETHOLDER
 _EVENTINFO.fields_by_name['start_time'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _EVENTINFO.fields_by_name['end_time'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
+_EVENTINFO.fields_by_name['consume_tx'].message_type = type__pb2._TRANSACTION
 _TICKETHOLDER.fields_by_name['ticket_create'].message_type = type__pb2._TRANSACTION
 _TICKETHOLDER.fields_by_name['ticket_exchange'].message_type = type__pb2._TRANSACTION
 DESCRIPTOR.message_types_by_name['EventInfo'] = _EVENTINFO
@@ -365,7 +342,6 @@ DESCRIPTOR.message_types_by_name['UpdateHostedTx'] = _UPDATEHOSTEDTX
 DESCRIPTOR.message_types_by_name['ParticipantInfo'] = _PARTICIPANTINFO
 DESCRIPTOR.message_types_by_name['TicketInfo'] = _TICKETINFO
 DESCRIPTOR.message_types_by_name['TicketHolder'] = _TICKETHOLDER
-DESCRIPTOR.message_types_by_name['UseTicketTx'] = _USETICKETTX
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 EventInfo = _reflection.GeneratedProtocolMessageType(
@@ -412,15 +388,6 @@ TicketHolder = _reflection.GeneratedProtocolMessageType(
     ),
 )
 _sym_db.RegisterMessage(TicketHolder)
-
-UseTicketTx = _reflection.GeneratedProtocolMessageType(
-    'UseTicketTx', (_message.Message,), dict(
-        DESCRIPTOR=_USETICKETTX,
-        __module__='event_chain_pb2',
-        # @@protoc_insertion_point(class_scope:UseTicketTx)
-    ),
-)
-_sym_db.RegisterMessage(UseTicketTx)
 
 
 # @@protoc_insertion_point(module_scope)

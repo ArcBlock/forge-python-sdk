@@ -1,0 +1,41 @@
+{
+  "users": [
+    {
+      "moniker": "Harry",
+      "passphrase": "abcde1234"
+    },
+    {
+      "moniker": "Hermione",
+      "passphrase": "abcde1234"
+    }
+  ],
+  "events": [
+    {
+      "title": "Harry's first Quidditch practice",
+      "total": "25",
+      "description": "Harry brings his new Nimbus 2000 broom to the Quidditch pitch as 7 pm. While waiting for Gyffindor Quidditch Captain Oliver Wood to show up, Harry flies around the goal posts, reveling in the responsiveness of the broom. When Wood arrives, he complements Harry’s flying, then shows him the Quidditch pitch and the equipment, including the elusive Golden Snitch.",
+      "start_time": "2020/9/19",
+      "end_time": "2020/9/20",
+      "ticket_price": "300000000000000000",
+      "location": "Quidditch pitch"
+    },
+    {
+      "title": "Sorting Ceremony",
+      "total": "30",
+      "description": "At the Sorting Ceremony, Harry is worried that he won’t be accepted, that the Hat will tell him he has to go back to the Dursleys. He is sorted into Gryffindor after telling the Sorting Hat that he does not want to be put into Slytherin.",
+      "start_time": "2020/9/1",
+      "end_time": "2020/9/2",
+      "ticket_price": "200000000000000000",
+      "location": "Great Hall"
+    },
+    {
+      "title": "Harry's first potions class",
+      "total": "28",
+      "description": "Harry discovers that Professor Snape actively dislikes him when he embarrasses Harry in front of the rest of the class. However, some of the information Snape gives him was valuable later on, such as the ingredients for Wolfsbane Potion and the proper use of a bezoar to avoid poisoning.",
+      "start_time": "2020/9/6",
+      "end_time": "2020/9/7",
+      "ticket_price": "100000000000000000",
+      "location": "Potions classroom"
+    }
+  ]
+}

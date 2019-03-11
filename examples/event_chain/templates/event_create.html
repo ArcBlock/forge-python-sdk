@@ -1,23 +1,23 @@
 {% extends "layout.html" %}
 {% block content %}
-
-<section class="hero is-info is-small">
-  <div class="hero-body">
-    <div class="container has-text-centered">
-      <p class="title">
-        Publish an event！
-      </p>
-      <p class="subtitle">
-        Publish an event and sell tickets, just few inputs! All you need is to install (or connect) to an ABT full
-        node, you can create and publish your events! The whole process is protected by distributed ledger so you don't
-        need to worry about anything!
-      </p>
-    </div>
-  </div>
-</section>
-<hr />
+<session class="hero">
+    <br>
+    <br>
+    <section class="hero is-light">
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <h1 class="title">Create Your Own Event!</h1>
+                <br>
+                <h2 class="subtitle">Fill in the following information and create your shiny event！</h2>
+            </div>
+        </div>
+    </section>
+    <br>
+    <br>
+</session>
+<br>
 <section class="container">
-  <h3 class="title">Fill in the following information and create your shiny event！</h3>
+  <h3 class="title"></h3>
   <form id="create-product" action="/create" method="POST">
     <div class="field">
       <p class="control has-icons-left has-icons-right">
@@ -32,7 +32,18 @@
     </div>
     <div class="field">
       <p class="control has-icons-left has-icons-right">
-        <input class="input is-large" type="text" name="value" placeholder="Ticket price (in ABT, e.g. 1.5)">
+        <input class="input is-large" type="text" name="location" value="3150 Richards, Bellevue, WA" placeholder="Where is Your Event">
+        <span class="icon is-small is-left">
+          <i class="fa fa-align-justify"></i>
+        </span>
+        <span class="icon is-small is-right">
+          <i class="fa fa-check"></i>
+        </span>
+      </p>
+    </div>
+    <div class="field">
+      <p class="control has-icons-left has-icons-right">
+        <input class="input is-large" type="text" name="ticket_price" placeholder="Ticket Price">
         <span class="icon is-small is-left">
           <i class="fa fa-dollar"></i>
         </span>
@@ -43,7 +54,18 @@
     </div>
     <div class="field">
       <p class="control has-icons-left has-icons-right">
-        <input class="input is-large" type="text" name="expired_at" placeholder="Event start time (yyyy-mm-dd)">
+        <input class="input is-large" type="text" value="20" name="total" placeholder="Number of Ticket(20)">
+        <span class="icon is-small is-left">
+          <i class="fa fa-dollar"></i>
+        </span>
+        <span class="icon is-small is-right">
+          <i class="fa fa-check"></i>
+        </span>
+      </p>
+    </div>
+    <div class="field">
+      <p class="control has-icons-left has-icons-right">
+        <input class="input is-large" type="text" value="2019/1/1" name="start_time" placeholder="Event start time">
         <span class="icon is-small is-left">
           <i class="fa fa-calendar"></i>
         </span>
@@ -54,9 +76,9 @@
     </div>
     <div class="field">
       <p class="control has-icons-left has-icons-right">
-        <input class="input is-large" type="text" name="tags" placeholder="Tags for event (please use comma to separate tags)">
+        <input class="input is-large" type="text"  value="2019/1/5" name="end_time" placeholder="">
         <span class="icon is-small is-left">
-          <i class="fa fa-tags"></i>
+          <i class="fa fa-calendar"></i>
         </span>
         <span class="icon is-small is-right">
           <i class="fa fa-check"></i>
@@ -65,17 +87,13 @@
     </div>
     <div class="field">
       <p class="control">
-        <textarea class="textarea is-large" name="content" placeholder="Event Description" style="height: 500px"></textarea>
+        <textarea class="textarea is-large" type="text" name="description" placeholder="Event Description" style="height: 500px"></textarea>
       </p>
     </div>
-    {{ form.hidden_tag() }}
     <div class="field is-grouped">
-
       <p class="control">
-        <button class="button is-block is-primary is-large" drab="click:create">Create Now！</button>
-
+        <button class="button is-block is-primary is-large" name="submit">Create Now！</button>
       </p>
-      <p class="control"><input class="button is-block is-warning is-large" type="reset" value="reset！"></input></p>
       <p class="help is-success result-text">
     </div>
 

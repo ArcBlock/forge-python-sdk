@@ -94,6 +94,7 @@ class RpcWallet:
                 'moniker': moniker,
             }
             req = protos.RequestRecoverWallet(**req_kwargs)
+            print(req)
             return self.stub.recover_wallet(req)
 
     def list_wallet(self):

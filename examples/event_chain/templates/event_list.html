@@ -1,64 +1,75 @@
 {% extends "layout.html" %}
 {% block content %}
-<section class="hero is-link is-small">
-    <div class="hero-body">
-        <div class="container has-text-centered">
-            <p class="title">
-                Here are all {{number}} events!
-            </p>
-            <p class="subtitle">
-                In Math We Trust! All events and tickets can be transferred and traced without any issue!
-            </p>
-        </div>
-    </div>
-</section>
-
-<section class="container">
-    {% if event_lists %}
-    {% for events in event_lists %}
-    <div class="columns features">
-        {% for event in events %}
-        <div class="column is-4">
-            <div class="card is-shady">
-                <div class="card-image">
-                    {% if event.event_info.remaining==0 %}
-                    <figure class="watermarked image is-2by1">
-                        <img src="https://unsplash.it/1200/600?{{ event.address }}" alt="
-{{ event.event_info.title }}"/>
-                    </figure>
-                    {% else %}
-                    <figure class="image is-2by1">
-                        <img src="https://unsplash.it/1200/600?{{ event.address }}" alt="
-{{ event.event_info.title }}"/>
-                    </figure>
-                    {% endif %}
-
-                </div>
-                <div class="card-content">
-                    <div class="content">
-                        <h2>{{ event.event_info.title }}</h2>
-                        <div class="tags are-large">
-              <span class="tag are-large is-warning">Tickets：
-                {{ event.event_info.remaining }}/{{event.event_info.total}}</span>
-                        </div>
-                        <div class="tags are-large">
-                        <span class="tag are-large is-danger">Price：
-                {{ event.event_info.ticket_price}}</span>
-                        </div>
-                        <p>Place: 3150 Richards, Bellevue</p>
-                        <p >
-                            Description: {{event.event_info.description}}
-                        </p>
-                        <a class="button is-link" href={{url_for('event_detail',address=event.address)}}> Join Event</a>
-                    </div>
+    <session class="hero">
+        <br>
+        <br>
+        <section class="hero is-light">
+            <div class="hero-body">
+                <div class="container has-text-centered">
+                    <h1 class="title">All Events</h1>
+                    <br>
+                    <h2 class="subtitle">Join some events and enjoy your life</h2>
                 </div>
             </div>
-        </div>
+        </section>
+        <br>
+        <br>
+        <section class="section">
+            <section class="container">
+                {% if event_lists %}
+                    {% for events in event_lists %}
+                        <section class="secion">
+                            <div class="columns is-multiline features">
+                                {% for event in events %}
+                                    <div class="column is-4">
+                                        <div class="card is-shady">
+                                            <div class="card-image">
+                                                {% if event.event_info.remaining==0 %}
+                                                    <figure class="watermarked image is-4by3">
+                                                        <img src="https://unsplash.it/1200/900?{{ event.address }}"
+                                                             alt="
+                            {{ event.event_info.title }}"/>
+                                                    </figure>
+                                                {% else %}
+                                                    <figure class="image is-4by3">
+                                                        <img src="https://unsplash.it/1200/900?{{ event.address }}"
+                                                             alt="
+                                {{ event.event_info.title }}"/>
+                                                    </figure>
+                                                {% endif %}
 
-        {% endfor %}
-    </div>
-    {% endfor %}
-    {% else %} <h1>There's no events created yet!</h1>
-    {% endif %}
-</section>
+                                            </div>
+                                            <div class="card-content">
+                                                <div class="content">
+                                                    <h2>{{ event.event_info.title }}</h2>
+                                                    <div class="tags are-large">
+              <span class="tag are-large is-warning">Tickets：
+                                {{ event.event_info.remaining }}/{{ event.event_info.total }}</span>
+                                                        <span class="tag are-large is-danger">Price：
+                                {{ event.display_price }}ABT</span>
+                                                    </div>
+                                                    <p>Location: {{ event.event_info.location }}</p>
+                                                    <p>Start Time: {{ event.display_start_time }}</p>
+                                                    <p>End Time: {{ event.display_end_time }}</p>
+                                                    <a class="button is-link"
+                                                       href={{ url_for('event_detail',address=event.address) }}> Join
+                                                        Event</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                {% endfor %}
+                            </div>
+                        </section>
+                    {% endfor %}
+                {% else %} <h1>There's no events created yet!</h1>
+                {% endif %}
+            </section>
+        </section>
+
+    </session>
+
+
+
 {% endblock %}

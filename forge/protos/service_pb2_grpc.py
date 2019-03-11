@@ -60,6 +60,11 @@ class ChainRpcStub(object):
         request_serializer=rpc__pb2.RequestGetChainInfo.SerializeToString,
         response_deserializer=rpc__pb2.ResponseGetChainInfo.FromString,
         )
+    self.get_node_info = channel.unary_unary(
+        '/forge_abi.ChainRpc/get_node_info',
+        request_serializer=rpc__pb2.RequestGetNodeInfo.SerializeToString,
+        response_deserializer=rpc__pb2.ResponseGetNodeInfo.FromString,
+        )
     self.search = channel.unary_unary(
         '/forge_abi.ChainRpc/search',
         request_serializer=rpc__pb2.RequestSearch.SerializeToString,
@@ -158,6 +163,13 @@ class ChainRpcServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def get_node_info(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
   def search(self, request, context):
     # missing associated documentation comment in .proto file
     pass
@@ -242,6 +254,11 @@ def add_ChainRpcServicer_to_server(servicer, server):
           servicer.get_chain_info,
           request_deserializer=rpc__pb2.RequestGetChainInfo.FromString,
           response_serializer=rpc__pb2.ResponseGetChainInfo.SerializeToString,
+      ),
+      'get_node_info': grpc.unary_unary_rpc_method_handler(
+          servicer.get_node_info,
+          request_deserializer=rpc__pb2.RequestGetNodeInfo.FromString,
+          response_serializer=rpc__pb2.ResponseGetNodeInfo.SerializeToString,
       ),
       'search': grpc.unary_unary_rpc_method_handler(
           servicer.search,
@@ -669,6 +686,11 @@ class StatisticRpcStub(object):
         request_serializer=rpc__pb2.RequestGetTopAccounts.SerializeToString,
         response_deserializer=rpc__pb2.ResponseGetTopAccounts.FromString,
         )
+    self.list_asset_transactions = channel.unary_unary(
+        '/forge_abi.StatisticRpc/list_asset_transactions',
+        request_serializer=rpc__pb2.RequestListAssetTransactions.SerializeToString,
+        response_deserializer=rpc__pb2.ResponseListAssetTransactions.FromString,
+        )
 
 
 class StatisticRpcServicer(object):
@@ -710,6 +732,13 @@ class StatisticRpcServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def list_asset_transactions(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_StatisticRpcServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -737,6 +766,11 @@ def add_StatisticRpcServicer_to_server(servicer, server):
           servicer.get_top_accounts,
           request_deserializer=rpc__pb2.RequestGetTopAccounts.FromString,
           response_serializer=rpc__pb2.ResponseGetTopAccounts.SerializeToString,
+      ),
+      'list_asset_transactions': grpc.unary_unary_rpc_method_handler(
+          servicer.list_asset_transactions,
+          request_deserializer=rpc__pb2.RequestListAssetTransactions.FromString,
+          response_serializer=rpc__pb2.ResponseListAssetTransactions.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

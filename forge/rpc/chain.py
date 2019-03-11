@@ -8,7 +8,7 @@ class RpcChain:
 
     def create_tx(
             self, itx=None, from_address='',
-            wallet=None, token='', req=None, nonce=1,
+            wallet=None, token=None, req=None, nonce=1,
     ):
         """
         RPC call to create transaction.
@@ -41,7 +41,7 @@ class RpcChain:
             return self.stub.create_tx(protos.RequestCreateTx(**req_kwargs))
 
     def send_tx(
-            self, tx=None, wallet=None, token='', commit=False, req=None,
+            self, tx=None, wallet=None, token=None, commit=False, req=None,
     ):
         """
         RPC call to send transaction.
@@ -238,14 +238,16 @@ class RpcChain:
                 protos.RequestGetConfig(),
             )
 
-    def multisig(self, tx=None, wallet=None, token='', req=None):
+    def multisig(self, tx=None, wallet=None, token=None, data=None, req=None):
 
         if req is not None:
             return self.stub.multisig(req)
         else:
-            return self.stub.multisig(
-                protos.RequestMultisig(tx=tx, wallet=wallet, token=token),
+            req = protos.RequestMultisig(
+                tx=tx, wallet=wallet, token=token,
+                data=data,
             )
+            return self.stub.multisig(req)
 
     def get_asset_address(
             self, sender_address='', itx=None,

@@ -1,11 +1,12 @@
+import base64
 import logging
 from time import sleep
 
+import event_chain.config.config as config
+import event_chain.protos as protos
+import event_chain.utils.helpers as helpers
 from google.protobuf.any_pb2 import Any
 
-from examples.event_chain import config
-from examples.event_chain import helpers
-from examples.event_chain import protos as protos
 from forge import ForgeSdk
 from forge import Signer
 from forge import utils
@@ -31,7 +32,7 @@ def gen_ticket_token(id, wallet):
     return token
 
 
-def create_asset_ticket_info(id, event_address, expire_time):
+def create_asset_ticket_info(id, event_address):
     ticket_info = protos.TicketInfo(
         id=id, event_address=event_address,
         is_used=False,
@@ -42,14 +43,15 @@ def create_asset_ticket_info(id, event_address, expire_time):
             ticket_info,
         ),
         readonly=True,
-        expired_at=expire_time,
     )
     return ticket_itx
 
 
 def gen_exchange_tx(value, ticket_address, event_address):
     receiver = protos.ExchangeInfo(
-        value=protos.BigUint(value=bytes(value)),
+        # TODO: convert long to bytes
+        # ctypes.c_uint32(value).value.encode()
+        value=protos.BigUint(value=b'0', ),
     )
     sender = protos.ExchangeInfo(assets=[ticket_address])
     exchange_tx = protos.ExchangeTx(
@@ -74,22 +76,48 @@ class EventInfo:
         self.start_time = helpers.gen_timestamp(kwargs.get('start_time'))
         self.end_time = helpers.gen_timestamp(kwargs.get('end_time'))
         self.ticket_price = kwargs.get('ticket_price')
+        self.location = kwargs.get('location')
         self.description = kwargs.get('description', 'No description :(')
         self.type_url = 'ec:s:event_info'
+        self.consume_tx = self.gen_consume_tx()
         self.address = self.create()
-        self.update_generated_tickets()
+        self.finished = self.update_generated_tickets()
+
+    def gen_consume_tx(self):
+        consume_itx = protos.ConsumeAssetTx(issuer=self.wallet.address)
+        res = forgeRpc.create_tx(
+            itx=utils.encode_to_any(
+                'fg:t:consume_asset',
+                consume_itx,
+            ),
+            from_address=self.wallet.address,
+            wallet=self.wallet,
+            token=self.token,
+        )
+        if res.code != 0 or res.tx is None:
+            logger.error(u'Fail to generate consume tx for event.')
+            return None
+        else:
+            logger.debug(
+                u"Consume tx generated for event {}".format(self.title),
+            )
+            return res.tx
 
     def create(self):
-        logger.debug("Creating event...")
+        logger.debug(u"Creating event...")
+        if not self.consume_tx:
+            logger.error(u"Consume tx not generated!")
         event_info = protos.EventInfo(
             title=self.title,
             total=self.total,
             start_time=self.start_time,
             end_time=self.end_time,
             ticket_price=self.ticket_price,
+            location=self.location,
             tickets=[],
             participants=[],
             remaining=self.total,
+            consume_tx=self.consume_tx,
         )
         create_asset_itx = protos.CreateAssetTx(
             data=utils.encode_to_any(self.type_url, event_info),
@@ -99,27 +127,23 @@ class EventInfo:
             itx=create_asset_itx,
             wallet_type=self.wallet.type,
         ).asset_address
+        logger.debug(
+            u"Event address has been calculated: {}".format(event_address),
+        )
         res = forgeRpc.create_asset(
             self.type_url, event_info, self.wallet,
             self.token,
         )
-        if res.code != 0:
+        if res.code != 0 or not res.hash:
             logger.error(res)
-        logger.info(
-            "Event '{}' has been created successfully!".format(
-                self.title,
-            ),
-        )
-        # wait()
-        # update_hosted_itx = protos.UpdateHostedTx(address=event_address)
-        # res = forgeRpc.send_itx(
-        #         'ec:t:update_hosted', update_hosted_itx,
-        #         self.wallet, self.token,
-        # )
-        # if res.code != 0:
-        #     logger.error(res)
-        # logger.debug("Sender hosted events has been updated!")
-        return event_address
+        else:
+            logger.info(
+                u"Event '{0}' has been created successfully by tx {"
+                "1}!".format(
+                    self.title, res.hash,
+                ),
+            )
+            return event_address
 
     def gen_tickets(self):
         tickets = []
@@ -128,7 +152,7 @@ class EventInfo:
             ticket_holder = self.gen_ticket_holder(ticket_id)
             tickets.append(ticket_holder)
         logger.info(
-            "All {} tickets have been generated successfully!".format(
+            u"All {} tickets have been generated successfully!".format(
                 self.total,
             ),
         )
@@ -138,7 +162,6 @@ class EventInfo:
         create_asset_ticket = create_asset_ticket_info(
             ticket_id,
             self.address,
-            self.end_time,
         )
 
         ticket__address = forgeRpc.get_asset_address(
@@ -174,29 +197,37 @@ class EventInfo:
         return ticket_holder
 
     def update_generated_tickets(self):
-        tickets = self.gen_tickets()
-        # TODO: interface to initialize event_info
-        event_info = protos.EventInfo(
-            title=self.title,
-            description=self.description,
-            total=self.total,
-            tickets=tickets,
-            start_time=self.start_time,
-            end_time=self.end_time,
-            ticket_price=self.ticket_price,
-            participants=[],
-            remaining=self.total,
-        )
-        res = forgeRpc.update_asset(
-            self.type_url,
-            self.address,
-            event_info,
-            self.wallet,
-            self.token,
-        )
-        assert (res.code == 0)
-        logger.debug("Event has been updated with generated tickets. ")
-        logger.info("Event {} is ready!".format(self.title))
+        if not self.address:
+            logger.error(u"No event address available.")
+        else:
+            tickets = self.gen_tickets()
+            event_info = protos.EventInfo(
+                title=self.title,
+                description=self.description,
+                total=self.total,
+                tickets=tickets,
+                start_time=self.start_time,
+                end_time=self.end_time,
+                ticket_price=self.ticket_price,
+                participants=[],
+                remaining=self.total,
+                location=self.location,
+                consume_tx=self.consume_tx,
+            )
+            res = forgeRpc.update_asset(
+                self.type_url,
+                self.address,
+                event_info,
+                self.wallet,
+                self.token,
+            )
+
+            logger.debug(u"Event has been updated with generated tickets. ")
+            logger.info(u"Event {} is ready!".format(self.title))
+            if res.hash:
+                return True
+            else:
+                return False
 
 
 class EventAssetState:
@@ -205,8 +236,10 @@ class EventAssetState:
         self.owner = asset_state.owner
         self.moniker = asset_state.moniker
         self.readonly = asset_state.readonly
-        self.activated = asset_state.activated
-        self.expired_at = asset_state.expired_at
+        self.transferrable = asset_state.transferrable
+        self.ttl = asset_state.ttl
+        self.consumed_time = asset_state.consumed_time
+        self.issuer = asset_state.issuer
         self.context = asset_state.context
         self.stake = asset_state.stake
         self.event_info = utils.parse_to_proto(
@@ -216,9 +249,18 @@ class EventAssetState:
         self.remaining = self.event_info.remaining
         self.tickets = self.event_info.tickets
         self.participants = self.event_info.participants
+        self.display_start_time = helpers.to_display_time(
+            self.event_info.start_time,
+        )
+        self.display_end_time = helpers.to_display_time(
+            self.event_info.end_time,
+        )
+        self.display_price = self.event_info.ticket_price / 10000000000000000
 
     def get_next_ticket(self):
-        if len(self.tickets) > 0:
+        if not self.tickets:
+            logger.error("Tickets for event {0} was not generated!")
+        elif len(self.tickets) > 0:
             return self.tickets[0]
         else:
             logger.error("No tickets left!")
@@ -227,29 +269,59 @@ class EventAssetState:
         ticket_holder = self.get_next_ticket()
         create_tx = ticket_holder.ticket_create
         res = forgeRpc.send_tx(create_tx)
-        logger.debug("About to create ticket with ticketInfo: {info}".format(
+        logger.debug(u"About to create ticket with ticketInfo: {info}".format(
             info=utils.data_of_create_asset(
                 create_tx,
                 protos.TicketInfo,
             ),
         ))
-        logger.debug("executing-ticket: ticket_create_tx has been sent.")
         if res.code != 0:
             logger.error(res)
-            logger.error('Error ticket tx: {tx}'.format(tx=create_tx))
-            assert (res.code == 0)
+            logger.error(u'Fail to create ticket: {tx}'.format(tx=create_tx))
         return res.hash
 
     def exchange_ticket(self, buyer_wallet, buyer_token):
         ticket_holder = self.get_next_ticket()
         exchange_tx = ticket_holder.ticket_exchange
-        buyer_signed = forgeRpc.multisig(
+        res1 = forgeRpc.multisig(
             exchange_tx, buyer_wallet,
             buyer_token,
-        ).tx
+        )
+        if res1.code != 0:
+            logger.error(u"Buyer multisig failed!")
+            logger.error(res1)
+        else:
+            buyer_signed = res1.tx
+            res = forgeRpc.send_tx(buyer_signed)
+            if res.code != 0:
+                logger.error(res)
+            else:
+                logger.debug(
+                    u"Ticket {} has been exchanged.".format(
+                        ticket_holder.address,
+                    ),
+                )
+                return res.hash
+
+    def exchange_ticket_mobile(self, buyer_address, buyer_signature):
+        logger.debug(u"Preparing to send exchange_tx with mobile data.")
+        ticket_holder = self.get_next_ticket()
+        exchange_tx = ticket_holder.ticket_exchange
+        buyer_signed = helpers.add_multi_sig_to_tx(
+            exchange_tx,
+            buyer_address,
+            buyer_signature,
+        )
+        logger.debug(
+            "Buyer multisig kv pair has been inserted into tx "
+            "successfully. ",
+        )
+        logger.debug("url_safe base64 encoded tx: {}".format(
+            base64.urlsafe_b64encode(buyer_signed.SerializeToString()),
+        ))
         res = forgeRpc.send_tx(buyer_signed)
-        logger.debug("executing-ticket: ticket_exchange_tx has been sent.")
         if res.code != 0:
+            logger.error("Fail to send mobile buyer_signed exchange tx.")
             logger.error(res)
         return res.hash
 
@@ -311,18 +383,22 @@ class EventAssetState:
             total=self.event_info.total,
             start_time=self.event_info.start_time,
             end_time=self.event_info.end_time,
-            ticket_price=self.event_info.ticket_price,
+            ticket_price=int(self.event_info.ticket_price),
             remaining=self.remaining,
             tickets=self.tickets,
             participants=self.participants,
+            location=self.event_info.location,
+            consume_tx=self.event_info.consume_tx,
+
         )
         state = protos.AssetState(
             address=self.address,
             owner=self.owner,
             moniker=self.moniker,
             readonly=self.readonly,
-            activated=self.activated,
-            expired_at=self.expired_at,
+            transferrable=self.transferrable,
+            ttl=self.ttl,
+            consumed_time=self.consumed_time,
             stake=self.stake,
             context=self.context,
             data=utils.encode_to_any(
@@ -333,30 +409,100 @@ class EventAssetState:
         return state
 
     def execute_next_ticket_holder(self, buyer_wallet, buyer_token):
-        ticket_address = self.get_next_ticket().address
-        if len(self.tickets) < 1:
-            logger.error("There is no ticket left for this event!")
-        else:
-            create_hash = None if is_asset_exist(
-                ticket_address,
-            ) else self.create_ticket()
+        ticket = self.get_next_ticket()
+        if ticket:
+            ticket_address = ticket.address
+            create_hash = None
+            if is_asset_exist(ticket_address):
+                logger.info("Ticket {} already exists.".format(ticket_address))
+            else:
+                logger.info(
+                    "Ticket {} has not been created yet. Creating "
+                    "ticket...".format(
+                        ticket_address,
+                    ),
+                )
+                create_hash = self.create_ticket()
+            logger.debug("Executing exchange tx...")
+
             exchange_hash = self.exchange_ticket(buyer_wallet, buyer_token)
-            logger.debug("Update_Event itx has been sent.")
+            logger.debug("returned exchangeTx hash {}".format(exchange_hash))
             return create_hash, exchange_hash
 
+    def execute_next_ticket_holder_mobile(
+            self, buyer_address,
+            buyer_signature,
+    ):
+        logger.debug(
+            "Executing next ticket holder for event {}".format(
+                self.address,
+            ),
+        )
+        logger.debug("mobile buyer address: {}".format(buyer_address))
+        logger.debug("mobile buyer signature: {}".format(buyer_signature))
+        ticket = self.get_next_ticket()
+        ticket_address = None if not ticket else ticket.address
+        if not is_asset_exist(ticket_address):
+            self.create_ticket()
+
+        exchange_hash = self.exchange_ticket_mobile(
+            buyer_address,
+            buyer_signature,
+        )
+        if not exchange_hash:
+            logger.error("Fail to process exchange_tx for mobile buy request.")
+            return None
+        else:
+            return exchange_hash
+
     def buy_ticket(self, wallet, token):
+        ticket = self.get_next_ticket()
+        ticket_address = None if not ticket else ticket.address
         logger.info("User {user} is buying ticket {address}".format(
-            address=self.get_next_ticket().address,
+            address=ticket_address,
             user=wallet.address,
         ))
         create_hash, exchange_hash = self.execute_next_ticket_holder(
             wallet,
             token,
         )
-        logger.info(
-            "Ticket {} is bought successfully.".format(wallet.address),
+        if exchange_hash:
+            logger.info("Exchange Hash: {}".format(exchange_hash))
+            logger.info(
+                "Ticket {} is bought successfully.".format(ticket_address),
+            )
+        else:
+            logger.error(
+                "Ticket {} exchange TX failed.".format(ticket_address),
+            )
+        return ticket_address, create_hash, exchange_hash
+
+    def get_exchange_tx(self):
+        ticket = self.get_next_ticket()
+        exchange_tx = None if not ticket else ticket.ticket_exchange
+        # encoded = base64.b64encode(exchange_tx.SerializeToString())
+        # logger.debug(
+        #         "Exchange tx for next ticket has been fetched and encoded "
+        #         "successfully.",
+        # )
+        return exchange_tx
+
+    def buy_ticket_mobile(self, buyer_address, buyer_signature):
+        ticket = self.get_next_ticket()
+        logger.debug(
+            "User {} is buying ticket from mobile.".format(buyer_address),
         )
-        return self.get_next_ticket().address, create_hash, exchange_hash
+        exchange_hash = self.execute_next_ticket_holder_mobile(
+            buyer_address, buyer_signature,
+        )
+
+        address = None
+        if ticket and exchange_hash:
+            address = ticket.address
+        logger.debug(
+            "buy_ticket_mobiel is done with addresss{}".format(address),
+        )
+        return address
 
     def pop_executed_ticket(self):
         logger.debug("Number before pop ticket: {}".format(len(self.tickets)))
@@ -373,9 +519,11 @@ class TicketAssetState:
         self.owner = asset_state.owner
         self.moniker = asset_state.moniker
         self.readonly = asset_state.readonly
+        self.transferrable = asset_state.transferrable
+        self.ttl = asset_state.ttl
+        self.consumed_time = asset_state.consumed_time
+        self.issuer = asset_state.issuer
         self.context = asset_state.context
-        self.activated = asset_state.activated
-        self.expired_at = asset_state.expired_at
         self.stake = asset_state.stake
 
         self.ticket_info = utils.parse_to_proto(
@@ -397,8 +545,9 @@ class TicketAssetState:
             owner=self.owner,
             moniker=self.moniker,
             readonly=self.readonly,
-            activated=self.activated,
-            expired_at=self.expired_at,
+            transferrable=self.transferrable,
+            ttl=self.ttl,
+            consumed_time=self.consumed_time,
             stake=self.stake,
             context=self.context,
             data=utils.encode_to_any(
@@ -411,82 +560,92 @@ class TicketAssetState:
         logger.debug("state: {}".format(state))
         return state
 
-    def gen_activate_asset_tx(self, user_info):
-        user = User(
-            moniker=user_info['moniker'],
-            passphrase=user_info['passphrase'],
-            address=user_info['address'],
+    def consume(self, consume_tx, wallet, token):
+        res = forgeRpc.multisig(
+            tx=consume_tx,
+            wallet=wallet,
+            token=token,
+            data=Any(
+                type_url='fg:x:address',
+                value=self.address.encode(),
+            ),
         )
-        itx = utils.encode_to_any(
-            'fg:t:activate_asset',
-            protos.ActivateAssetTx(address=self.address),
-        )
-        res = forgeRpc.create_tx(itx, user.address, user.wallet, user.token)
-        logger.debug(
-            "ticket_activate tx is generated successfully "
-            "for ticket {}".format(self.address),
-        )
-        if res.code != 0:
-            logger.error(res)
-        return res.tx
+        if res.code != 0 or not res.tx:
+            logger.error("Fail to multisig consume tx.")
+        else:
+            return forgeRpc.send_tx(res.tx)
 
-    def activate(self):
-        self.is_used = True
-        self.activated = True
+    def consume_mobile(self, consume_tx, address, signature):
+        multisig_data = helpers.encode_string_to_any(
+            'fg:x:address',
+            self.address,
+        )
+
+        tx = helpers.update_tx_multisig(
+            tx=consume_tx, signer=address,
+            signature=signature,
+            data=multisig_data,
+        )
+        return forgeRpc.send_tx(tx)
 
 
 class User:
-    def __init__(self, moniker, passphrase, address=None):
+    def __init__(self, moniker, passphrase, address=None, data=None):
         self.moniker = moniker
         self.passphrase = passphrase
-        if not address:
-            self.wallet, self.token = self.__init_wallet()
-            self.address = self.wallet.address
-            self.account_state = None
-        else:
+        if data:
+            logger.debug("Recovering wallet for {}".format(moniker))
+            self.address, self.wallet, self.token = self.__recover_wallet(
+                passphrase, moniker, data,
+            )
+        elif address:
+            logger.debug("Loading wallet for {}".format(moniker))
+            self.wallet, self.token = self.__load_wallet(address, passphrase)
             self.address = address
-            self.wallet = None
-            self.token = None
-            self.account_state = None
-            self.refresh()
+        else:
+            logger.debug("creating wallet for {}".format(moniker))
+            self.address, self.wallet, self.token = self.__init_wallet()
+        logger.debug("wallet: {}".format(self.wallet))
+        logger.debug("token: {}".format(self.token))
+        logger.debug("address: {}".format(self.address))
 
-    def declare(self):
-        res = self.__declare_wallet()
-        self.token = res.token
-        wait()
-        self.account_state = self.__get_state()
+    def __recover_wallet(self, passphrase, moniker, data):
+        res = forgeRpc.recover_wallet(
+            passphrase=passphrase,
+            moniker=moniker,
+            data=data,
+        )
+        if res.code != 0:
+            logger.error("Recovering wallet failed!")
+            logger.error(res)
+        return res.wallet.address, res.wallet.SerializeToString(), res.token
+
+    def get_wallet(self):
+        wallet = protos.WalletInfo()
+        wallet.ParseFromString(self.wallet)
+        return wallet
 
     def __init_wallet(self):
-        res = forgeRpc.create_wallet(passphrase=self.passphrase)
-        return res.wallet, res.token
-
-    def __declare_wallet(self):
-        res = forgeRpc.recover_wallet(
+        res = forgeRpc.create_wallet(
+            moniker=self.moniker,
             passphrase=self.passphrase,
-            moniker='EC{}'.format(self.moniker),
-            data=self.wallet.sk,
         )
-        if not res.code == 0:
-            print(res)
-        return res
+        if res.code != 0:
+            logger.error("Creating wallet failed!")
+            logger.error(res)
+        return res.wallet.address, res.wallet.SerializeToString(), res.token
 
-    def __get_state(self):
-        state = forgeRpc.get_single_account_state(self.address)
-        return ParticipantAccountState(state)
+    def __load_wallet(self, address, passphrase):
+        res = forgeRpc.load_wallet(address, passphrase)
+        if res.code != 0:
+            logger.error(
+                "Reloading wallet failed! Please check your passphrase.",
+            )
+            logger.error(res)
+        return res.wallet.SerializeToString(), res.token
 
-    def refresh(self):
-        res = forgeRpc.load_wallet(
-            address=self.address, passphrase=self.passphrase,
-        )
-        self.token = res.token
-        self.wallet = res.wallet
-        self.account_state = self.__get_state()
-        if not res.code == 0:
-            print(res)
-
-    def current_state(self):
+    def get_state(self):
         state = get_participant_state(self.address)
-        self.account_state = state
         return state
 
 
@@ -500,6 +659,7 @@ class ParticipantAccountState:
         self.pk = state.pk
         self.type = state.type
         self.moniker = state.moniker
+        self.issuer = state.issuer
         self.context = state.context
         self.migrated_to = state.migrated_to
         self.migrated_from = state.migrated_from
@@ -532,6 +692,7 @@ class ParticipantAccountState:
             pk=self.pk,
             type=self.type,
             moniker=self.moniker,
+            issuer=self.issuer,
             context=self.context,
             migrated_to=self.migrated_to,
             migrated_from=self.migrated_from,
@@ -544,9 +705,6 @@ class ParticipantAccountState:
             ),
         )
         return state
-
-    def add_hosted(self, address):
-        self.hosted = helpers.add_to_proto_list(address, self.hosted)
 
     def add_participated(self, address):
         self.participated = helpers.add_to_proto_list(
@@ -565,11 +723,12 @@ class ParticipantAccountState:
 
 
 def get_event_state(event_address):
-    state = forgeRpc.get_single_asset_state(event_address)
-    if not state:
-        logger.error("Event {} doesn't exist.".format(event_address))
-    else:
-        return EventAssetState(state)
+    if event_address:
+        state = forgeRpc.get_single_asset_state(event_address)
+        if not state:
+            logger.error("Event {} doesn't exist.".format(event_address))
+        else:
+            return EventAssetState(state)
 
 
 def get_ticket_state(ticket_address):

@@ -65,10 +65,6 @@ def to_iter(to_req, data):
         return iter([data])
 
 
-def to_asset_address(sender_address, itx):
-    return 'asset_address_place_holder'
-
-
 def data_of_create_asset(tx, proto_def):
     create_tx = parse_to_proto(tx.itx.value, protos.CreateAssetTx)
     data = parse_to_proto(create_tx.data.value, proto_def)

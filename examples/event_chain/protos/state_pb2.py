@@ -9,7 +9,7 @@ from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
 from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 
-from examples.event_chain.protos import type_pb2 as type__pb2
+from . import type_pb2 as type__pb2
 _b = sys.version_info[0] < 3 and (
     lambda x: x
 ) or (lambda x: x.encode('latin1'))
@@ -23,7 +23,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
     package='forge_abi',
     syntax='proto3',
     serialized_options=None,
-    serialized_pb=_b('\n\x0bstate.proto\x12\tforge_abi\x1a\x19google/protobuf/any.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\ntype.proto\"\x8c\x03\n\x0c\x41\x63\x63ountState\x12#\n\x07\x62\x61lance\x18\x01 \x01(\x0b\x32\x12.forge_abi.BigUint\x12\r\n\x05nonce\x18\x02 \x01(\x04\x12\x0f\n\x07num_txs\x18\x03 \x01(\x04\x12\x0f\n\x07\x61\x64\x64ress\x18\x04 \x01(\t\x12\n\n\x02pk\x18\x05 \x01(\x0c\x12#\n\x04type\x18\x06 \x01(\x0b\x32\x15.forge_abi.WalletType\x12\x0f\n\x07moniker\x18\x07 \x01(\t\x12(\n\x07\x63ontext\x18\x08 \x01(\x0b\x32\x17.forge_abi.StateContext\x12\x13\n\x0bmigrated_to\x18\r \x03(\t\x12\x15\n\rmigrated_from\x18\x0e \x03(\t\x12\x12\n\nnum_assets\x18\x0f \x01(\x04\x12&\n\x05stake\x18\x10 \x01(\x0b\x32\x17.forge_abi.StakeContext\x12.\n\x0cpinned_files\x18\x11 \x01(\x0b\x32\x18.forge_abi.CircularQueue\x12\"\n\x04\x64\x61ta\x18\x32 \x01(\x0b\x32\x14.google.protobuf.Any\"\x88\x02\n\nAssetState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\r\n\x05owner\x18\x02 \x01(\t\x12\x0f\n\x07moniker\x18\x03 \x01(\t\x12\x10\n\x08readonly\x18\x04 \x01(\x08\x12\x11\n\tactivated\x18\x05 \x01(\x08\x12.\n\nexpired_at\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12&\n\x05stake\x18\r \x01(\x0b\x32\x17.forge_abi.StakeContext\x12(\n\x07\x63ontext\x18\x0e \x01(\x0b\x32\x17.forge_abi.StateContext\x12\"\n\x04\x64\x61ta\x18\x32 \x01(\x0b\x32\x14.google.protobuf.Any\"\xe0\x03\n\nForgeState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12-\n\tconsensus\x18\x02 \x01(\x0b\x32\x1a.forge_abi.ConsensusParams\x12/\n\x05tasks\x18\x03 \x03(\x0b\x32 .forge_abi.ForgeState.TasksEntry\x12>\n\rstake_summary\x18\x04 \x03(\x0b\x32\'.forge_abi.ForgeState.StakeSummaryEntry\x12\x0f\n\x07version\x18\x05 \x01(\t\x12\x14\n\x0c\x64\x61ta_version\x18\x06 \x01(\t\x12\x16\n\x0e\x66orge_app_hash\x18\x07 \x01(\x0c\x12)\n\x0broot_hashes\x18\x08 \x01(\x0b\x32\x14.forge_abi.StateRoot\x12\"\n\x04\x64\x61ta\x18\x0f \x01(\x0b\x32\x14.google.protobuf.Any\x1a\x45\n\nTasksEntry\x12\x0b\n\x03key\x18\x01 \x01(\x04\x12&\n\x05value\x18\x02 \x01(\x0b\x32\x17.forge_abi.UpgradeTasks:\x02\x38\x01\x1aL\n\x11StakeSummaryEntry\x12\x0b\n\x03key\x18\x01 \x01(\r\x12&\n\x05value\x18\x02 \x01(\x0b\x32\x17.forge_abi.StakeSummary:\x02\x38\x01\"\xbb\x01\n\nStakeState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x0c\n\x04\x66rom\x18\x02 \x01(\t\x12\n\n\x02to\x18\x03 \x01(\t\x12#\n\x07\x62\x61lance\x18\x04 \x01(\x0b\x32\x12.forge_abi.BigUint\x12\x0f\n\x07message\x18\x05 \x01(\t\x12(\n\x07\x63ontext\x18\x0e \x01(\x0b\x32\x17.forge_abi.StateContext\x12\"\n\x04\x64\x61ta\x18\x0f \x01(\x0b\x32\x14.google.protobuf.Any\"\xb7\x01\n\x0fStatisticsState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x12\n\nnum_blocks\x18\x02 \x01(\x04\x12\x0f\n\x07num_txs\x18\x03 \x01(\x04\x12&\n\nnum_stakes\x18\x04 \x01(\x0b\x32\x12.forge_abi.BigUint\x12\x16\n\x0enum_validators\x18\x05 \x01(\r\x12.\n\rtx_statistics\x18\x06 \x01(\x0b\x32\x17.forge_abi.TxStatisticsb\x06proto3'),
+    serialized_pb=_b('\n\x0bstate.proto\x12\tforge_abi\x1a\x19google/protobuf/any.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\ntype.proto\"\x9c\x03\n\x0c\x41\x63\x63ountState\x12#\n\x07\x62\x61lance\x18\x01 \x01(\x0b\x32\x12.forge_abi.BigUint\x12\r\n\x05nonce\x18\x02 \x01(\x04\x12\x0f\n\x07num_txs\x18\x03 \x01(\x04\x12\x0f\n\x07\x61\x64\x64ress\x18\x04 \x01(\t\x12\n\n\x02pk\x18\x05 \x01(\x0c\x12#\n\x04type\x18\x06 \x01(\x0b\x32\x15.forge_abi.WalletType\x12\x0f\n\x07moniker\x18\x07 \x01(\t\x12(\n\x07\x63ontext\x18\x08 \x01(\x0b\x32\x17.forge_abi.StateContext\x12\x0e\n\x06issuer\x18\t \x01(\t\x12\x13\n\x0bmigrated_to\x18\r \x03(\t\x12\x15\n\rmigrated_from\x18\x0e \x03(\t\x12\x12\n\nnum_assets\x18\x0f \x01(\x04\x12&\n\x05stake\x18\x10 \x01(\x0b\x32\x17.forge_abi.StakeContext\x12.\n\x0cpinned_files\x18\x11 \x01(\x0b\x32\x18.forge_abi.CircularQueue\x12\"\n\x04\x64\x61ta\x18\x32 \x01(\x0b\x32\x14.google.protobuf.Any\"\xac\x02\n\nAssetState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\r\n\x05owner\x18\x02 \x01(\t\x12\x0f\n\x07moniker\x18\x03 \x01(\t\x12\x10\n\x08readonly\x18\x04 \x01(\x08\x12\x15\n\rtransferrable\x18\x05 \x01(\x08\x12\x0b\n\x03ttl\x18\x06 \x01(\r\x12\x31\n\rconsumed_time\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0e\n\x06issuer\x18\x08 \x01(\t\x12&\n\x05stake\x18\r \x01(\x0b\x32\x17.forge_abi.StakeContext\x12(\n\x07\x63ontext\x18\x0e \x01(\x0b\x32\x17.forge_abi.StateContext\x12\"\n\x04\x64\x61ta\x18\x32 \x01(\x0b\x32\x14.google.protobuf.Any\"\xb5\x03\n\nForgeState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12-\n\tconsensus\x18\x02 \x01(\x0b\x32\x1a.forge_abi.ConsensusParams\x12/\n\x05tasks\x18\x03 \x03(\x0b\x32 .forge_abi.ForgeState.TasksEntry\x12>\n\rstake_summary\x18\x04 \x03(\x0b\x32\'.forge_abi.ForgeState.StakeSummaryEntry\x12\x0f\n\x07version\x18\x05 \x01(\t\x12\x14\n\x0c\x64\x61ta_version\x18\x06 \x01(\t\x12\x16\n\x0e\x66orge_app_hash\x18\x07 \x01(\x0c\x12\"\n\x04\x64\x61ta\x18\x0f \x01(\x0b\x32\x14.google.protobuf.Any\x1a\x45\n\nTasksEntry\x12\x0b\n\x03key\x18\x01 \x01(\x04\x12&\n\x05value\x18\x02 \x01(\x0b\x32\x17.forge_abi.UpgradeTasks:\x02\x38\x01\x1aL\n\x11StakeSummaryEntry\x12\x0b\n\x03key\x18\x01 \x01(\r\x12&\n\x05value\x18\x02 \x01(\x0b\x32\x17.forge_abi.StakeSummary:\x02\x38\x01\"M\n\tRootState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x0f\n\x07\x61\x63\x63ount\x18\x02 \x01(\x0c\x12\r\n\x05\x61sset\x18\x03 \x01(\x0c\x12\x0f\n\x07receipt\x18\x04 \x01(\x0c\"\xbb\x01\n\nStakeState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x0c\n\x04\x66rom\x18\x02 \x01(\t\x12\n\n\x02to\x18\x03 \x01(\t\x12#\n\x07\x62\x61lance\x18\x04 \x01(\x0b\x32\x12.forge_abi.BigUint\x12\x0f\n\x07message\x18\x05 \x01(\t\x12(\n\x07\x63ontext\x18\x0e \x01(\x0b\x32\x17.forge_abi.StateContext\x12\"\n\x04\x64\x61ta\x18\x0f \x01(\x0b\x32\x14.google.protobuf.Any\"\xb7\x01\n\x0fStatisticsState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x12\n\nnum_blocks\x18\x02 \x01(\x04\x12\x0f\n\x07num_txs\x18\x03 \x01(\x04\x12&\n\nnum_stakes\x18\x04 \x01(\x0b\x32\x12.forge_abi.BigUint\x12\x16\n\x0enum_validators\x18\x05 \x01(\r\x12.\n\rtx_statistics\x18\x06 \x01(\x0b\x32\x17.forge_abi.TxStatisticsb\x06proto3'),
     dependencies=[
         google_dot_protobuf_dot_any__pb2.DESCRIPTOR,
         google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR, type__pb2.DESCRIPTOR, ],
@@ -102,7 +102,15 @@ _ACCOUNTSTATE = _descriptor.Descriptor(
             serialized_options=None, file=DESCRIPTOR,
         ),
         _descriptor.FieldDescriptor(
-            name='migrated_to', full_name='forge_abi.AccountState.migrated_to', index=8,
+            name='issuer', full_name='forge_abi.AccountState.issuer', index=8,
+            number=9, type=9, cpp_type=9, label=1,
+            has_default_value=False, default_value=_b("").decode('utf-8'),
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR,
+        ),
+        _descriptor.FieldDescriptor(
+            name='migrated_to', full_name='forge_abi.AccountState.migrated_to', index=9,
             number=13, type=9, cpp_type=9, label=3,
             has_default_value=False, default_value=[],
             message_type=None, enum_type=None, containing_type=None,
@@ -110,7 +118,7 @@ _ACCOUNTSTATE = _descriptor.Descriptor(
             serialized_options=None, file=DESCRIPTOR,
         ),
         _descriptor.FieldDescriptor(
-            name='migrated_from', full_name='forge_abi.AccountState.migrated_from', index=9,
+            name='migrated_from', full_name='forge_abi.AccountState.migrated_from', index=10,
             number=14, type=9, cpp_type=9, label=3,
             has_default_value=False, default_value=[],
             message_type=None, enum_type=None, containing_type=None,
@@ -118,7 +126,7 @@ _ACCOUNTSTATE = _descriptor.Descriptor(
             serialized_options=None, file=DESCRIPTOR,
         ),
         _descriptor.FieldDescriptor(
-            name='num_assets', full_name='forge_abi.AccountState.num_assets', index=10,
+            name='num_assets', full_name='forge_abi.AccountState.num_assets', index=11,
             number=15, type=4, cpp_type=4, label=1,
             has_default_value=False, default_value=0,
             message_type=None, enum_type=None, containing_type=None,
@@ -126,7 +134,7 @@ _ACCOUNTSTATE = _descriptor.Descriptor(
             serialized_options=None, file=DESCRIPTOR,
         ),
         _descriptor.FieldDescriptor(
-            name='stake', full_name='forge_abi.AccountState.stake', index=11,
+            name='stake', full_name='forge_abi.AccountState.stake', index=12,
             number=16, type=11, cpp_type=10, label=1,
             has_default_value=False, default_value=None,
             message_type=None, enum_type=None, containing_type=None,
@@ -134,7 +142,7 @@ _ACCOUNTSTATE = _descriptor.Descriptor(
             serialized_options=None, file=DESCRIPTOR,
         ),
         _descriptor.FieldDescriptor(
-            name='pinned_files', full_name='forge_abi.AccountState.pinned_files', index=12,
+            name='pinned_files', full_name='forge_abi.AccountState.pinned_files', index=13,
             number=17, type=11, cpp_type=10, label=1,
             has_default_value=False, default_value=None,
             message_type=None, enum_type=None, containing_type=None,
@@ -142,7 +150,7 @@ _ACCOUNTSTATE = _descriptor.Descriptor(
             serialized_options=None, file=DESCRIPTOR,
         ),
         _descriptor.FieldDescriptor(
-            name='data', full_name='forge_abi.AccountState.data', index=13,
+            name='data', full_name='forge_abi.AccountState.data', index=14,
             number=50, type=11, cpp_type=10, label=1,
             has_default_value=False, default_value=None,
             message_type=None, enum_type=None, containing_type=None,
@@ -162,7 +170,7 @@ _ACCOUNTSTATE = _descriptor.Descriptor(
     oneofs=[
     ],
     serialized_start=99,
-    serialized_end=495,
+    serialized_end=511,
 )
 
 
@@ -206,7 +214,7 @@ _ASSETSTATE = _descriptor.Descriptor(
             serialized_options=None, file=DESCRIPTOR,
         ),
         _descriptor.FieldDescriptor(
-            name='activated', full_name='forge_abi.AssetState.activated', index=4,
+            name='transferrable', full_name='forge_abi.AssetState.transferrable', index=4,
             number=5, type=8, cpp_type=7, label=1,
             has_default_value=False, default_value=False,
             message_type=None, enum_type=None, containing_type=None,
@@ -214,15 +222,31 @@ _ASSETSTATE = _descriptor.Descriptor(
             serialized_options=None, file=DESCRIPTOR,
         ),
         _descriptor.FieldDescriptor(
-            name='expired_at', full_name='forge_abi.AssetState.expired_at', index=5,
-            number=6, type=11, cpp_type=10, label=1,
+            name='ttl', full_name='forge_abi.AssetState.ttl', index=5,
+            number=6, type=13, cpp_type=3, label=1,
+            has_default_value=False, default_value=0,
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR,
+        ),
+        _descriptor.FieldDescriptor(
+            name='consumed_time', full_name='forge_abi.AssetState.consumed_time', index=6,
+            number=7, type=11, cpp_type=10, label=1,
             has_default_value=False, default_value=None,
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
             serialized_options=None, file=DESCRIPTOR,
         ),
         _descriptor.FieldDescriptor(
-            name='stake', full_name='forge_abi.AssetState.stake', index=6,
+            name='issuer', full_name='forge_abi.AssetState.issuer', index=7,
+            number=8, type=9, cpp_type=9, label=1,
+            has_default_value=False, default_value=_b("").decode('utf-8'),
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR,
+        ),
+        _descriptor.FieldDescriptor(
+            name='stake', full_name='forge_abi.AssetState.stake', index=8,
             number=13, type=11, cpp_type=10, label=1,
             has_default_value=False, default_value=None,
             message_type=None, enum_type=None, containing_type=None,
@@ -230,7 +254,7 @@ _ASSETSTATE = _descriptor.Descriptor(
             serialized_options=None, file=DESCRIPTOR,
         ),
         _descriptor.FieldDescriptor(
-            name='context', full_name='forge_abi.AssetState.context', index=7,
+            name='context', full_name='forge_abi.AssetState.context', index=9,
             number=14, type=11, cpp_type=10, label=1,
             has_default_value=False, default_value=None,
             message_type=None, enum_type=None, containing_type=None,
@@ -238,7 +262,7 @@ _ASSETSTATE = _descriptor.Descriptor(
             serialized_options=None, file=DESCRIPTOR,
         ),
         _descriptor.FieldDescriptor(
-            name='data', full_name='forge_abi.AssetState.data', index=8,
+            name='data', full_name='forge_abi.AssetState.data', index=10,
             number=50, type=11, cpp_type=10, label=1,
             has_default_value=False, default_value=None,
             message_type=None, enum_type=None, containing_type=None,
@@ -257,8 +281,8 @@ _ASSETSTATE = _descriptor.Descriptor(
     extension_ranges=[],
     oneofs=[
     ],
-    serialized_start=498,
-    serialized_end=762,
+    serialized_start=514,
+    serialized_end=814,
 )
 
 
@@ -297,8 +321,8 @@ _FORGESTATE_TASKSENTRY = _descriptor.Descriptor(
     extension_ranges=[],
     oneofs=[
     ],
-    serialized_start=1098,
-    serialized_end=1167,
+    serialized_start=1107,
+    serialized_end=1176,
 )
 
 _FORGESTATE_STAKESUMMARYENTRY = _descriptor.Descriptor(
@@ -336,8 +360,8 @@ _FORGESTATE_STAKESUMMARYENTRY = _descriptor.Descriptor(
     extension_ranges=[],
     oneofs=[
     ],
-    serialized_start=1169,
-    serialized_end=1245,
+    serialized_start=1178,
+    serialized_end=1254,
 )
 
 _FORGESTATE = _descriptor.Descriptor(
@@ -404,15 +428,7 @@ _FORGESTATE = _descriptor.Descriptor(
             serialized_options=None, file=DESCRIPTOR,
         ),
         _descriptor.FieldDescriptor(
-            name='root_hashes', full_name='forge_abi.ForgeState.root_hashes', index=7,
-            number=8, type=11, cpp_type=10, label=1,
-            has_default_value=False, default_value=None,
-            message_type=None, enum_type=None, containing_type=None,
-            is_extension=False, extension_scope=None,
-            serialized_options=None, file=DESCRIPTOR,
-        ),
-        _descriptor.FieldDescriptor(
-            name='data', full_name='forge_abi.ForgeState.data', index=8,
+            name='data', full_name='forge_abi.ForgeState.data', index=7,
             number=15, type=11, cpp_type=10, label=1,
             has_default_value=False, default_value=None,
             message_type=None, enum_type=None, containing_type=None,
@@ -431,8 +447,64 @@ _FORGESTATE = _descriptor.Descriptor(
     extension_ranges=[],
     oneofs=[
     ],
-    serialized_start=765,
-    serialized_end=1245,
+    serialized_start=817,
+    serialized_end=1254,
+)
+
+
+_ROOTSTATE = _descriptor.Descriptor(
+    name='RootState',
+    full_name='forge_abi.RootState',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='address', full_name='forge_abi.RootState.address', index=0,
+            number=1, type=9, cpp_type=9, label=1,
+            has_default_value=False, default_value=_b("").decode('utf-8'),
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR,
+        ),
+        _descriptor.FieldDescriptor(
+            name='account', full_name='forge_abi.RootState.account', index=1,
+            number=2, type=12, cpp_type=9, label=1,
+            has_default_value=False, default_value=_b(""),
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR,
+        ),
+        _descriptor.FieldDescriptor(
+            name='asset', full_name='forge_abi.RootState.asset', index=2,
+            number=3, type=12, cpp_type=9, label=1,
+            has_default_value=False, default_value=_b(""),
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR,
+        ),
+        _descriptor.FieldDescriptor(
+            name='receipt', full_name='forge_abi.RootState.receipt', index=3,
+            number=4, type=12, cpp_type=9, label=1,
+            has_default_value=False, default_value=_b(""),
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR,
+        ),
+    ],
+    extensions=[
+    ],
+    nested_types=[],
+    enum_types=[
+    ],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto3',
+    extension_ranges=[],
+    oneofs=[
+    ],
+    serialized_start=1256,
+    serialized_end=1333,
 )
 
 
@@ -511,8 +583,8 @@ _STAKESTATE = _descriptor.Descriptor(
     extension_ranges=[],
     oneofs=[
     ],
-    serialized_start=1248,
-    serialized_end=1435,
+    serialized_start=1336,
+    serialized_end=1523,
 )
 
 
@@ -583,8 +655,8 @@ _STATISTICSSTATE = _descriptor.Descriptor(
     extension_ranges=[],
     oneofs=[
     ],
-    serialized_start=1438,
-    serialized_end=1621,
+    serialized_start=1526,
+    serialized_end=1709,
 )
 
 _ACCOUNTSTATE.fields_by_name['balance'].message_type = type__pb2._BIGUINT
@@ -593,7 +665,7 @@ _ACCOUNTSTATE.fields_by_name['context'].message_type = type__pb2._STATECONTEXT
 _ACCOUNTSTATE.fields_by_name['stake'].message_type = type__pb2._STAKECONTEXT
 _ACCOUNTSTATE.fields_by_name['pinned_files'].message_type = type__pb2._CIRCULARQUEUE
 _ACCOUNTSTATE.fields_by_name['data'].message_type = google_dot_protobuf_dot_any__pb2._ANY
-_ASSETSTATE.fields_by_name['expired_at'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
+_ASSETSTATE.fields_by_name['consumed_time'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _ASSETSTATE.fields_by_name['stake'].message_type = type__pb2._STAKECONTEXT
 _ASSETSTATE.fields_by_name['context'].message_type = type__pb2._STATECONTEXT
 _ASSETSTATE.fields_by_name['data'].message_type = google_dot_protobuf_dot_any__pb2._ANY
@@ -604,7 +676,6 @@ _FORGESTATE_STAKESUMMARYENTRY.containing_type = _FORGESTATE
 _FORGESTATE.fields_by_name['consensus'].message_type = type__pb2._CONSENSUSPARAMS
 _FORGESTATE.fields_by_name['tasks'].message_type = _FORGESTATE_TASKSENTRY
 _FORGESTATE.fields_by_name['stake_summary'].message_type = _FORGESTATE_STAKESUMMARYENTRY
-_FORGESTATE.fields_by_name['root_hashes'].message_type = type__pb2._STATEROOT
 _FORGESTATE.fields_by_name['data'].message_type = google_dot_protobuf_dot_any__pb2._ANY
 _STAKESTATE.fields_by_name['balance'].message_type = type__pb2._BIGUINT
 _STAKESTATE.fields_by_name['context'].message_type = type__pb2._STATECONTEXT
@@ -614,6 +685,7 @@ _STATISTICSSTATE.fields_by_name['tx_statistics'].message_type = type__pb2._TXSTA
 DESCRIPTOR.message_types_by_name['AccountState'] = _ACCOUNTSTATE
 DESCRIPTOR.message_types_by_name['AssetState'] = _ASSETSTATE
 DESCRIPTOR.message_types_by_name['ForgeState'] = _FORGESTATE
+DESCRIPTOR.message_types_by_name['RootState'] = _ROOTSTATE
 DESCRIPTOR.message_types_by_name['StakeState'] = _STAKESTATE
 DESCRIPTOR.message_types_by_name['StatisticsState'] = _STATISTICSSTATE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
@@ -662,6 +734,15 @@ ForgeState = _reflection.GeneratedProtocolMessageType(
 _sym_db.RegisterMessage(ForgeState)
 _sym_db.RegisterMessage(ForgeState.TasksEntry)
 _sym_db.RegisterMessage(ForgeState.StakeSummaryEntry)
+
+RootState = _reflection.GeneratedProtocolMessageType(
+    'RootState', (_message.Message,), dict(
+        DESCRIPTOR=_ROOTSTATE,
+        __module__='state_pb2',
+        # @@protoc_insertion_point(class_scope:forge_abi.RootState)
+    ),
+)
+_sym_db.RegisterMessage(RootState)
 
 StakeState = _reflection.GeneratedProtocolMessageType(
     'StakeState', (_message.Message,), dict(

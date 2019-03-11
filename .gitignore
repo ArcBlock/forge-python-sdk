@@ -15,3 +15,6 @@ build/
 dist/
 forge_python_sdk.egg-info/
 flask_session
+examples/build
+examples/dist
+examples/forge_event_chain.egg-info/

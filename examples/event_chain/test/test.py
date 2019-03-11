@@ -2,7 +2,7 @@ import logging
 import os.path as path
 from time import sleep
 
-from examples.event_chain import app
+from . import app
 from forge import ForgeConfig
 from forge import ForgeSdk
 
@@ -23,35 +23,34 @@ def test():
     alice = app.register_user('alice', 'abcde1234')
     frank = app.register_user('frank', 'abcde1234')
     logger.info("User registration Done.")
+    wait()
 
-    assert (len(bobb.account_state.hosted) == 0)
-    assert (len(alice.account_state.unused) == 0)
-    assert (len(alice.account_state.used) == 0)
-    assert (len(alice.account_state.participated) == 0)
+    assert (len(bobb.get_state().hosted) == 0)
+    assert (len(alice.get_state().unused) == 0)
+    assert (len(alice.get_state().used) == 0)
+    assert (len(alice.get_state().participated) == 0)
 
     event_address = app.create_sample_event(bobb, 'Jay Chou Concert')
     logger.info("Event address is {}".format(event_address))
     app.refresh()
-
-    assert (bobb.current_state().hosted[0] == event_address)
 
     logger.info("Buying first ticket...")
     ticket1_address = app.buy_ticket(event_address, alice)
     logger.info("First ticket is bought successfully.")
     app.refresh()
 
-    assert (alice.current_state().unused[0] == ticket1_address)
-    assert (len(alice.account_state.used) == 0)
-    assert (len(alice.account_state.participated) == 0)
+    assert (alice.get_state().unused[0] == ticket1_address)
+    assert (len(alice.get_state().used) == 0)
+    assert (len(alice.get_state().participated) == 0)
 
     logger.info("Buying second ticket...")
     ticket2_address = app.buy_ticket(event_address, frank)
     logger.info("Second ticket is bought successfully.")
     app.refresh()
 
-    assert (frank.current_state().unused[0] == ticket2_address)
-    assert (len(frank.account_state.used) == 0)
-    assert (len(frank.account_state.participated) == 0)
+    assert (frank.get_state().unused[0] == ticket2_address)
+    assert (len(frank.get_state().used) == 0)
+    assert (len(frank.get_state().participated) == 0)
 
     ticket1 = app.get_ticket_state(ticket1_address)
     ticket2 = app.get_ticket_state(ticket2_address)
@@ -63,26 +62,26 @@ def test():
     assert (not ticket1.activated)
 
     # alice wants to use her ticket for event
-    alice_tx = ticket1.gen_activate_asset_tx(alice.wallet, alice.token)
-    app.activate(alice_tx, frank.wallet, frank.token)
+    alice_tx = ticket1.gen_activate_asset_tx(alice)
+    app.activate(alice_tx, frank)
     logger.info("Ticket has been activated!")
     app.refresh()
 
     ticket1 = app.get_ticket_state(ticket1_address)
     assert ticket1.is_used
     assert ticket1.activated
-    assert (alice.current_state().used[0] == ticket1.address)
-    assert (alice.account_state.participated[0] == event_address)
-    assert (len(alice.account_state.unused) == 0)
+    assert (alice.get_state().used[0] == ticket1.address)
+    assert (alice.get_state().participated[0] == event_address)
+    assert (len(alice.get_state().unused) == 0)
 
     logger.info("Ticket is used successfully.")
 
 
 def test_config():
-    app_config = path.join(path.dirname(__file__), "priv", "forge.toml")
+    app_config = path.join(path.dirname(__file__), "config", "forge.toml")
     print(app_config)
     config = ForgeConfig(file_path=app_config)
-    print(config.app_path)
+    print(config.get_app_path())
 
 
 if __name__ == "__main__":
