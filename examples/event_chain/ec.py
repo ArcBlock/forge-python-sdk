@@ -393,9 +393,9 @@ def mobile_consume_ticket(ticket_address):
 
 
 def send_did_request(tx, url):
-    base64_encoded = base64.b64encode(tx)
+    base64_encoded = base64.b64encode(tx.SerializeToString())
     g.logger.debug(
-        "Sending request to DID with base64 encoded tx: {} and url {"
+        u"Sending request to DID with base64 encoded tx: {} and url {"
         "}".format(
             base64_encoded, url,
         ),

@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="forge-event-chain",
-    version="0.12.3",
+    version="0.12.4",
     author="Riley Shu",
     author_email="riley@arcblock.io",
     description="A small example package",
@@ -36,7 +36,7 @@ setuptools.setup(
         # 'Flask-SQLAlchemy==2.1',
         # 'Flask-Testing==0.7.1',
         # 'Flask-WTF==0.14.2',
-        # 'forge-python-sdk',
+        'forge-python-sdk',
         # 'requests',
         # 'click==6.7',
         # 'base58',
