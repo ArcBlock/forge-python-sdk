@@ -278,5 +278,28 @@ def list_ticket_exchange_tx(event_address):
         return [tx for tx in res.transactions if tx.type == 'exchange']
 
 
+def verify_event_address(event_address):
+    try:
+        event = get_event_state(event_address)
+        if not event:
+            logger.error('Event {} does not exist.'.format(event_address))
+            raise ValueError('Event {} does not exist'.format(event_address))
+
+    except Exception:
+        logger.error('exception in verifying event_address ')
+        raise TypeError("{} is not an event address.".format(event_address))
+
+
+def verify_ticket_address(ticket_address):
+    try:
+        ticket = get_ticket_state(ticket_address)
+        if not ticket:
+            logger.error(u'Ticket {} does not exist.'.format(ticket_address))
+            raise ValueError('Ticket {} does not exist'.format(ticket_address))
+    except Exception:
+        logger.error('Error in checking ticket, event, owner state')
+        raise TypeError("{} is not an ticket address.".format(ticket_address))
+
+
 def refresh():
     sleep(5)

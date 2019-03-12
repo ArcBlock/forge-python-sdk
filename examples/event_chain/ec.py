@@ -23,6 +23,8 @@ from flask_wtf import FlaskForm
 from wtforms import IntegerField
 from wtforms import StringField
 from wtforms import SubmitField
+from wtforms import ValidationError
+from wtforms import validators
 from wtforms.validators import DataRequired
 
 from flask_session import Session
@@ -66,6 +68,66 @@ class EventForm(FlaskForm):
     ticket_price = IntegerField("TicketPrice", validators=[DataRequired()])
     address = StringField('Address')
     location = StringField('Location', validators=[DataRequired()])
+
+
+def validate_name(form, field):
+    for i in field.data:
+        if i == ' ':
+            raise ValidationError('Name should not contain white space.')
+        if not i.isalnum():
+            raise ValidationError(
+                'Name should not contain special character',
+            )
+
+
+def validate_passphrase(form, field):
+    has_alpha = False
+    has_num = False
+    for i in field.data:
+        if i.isnumeric():
+            has_num = True
+        if i.isalpha():
+            has_alpha = True
+    if not has_alpha or not has_num:
+        raise ValidationError(
+            "Password must have both letters and numbers!",
+        )
+
+
+def verify_ticket(address):
+    if not address:
+        return response_error("Please provide a valid ticket address.")
+    try:
+        app.verify_ticket_address(address)
+    except Exception as e:
+        return response_error(e.args[0])
+
+
+def verify_event(address):
+    if not address:
+        return response_error("Please provide a valid event address.")
+    try:
+        app.verify_event_address(address)
+    except Exception as e:
+        return response_error(e.args[0])
+
+
+class RegisterForm(FlaskForm):
+    name = StringField(
+        'Name', validators=[
+            DataRequired(),
+            validators.length(min=4, max=10),
+            validate_name,
+        ],
+    )
+    passphrase = StringField(
+        'Passphrase', validators=[
+            DataRequired(),
+            validate_passphrase,
+        ],
+    )
+    confirm = SubmitField('Confirm')
+    address = StringField('Address')
 
 
 def wait():
@@ -120,40 +182,44 @@ def gen_did_url(url):
 
 @application.route("/details/<address>", methods=['GET', 'POST'])
 def event_detail(address):
-    if helpers.is_event_address_valid(address):
-        event = app.get_event_state(address)
-        form = EventForm()
-        if is_loggedin():
-            url = gen_mobile_url(address)
-            txs = app.list_ticket_exchange_tx(address)
-            tx_lists = chunks(txs, 3)
-            return render_template(
-                'event_details.html', event=event, form=form,
-                url=url, tx_lists=tx_lists,
-            )
+
+    error = verify_event(address)
+    if error:
+        return error
+
+    event = app.get_event_state(address)
+    form = EventForm()
+    if is_loggedin():
+        url = gen_mobile_url(address)
+        txs = app.list_ticket_exchange_tx(address)
+        tx_lists = chunks(txs, 3)
+        return render_template(
+            'event_details.html', event=event, form=form,
+            url=url, tx_lists=tx_lists,
+        )
+    return redirect('/login')
 
 
 @application.route("/ticket-detail", methods=['GET', 'POST'])
 def ticket_detail():
     form = EventForm()
     address = request.args.get('address', None)
-    if not address:
-        flash("/tickets")
-        return redirect('/')
-    if helpers.is_ticket_address_valid(address):
-        ticket = app.get_ticket_state(address)
-        event = app.get_event_state(ticket.event_address)
-        host = app.get_participant_state(event.owner)
+    error = verify_ticket(address)
+    if error:
+        return error
+    ticket = app.get_ticket_state(address)
+    event = app.get_event_state(ticket.event_address)
+    host = app.get_participant_state(event.owner)
 
-        call_back_url = HOST + "api/mobile-consume-ticket/{}".format(
-            address,
-        )
-        url = gen_did_url(call_back_url)
+    call_back_url = HOST + "api/mobile-consume-ticket/{}".format(
+        address,
+    )
+    url = gen_did_url(call_back_url)
 
-        return render_template(
-            "ticket_details.html", ticket=ticket, event=event,
-            url=url, form=form, host=host,
-        )
+    return render_template(
+        "ticket_details.html", ticket=ticket, event=event,
+        url=url, form=form, host=host,
+    )
 
 
 @application.route("/buy", methods=['POST'])
@@ -162,11 +228,14 @@ def buy():
     form = EventForm()
     address = form.address.data
 
-    if helpers.is_event_address_valid(address):
-        ticket_address = app.buy_ticket(address, session['user'], g.db)
-        g.logger.info("ticket is bought successfully from web.")
-        flash('Ticket {} is yours now!'.format(ticket_address))
-    else:
+    error = verify_event()
+    if error:
+        return error
+
+    ticket_address = app.buy_ticket(address, session['user'], g.db)
+    g.logger.info("ticket is bought successfully from web.")
+    flash('Ticket {} is yours now!'.format(ticket_address))
+    if not ticket_address:
         g.logger.error("Fail to buy ticket from web.")
     return redirect('/')
 
@@ -174,7 +243,13 @@ def buy():
 @application.route("/activate/<address>", methods=['GET', 'POST'])
 def use(address):
     refresh_token()
+
+    error = verify_ticket(address)
+    if error:
+        return error
+
     app.consume(address, session['user'])
+    # add flash success message
     return redirect('/')
 
 
@@ -192,9 +267,8 @@ def get_event_for_ticket(tickets):
     res = {}
     for ticket in tickets:
         event_address = ticket.ticket_info.event_address
-        if helpers.is_event_address_valid(event_address):
-            event = app.get_event_state(event_address)
-            res[ticket.address] = event
+        event = app.get_event_state(event_address)
+        res[ticket.address] = event
     return res
 
 
@@ -211,7 +285,8 @@ def ticket_list():
     events = get_event_for_ticket(tickets)
     ticket_lists = chunks(tickets, 3)
     return render_template(
-        'tickets.html', ticket_lists=ticket_lists, events=events, user=user,
+        'tickets.html', ticket_lists=ticket_lists, events=events,
+        user=user,
     )
 
 
@@ -231,7 +306,7 @@ def create_event():
                 description=form.description.data,
                 start_time=form.start_time.data,
                 end_time=form.end_time.data,
-                ticket_price=form.ticket_price.data * 10000000000000000,
+                ticket_price=form.ticket_price.data * 1e+16,
                 location=form.location.data,
                 conn=g.db,
             )
@@ -240,14 +315,6 @@ def create_event():
     else:
         g.logger.error(form.errors)
     return render_template('event_create.html', form=form)
-
-
-class RegisterForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired()])
-    passphrase = StringField('Passphrase', validators=[DataRequired()])
-    data = StringField('Data')
-    confirm = SubmitField('Confirm')
-    address = StringField('Address')
 
 
 @application.route("/peek", methods=['GET', 'POST'])
@@ -282,6 +349,18 @@ def refresh_token():
     session['user'] = user
 
 
+def flash_errors(form):
+    """Flashes form errors"""
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(
+                u"Error in the {} field - {}".format(
+                    getattr(form, field).label.text,
+                    error,
+                ), 'error',
+            )
+
+
 @application.route("/login", methods=['GET', 'POST'])
 def login():
     form = RegisterForm()
@@ -293,13 +372,14 @@ def login():
         )
         session['user'] = user
         return redirect('/')
+    else:
+        flash_errors(form)
     return render_template('login.html', form=form)
 
 
 @application.route("/register", methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
-
     if form.validate_on_submit():
         user = app.register_user(
             form.name.data,
@@ -315,29 +395,10 @@ def register():
         )
         g.logger.debug("form is validated!!")
         wait()
-        return redirect('/')
-
-
-@application.route("/recover", methods=['GET', 'POST'])
-def recover():
-    form = RegisterForm()
-
-    if form.validate_on_submit():
-        user = app.recover_user(
-            form.data.data.encode('utf8'),
-            form.name.data,
-            form.passphrase.data,
-            g.db,
-        )
-        session['user'] = user
-        g.logger.debug(
-            'New User recovered! wallet: {}, token: {}'.format(
-                user.wallet,
-                user.token,
-            ),
-        )
-        g.logger.debug("form is validated!!")
-        return redirect('/')
+    else:
+        flash_errors(form)
+        return render_template('login.html', form=form)
+    return redirect('/')
 
 
 @application.route(
@@ -352,13 +413,13 @@ def mobile_consume_ticket(ticket_address):
     g.logger.debug(
         "user address parsed from consume request {}".format(user_address),
     )
-    ticket = app.get_ticket_state(ticket_address)
-    if not ticket:
-        return response_error("Requested ticket is not available.")
 
+    error = verify_ticket(ticket_address)
+    if error:
+        return error
+
+    ticket = app.get_ticket_state(ticket_address)
     event = app.get_event_state(ticket.ticket_info.event_address)
-    if not event:
-        return response_error("Requested event is not available.")
 
     if request.method == 'GET':
         consume_tx = event.event_info.consume_tx

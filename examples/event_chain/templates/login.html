@@ -17,6 +17,21 @@
         <br>
         <br>
     </session>
+     <div class="container">
+            <main role="main" class="container">
+            {% for message in get_flashed_messages() %}
+                <article class="message is-warning">
+                    <div class="message-header">
+                        <p>Warning</p>
+                        <button class="delete"></button>
+                    </div>
+                    <div class="message-body">{{ message }}
+                    </div>
+                </article>
+            {% endfor %}
+        </main>
+        </div>
+    <br>
 
     <section class="container">
         <div class="columns features">
@@ -85,7 +100,7 @@
                         <br>
 
                         {{ form.hidden_tag() }}
-                        <div class="field" >
+                        <div class="field">
                             <div class="control">
                                 <input type="submit" class="button  is-link is-medium is-fullwidth" value="Log In"/>
                             </div>

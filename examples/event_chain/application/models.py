@@ -253,7 +253,7 @@ class EventAssetState:
         self.display_end_time = helpers.to_display_time(
             self.event_info.end_time,
         )
-        self.display_price = self.event_info.ticket_price / 10000000000000000
+        self.display_price = self.event_info.ticket_price / 1e+16
 
     def get_next_ticket(self):
         if not self.tickets:
