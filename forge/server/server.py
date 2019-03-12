@@ -58,7 +58,6 @@ class ForgeServer:
                 self.buffer,
             )
             request = utils.parse_to_proto(request_bytes, protos.Request)
-            # self.logger.info("request parsed: {}".format(request))
             action = request.WhichOneof('value')
             self.__handle_request(request, action)
             self.__update_buffer(pos, len)
@@ -67,7 +66,8 @@ class ForgeServer:
         self.buffer = self.buffer[start + length:]
 
     def __handle_request(self, request, action):
-        self.logger.debug("Received a {} request!".format(action))
+        self.logger.debug("EC Received a {} request!".format(action))
+
         action_request = getattr(request, action)
         if action == 'info':
             self.__handle_info_request()
@@ -81,8 +81,6 @@ class ForgeServer:
                     ), action=action,
                 )
                 self.conn.send(res)
-
-                # self.logger.info("Response sent: {}".format(res))
             else:
                 self.conn.send(self.__reply(action=action, unsupported=True))
 
@@ -93,8 +91,7 @@ class ForgeServer:
         response = utils.encode(
             protos.Response(info=protos.ResponseInfo(type_urls=url_list)),
         )
-        self.logger.debug('url list: {}'.format(url_list))
-        self.logger.debug('Info response: {}'.format(response))
+        self.logger.debug('type_urls: {}'.format(url_list))
         self.conn.send(response)
 
     def __is_type_supported(self, itx_type):
@@ -135,15 +132,6 @@ class ForgeServer:
                     "request..",
                 )
                 return True
-            else:
-                self.logger.debug(
-                    "Buffer doesn't contain a full request! request "
-                    "length "
-                    "is {}, start position is {}, the length of buffer "
-                    "is {}".format(
-                        req_len, start_pos, len(self.buffer),
-                    ),
-                )
         return False
 
     def __reply(self, action, unsupported=False, response=None):
@@ -153,8 +141,7 @@ class ForgeServer:
                     code=protos.StatusCode.UNSUPPORTED_TX,
                 )}
             )
-            self.logger.debug("Response is {}".format(result))
+            self.logger.debug("Receives unsupported action".format(action))
         else:
             result = protos.Response(**{action: response})
-            self.logger.debug("Response is {}".format(result))
         return utils.encode(result)

@@ -1,6 +1,7 @@
 import codecs
 import math
 from collections import Iterable
+from functools import reduce
 
 from google.protobuf.any_pb2 import Any
 from google.protobuf.internal.decoder import _DecodeVarint32
@@ -97,7 +98,4 @@ def int_to_bytes(n):
 
 
 def bytes_to_int(bytes):
-    result = 0
-    for b in bytes:
-        result = result * 256 + int(b)
-    return result
+    return reduce(lambda s, x: (s << 8) + x, bytearray(bytes))
