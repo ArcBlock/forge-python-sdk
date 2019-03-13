@@ -6,9 +6,9 @@
         <section class="hero is-light">
             <div class="hero-body">
                 <div class="container has-text-centered">
-                    <h1 class="title">Let's Peek Others</h1>
+                    <h1 class="title">Let Explore Around</h1>
                     <br>
-                    <h2 class="subtitle">Reveal their secrets ...</h2>
+                    <h2 class="subtitle">If you prefer to keep your own wallet ...</h2>
                 </div>
                 <br>
             </div>
@@ -16,17 +16,38 @@
         <br>
         <section class="section">
             <section class="container">
-                        <p class="control">
-                            <form method="POST" action="/peek">
-                            <div class="columns">
-                                <div class="column">
+                      <div class="columns">
+                          <div class="column">
+                              <form method="POST" action="/peek">
+                                <div class="columns">
+                                    <div class="column is-6">
                                     <input class="input" name="address" type="text" placeholder="Address">
                                 </div>
                                 <div class="column">
                                      <input type=submit value="Peek" class="button is-link"/>
                                 </div>
-                            </div>
+                                </div>
+
+
                         </form>
+                          </div>
+
+                          <div class="column">
+                              <form method="POST" action="/ticket-detail">
+                                <div class="columns">
+                                    <div class="column is-6">
+                                    <input class="input" name="address" type="text" placeholder="Address">
+                                </div>
+                                <div class="column">
+                                     <input type=submit value="Peek" class="button is-link"/>
+                                </div>
+                                </div>
+
+
+                        </form>
+                          </div>
+
+                           </div>
                 <div class="container">
                     <br>
                     <hr>

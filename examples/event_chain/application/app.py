@@ -142,7 +142,10 @@ def list_unused_tickets(user_address):
         return []
     else:
         addr_list = user_state.unused
-        ticket_states = [get_ticket_state(addr) for addr in addr_list]
+        ticket_states = [
+            get_ticket_state(addr) for addr in addr_list if
+            get_ticket_state(addr) is not None
+        ]
         return ticket_states
 
 
@@ -173,7 +176,9 @@ def buy_ticket(event_address, user, conn=None):
             conn, ticket_address, event_address, user.address,
             create_hash, exchange_hash,
         )
-    return None
+        return ticket_address
+    else:
+        return None
 
 
 def buy_ticket_mobile(event_address, response, conn=None):
@@ -194,6 +199,12 @@ def buy_ticket_mobile(event_address, response, conn=None):
             conn, ticket_address, event_address, address,
         )
     return ticket_address
+
+
+def get_wallet_address(response):
+    wallet_response = helpers.WalletResponse(response)
+    address = wallet_response.get_address()
+    return address
 
 
 def create_sample_event(user, title, conn=None):
@@ -271,6 +282,29 @@ def list_ticket_exchange_tx(event_address):
         return []
     else:
         return [tx for tx in res.transactions if tx.type == 'exchange']
+
+
+def verify_event_address(event_address):
+    try:
+        event = get_event_state(event_address)
+        if not event:
+            logger.error('Event {} does not exist.'.format(event_address))
+            raise ValueError('Event {} does not exist'.format(event_address))
+
+    except Exception:
+        logger.error('exception in verifying event_address ')
+        raise TypeError("{} is not an event address.".format(event_address))
+
+
+def verify_ticket_address(ticket_address):
+    try:
+        ticket = get_ticket_state(ticket_address)
+        if not ticket:
+            logger.error(u'Ticket {} does not exist.'.format(ticket_address))
+            raise ValueError('Ticket {} does not exist'.format(ticket_address))
+    except Exception:
+        logger.error('Error in checking ticket, event, owner state')
+        raise TypeError("{} is not an ticket address.".format(ticket_address))
 
 
 def refresh():

@@ -6,17 +6,42 @@
         <section class="hero is-light">
             <div class="hero-body">
                 <div class="container has-text-centered">
-                    <h1 class="title">All Your Tickets</h1>
+                    <h1 class="title">Your Account Information</h1>
                     <br>
-                    <h2 class="subtitle">So many tickets...</h2>
+                    <h2 class="subtitle">More about yourself...</h2>
                 </div>
             </div>
         </section>
         <br>
         <br>
+        <section class="section">
+            <section class="container">
+                <h2 class="title"> Summary</h2>
+                <hr>
+                <br>
+                <div class="media">
+                    <div class="media-left">
+                        <figure class="image" style="height: 70px; width: 70px;"><img
+                                src="https://source.unsplash.com/random/96x96" alt="Image"></figure>
+                    </div>
+                    <div class="media-content">
+                        <p class="title is-4">{{ user.moniker }}</p>
+                        <p class='text-center'><strong>Address:</strong> <i>{{ user.address }}</i></p>
+                    </div>
+                </div>
+                <div class="contents">
+                    <br>
+                    <br>
+                    <br>
+                    <h3 class='title is-5'><strong>Balance: </strong> <i>{{ user.display_balance }}</i> ABT</h3>
+                </div>
+            </section>
+        </section>
 
         <section class="section">
             <section class="container">
+                <h2 class="title"> Your Tickets</h2>
+                <hr>
                 {% if ticket_lists %}
                     {% for tickets in ticket_lists %}
                         <section class="section">

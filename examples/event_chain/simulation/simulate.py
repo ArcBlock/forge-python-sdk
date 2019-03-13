@@ -3,8 +3,8 @@ import logging
 import os
 import time
 
+import event_chain.application.app as app
 from event_chain import db
-from event_chain.application import app
 
 logger = logging.getLogger('ec-simulator')
 
