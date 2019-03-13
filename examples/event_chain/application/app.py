@@ -201,6 +201,12 @@ def buy_ticket_mobile(event_address, response, conn=None):
     return ticket_address
 
 
+def get_wallet_address(response):
+    wallet_response = helpers.WalletResponse(response)
+    address = wallet_response.get_address()
+    return address
+
+
 def create_sample_event(user, title, conn=None):
     return create_event(
         user=user,

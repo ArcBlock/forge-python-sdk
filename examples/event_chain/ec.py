@@ -40,14 +40,17 @@ QRcode(application)
 
 logging.basicConfig(level=logging.DEBUG)
 DB_PATH = config.db_path
+SERVER_ADDRESS = "http://" + config.app_host + ":" + str(config.app_port) + "/"
+
 logging.info('DB: {}'.format(DB_PATH))
 logging.info('forge port {}'.format(config.forge_config.sock_grpc))
+logging.info('app server address: {}'.format(SERVER_ADDRESS))
+
 APP_SK = "Usi5RHoF/YGoGvbt7TQMaz55p3" \
          "+dl4HUi6M9mHkLuzpJLJxpXrvfQ3ZS189YWlieMik3TKqQuk9hhFLcg/WM8A=="
 APP_PK = "SSycaV6730N2UtfPWFpYnjIpN0yqkLpPYYRS3IP1jPA="
 APP_ADDR = "z1gJMDjiA9HfbXw9YD2DWKkKWaBJAAMttGu"
 
-HOST = 'http://did-workshop.arcblock.co:5000/'
 ARC = 'https://arcwallet.io/i/'
 
 
@@ -156,7 +159,9 @@ def gen_mobile_url(event_address):
         'appPk': APP_PK,
         'appDid': 'did:abt:' + APP_ADDR,
         'action:': 'requestAuth',
-        'url': HOST + 'api/mobile-buy-ticket/{}'.format(event_address),
+        'url': SERVER_ADDRESS + 'api/mobile-buy-ticket/{}'.format(
+            event_address,
+        ),
     }
     r = requests.Request('GET', ARC, params=params).prepare()
     g.logger.info(u'Url generated {}'.format(r.url))
@@ -182,7 +187,6 @@ def gen_did_url(url):
 
 @application.route("/details/<address>", methods=['GET', 'POST'])
 def event_detail(address):
-
     error = verify_event(address)
     if error:
         return error
@@ -203,7 +207,9 @@ def event_detail(address):
 @application.route("/ticket-detail", methods=['GET', 'POST'])
 def ticket_detail():
     form = EventForm()
-    address = request.args.get('address', None)
+    address = form.address.data if form.address.data else request.args.get(
+        'address',
+    )
     error = verify_ticket(address)
     if error:
         return error
@@ -211,7 +217,7 @@ def ticket_detail():
     event = app.get_event_state(ticket.event_address)
     host = app.get_participant_state(event.owner)
 
-    call_back_url = HOST + "api/mobile-consume-ticket/{}".format(
+    call_back_url = SERVER_ADDRESS + "api/mobile-consume-ticket/{}".format(
         address,
     )
     url = gen_did_url(call_back_url)
@@ -228,7 +234,7 @@ def buy():
     form = EventForm()
     address = form.address.data
 
-    error = verify_event()
+    error = verify_event(address)
     if error:
         return error
 
@@ -280,8 +286,28 @@ def logout():
 
 @application.route("/tickets")
 def ticket_list():
+    if not session['user']:
+        return redirect('login')
     tickets = app.list_unused_tickets(session['user'].address)
     user = app.get_participant_state(session['user'].address)
+    events = get_event_for_ticket(tickets)
+    ticket_lists = chunks(tickets, 3)
+    return render_template(
+        'tickets.html', ticket_lists=ticket_lists, events=events,
+        user=user,
+    )
+
+
+@application.route("/mobile-account", methods=['GET', 'POST'])
+def mobile_account():
+    if not session.get('mobile_address'):
+        flash("Please use your mobile wallet to buy a ticket first!")
+        return redirect('/')
+
+    address = session['mobile_address']
+
+    tickets = app.list_unused_tickets(address)
+    user = app.get_participant_state(address)
     events = get_event_for_ticket(tickets)
     ticket_lists = chunks(tickets, 3)
     return render_template(
@@ -345,7 +371,6 @@ def refresh_token():
         conn=g.db,
         address=user.address,
     )
-    session.clear()
     session['user'] = user
 
 
@@ -433,7 +458,7 @@ def mobile_consume_ticket(ticket_address):
             data=multisig_data,
         )
         g.logger.debug('new tx {}:'.format(new_tx))
-        call_back_url = HOST + "api/mobile-consume-ticket/{}".format(
+        call_back_url = SERVER_ADDRESS + "api/mobile-consume-ticket/{}".format(
             ticket_address,
         )
         response = send_did_request(new_tx, gen_did_url(call_back_url))
@@ -493,6 +518,7 @@ def mobile_buy_ticket(event_address):
         if not user_did:
             return response_error("Please provide a valid user did.")
         user_address = user_did.split(":")[2]
+        session['mobile_address'] = user_address
         g.logger.debug(
             "user address parsed from request {}".format(user_address),
         )
@@ -522,7 +548,9 @@ def mobile_buy_ticket(event_address):
             'pk': APP_PK,
             'address': APP_ADDR,
             'tx': base64_encoded,
-            'url': HOST + 'api/mobile-buy-ticket/{}'.format(event_address),
+            'url': SERVER_ADDRESS + 'api/mobile-buy-ticket/{}'.format(
+                event_address,
+            ),
         }
         headers = {'content-type': 'application/json'}
         response = requests.post(
@@ -544,6 +572,10 @@ def mobile_buy_ticket(event_address):
             g.logger.info("Ticket {} is bought successfully by mobile.".format(
                 ticket_address,
             ))
+            # wallet_address = app.get_wallet_address(req)
+            # session['mobile_address'] = wallet_address
+            # g.logger.info('Wallet address {} is saved in session.'.format(
+            # wallet_address))
             js = json.dumps({'ticket': ticket_address})
             resp = Response(js, status=200, mimetype='application/json')
             return resp
@@ -588,4 +620,7 @@ if __name__ == '__main__':
     if run_type == 'debug':
         application.run(debug=True)
     else:
-        application.run(debug=False, host='0.0.0.0')
+        application.run(
+            debug=False, host=config.app_host,
+            port=config.app_port,
+        )

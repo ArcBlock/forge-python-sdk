@@ -24,7 +24,7 @@
                         <div class="card" style="height: 350px; width: 380px;">
 
                             <figure class="image">
-                                <img src="{{ qrcode(url) }}" alt="Image">
+                                <img src="{{ qrcode(url,border=2) }}" alt="Image">
                             </figure>
 
                         </div>
@@ -59,8 +59,11 @@
                                             </p>
                                         {% else %}
                                             <a class='is-link' onclick="myFunction()">Transaction Details</a>
+                                            <br>
+                                            <br>
                                             <div class="contents" style='display:none' id="myDIV">
-                                                <p><i>You will receive</i>: a ticket for event "{{ event.event_info.title }}" </p>
+                                                <p><i>You will receive</i>: a ticket for event
+                                                    "{{ event.event_info.title }}" </p>
                                                 <p><i>You will pay</i>: {{ event.display_price }} TBA" </p>
                                                 <p><b>Note:</b> Click sign to agree this transaction.</p>
                                             </div>
@@ -79,15 +82,14 @@
                                                 <p class="control">
                                                     <label class="checkbox">
 
-                                                        <input type="checkbox"> I agree pay {{ event.display_price }}
+                                                        <input type="checkbox" id="pay_check_box"> I agree pay {{ event.display_price }}
                                                         ABT to execute this transaction
-
 
                                                     </label>
                                                 </p>
                                             </div>
                                             <p class=""><input type=submit
-                                                               value='Sign the Transaction'
+                                                               value='Confirm to Pay'
                                                                class="button is-link"/></p>
                                         {% endif %}
                                     </form>

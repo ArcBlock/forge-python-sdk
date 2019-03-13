@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="forge-python-sdk",
-    version="0.13.2",
+    version="0.13.12",
     author="Riley Shu",
     author_email="riley@arcblock.io",
     description="A small example package",

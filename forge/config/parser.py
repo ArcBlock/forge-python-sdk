@@ -71,6 +71,12 @@ class ForgeConfig:
     def get_app_path(self):
         return expanduser(self.toml_dict['app']['path'])
 
+    def get_app_host(self):
+        return self.toml_dict['app']['host']
+
+    def get_app_port(self):
+        return self.toml_dict['app']['port']
+
     def __parse_socket(self, forge_path, forge_socket):
         """
 
