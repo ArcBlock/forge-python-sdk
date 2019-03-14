@@ -437,62 +437,6 @@ def register():
     return redirect('/')
 
 
-# @application.route(
-#         "/api/mobile-consume-ticket/<ticket_address>",
-#         methods=['GET', 'POST'],
-# )
-# def mobile_consume_ticket(ticket_address):
-#     user_did = request.args.get('userDid', None)
-#     if not user_did:
-#         return response_error("Please provide a valid user did.")
-#     user_address = user_did.split(":")[2]
-#     g.logger.debug(
-#             "user address parsed from consume request {}".format(
-# user_address),
-#     )
-#
-#     error = verify_ticket(ticket_address)
-#     if error:
-#         return error
-#
-#     ticket = app.get_ticket_state(ticket_address)
-#     event = app.get_event_state(ticket.ticket_info.event_address)
-#
-#     if request.method == 'GET':
-#         consume_tx = event.event_info.consume_tx
-#         multisig_data = helpers.encode_string_to_any(
-#                 'fg:x:address',
-#                 ticket_address,
-#         )
-#
-#         new_tx = helpers.update_tx_multisig(
-#                 tx=consume_tx, signer=user_address,
-#                 data=multisig_data,
-#         )
-#         g.logger.debug('new tx {}:'.format(new_tx))
-#         call_back_url = SERVER_ADDRESS + "api/mobile-consume-ticket/{
-# }".format(
-#                 ticket_address,
-#         )
-#         des = 'Confirm to complete the purchase'
-#         return send_did_request(call_back_url, des, new_tx)
-#
-#     if request.method == 'POST':
-#         req = ast.literal_eval(request.get_data(as_text=True))
-#         g.logger.debug("Receives data from wallet {}".format(req))
-#         hash = app.consume_ticket_mobile(ticket_address, req)
-#         if hash:
-#             g.logger.info(
-#                     "Ticket {} is consumed successfully by mobile, "
-#                     "hash: {}.".format(ticket_address, hash)
-#             )
-#             js = json.dumps({'hash': hash})
-#             resp = Response(js, status=200, mimetype='application/json')
-#             return resp
-#         else:
-#             return response_error('error in consumming ticket.')
-
-
 def send_did_request(
         url, description, endpoint, workflow, tx=None,
         target=None,
@@ -547,7 +491,6 @@ def mobile_buy_ticket(event_address):
             if not user_did:
                 return response_error("Please provide a valid user did.")
             user_address = user_did.split(":")[2]
-            session['mobile_address'] = user_address
             g.logger.debug(
                 "user address parsed from request {}".format(user_address),
             )
@@ -569,30 +512,6 @@ def mobile_buy_ticket(event_address):
                 tx=updated_exchange_tx,
                 workflow="buy-ticket",
             )
-            #
-            # base64_encoded = base64.b64encode(new_tx.SerializeToString())
-            # g.logger.debug("Sent tx base64 encoded: {}".format(
-            # base64_encoded))
-            #
-            # params = {
-            #     'sk': APP_SK,
-            #     'pk': APP_PK,
-            #     'address': APP_ADDR,
-            #     'tx': base64_encoded,
-            #     'url': SERVER_ADDRESS + 'api/mobile-buy-ticket/{}'.format(
-            #             event_address,
-            #     ),
-            # }
-            # headers = {'content-type': 'application/json'}
-            # response = requests.post(
-            #         'http://did-workshop.arcblock.co:4000/api/authinfo',
-            #         json=params,
-            #         headers=headers,
-            # )
-            # g.logger.debug("mobile-buy got response from did auth service.")
-            # json_response = json.loads(response.content)
-            # g.logger.debug('Response: {}'.format(json_response))
-            # return json_response
 
         elif request.method == 'POST':
             req = ast.literal_eval(request.get_data(as_text=True))
@@ -612,11 +531,8 @@ def mobile_buy_ticket(event_address):
             if ticket_address:
                 g.logger.info("Ticket {} is bought successfully "
                               "by mobile.".format(ticket_address))
-                # wallet_address = app.get_wallet_address(req)
-                # session['mobile_address'] = wallet_address
-                # g.logger.info('Wallet address {} is saved in
-                # session.'.format(
-                # wallet_address))
+                wallet_address = app.get_wallet_address(req)
+                session['mobile_address'] = wallet_address
                 js = json.dumps({'ticket': ticket_address})
                 resp = Response(js, status=200, mimetype='application/json')
                 return resp
@@ -651,7 +567,7 @@ def mobile_require_asset(event_address):
 
         if request.method == 'GET':
             call_back_url = SERVER_ADDRESS + "api/mobile-require-asset/"
-            des = 'Please select the asset for event.'
+            des = 'Select a ticket for event.'
             target = event.event_info.title
             endpoint = 'requireAsset'
             return send_did_request(
@@ -659,7 +575,7 @@ def mobile_require_asset(event_address):
                 description=des,
                 target=target,
                 endpoint=endpoint,
-                workflow='require-asset',
+                workflow='use-ticket',
             )
 
         if request.method == 'POST':
@@ -692,7 +608,7 @@ def mobile_require_asset(event_address):
             call_back_url = SERVER_ADDRESS + "api/mobile-consume/{}".format(
                 asset_address,
             )
-            des = 'Confirm the purchase below.'
+            des = 'Confirm to use the ticket.'
             consume_tx = event.event_info.consume_tx
             multisig_data = helpers.encode_string_to_any(
                 'fg:x:address',
@@ -709,7 +625,7 @@ def mobile_require_asset(event_address):
                 description=des,
                 tx=new_tx,
                 endpoint=endpoint,
-                workflow='require-signature',
+                workflow='use-ticket',
             )
     except Exception:
         return response_error("Exception in requesting asset.")
