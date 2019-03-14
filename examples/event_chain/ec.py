@@ -493,7 +493,10 @@ def register():
 #             return response_error('error in consumming ticket.')
 
 
-def send_did_request(url, description, endpoint, tx=None, target=None):
+def send_did_request(
+    url, description, endpoint, workflow, tx=None,
+    target=None,
+):
     base58_encoded = (b'z' + base58.b58encode(
         tx.SerializeToString(),
     )) if tx else None
@@ -509,6 +512,7 @@ def send_did_request(url, description, endpoint, tx=None, target=None):
         'description': description,
         'target': target,
         'url': url,
+        'workflow': workflow,
     }
     headers = {'content-type': 'application/json'}
     call_url = 'http://localhost:4000/api/' + endpoint
@@ -559,6 +563,7 @@ def mobile_buy_ticket(event_address):
                 description=des,
                 endpoint=endpoint,
                 tx=updated_exchange_tx,
+                workflow="buy-ticket",
             )
             #
             # base64_encoded = base64.b64encode(new_tx.SerializeToString())
@@ -653,6 +658,7 @@ def mobile_require_asset(event_address):
                 description=des,
                 target=target,
                 endpoint=endpoint,
+                workflow='require-asset',
             )
 
         if request.method == 'POST':
@@ -685,6 +691,7 @@ def mobile_require_asset(event_address):
                 description=des,
                 tx=new_tx,
                 endpoint=endpoint,
+                workflow='require-signature',
             )
     except Exception:
         return response_error("Exception in requesting asset.")
