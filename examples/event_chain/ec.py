@@ -732,12 +732,13 @@ def mobile_consume(ticket_address):
             g.logger.debug("Receives data from wallet {}".format(req))
             try:
                 wallet_response = helpers.WalletResponse(req)
-            except Exception:
+            except Exception as e:
+                g.logger.exception(e)
                 return response_error("Error in parsing wallet data. Original "
                                       "data received is {}".format(req))
 
             hash = app.consume_ticket_mobile(
-                ticket_address,
+                ticket,
                 event.event_info.consume_tx,
                 wallet_response.get_address(),
                 wallet_response.get_signature(),
@@ -751,8 +752,9 @@ def mobile_consume(ticket_address):
             else:
                 g.logger.error('Fail to consume ticket.')
                 return response_error('error in consuming ticket.')
-    except Exception:
-        return response_error("xception in consuming ticket.")
+    except Exception as e:
+        g.logger.exception(e)
+        return response_error("Exception in consuming ticket.")
 
 
 def chunks(l, n):
