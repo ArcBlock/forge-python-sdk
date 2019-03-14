@@ -34,7 +34,7 @@ class WalletResponse:
         self.user_info = response.get('userInfo')
         self.decoded_info = self.decode_user_info()
         self.requested_claim = self.decoded_info.get('requestedClaims')[0]
-        self.get_origin_tx()
+        self.origin = self.get_origin_tx()
 
     def decode_user_info(self):
         if not self.user_info:
@@ -55,27 +55,40 @@ class WalletResponse:
     def get_origin_tx(self):
         origin = self.requested_claim.get('origin')
         origin = str(origin)
-        logger.debug("Origin tx before decode: {}".format(origin))
+        logger.debug(
+            "Wallet Response:origin tx before decode: {}".format(origin),
+        )
         decoded = base58.b58decode(origin[1:])
         tx = protos.Transaction()
         tx.ParseFromString(decoded)
-        logger.debug("Origin tx after base58 decode: {}".format(tx))
+        logger.debug(
+            "Wallet Response:origin tx after base58 decode: {}".format(tx),
+        )
+        return tx
 
     def get_address(self):
         did = self.decoded_info.get('iss')
-        logger.debug("Parsed did type {}".format(type(did)))
-        logger.debug("Parsed did: {}".format(did))
+        logger.debug("Wallet Response:raw address: {}".format(did))
         did = str(did)
         return did.split(':')[-1]
 
     def get_signature(self):
         sig = self.requested_claim.get('sig')
-        logger.debug("Parsed sig type {}".format(type(sig)))
-        logger.debug("Parsed sig {}: ".format(sig))
+        logger.debug("Wallet Response:raw sig {}: ".format(sig))
         str_sig = str(sig)
         decoded_sig = base58.b58decode(str_sig[1:])
-        logger.debug("sig after base58 decode: {}".format(decoded_sig))
+        logger.debug(
+            "Wallet Response:sig after base58 decode: {}".format(decoded_sig),
+        )
         return decoded_sig
+
+    def get_asset_address(self):
+        asset_address = self.requested_claim.get('did')
+        asset_address = str(asset_address)
+        logger.debug(
+            "Wallet Response: asset_address: {}".format(asset_address),
+        )
+        return asset_address
 
     # def get_event_address(self):
     #     tx = self.requested_claim.get('tx')
@@ -122,10 +135,14 @@ def add_multi_sig_to_tx(tx, address, signature):
 
 def to_display_time(timestamp):
     dt = timestamp.ToDatetime()
-    return dt.strftime("%Y/%m/%d")
+    return dt.strftime("%a,%b %d,%Y")
 
 
-def update_tx_multisig(tx, signer, signature='', data=None):
+def time_diff(t1, t2):
+    return t2.ToDatetime()-t1.ToDatetime()
+
+
+def update_tx_multisig(tx, signer, signature=None, data=None):
     multisig = protos.Multisig(
         signer=signer,
         signature=signature,
