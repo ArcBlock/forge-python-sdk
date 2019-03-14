@@ -34,7 +34,6 @@ class WalletResponse:
         self.user_info = response.get('userInfo')
         self.decoded_info = self.decode_user_info()
         self.requested_claim = self.decoded_info.get('requestedClaims')[0]
-        self.origin = self.get_origin_tx()
 
     def decode_user_info(self):
         if not self.user_info:

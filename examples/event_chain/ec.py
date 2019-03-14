@@ -667,7 +667,10 @@ def mobile_require_asset(event_address):
             g.logger.debug("Receives data from wallet {}".format(req))
             try:
                 wallet_response = helpers.WalletResponse(req)
-            except Exception:
+            except Exception as e:
+                g.logger.error(
+                    "error in parsing wallet data, error:{}".format(e),
+                )
                 return response_error("Error in parsing wallet data. Original "
                                       "data received is {}".format(req))
 
