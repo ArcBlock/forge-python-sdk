@@ -530,85 +530,92 @@ def send_did_request(url, description, endpoint, tx=None, target=None):
     methods=['GET', 'POST'],
 )
 def mobile_buy_ticket(event_address):
-    if request.method == 'GET':
+    try:
+        error = verify_event(event_address)
+        if error:
+            return error
+        if request.method == 'GET':
+            user_did = request.args.get('userDid', None)
+            if not user_did:
+                return response_error("Please provide a valid user did.")
+            user_address = user_did.split(":")[2]
+            session['mobile_address'] = user_address
+            g.logger.debug(
+                "user address parsed from request {}".format(user_address),
+            )
 
-        user_did = request.args.get('userDid', None)
-        if not user_did:
-            return response_error("Please provide a valid user did.")
-        user_address = user_did.split(":")[2]
-        session['mobile_address'] = user_address
-        g.logger.debug(
-            "user address parsed from request {}".format(user_address),
-        )
+            event = app.get_event_state(event_address)
+            updated_exchange_tx = helpers.update_tx_multisig(
+                event.get_exchange_tx(),
+                user_address,
+            )
+            g.logger.debug('new tx {}:'.format(updated_exchange_tx))
+            call_back_url = SERVER_ADDRESS + "api/mobile-buy-ticket/"
+            des = 'Confirm the purchase below.'
+            endpoint = 'requireMultiSig'
 
-        event = app.get_event_state(event_address)
-        updated_exchange_tx = helpers.update_tx_multisig(
-            event.get_exchange_tx(),
-            user_address,
-        )
-        g.logger.debug('new tx {}:'.format(updated_exchange_tx))
-        call_back_url = SERVER_ADDRESS + "api/mobile-buy-ticket/"
-        des = 'Confirm the purchase below.'
-        endpoint = 'requireMultiSig'
+            return send_did_request(
+                url=call_back_url,
+                description=des,
+                endpoint=endpoint,
+                tx=updated_exchange_tx,
+            )
+            #
+            # base64_encoded = base64.b64encode(new_tx.SerializeToString())
+            # g.logger.debug("Sent tx base64 encoded: {}".format(
+            # base64_encoded))
+            #
+            # params = {
+            #     'sk': APP_SK,
+            #     'pk': APP_PK,
+            #     'address': APP_ADDR,
+            #     'tx': base64_encoded,
+            #     'url': SERVER_ADDRESS + 'api/mobile-buy-ticket/{}'.format(
+            #             event_address,
+            #     ),
+            # }
+            # headers = {'content-type': 'application/json'}
+            # response = requests.post(
+            #         'http://did-workshop.arcblock.co:4000/api/authinfo',
+            #         json=params,
+            #         headers=headers,
+            # )
+            # g.logger.debug("mobile-buy got response from did auth service.")
+            # json_response = json.loads(response.content)
+            # g.logger.debug('Response: {}'.format(json_response))
+            # return json_response
 
-        return send_did_request(
-            url=call_back_url,
-            description=des,
-            endpoint=endpoint,
-            tx=updated_exchange_tx,
-        )
-        #
-        # base64_encoded = base64.b64encode(new_tx.SerializeToString())
-        # g.logger.debug("Sent tx base64 encoded: {}".format(base64_encoded))
-        #
-        # params = {
-        #     'sk': APP_SK,
-        #     'pk': APP_PK,
-        #     'address': APP_ADDR,
-        #     'tx': base64_encoded,
-        #     'url': SERVER_ADDRESS + 'api/mobile-buy-ticket/{}'.format(
-        #             event_address,
-        #     ),
-        # }
-        # headers = {'content-type': 'application/json'}
-        # response = requests.post(
-        #         'http://did-workshop.arcblock.co:4000/api/authinfo',
-        #         json=params,
-        #         headers=headers,
-        # )
-        # g.logger.debug("mobile-buy got response from did auth service.")
-        # json_response = json.loads(response.content)
-        # g.logger.debug('Response: {}'.format(json_response))
-        # return json_response
+        elif request.method == 'POST':
+            req = ast.literal_eval(request.get_data(as_text=True))
+            g.logger.debug("Receives data from wallet {}".format(req))
+            try:
+                wallet_response = helpers.WalletResponse(req)
+            except Exception:
+                return response_error("Error in parsing wallet data. Original "
+                                      "data received is {}".format(req))
 
-    elif request.method == 'POST':
-        req = ast.literal_eval(request.get_data(as_text=True))
-        g.logger.debug("Receives data from wallet {}".format(req))
-        try:
-            wallet_response = helpers.WalletResponse(req)
-        except Exception:
-            return response_error("Error in parsing wallet data. Original "
-                                  "data received is {}".format(req))
+            ticket_address = app.buy_ticket_mobile(
+                event_address,
+                wallet_response.get_address(),
+                wallet_response.get_signature(),
+            )
 
-        ticket_address = app.buy_ticket_mobile(
-            event_address,
-            wallet_response.get_address(),
-            wallet_response.get_signature(),
-        )
-
-        if ticket_address:
-            g.logger.info("Ticket {} is bought successfully "
-                          "by mobile.".format(ticket_address))
-            # wallet_address = app.get_wallet_address(req)
-            # session['mobile_address'] = wallet_address
-            # g.logger.info('Wallet address {} is saved in session.'.format(
-            # wallet_address))
-            js = json.dumps({'ticket': ticket_address})
-            resp = Response(js, status=200, mimetype='application/json')
-            return resp
-        else:
-            g.logger.error('Fail to buy ticket.')
-            return response_error('error in buying ticket.')
+            if ticket_address:
+                g.logger.info("Ticket {} is bought successfully "
+                              "by mobile.".format(ticket_address))
+                # wallet_address = app.get_wallet_address(req)
+                # session['mobile_address'] = wallet_address
+                # g.logger.info('Wallet address {} is saved in
+                # session.'.format(
+                # wallet_address))
+                js = json.dumps({'ticket': ticket_address})
+                resp = Response(js, status=200, mimetype='application/json')
+                return resp
+            else:
+                g.logger.error('Fail to buy ticket.')
+                return response_error('error in buying ticket.')
+    except Exception:
+        return response_error('Exception in buying ticket.')
 
 
 def response_error(msg):
@@ -626,95 +633,101 @@ def error():
     methods=['GET', 'POST'],
 )
 def mobile_require_asset(event_address):
-    error = verify_event(event_address)
-    if error:
-        return error
-    event = app.get_event_state(event_address)
-    user_did = request.args.get('userDid', None)
-    if not user_did:
-        return response_error("Please provide a valid user did.")
-    user_address = user_did.split(":")[2]
+    try:
+        error = verify_event(event_address)
+        if error:
+            return error
+        event = app.get_event_state(event_address)
+        user_did = request.args.get('userDid', None)
+        if not user_did:
+            return response_error("Please provide a valid user did.")
+        user_address = user_did.split(":")[2]
 
-    if request.method == 'GET':
-        call_back_url = SERVER_ADDRESS + "api/mobile-require-asset/"
-        des = 'Please select the asset for event.'
-        target = event.address
-        endpoint = 'requireAsset'
-        return send_did_request(
-            url=call_back_url,
-            description=des,
-            target=target,
-            endpoint=endpoint,
-        )
+        if request.method == 'GET':
+            call_back_url = SERVER_ADDRESS + "api/mobile-require-asset/"
+            des = 'Please select the asset for event.'
+            target = event.address
+            endpoint = 'requireAsset'
+            return send_did_request(
+                url=call_back_url,
+                description=des,
+                target=target,
+                endpoint=endpoint,
+            )
 
-    if request.method == 'POST':
-        req = ast.literal_eval(request.get_data(as_text=True))
-        g.logger.debug("Receives data from wallet {}".format(req))
-        try:
-            wallet_response = helpers.WalletResponse(req)
-        except Exception:
-            return response_error("Error in parsing wallet data. Original "
-                                  "data received is {}".format(req))
+        if request.method == 'POST':
+            req = ast.literal_eval(request.get_data(as_text=True))
+            g.logger.debug("Receives data from wallet {}".format(req))
+            try:
+                wallet_response = helpers.WalletResponse(req)
+            except Exception:
+                return response_error("Error in parsing wallet data. Original "
+                                      "data received is {}".format(req))
 
-        asset_address = wallet_response.get_asset_address()
-        call_back_url = SERVER_ADDRESS + "api/mobile-consume/{}".format(
-            asset_address,
-        )
-        des = 'Confirm the purchase below.'
-        consume_tx = event.event_info.consume_tx
-        multisig_data = helpers.encode_string_to_any(
-            'fg:x:address',
-            asset_address,
-        )
+            asset_address = wallet_response.get_asset_address()
+            call_back_url = SERVER_ADDRESS + "api/mobile-consume/{}".format(
+                asset_address,
+            )
+            des = 'Confirm the purchase below.'
+            consume_tx = event.event_info.consume_tx
+            multisig_data = helpers.encode_string_to_any(
+                'fg:x:address',
+                asset_address,
+            )
 
-        new_tx = helpers.update_tx_multisig(
-            tx=consume_tx, signer=user_address,
-            data=multisig_data,
-        )
-        endpoint = 'requireMultiSig'
-        return send_did_request(
-            url=call_back_url,
-            description=des,
-            tx=new_tx,
-            endpoint=endpoint,
-        )
+            new_tx = helpers.update_tx_multisig(
+                tx=consume_tx, signer=user_address,
+                data=multisig_data,
+            )
+            endpoint = 'requireMultiSig'
+            return send_did_request(
+                url=call_back_url,
+                description=des,
+                tx=new_tx,
+                endpoint=endpoint,
+            )
+    except Exception:
+        return response_error("Exception in requesting asset.")
 
 
 @application.route(
     "/api/mobile-consume/<ticket_address>", methods=['POST'],
 )
 def mobile_consume(ticket_address):
-    error = verify_ticket(ticket_address)
-    if error:
-        return error
+    try:
+        error = verify_ticket(ticket_address)
+        if error:
+            return error
 
-    ticket = app.get_ticket_state(ticket_address)
-    event = app.get_event_state(ticket.event_address)
+        ticket = app.get_ticket_state(ticket_address)
+        event = app.get_event_state(ticket.event_address)
 
-    if request.method == 'POST':
-        req = ast.literal_eval(request.get_data(as_text=True))
-        g.logger.debug("Receives data from wallet {}".format(req))
-        try:
-            wallet_response = helpers.WalletResponse(req)
-        except Exception:
-            return response_error("Error in parsing wallet data. Original "
-                                  "data received is {}".format(req))
+        if request.method == 'POST':
+            req = ast.literal_eval(request.get_data(as_text=True))
+            g.logger.debug("Receives data from wallet {}".format(req))
+            try:
+                wallet_response = helpers.WalletResponse(req)
+            except Exception:
+                return response_error("Error in parsing wallet data. Original "
+                                      "data received is {}".format(req))
 
-        hash = app.consume_ticket_mobile(
-            ticket_address,
-            event.event_info.consume_tx,
-            wallet_response.get_address(),
-            wallet_response.get_signature(),
-        )
+            hash = app.consume_ticket_mobile(
+                ticket_address,
+                event.event_info.consume_tx,
+                wallet_response.get_address(),
+                wallet_response.get_signature(),
+            )
 
-        if hash:
-            g.logger.info("ConsumeTx has been sent.")
-            js = json.dumps({'hash': hash})
-            resp = Response(js, status=200, mimetype='application/json')
-            return resp
-        else:
-            g.logger.error('Fail to consume ticket.')
-            return response_error('error in consuming ticket.')
+            if hash:
+                g.logger.info("ConsumeTx has been sent.")
+                js = json.dumps({'hash': hash})
+                resp = Response(js, status=200, mimetype='application/json')
+                return resp
+            else:
+                g.logger.error('Fail to consume ticket.')
+                return response_error('error in consuming ticket.')
+    except Exception:
+        return response_error("xception in consuming ticket.")
 
 
 def chunks(l, n):
