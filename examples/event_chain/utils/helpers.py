@@ -84,11 +84,14 @@ class WalletResponse:
 
     def get_asset_address(self):
         asset_address = self.requested_claim.get('did')
-        asset_address = str(asset_address)
-        logger.debug(
-            "Wallet Response: asset_address: {}".format(asset_address),
-        )
-        return asset_address
+        if not asset_address:
+            return None
+        else:
+            asset_address = str(asset_address)
+            logger.debug(
+                "Wallet Response: asset_address: {}".format(asset_address),
+            )
+            return asset_address
 
     # def get_event_address(self):
     #     tx = self.requested_claim.get('tx')

@@ -623,7 +623,8 @@ def mobile_buy_ticket(event_address):
             else:
                 g.logger.error('Fail to buy ticket.')
                 return response_error('error in buying ticket.')
-    except Exception:
+    except Exception as e:
+        g.logger.error(e)
         return response_error('Exception in buying ticket.')
 
 
@@ -647,10 +648,6 @@ def mobile_require_asset(event_address):
         if error:
             return error
         event = app.get_event_state(event_address)
-        user_did = request.args.get('userDid')
-        if not user_did:
-            return response_error("Please provide a valid user did.")
-        user_address = user_did.split(":")[2]
 
         if request.method == 'GET':
             call_back_url = SERVER_ADDRESS + "api/mobile-require-asset/"
@@ -675,6 +672,20 @@ def mobile_require_asset(event_address):
                                       "data received is {}".format(req))
 
             asset_address = wallet_response.get_asset_address()
+            if not asset_address:
+                g.logger.error(
+                    "No available asset address in wallet response.",
+                )
+                return response_error("Please provide an asset address.")
+
+            error = verify_ticket(asset_address)
+            if error:
+                g.logger.error(
+                    "ticket address in wallet response is not valid.",
+                )
+                return response_error("Please provide a valid ticket address.")
+
+            user_address = wallet_response.get_address()
             call_back_url = SERVER_ADDRESS + "api/mobile-consume/{}".format(
                 asset_address,
             )
