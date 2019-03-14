@@ -181,23 +181,17 @@ def buy_ticket(event_address, user, conn=None):
         return None
 
 
-def buy_ticket_mobile(event_address, response, conn=None):
-    wallet_response = helpers.WalletResponse(response)
-    address = wallet_response.get_address()
-    logger.debug('mobile wallet address:{}'.format(address))
-
-    signature = wallet_response.get_signature()
-    logger.debug('mobile wallet signature:{}'.format(signature))
-
+def buy_ticket_mobile(event_address, address, signature):
+    # wallet_response = helpers.WalletResponse(response)
+    # address = wallet_response.get_address()
+    # logger.debug('mobile wallet address:{}'.format(address))
+    #
+    # signature = wallet_response.get_signature()
+    # logger.debug('mobile wallet signature:{}'.format(signature))
     state = get_event_state(event_address)
     ticket_address = state.buy_ticket_mobile(
         address, signature,
     )
-    logger.debug("Returned ticket addr {}: ".format(ticket_address))
-    if ticket_address and conn:
-        db.insert_ticket(
-            conn, ticket_address, event_address, address,
-        )
     return ticket_address
 
 
@@ -239,29 +233,22 @@ def consume(ticket_address, user):
         logger.error('Fail to consume ticket {}'.format(ticket_address))
     else:
         logger.info(
-            "ConsumeTx has been sent              by tx: {}!".format(
-                res.hash,
-            ),
+            "ConsumeTx has been sent by tx: {}!".format(res.hash),
         )
     return res.hash
 
 
-def consume_ticket_mobile(ticket, consume_tx, response):
-    wallet_response = helpers.WalletResponse(response)
-
-    address = wallet_response.get_address()
-    logger.debug('Consuming ticket: mobile address:{}'.format(address))
-
-    signature = wallet_response.get_signature()
-    logger.debug('Consuming ticket: mobile signature:{}'.format(signature))
+def consume_ticket_mobile(ticket, consume_tx, address, signature):
 
     res = ticket.consume_mobile(consume_tx, address, signature)
 
     if res.code != 0 or res.hash is None:
         logger.error(res)
-        logger.error('Fail to consume ticket {}'.format(ticket.address))
+        logger.error(
+            'Fail to consume ticket by mobile {}'.format(ticket.address),
+        )
     else:
-        logger.info("ConsumeTx has been sent   ,]llllllllm  by tx: {}!".format(
+        logger.info("Mobile ConsumeTx has been sent by tx: {}!".format(
             res.hash,
         ))
     return res.hash
@@ -286,25 +273,47 @@ def list_ticket_exchange_tx(event_address):
 
 def verify_event_address(event_address):
     try:
-        event = get_event_state(event_address)
-        if not event:
-            logger.error('Event {} does not exist.'.format(event_address))
-            raise ValueError('Event {} does not exist'.format(event_address))
-
+        state = get_event_state(event_address)
     except Exception:
         logger.error('exception in verifying event_address ')
         raise TypeError("{} is not an event address.".format(event_address))
+    if not state:
+        logger.error('Event {} does not exist.'.format(event_address))
+        raise ValueError('Event {} does not exist'.format(event_address))
+    if state.type_url != 'ec:s:event_info':
+        logger.error(
+            'This asset should be type ec:s:event_info, but provided '
+            'type_url is : {}'.format(
+                state.type_url,
+            ),
+        )
+        raise ValueError(
+            '{} is not a valid event address. Type_url for this asset '
+            'is {}'.format(
+                event_address, state.type_url,
+            ),
+        )
 
 
 def verify_ticket_address(ticket_address):
     try:
-        ticket = get_ticket_state(ticket_address)
-        if not ticket:
-            logger.error(u'Ticket {} does not exist.'.format(ticket_address))
-            raise ValueError('Ticket {} does not exist'.format(ticket_address))
+        state = get_ticket_state(ticket_address)
     except Exception:
-        logger.error('Error in checking ticket, event, owner state')
+        logger.error('Error in checking ticket')
         raise TypeError("{} is not an ticket address.".format(ticket_address))
+
+    if not state:
+        logger.error(u'Ticket {} does not exist.'.format(ticket_address))
+        raise ValueError('Ticket {} does not exist'.format(ticket_address))
+    if state.type_url != 'ec:s:ticket_info':
+        logger.error('This asset type should be ec:s:ticket_info,'
+                     ' but the provided url is: {}'.format(state.type_url))
+        raise ValueError(
+            '{} is not a valid ticket address. Type_url for this asset '
+            'is {}'.format(
+                ticket_address, state.type_url,
+            ),
+        )
 
 
 def refresh():

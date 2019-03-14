@@ -1,97 +1,104 @@
 {% extends "layout.html" %}
 {% block content %}
-<session class="hero">
-  <br>
-  <br>
-  <section class="hero is-white">
-    <div class="hero-body">
-      <div class="container has-text-left">
-        <h1 class="title is-1">Welcome to Event Chain</h1>
-        <h2 class="subtitle">Create and join events to start enjoying your day</h2>
-      </div>
-    </div>
-  </section>
-  <br>
-  <br>
-  <section class="section">
-    <section class="container">
-      {% if event_lists %}
-      {% for events in event_lists %}
-      <section class="secion">
-        <div class="columns is-multiline features">
-          {% for event in events %}
-          <div class="column is-4">
-            <div class="card is-shady">
-              <div class="card-image">
-                {% if event.event_info.remaining==0 %}
-                <figure class="watermarked image is-16by9">
-                  <img src="https://unsplash.it/1600/900?{{ event.address }}"
-                  alt="
+    <session class="hero">
+        <br>
+        <br>
+        <section class="hero is-white">
+            <div class="hero-body">
+                <div class="container has-text-left">
+                    <h1 class="title is-1">Welcome to Event Chain</h1>
+                    <h2 class="subtitle">Create and join events to start enjoying your day</h2>
+                </div>
+            </div>
+        </section>
+        <br>
+        <br>
+        <section class="section">
+            <section class="container">
+                {% if event_lists %}
+                    {% for events in event_lists %}
+                        <section class="secion">
+                            <div class="columns is-multiline features">
+                                {% for event in events %}
+                                    <div class="column is-4">
+                                        <div class="card is-shady">
+                                            <div class="card-image">
+                                                {% if event.event_info.remaining==0 %}
+                                                    <figure class="watermarked image is-16by9">
+                                                        <img src="https://unsplash.it/1600/900?{{ event.address }}"
+                                                             alt="{{ event.event_info.title }}"/>
+                                                    </figure>
+                                                {% else %}
+                                                    <figure class="image is-16by9">
+                                                        <img src="https://unsplash.it/1600/900?{{ event.address }}"
+                                                             alt="
                   {{ event.event_info.title }}"/>
-                </figure>
-                {% else %}
-                <figure class="image is-16by9">
-                  <img src="https://unsplash.it/1600/900?{{ event.address }}"
-                  alt="
-                  {{ event.event_info.title }}"/>
-                </figure>
-                {% endif %}
-              </div>
-              <div class="card-content">
-                <div class="content">
-                  <h2 class="subtitle strong">{{ event.event_info.title }}</h2>
-                  <!-- <div class="tags are-large">
+                                                    </figure>
+                                                {% endif %}
+                                            </div>
+                                            <div class="card-content">
+                                                <div class="content">
+                                                    <h2 class="subtitle strong">{{ event.event_info.title }}</h2>
+                                                    <!-- <div class="tags are-large">
                     <span class="tag are-large is-warning">Tickets：
                       {{ event.event_info.remaining }}/{{ event.event_info.total }}</span>
                       <span class="tag are-large is-danger">Price：
                         {{ event.display_price }}ABT</span>
                       </div> -->
-                      <p>
+                                                    <p>
                         <span class="icon is-small is-left">
                           <i class="fa fa-map-marker" style="margin-right:2px;"></i>
                         </span> {{ event.event_info.location }}
-                        <span class="icon is-small is-left" style="margin-left:16px; margin-right:2px;">
+                                                        <span class="icon is-small is-left"
+                                                              style="margin-left:16px; margin-right:2px;">
                           <i class="fa fa-calendar"></i>
                         </span> {{ event.display_start_time }}
-                        <span class="icon is-small is-left" style="margin-left:16px; margin-right:2px;">
+                                                        <span class="icon is-small is-left"
+                                                              style="margin-left:16px; margin-right:2px;">
                           <i class="fa fa-hourglass-start"></i>
-                        </span> {{ event.display_end_time }}</p>
-                        <nav class="level">
-                          <div class="level-item has-text-centered">
-                            <div>
-                              <p class="heading">Tickets</p>
-                              <p class="title">{{ event.event_info.remaining }}/{{ event.event_info.total }}</p>
-                            </div>
-                          </div>
-                          <div class="level-item has-text-centered">
-                            <div>
-                              <p class="heading">Price</p>
-                              <p class="title">{{ event.display_price }}ABT</p>
-                            </div>
-                          </div>
-                        </nav>
-                        <!-- <a class="button is-link is-large-font" style="width:100%"
+                                                            {% if event.duration > 1 %}
+                                                                </span> {{ event.duration }} days</p>
+                                                            {% else %}
+                                                                </span> {{ event.duration }} day</p>
+                                                            {% endif %}
+                                                    <nav class="level">
+                                                        <div class="level-item has-text-centered">
+                                                            <div>
+                                                                <p class="heading">Tickets</p>
+                                                                <p class="title">{{ event.event_info.remaining }}/{{ event.event_info.total }}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="level-item has-text-centered">
+                                                            <div>
+                                                                <p class="heading">Price</p>
+                                                                <p class="title">{{ event.display_price }}ABT</p>
+                                                            </div>
+                                                        </div>
+                                                    </nav>
+                                                    <!-- <a class="button is-link is-large-font" style="width:100%"
                           href={{ url_for('event_detail',address=event.address) }}> Join
                           Event</a> -->
-                        </div>
-                      </div>
-                      <footer class="card-footer">
-                        <a class="card-footer-item" href={{ url_for('event_detail',address=event.address) }}>Event Details</a>
-                      </footer>
-                    </div>
-                  </div>
-                  <br>
-                  {% endfor %}
-                </div>
-              </section>
-              {% endfor %}
-              {% else %} <h1>Sorry, no event yet</h1>
-              {% endif %}
+                                                </div>
+                                            </div>
+                                            <footer class="card-footer">
+                                                <a class="card-footer-item"
+                                                   href={{ url_for('event_detail',address=event.address) }}>Event
+                                                    Details</a>
+                                            </footer>
+                                        </div>
+                                    </div>
+                                    <br>
+                                {% endfor %}
+                            </div>
+                        </section>
+                    {% endfor %}
+                {% else %} <h1>Sorry, no event yet</h1>
+                {% endif %}
             </section>
-          </section>
+        </section>
 
-        </session>
+    </session>
 
 
 
-        {% endblock %}
+{% endblock %}

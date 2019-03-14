@@ -21,12 +21,30 @@
                 </figure>
                 <div class="columns">
                     <div class="column">
-                        <div class="card" style="height: 350px; width: 380px;">
-
+                        <div class="card" style="height: 250px; width: 250px;">
                             <figure class="image">
                                 <img src="{{ qrcode(url,border=2) }}" alt="Image">
                             </figure>
+                        </div>
+                        <br>
+                        <br>
 
+                        <a class='is-link' style="padding-left: 30px;" onclick="showConsumeQR()"><strong>Show Consume QR Code</strong></a>
+                        <br>
+                        <script>
+                            function showConsumeQR() {
+                                var x = document.getElementById("ConsumeQr");
+                                if (x.style.display === "block") {
+                                    x.style.display = "none";
+                                } else {
+                                    x.style.display = "block";
+                                }
+                            }
+                        </script>
+                        <div class="card" style="height: 250px; width: 250px; display:none;" id="ConsumeQr">
+                            <figure class="image">
+                                <img src="{{ qrcode(consume_url,border=2) }}" alt="Image">
+                            </figure>
                         </div>
                     </div>
                     <div class="column">
@@ -61,7 +79,7 @@
                                             <a class='is-link' onclick="myFunction()">Transaction Details</a>
                                             <br>
                                             <br>
-                                            <div class="contents" style='display:none' id="myDIV">
+                                            <div class="contents" style='display:none' id="TxDetail">
                                                 <p><i>You will receive</i>: a ticket for event
                                                     "{{ event.event_info.title }}" </p>
                                                 <p><i>You will pay</i>: {{ event.display_price }} TBA" </p>
@@ -70,7 +88,7 @@
 
                                             <script>
                                                 function myFunction() {
-                                                    var x = document.getElementById("myDIV");
+                                                    var x = document.getElementById(TxDetail);
                                                     if (x.style.display === "block") {
                                                         x.style.display = "none";
                                                     } else {
@@ -82,7 +100,8 @@
                                                 <p class="control">
                                                     <label class="checkbox">
 
-                                                        <input type="checkbox" id="pay_check_box"> I agree pay {{ event.display_price }}
+                                                        <input type="checkbox" id="pay_check_box"> I agree
+                                                        pay {{ event.display_price }}
                                                         ABT to execute this transaction
 
                                                     </label>
