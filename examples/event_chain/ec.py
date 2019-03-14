@@ -494,21 +494,25 @@ def register():
 
 
 def send_did_request(
-    url, description, endpoint, workflow, tx=None,
-    target=None,
+        url, description, endpoint, workflow, tx=None,
+        target=None,
 ):
-    base58_encoded = (b'z' + base58.b58encode(
-        tx.SerializeToString(),
-    )) if tx else None
-    g.logger.debug(
-        u"Sending request to DID with base58 encoded tx: {} and"
-        u" url {}".format(base58_encoded, url),
-    )
+    if tx:
+        base58_encoded = (b'z' + base58.b58encode(
+            tx.SerializeToString(),
+        )).decode()
+        g.logger.debug(
+            u"Sending request to DID with base58 encoded tx: {} and"
+            u" url {}".format(base58_encoded, url),
+        )
+    else:
+        base58_encoded = None
+
     params = {
         'sk': APP_SK,
         'pk': APP_PK,
         'address': APP_ADDR,
-        'tx': base58_encoded.decode(),
+        'tx': base58_encoded,
         'description': description,
         'target': target,
         'url': url,
@@ -643,7 +647,7 @@ def mobile_require_asset(event_address):
         if error:
             return error
         event = app.get_event_state(event_address)
-        user_did = request.args.get('userDid', None)
+        user_did = request.args.get('userDid')
         if not user_did:
             return response_error("Please provide a valid user did.")
         user_address = user_did.split(":")[2]
@@ -651,7 +655,7 @@ def mobile_require_asset(event_address):
         if request.method == 'GET':
             call_back_url = SERVER_ADDRESS + "api/mobile-require-asset/"
             des = 'Please select the asset for event.'
-            target = event.address
+            target = event.event_info.title
             endpoint = 'requireAsset'
             return send_did_request(
                 url=call_back_url,
