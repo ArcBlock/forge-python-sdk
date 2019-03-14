@@ -505,7 +505,7 @@ def send_did_request(url, description, endpoint, tx=None, target=None):
         'sk': APP_SK,
         'pk': APP_PK,
         'address': APP_ADDR,
-        'tx': base58_encoded,
+        'tx': base58_encoded.decode(),
         'description': description,
         'target': target,
         'url': url,
