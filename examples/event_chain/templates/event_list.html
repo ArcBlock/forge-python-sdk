@@ -1,6 +1,21 @@
 {% extends "layout.html" %}
 {% block content %}
+<main role="main" class="container">
+
+    {% for message in get_flashed_messages() %}
+        <div class="notification is-light"  id="layout_msg">
+            {{ message }} </div>
+    {% endfor %}
+
+
+    <script>
+        function close() {
+            document.getElementById("layout_msg").style.display = 'none';
+        }
+    </script>
+</main>
     <session class="hero">
+        <br>
         <br>
         <br>
         <section class="hero is-white">
