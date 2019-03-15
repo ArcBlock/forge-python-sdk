@@ -221,6 +221,7 @@ def ticket_detail():
     address = form.address.data if form.address.data else request.args.get(
         'address',
     )
+    view_only = request.args.get('viewonly', False)
     error = verify_ticket(address)
     if error:
         return error
@@ -228,14 +229,9 @@ def ticket_detail():
     event = app.get_event_state(ticket.event_address)
     host = app.get_participant_state(event.owner)
 
-    # call_back_url = SERVER_ADDRESS + "api/mobile-consume-ticket/{}".format(
-    #         address,
-    # )
-    # url = gen_did_url(call_back_url, "requestAuth")
-
     return render_template(
         "ticket_details.html", ticket=ticket, event=event, form=form,
-        host=host,
+        host=host, view_only=view_only,
     )
 
 
@@ -306,7 +302,7 @@ def ticket_list():
     ticket_lists = chunks(tickets, 3)
     return render_template(
         'tickets.html', ticket_lists=ticket_lists, events=events,
-        user=user,
+        user=user, view_only=False
     )
 
 
@@ -327,7 +323,7 @@ def mobile_account():
     ticket_lists = chunks(tickets, 3)
     return render_template(
         'tickets.html', ticket_lists=ticket_lists, events=events,
-        user=user,
+        user=user, view_only=True
     )
 
 
@@ -356,26 +352,6 @@ def create_event():
     else:
         g.logger.error(form.errors)
     return render_template('event_create.html', form=form)
-
-
-@application.route("/peek", methods=['GET', 'POST'])
-def peek():
-    ticket_lists = []
-    events = []
-    address = request.form.get('address')
-    msg = ''
-    if address:
-        user = app.get_participant_state(address)
-        if user:
-            tickets = app.list_unused_tickets(address)
-            events = get_event_for_ticket(tickets)
-            ticket_lists = chunks(tickets, 3)
-        else:
-            msg = "This user doesn't exist! Try another one!"
-    return render_template(
-        'peek.html', ticket_lists=ticket_lists, msg=msg,
-        events=events,
-    )
 
 
 def refresh_token():

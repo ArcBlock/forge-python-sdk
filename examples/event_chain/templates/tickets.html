@@ -69,13 +69,13 @@
                                                     <div class="tags are-large">
                                                         <span class="tag are-large is-warning">2019-02-21</span>
                                                     </div>
-                                                    {% if ticket.transferrable==True %}
+                                                    {% if ticket.transferrable==True and view_only ==False %}
                                                         <a class="button is-info"
                                                            href="/ticket-detail?address={{ ticket.address }}">
                                                             Click to Use</a>
                                                     {% else %}
                                                         <a class="button is-info"
-                                                           href="/ticket-detail?address={{ ticket.address }}">
+                                                           href="/ticket-detail?address={{ ticket.address }}&viewonly=True">
                                                             Click to View</a>
                                                     {% endif %}
                                                 </div>
