@@ -53,26 +53,26 @@
                                             </div>
                                             <div class="card-content">
                                                 <div class="content">
-                                                    <h2 class="subtitle strong">{{ event.event_info.title }}</h2>
-                                                    <p><span class="icon is-small is-left"
+                                                    <h2 class="subtitle strong text-nowrap">{{ event.event_info.title }}</h2>
+
+                                                    <div class="content">
+                                                        <p><span class="icon is-small is-left"
                                                              style="margin-right:2px;">
-                          <i class="fa fa-calendar"></i>
-                        </span> {{ event.display_start_time }}
+                                                         <i class="fa fa-calendar"></i>
+                                                        </span> {{ event.display_start_time }}
                                                         <span class="icon is-small is-left"
                                                               style="margin-left:16px; margin-right:2px;">
-                          <i class="fa fa-hourglass-start"></i>
+                                                            <i class="fa fa-hourglass-start"></i></span>
                                                             {% if event.duration > 1 %}
-                                                                </span> {{ event.duration }} days</p>
+                                                                 {{ event.duration }} days
                                                             {% else %}
-                                                                </span> {{ event.duration }} day</p>
+                                                                {{ event.duration }} day
                                                             {% endif %}
                                                     </p>
-
                                                     <p> <span class="icon is-small is-left">
-                          <i class="fa fa-map-marker" style="margin-right:2px;"></i>
-                        </span> {{ event.event_info.location }}
-
-                                                        <br>
+                                                            <i class="fa fa-map-marker" style="margin-right:2px;"></i>
+                                                    </span> {{ event.event_info.location }}</p>
+                                                    </div>
                                                         <nav class="level">
                                                             <div class="level-item has-text-centered">
                                                                 <div>
@@ -87,9 +87,7 @@
                                                 </div>
                                             </div>
                                             </nav>
-                                            <!-- <a class="button is-link is-large-font" style="width:100%"
-                          href={{ url_for('event_detail',address=event.address) }}> Join
-                          Event</a> -->
+
                                         </div>
                                     </div>
                                     <footer class="card-footer">
