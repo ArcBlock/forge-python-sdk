@@ -8,6 +8,7 @@ from time import sleep
 import base58
 import event_chain.application.app as app
 import event_chain.config.config as config
+import event_chain.db.utils as db
 import requests
 from event_chain.utils import helpers
 from flask import flash
@@ -19,6 +20,7 @@ from flask import request
 from flask import Response
 from flask import session
 from flask_qrcode import QRcode
+from flask_session import Session
 from flask_wtf import FlaskForm
 from wtforms import IntegerField
 from wtforms import StringField
@@ -26,8 +28,6 @@ from wtforms import SubmitField
 from wtforms import ValidationError
 from wtforms import validators
 from wtforms.validators import DataRequired
-
-from flask_session import Session
 
 application = Flask(__name__)
 application.config['SECRET_KEY'] = 'hihihihihi'
@@ -249,7 +249,7 @@ def buy():
     if error:
         return error
 
-    ticket_address = app.buy_ticket(address, session['user'], g.db)
+    ticket_address = app.buy_ticket(address, session.get('user'), g.db)
     g.logger.info("ticket is bought successfully from web.")
     flash('Ticket {} is yours now!'.format(ticket_address))
     if not ticket_address:
@@ -292,15 +292,16 @@ def get_event_for_ticket(tickets):
 @application.route("/logout", methods=['GET', 'POST'])
 def logout():
     session['user'] = None
+    db.delete_mobile_address(g.db)
     return redirect('/')
 
 
 @application.route("/tickets")
 def ticket_list():
-    if not session['user']:
+    if not session.get('user'):
         return redirect('login')
-    tickets = app.list_unused_tickets(session['user'].address)
-    user = app.get_participant_state(session['user'].address)
+    tickets = app.list_unused_tickets(session.get('user').address)
+    user = app.get_participant_state(session.get('user').address)
     events = get_event_for_ticket(tickets)
     ticket_lists = chunks(tickets, 3)
     return render_template(
@@ -309,14 +310,17 @@ def ticket_list():
     )
 
 
-@application.route("/mobile-account", methods=['GET', 'POST'])
+@application.context_processor
+def inject_mobile_address():
+    return dict(mobile_address=db.get_last_mobile_address(g.db))
+
+
+@application.route("/mobile-account", methods=['GET'])
 def mobile_account():
-    if not session.get('mobile_address'):
+    address = db.get_last_mobile_address(g.db)
+    if not address:
         flash("Please use your mobile wallet to buy a ticket first!")
         return redirect('/')
-
-    address = session['mobile_address']
-
     tickets = app.list_unused_tickets(address)
     user = app.get_participant_state(address)
     events = get_event_for_ticket(tickets)
@@ -329,7 +333,7 @@ def mobile_account():
 
 @application.route("/create", methods=['GET', 'POST'])
 def create_event():
-    if not session.get('user', None):
+    if not session.get('user'):
         flash('Please register first!')
         return redirect('/login')
     refresh_token()
@@ -337,7 +341,7 @@ def create_event():
     if form.validate_on_submit():
         if request.method == "POST":
             app.create_event(
-                user=session['user'],
+                user=session.get('user'),
                 title=form.title.data,
                 total=form.total.data,
                 description=form.description.data,
@@ -375,7 +379,7 @@ def peek():
 
 
 def refresh_token():
-    user = session['user']
+    user = session.get('user')
     user = app.load_user(
         moniker=user.moniker,
         passphrase=user.passphrase,
@@ -532,7 +536,9 @@ def mobile_buy_ticket(event_address):
                 g.logger.info("Ticket {} is bought successfully "
                               "by mobile.".format(ticket_address))
                 wallet_address = app.get_wallet_address(req)
-                session['mobile_address'] = wallet_address
+
+                db.insert_mobile_address(g.db, wallet_address)
+
                 js = json.dumps({'ticket': ticket_address})
                 resp = Response(js, status=200, mimetype='application/json')
                 return resp

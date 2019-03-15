@@ -675,7 +675,7 @@ class ParticipantAccountState:
         self.stake = state.stake
         self.pinned_files = state.pinned_files
 
-        self.display_balance = utils.bytes_to_int(self.balance.value)/1e16
+        self.display_balance = utils.bytes_to_int(self.balance.value) / 1e16
 
         self.participant_info = utils.parse_to_proto(
             state.data.value,

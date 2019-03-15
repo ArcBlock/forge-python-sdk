@@ -239,7 +239,6 @@ def consume(ticket_address, user):
 
 
 def consume_ticket_mobile(ticket, consume_tx, address, signature):
-
     res = ticket.consume_mobile(consume_tx, address, signature)
 
     if res.code != 0 or res.hash is None:
