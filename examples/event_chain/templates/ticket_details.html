@@ -41,7 +41,7 @@
                             <div class="content">
                                 <p>{{ event.event_info.description }} </p>
                                 <br>
-                                {% if ticket.transferrable == True %}
+                                {% if ticket.transferrable == True and view_only==False %}
                                 <a class="button is-link"
                                    href={{ url_for('use',address=ticket.address) }}> Use Ticket</a>
                                 {% else %}
