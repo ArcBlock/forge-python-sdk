@@ -171,7 +171,7 @@ def insert_mobile_address(conn, address):
     c = conn.cursor()
     c.execute("select * from mobile_address;")
     if c.fetchone():
-        c.execute('''delete from mobile_adress''')
+        c.execute('''delete from mobile_address''')
     c.execute('''insert into mobile_address (address) values (?)''',
               [address], )
     conn.commit()

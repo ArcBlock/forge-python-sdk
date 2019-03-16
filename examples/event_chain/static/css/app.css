@@ -7788,7 +7788,7 @@ label.panel-block:hover {
 }
 
 .columns.is-mobile > .column.is-4 {
-  flex: 1;
+  flex: none;
   width: 33.33333%;
 }
 
@@ -8187,7 +8187,7 @@ label.panel-block:hover {
   }
 
   .column.is-4, .column.is-4-tablet {
-    flex: 1;
+    flex: none;
     width: 33.33333%;
   }
 
@@ -8587,7 +8587,7 @@ label.panel-block:hover {
   }
 
   .column.is-4-desktop {
-    flex: 1;
+    flex: none;
     width: 33.33333%;
   }
 
@@ -8787,7 +8787,7 @@ label.panel-block:hover {
   }
 
   .column.is-4-widescreen {
-    flex: 1;
+    flex: none;
     width: 33.33333%;
   }
 
@@ -8987,7 +8987,7 @@ label.panel-block:hover {
   }
 
   .column.is-4-fullhd {
-    flex: 1;
+    flex: none;
     width: 33.33333%;
   }
 
