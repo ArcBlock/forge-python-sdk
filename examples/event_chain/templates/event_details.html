@@ -1,147 +1,233 @@
 {% extends "layout.html" %}
 {% block content %}
-    <section class="hero">
-        <section class="session">
-            <br>
-            <br>
-            <section class="hero is-light">
-                <div class="hero-body">
-                    <div class="container has-text-centered">
-                        <h1 class="title">Event Details</h1>
+  <section class="hero">
+
+    <section class="session" style="margin-top: 40px;">
+      {#      <div class="section">#}
+      {#        <figure class="image is-2by1">#}
+      {#          <img src="https://unsplash.it/1200/600?{{ event.address }}"#}
+      {#               alt="#}
+      {#                                {{ event.event_info.title }}"/>#}
+      {#        </figure>#}
+      {#        <div class="columns">#}
+      {#          <div class="column">#}
+      {#            <div class="card" style="height: 350px; width: 380px;">#}
+      {##}
+      {#              <figure class="image">#}
+      {#                <img src="{{ qrcode(url) }}" alt="Image">#}
+      {#              </figure>#}
+      {##}
+      {#      </div>#}
+      <div class="card is-transparent">
+        <div class="card-image">
+          <figure class="image is-3by1"><img src="https://unsplash.it/900/300?{{ event.address }}" alt="Image"></figure>
+        </div>
+        <div class="card-content">
+          <div class="content">
+            <table class="table is-no-bordered" width="100%">
+              <tbody>
+              <tr style="padding: 0px;">
+                <td>
+                  <p class="title is-2">{{ event.event_info.title }}</p>
+                  <p class="subtitle is-6">Created by <a>Riley (000000...0000)</a></p>
+                </td>
+                <td width="30%">
+                  <nav class="level">
+                    <div class="level-item has-text-centered">
+                      <div>
+                        <p class="heading">Tickets</p>
+                        <p class="title">{{ event.event_info.remaining }}/{{ event.event_info.total }}</p>
+                      </div>
                     </div>
-                </div>
-            </section>
-            <br>
-            <br>
-            <div class="section">
-                <figure class="image is-2by1">
-                    <img src="https://unsplash.it/1200/600?{{ event.address }}"
-                         alt="
-                                {{ event.event_info.title }}"/>
-                </figure>
-                <div class="columns">
-                    <div class="column">
-                        <div class="card" style="height: 350px; width: 380px;">
+                    <div class="level-item has-text-centered">
+                      <div>
+                        <p class="heading">Price</p>
+                        <p class="title">{{ event.display_price }} ABT</p>
+                      </div>
+                    </div>
+                  </nav>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+            <table class="table is-no-bordered" width="100%">
+              <tbody>
+              <tr style="padding: 0px;">
+                <td>
+                  <p>About:</p>
+                  <p>{{ event.event_info.description }}</p>
+                </td>
+                <td width="30%">
+                  <hr>
+                  <p><span class="icon is-small is-left" style="margin-right:4px;">
+                          <i class="fa fa-map-marker" style="margin-right:2px;"></i>
+                        </span> {{ event.event_info.location }}</p>
+                  <p><span class="icon is-small is-left" style="margin-right:4px;">
+                          <i class="fa fa-calendar"></i>
+                        </span> {{ event.display_start_time }}</p>
+                  <p><span class="icon is-small is-left" style="margin-right:4px;">
+                          <i class="fa fa-hourglass-start"></i>
+                        </span> {{ event.display_end_time }}</p>
+                  <section class="section" style="padding: 6px 0px;" id="modal">
+                    <a class="button fullwidth is-link is-bold" data-target="#buyTicket"
+                       onclick="$('buyTicket').toggleClass('is-active')">Buy Ticket</a>
+                    <div class="modal" id="buyTicket">
+                      <div class="modal-background"></div>
+                      <div class="modal-card">
+                        <article class="message is-link">
+                          <div class="message-header">
+                            <p>Buy Ticket</p>
+                            <button class="delete"></button>
+                          </div>
+                          <div class="message-body">
+                            <form method="POST" action="/buy">
+                              {{ form.hidden_tag() }}
+                              <input type="hidden" name="address" value="{{ event.address }}"/>
 
-                            <figure class="image">
-                                <img src="{{ qrcode(url) }}" alt="Image">
-                            </figure>
+                              {% if event.event_info.remaining == 0 %}
+                                <p class=""><input type=submit value='Buy' class="button is-info" disabled/>
+                                </p>
 
+                              {% else %}
+                                <div class="contents">
+                                <p>Please confirm you are going to buy the ticket for this event: </p>
+                                <p class="title is-3">{{ event.event_info.title }}</p>
+                                <p>by paying <b>{{ event.display_price }} TBA</b></p>
+                                <table class="table is-no-bordered" width="100%">
+                                  <tbody>
+                                  <tr>
+                                    <td style="padding: 0px;" width="66.6666%">
+                                      <p><b>Note:</b> Click sign to agree this transaction.</p>
+                                      <br>
+                                      <script>
+                                        function myFunction() {
+                                          var x = document.getElementById("testitem ");
+                                          if (x.style.display === "block") {
+                                            x.style.display = "none";
+                                          } else {
+                                            x.style.display = "block";
+                                          }
+                                        }
+                                      </script>
+                                      <div class="field">
+                                        <p class="control">
+                                          <label class="checkbox">
+                                            <input type="checkbox"> By click the button below, I agree with the payment
+                                            information and confirm to buy the ticket.
+                                          </label>
+                                        </p>
+                                      </div>
+                                      <br>
+                                      <input type=submit value='Buy Ticket' class="button is-link"/>
+                                    </td>
+                                    <td style="padding: 0px;">
+                                      <figure class="image"
+                                              style="display: block; margin-left: auto; margin-right: 0px; width: 80%;">
+                                        <img src="{{ qrcode(url) }}" alt="Image">
+                                      </figure>
+                                    </td>
+                                  </tr>
+                                  </tbody>
+                                </table>
+
+                              {% endif %}
+                            </form>
+
+                          </div>
+                        </article>
+                      </div>
+                    </div>
+                  </section>
+                  <section class="section" style="padding: 6px 0px;" id="modal">
+                    <a class="button fullwidth is-link is-bold" data-target="#useTicket"
+                       onclick="$('useTicket').toggleClass('is-active')">Join Event</a>
+                    <div class="modal" id="useTicket">
+                      <div class="modal-background"></div>
+                      <div class="modal-card">
+                        <article class="message is-link">
+                          <div class="message-header">
+                            <p>Join Event</p>
+                            <button class="delete"></button>
+                          </div>
+                          <div class="message-body" style="padding-bottom: 60px;">
+                            <form method="POST" action="/buy">
+                              {{ form.hidden_tag() }}
+                              <input type="hidden" name="address" value="{{ event.address }}"/>
+
+                              {% if event.event_info.remaining == 0 %}
+                                <p class=""><input type=submit value='Buy' class="button is-info" disabled/>
+                                </p>
+
+                              {% else %}
+                                <div class="contents">
+                                  <p>Join us in</p>
+                                  <p class="title is-3">{{ event.event_info.title }}</p>
+                                  <p>by scanning the QR code below</p>
+                                  <figure class="image"
+                                          style="display: block; margin-left: auto; margin-right: auto; width: 30%;">
+                                    <img src="{{ qrcode(url) }}" alt="Image">
+                                  </figure>
+                                </div>
+                              {% endif %}
+                            </form>
+                          </div>
+                        </article>
+                      </div>
+                    </div>
+                  </section>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="column">
+        {#            <div class="card">#}
+        {#              <div class="card-content">#}
+        {#              </div>#}
+        {#            </div>#}
+        {#          </div>#}
+        {#        </div>#}
+        {#      </div>#}
+        <br>
+        <br>
+        <h2 class="title">Who already got the tickets?</h2>
+        <hr>
+        <section class="container">
+
+          {% if tx_lists %}
+            {% for tx_list in tx_lists %}
+              <section class="container">
+                <div class="columns is-multiline features">
+                  {% for tx in tx_list %}
+                    <div class="column is-4">
+                      <div class="card is-shady">
+                        <header class="card-header">
+                          <p class="card-header-title" style="word-wrap: break-word;">#{{ tx.hash }}</p>
+                        </header>
+                        <div class="card-content">
+                          <div class="content">
+                            {#                              <p class="subtitle">#{{ tx.hash }}</p>#}
+                            {#                              <div class="tags are-large">#}
+                            {#                                <span class="tag are-large is-danger">Type: {{ tx.type }}</span>#}
+                            {#                              </div>#}
+                            <p>Sender: {{ tx.sender }}</p>
+                            <p>Receiver: {{ tx.receiver }}</p>
+                            <p>Time: {{ tx.time }}</p>
+
+                          </div>
                         </div>
+                      </div>
                     </div>
-                    <div class="column">
-                        <div class="card">
-                            <div class="card-content">
-                                <div class="media">
-                                    <div class="media-left">
-                                        <figure class="image" style="height: 70px; width: 70px;"><img
-                                                src="https://source.unsplash.com/random/96x96" alt="Image"></figure>
-                                    </div>
-                                    <div class="media-content">
-                                        <p class="title is-4">{{ event.event_info.title }}</p>
-                                        <br>
-                                    </div>
-                                </div>
-                                <div class="content">
-                                    <p class="subtitle is-6">Location: {{ event.event_info.location }}</p>
-                                    <p class="subtitle is-6">Start: {{ event.display_start_time }}</p>
-                                    <p class="subtitle is-6">End: {{ event.display_end_time }}</p>
-                                    <p class="subtitle is-6">Remaining Tickets: {{ event.remaining }}</p>
-                                    <p class="subtitle is-6">Total Tickets: {{ event.event_info.total }}</p>
 
-                                    <p>{{ event.event_info.description }} </p>
-                                    <br>
-                                    <form method="POST" action="/buy">
-                                        {{ form.hidden_tag() }}
-                                        <input type="hidden" name="address" value="{{ event.address }}"/>
-                                        {% if event.event_info.remaining == 0 %}
-                                            <p class=""><input type=submit value='Buy' class="button is-info" disabled/>
-                                            </p>
-                                        {% else %}
-                                            <a class='is-link' onclick="myFunction()">Transaction Details</a>
-                                            <div class="contents" style='display:none' id="myDIV">
-                                                <p><i>You will receive</i>: a ticket for event "{{ event.event_info.title }}" </p>
-                                                <p><i>You will pay</i>: {{ event.display_price }} TBA" </p>
-                                                <p><b>Note:</b> Click sign to agree this transaction.</p>
-                                            </div>
-
-                                            <script>
-                                                function myFunction() {
-                                                    var x = document.getElementById("myDIV");
-                                                    if (x.style.display === "block") {
-                                                        x.style.display = "none";
-                                                    } else {
-                                                        x.style.display = "block";
-                                                    }
-                                                }
-                                            </script>
-                                            <div class="field">
-                                                <p class="control">
-                                                    <label class="checkbox">
-
-                                                        <input type="checkbox"> I agree pay {{ event.display_price }}
-                                                        ABT to execute this transaction
-
-
-                                                    </label>
-                                                </p>
-                                            </div>
-                                            <p class=""><input type=submit
-                                                               value='Sign the Transaction'
-                                                               class="button is-link"/></p>
-                                        {% endif %}
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                  {% endfor %}
                 </div>
-            </div>
-            <br>
-            <br>
-            <h2 class="title">Ticket Selling Transactions</h2>
-            <hr>
-            <section class="section">
-                <section class="container">
-                    {% if tx_lists %}
-                        {% for tx_list in tx_lists %}
-                            <section class="secion">
-                                <div class="columns is-multiline features">
-                                    {% for tx in tx_list %}
-                                        <div class="column is-4">
-                                            <div class="card is-shady">
-                                                <div class="card-image">
-
-                                                    <figure class="image is-3by2">
-                                                        <img src="https://unsplash.it/900/600?{{ tx.hash }}"
-                                                             alt="
-                                {{ event.event_info.title }}"/>
-                                                    </figure>
-
-                                                </div>
-                                                <div class="card-content">
-                                                    <div class="content">
-                                                        <p class="subtitle">hash: {{ tx.hash }}</p>
-                                                        <div class="tags are-large">
-                                                            <span class="tag are-large is-danger">Type: {{ tx.type }}</span>
-                                                        </div>
-                                                        <p>Sender: {{ tx.sender }}</p>
-                                                        <p>Receiver: {{ tx.receiver }}</p>
-                                                        <p>Time: {{ tx.time }}</p>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    {% endfor %}
-                                </div>
-                            </section>
-                        {% endfor %}
-                    {% else %}
-                    {% endif %}
-                </section>
-            </section>
+              </section>
+            {% endfor %}
+          {% else %}
+          {% endif %}
         </section>
     </section>
+  </section>
 {% endblock %}

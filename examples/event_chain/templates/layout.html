@@ -11,22 +11,22 @@
   <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}"/>
   <style>
-  .columns:nth-child(2) {
-    margin-top: -10rem;
-  }
+    .columns:nth-child(2) {
+      margin-top: -10rem;
+    }
 
   </style>
 </head>
 
 <body>
-  <nav class="navbar is-white" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand">
-      <a class="navbar-item">
-        <img src="{{ url_for('static', filename='images/eventchain.png') }}">
-      </a>
+<nav class="navbar is-white" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a class="navbar-item">
+      <img src="{{ url_for('static', filename='images/eventchain.png') }}">
+    </a>
 
-      <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
-      data-target="navbar-basic">
+    <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
+       data-target="navbar-basic">
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
@@ -56,27 +56,27 @@
       Logout
     </a>
     {% endif %} -->
-    <span class="navbar-item" style="text-align: right;">
+      <span class="navbar-item" style="text-align: right;">
       {% if not session.user %}
-      <a class="button is-link is-large-font" href="/login">
+        <a class="button is-link is-bold" href="/login">
         <span>Log In</span>
       </a>
       {% else %}
-      <a class="button is-link is-large-font" href="/logout">
+        <a class="button is-link is-bold" href="/logout">
         <span>Log Out</span>
       </a>
       {% endif %}
     </span>
 
 
-  </div>
+    </div>
 
-</div>
+  </div>
 </nav>
 <main role="main" class="container">
 
   {% for message in get_flashed_messages() %}
-  <div class="alert alert-info">{{ message }}</div>
+    <div class="alert alert-info">{{ message }}</div>
   {% endfor %}
   {% block content %}{% endblock %}
 </main>
