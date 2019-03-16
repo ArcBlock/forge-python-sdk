@@ -237,19 +237,28 @@ def ticket_detail():
 
 @application.route("/buy", methods=['POST'])
 def buy():
+    user = session.get('user')
+    if not user:
+        return redirect('/login')
+
     refresh_token()
     form = EventForm()
     address = form.address.data
+    event = app.get_event_state(address)
 
     error = verify_event(address)
     if error:
         return error
 
-    ticket_address = app.buy_ticket(address, session.get('user'), g.db)
+    ticket_address = app.buy_ticket(address, user, g.db)
     g.logger.info("ticket is bought successfully from web.")
-    flash('Ticket {} is yours now!'.format(ticket_address))
     if not ticket_address:
         g.logger.error("Fail to buy ticket from web.")
+    else:
+        flash(
+            'Congratulations! Ticket for Event "{}" is bought successfully and can be '
+            'viewed under your account!'.format(
+                event.event_info.title))
     return redirect('/')
 
 
@@ -330,7 +339,6 @@ def mobile_account():
 @application.route("/create", methods=['GET', 'POST'])
 def create_event():
     if not session.get('user'):
-        flash('Please register first!')
         return redirect('/login')
     refresh_token()
     form = EventForm()

@@ -137,7 +137,7 @@ def add_multi_sig_to_tx(tx, address, signature):
 
 def to_display_time(timestamp):
     dt = timestamp.ToDatetime()
-    return dt.strftime("%a,%b %d,%Y")
+    return dt.strftime("%a, %b %d, %Y")
 
 
 def time_diff(t1, t2):

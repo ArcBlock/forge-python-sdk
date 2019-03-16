@@ -74,19 +74,6 @@
 
     </div>
 </nav>
-<main role="main" class="container">
+{% block content %}{% endblock %}
 
-    {% for message in get_flashed_messages() %}
-        <div class="notification is-link"  id="layout_msg">
-{#            <button class="delete" onclick="close()"></button>#}
-            {{ message }} </div>
-    {% endfor %}
-    {% block content %}{% endblock %}
-
-    <script>
-        function close() {
-            document.getElementById("layout_msg").style.display = 'none';
-        }
-    </script>
-</main>
 <!-- <script type="text/javascript" src="{{ url_for('static', filename='js/app.js') }}"> -->
