@@ -165,34 +165,21 @@ def buy_ticket(event_address, user, conn=None):
     event_asset = get_event_state(event_address)
     logger.debug('user wallet: {}'.format(user.get_wallet()))
     logger.debug('user token: {}'.format(user.token))
-    ticket_address, create_hash, exchange_hash = event_asset.buy_ticket(
+    exchange_hash = event_asset.buy_ticket(
         user.get_wallet(), user.token,
     )
-    logger.debug("Tick is bought. create hash:{}, exchange hash{}".format(
-        create_hash, exchange_hash,
+    logger.debug("Tick is bought. exchange hash{}".format(
+        exchange_hash,
     ))
-    if ticket_address and conn:
-        db.insert_ticket(
-            conn, ticket_address, event_address, user.address,
-            create_hash, exchange_hash,
-        )
-        return ticket_address
-    else:
-        return None
+    return exchange_hash
 
 
 def buy_ticket_mobile(event_address, address, signature):
-    # wallet_response = helpers.WalletResponse(response)
-    # address = wallet_response.get_address()
-    # logger.debug('mobile wallet address:{}'.format(address))
-    #
-    # signature = wallet_response.get_signature()
-    # logger.debug('mobile wallet signature:{}'.format(signature))
     state = get_event_state(event_address)
-    ticket_address = state.buy_ticket_mobile(
+    ticket_address, hash = state.buy_ticket_mobile(
         address, signature,
     )
-    return ticket_address
+    return ticket_address, hash
 
 
 def get_wallet_address(response):
