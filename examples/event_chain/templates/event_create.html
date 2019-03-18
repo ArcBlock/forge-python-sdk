@@ -1,149 +1,126 @@
 {% extends "layout.html" %}
 {% block content %}
-  <session class="hero">
+    {% for message in get_flashed_messages() %}
+        <article class="message is-warning">
+            <div class="message-header">
+                <p>Warning</p>
+                <button class="delete"></button>
+            </div>
+            <div class="message-body">{{ message }}
+            </div>
+        </article>
+    {% endfor %}
+    <session class="hero">
+        <br>
+        <br>
+        <section class="hero">
+            <br>
+            <br>
+            <section class="hero is-white">
+                <div class="hero-body">
+                    <div class="container has-text-left">
+                        <h1 class="title is-2">Greate Your Own Event!</h1>
+                        <h2 class="subtitle">Fill in the following information and create your shiny event！</h2>
+                    </div>
+                </div>
+            </section>
+            <br>
+            <br>
+    </session>
     <br>
-    <br>
-    <section class="hero">
-      <br>
-      <br>
-      <section class="hero is-white">
-        <div class="hero-body">
-          <div class="container has-text-left">
-            <h1 class="title is-2">Greate Your Own Event!</h1>
-            <h2 class="subtitle">ill in the following information and create your shiny event！</h2>
-          </div>
-        </div>
-      </section>
-      <br>
-      <br>
-  </session>
-  <br>
-  <section class="container">
-    <div class="columns">
-      <div class="column"></div>
-      <div class="column is-three-quarters">
-        <form id="create-product" action="/create" method="POST">
-          <div class="field">
-            <label class="label">Event Title</label>
-            <p class="control">
-              <input class="input is-normal" type="text" name="title" placeholder="Give your event a brief name">
-              {#              <span class="icon is-small is-left">#}
-              {#          <i class="fa fa-align-justify"></i>#}
-              {#        </span>#}
-              {#              <span class="icon is-small is-right">#}
-              {#          <i class="fa fa-check"></i>#}
-              {#        </span>#}
-            </p>
-          </div>
-          <div class="field">
-            <label class="label">Location</label>
-            <p class="control">
-              <input class="input is-normal" type="text" name="location"
-                     placeholder="Where will your event be happened">
-              {#              <span class="icon is-small is-left">#}
-              {#          <i class="fa fa-align-justify"></i>#}
-              {#        </span>#}
-              {#              <span class="icon is-small is-right">#}
-              {#          <i class="fa fa-check"></i>#}
-              {#        </span>#}
-            </p>
-          </div>
-          <div class="field">
-            <table class="table is-no-bordered" width="100%">
-              <tbody>
-              <tr>
-                <td style="padding: 0px;">
-                  <div class="field">
-                    <label class="label">Price</label>
-                    <p class="control">
-                      <input class="input is-normal" type="text" name="ticket_price" placeholder="0.00">
-                      {#              <span class="icon is-small is-left">#}
-                      {#          <i class="fa fa-dollar"></i>#}
-                      {#        </span>#}
-                      {#              <span class="icon is-small is-right">#}
-                      {#          <i class="fa fa-check"></i>#}
-                      {#        </span>#}
-                    </p>
-                  </div>
-                </td>
-                <td style="padding: 0px; padding-left: 10px;">
-                  <div class="field">
-                    <label class="label">Quantity available</label>
-                    <p class="control">
-                      <input class="input is-normal" type="text" name="total" placeholder="0">
-                      {#              <span class="icon is-small is-left">#}
-                      {#          <i class="fa fa-dollar"></i>#}
-                      {#        </span>#}
-                      {#              <span class="icon is-small is-right">#}
-                      {#          <i class="fa fa-check"></i>#}
-                      {#        </span>#}
-                    </p>
-                  </div>
-                </td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="field">
-            <table class="table is-no-bordered" width="100%">
-              <tbody>
-              <tr>
-                <td style="padding: 0px;">
-                  <div class="field">
-                    <label class="label">Starts</label>
-                    <p class="control">
-                      <input class="input is-normal" type="text" value="" name="start_time" placeholder="MM/DD/YYYY">
-                      {#              <span class="icon is-small is-left">#}
-                      {#          <i class="fa fa-calendar"></i>#}
-                      {#        </span>#}
-                      {#              <span class="icon is-small is-right">#}
-                      {#          <i class="fa fa-check"></i>#}
-                      {#        </span>#}
-                    </p>
-                  </div>
-                </td>
+    <section class="container">
+        <div class="columns">
+            <div class="column"></div>
+            <div class="column is-three-quarters">
+                <form id="create-product" action="/create" method="POST">
+                    <div class="field">
+                        <label class="label">Event Title</label>
+                        <p class="control">
+                            <input class="input is-normal" type="text" name="title"
+                                   placeholder="Give your event a brief name">
+                        </p>
+                    </div>
+                    <div class="field">
+                        <label class="label">Location</label>
+                        <p class="control">
+                            <input class="input is-normal" type="text" name="location"
+                                   placeholder="Where will your event be happened">
+                        </p>
+                    </div>
+                    <div class="field">
+                        <table class="table is-no-bordered" width="100%">
+                            <tbody>
+                            <tr>
+                                <td style="padding: 0px;">
+                                    <div class="field">
+                                        <label class="label">Price</label>
+                                        <p class="control">
+                                            <input class="input is-normal" type="text" name="ticket_price"
+                                                   placeholder="0.00">
+                                        </p>
+                                    </div>
+                                </td>
+                                <td style="padding: 0px; padding-left: 10px;">
+                                    <div class="field">
+                                        <label class="label">Quantity available</label>
+                                        <p class="control">
+                                            <input class="input is-normal" type="text" name="total" placeholder="0">
+                                        </p>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="field">
+                        <table class="table is-no-bordered" width="100%">
+                            <tbody>
+                            <tr>
+                                <td style="padding: 0px;">
+                                    <div class="field">
+                                        <label class="label">Starts</label>
+                                        <p class="control">
+                                            <input class="input is-normal" type="text" value="" name="start_time"
+                                                   placeholder="MM/DD/YYYY">
+                                        </p>
+                                    </div>
+                                </td>
 
-                <td style="padding: 0px; padding-left: 10px;">
-                  <div class="field">
-                    <label class="label">Duration</label>
-                    <p class="control">
-                      <input class="input is-normal" type="text" value="" name="end_time" placeholder="MM/DD/YYY">
-                      {#              <span class="icon is-small is-left">#}
-                      {#          <i class="fa fa-calendar"></i>#}
-                      {#        </span>#}
-                      {#              <span class="icon is-small is-right">#}
-                      {#          <i class="fa fa-check"></i>#}
-                      {#        </span>#}
-                    </p>
-                  </div>
-                </td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="field">
-            <label class="label">Event Description</label>
-            <p class="control">
+                                <td style="padding: 0px; padding-left: 10px;">
+                                    <div class="field">
+                                        <label class="label">Duration</label>
+                                        <p class="control">
+                                            <input class="input is-normal" type="text" value="" name="end_time"
+                                                   placeholder="MM/DD/YYY">
+                                        </p>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="field">
+                        <label class="label">Event Description</label>
+                        <p class="control">
           <textarea class="textarea is-normal" type="text" name="description"
-                    placeholder="EInclude need-to-know information to make it easier for people to search for your event page and buy tickets once they're there."
+                    placeholder="Include need-to-know information to make it easier for people to search for your event page and buy tickets once they're there."
                     style="height: 260px"></textarea>
-            </p>
-          </div>
-
-
-        </form>
-        <div class="field" style="margin-top: 40px;">
-          <p class="control">
-            <button class="button is-link is-bold is-large-font" name="submit">Make Your Event Live</button>
-          </p>
-          <p class="help is-success result-text">
+                        </p>
+                    </div>
+                    <div class="field" style="margin-top: 40px;">
+                        <p class="control">
+                            <button class="button is-link is-bold is-large-font" name="submit">Make Your Event Live
+                            </button>
+                        </p>
+                        <p class="help is-success result-text">
+                    </div>
+                </form>
+            </div>
+            <div class="column"></div>
         </div>
-      </div>
-      <div class="column"></div>
-    </div>
-  </section>
-  <section class="section">
-    <br>
-    <br>
-  </section>
+    </section>
+    <section class="section">
+        <br>
+        <br>
+    </section>
 {% endblock %}

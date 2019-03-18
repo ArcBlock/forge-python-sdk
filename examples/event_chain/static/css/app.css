@@ -6022,14 +6022,17 @@ a.list-item {
   overflow: hidden;
   position: fixed;
   z-index: 40;
+
 }
 
 .modal.is-active {
   display: flex;
+  z-index: 40;
+
 }
 
 .modal-background {
-  background-color: rgba(10, 10, 10, 0.86);
+  background-color: rgba(128, 128, 128, 0.8);
 }
 
 .modal-content,

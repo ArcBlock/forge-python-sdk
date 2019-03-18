@@ -1,79 +1,93 @@
 {% extends "layout.html" %}
 {% block content %}
-  <section class="hero">
-    <br>
-    <br>
-    <section class="hero is-white">
-      <div class="hero-body">
-        <div class="container has-text-left">
-          <h1 class="title is-2 separate">Good morning, Riley!</h1>
-          <h2 class="subtitle">Check your tickets and events here</h2>
-        </div>
-      </div>
-    </section>
-    <br>
-    <br>
-    <section class="section">
-      <h2 class="title">My Tickets
-        <hr>
-      </h2>
-      <section class="container">
-        {% if ticket_lists %}
-          {% for tickets in ticket_lists %}
-           <section class="container">
-            <div class="columns is-multiline features">
-              {% for ticket in tickets %}
-                <div class="column is-4">
-                  <div class="card is-shady">
-                    <header class="card-header">
-                      <p class="card-header-title"> {{ events.get(ticket.address).event_info.title }} </p>
-                    </header>
-                    {#                      <div class="card-image">#}
-                    {#                        {% if ticket.transferrable == False %}#}
-                    {#                          <figure class="watermarked image is-2by1">#}
-                    {#                            <img src="https://unsplash.it/1200/600?{{ ticket.address }}"#}
-                    {#                                 alt="pic"/>#}
-                    {#                          </figure>#}
-                    {#                        {% else %}#}
-                    {#                          <figure class="image is-2by1">#}
-                    {#                            <img src="https://unsplash.it/1200/600?{{ ticket.address }}"#}
-                    {#                                 alt="pic"/>#}
-                    {#                          </figure>#}
-                    {#                        {% endif %}#}
-                    {##}
-                    {#                      </div>#}
-                    <div class="card-content">
-                      <div class="content">
-                        <div class="content"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec
-                          iaculis
-                          mauris.
-                          <br>
-                          <small>2019-02-21</small>
+    <main role="main" class="container">
 
-                        </div>
-                      </div>
-                    </div>
-                    <footer class="card-footer">
-                      {% if ticket.transferrable==True %}
-                        <a class="card-footer-item"
-                           href="/ticket-detail?address={{ ticket.address }}">
-                          Use Ticket</a>
-                      {% else %}
-                        <a class="bcard-footer-item"
-                           href="/ticket-detail?address={{ ticket.address }}">
-                          View Ticket</a>
-                      {% endif %}
-                    </footer>
-                  </div>
+        {% for message in get_flashed_messages() %}
+            <div class="notification is-light" id="layout_msg">
+                {{ message }} </div>
+        {% endfor %}
+    </main>
+    <section class="hero">
+        <br>
+        <br>
+        <section class="hero is-white">
+            <div class="hero-body">
+                <div class="container has-text-left">
+                    <h1 class="title is-2 separate">Good morning, Riley!</h1>
+                    <h2 class="subtitle">Check your tickets and events here</h2>
                 </div>
-              {% endfor %}
             </div>
-           </section>
-          {% endfor %}
-        {% else %} <h1>There's no tickets created yet!</h1>
-        {% endif %}
-      </section>
+        </section>
+        <br>
+        <br>
+        <section class="section">
+            <section class="container">
+                <h2 class="title"> Summary</h2>
+                <hr>
+                <br>
+                <div class="media">
+                    <div class="media-left">
+                        <figure class="image" style="height: 70px; width: 70px;"><img
+                                src="https://source.unsplash.com/random/96x96" alt="Image"></figure>
+                    </div>
+                    <div class="media-content">
+                        <p class="title is-4">{{ user.moniker }}</p>
+                        <p class='text-center'><strong>Address:</strong> <i>{{ user.address }}</i></p>
+                    </div>
+                </div>
+                <div class="contents">
+                    <br>
+                    <br>
+                    <br>
+                    <h3 class='title is-5'><strong>Balance: </strong> <i>{{ user.display_balance }}</i> ABT</h3>
+                </div>
+            </section>
+        </section>
+        <section class="section">
+            <section class="container">
+            <h2 class="title">My Tickets
+                <hr>
+            </h2>
+                {% if ticket_lists %}
+                    {% for tickets in ticket_lists %}
+                        <section class="container">
+                            <div class="columns is-multiline features">
+                                {% for ticket in tickets %}
+                                    <div class="column is-4">
+                                        <div class="card is-shady">
+                                            <header class="card-header">
+                                                <p class="card-header-title"> {{ events.get(ticket.address).event_info.title }} </p>
+                                            </header>
+                                            <div class="card-content">
+                                                <div class="content">
+                                                    <div class="content">
+                                                        <p>Location: {{ events.get(ticket.address).event_info.location }}</p>
+                                                        <p>Start Time: {{ events.get(ticket.address).display_start_time }}</p>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <footer class="card-footer">
+                                                {% if ticket.transferrable==True %}
+                                                    <a class="card-footer-item"
+                                                       href="/ticket-detail?address={{ ticket.address }}">
+                                                        Ticket Details</a>
+                                                {% else %}
+                                                    <a class="bcard-footer-item"
+                                                       href="/ticket-detail?address={{ ticket.address }}">
+                                                        View Ticket</a>
+                                                {% endif %}
+                                            </footer>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </section>
+                    {% endfor %}
+                {% else %} <h1>There's no tickets created yet!</h1>
+                {% endif %}
+            </section>
+        </section>
     </section>
-  </section>
 
 {% endblock %}
