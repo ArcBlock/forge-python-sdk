@@ -39,7 +39,7 @@ def create_asset_ticket_info(id, event_address):
     )
     ticket_itx = protos.CreateAssetTx(
         data=utils.encode_to_any(
-            'ec:s:ticket',
+            'ec:s:ticket_info',
             ticket_info,
         ),
         readonly=True,
@@ -49,9 +49,7 @@ def create_asset_ticket_info(id, event_address):
 
 def gen_exchange_tx(value, ticket_address, event_address):
     receiver = protos.ExchangeInfo(
-        # TODO: convert long to bytes
-        # ctypes.c_uint32(value).value.encode()
-        value=protos.BigUint(value=b'0', ),
+        value=protos.BigUint(value=utils.int_to_bytes(int(value))),
     )
     sender = protos.ExchangeInfo(assets=[ticket_address])
     exchange_tx = protos.ExchangeTx(
@@ -242,20 +240,28 @@ class EventAssetState:
         self.issuer = asset_state.issuer
         self.context = asset_state.context
         self.stake = asset_state.stake
+
         self.event_info = utils.parse_to_proto(
             asset_state.data.value,
             protos.EventInfo,
         )
+        self.type_url = asset_state.data.type_url
         self.remaining = self.event_info.remaining
         self.tickets = self.event_info.tickets
         self.participants = self.event_info.participants
         self.display_start_time = helpers.to_display_time(
             self.event_info.start_time,
         )
+
+        # for front end display purpose
         self.display_end_time = helpers.to_display_time(
             self.event_info.end_time,
         )
-        self.display_price = self.event_info.ticket_price / 10000000000000000
+        self.duration = helpers.time_diff(
+            self.event_info.start_time,
+            self.event_info.end_time,
+        ).days
+        self.display_price = int(self.event_info.ticket_price / 1e+16)
 
     def get_next_ticket(self):
         if not self.tickets:
@@ -530,6 +536,8 @@ class TicketAssetState:
             asset_state.data.value,
             protos.TicketInfo,
         )
+
+        self.type_url = asset_state.data.type_url
         self.id = self.ticket_info.id
         self.event_address = self.ticket_info.event_address
         self.is_used = self.ticket_info.is_used
@@ -666,6 +674,8 @@ class ParticipantAccountState:
         self.num_assets = state.num_assets
         self.stake = state.stake
         self.pinned_files = state.pinned_files
+
+        self.display_balance = utils.bytes_to_int(self.balance.value) / 1e16
 
         self.participant_info = utils.parse_to_proto(
             state.data.value,

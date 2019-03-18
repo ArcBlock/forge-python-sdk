@@ -1,1 +1,1 @@
-from examples import event_chain
+import event_chain

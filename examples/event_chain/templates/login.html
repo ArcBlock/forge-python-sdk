@@ -8,42 +8,64 @@
         <section class="hero is-light">
             <div class="hero-body">
                 <div class="container has-text-centered">
-                    <h1 class="title">Declare Yourself</h1>
+                    <h1 class="title">Log In</h1>
                     <br>
-                    <h2 class="subtitle">Choose a way to declare your wallet</h2>
+                    <h2 class="subtitle">Where all the fun gets started</h2>
                 </div>
             </div>
         </section>
         <br>
         <br>
     </session>
+     <div class="container">
+            <main role="main" class="container">
+            {% for message in get_flashed_messages() %}
+                <article class="message is-warning">
+                    <div class="message-header">
+                        <p>Warning</p>
+                        <button class="delete"></button>
+                    </div>
+                    <div class="message-body">{{ message }}
+                    </div>
+                </article>
+            {% endfor %}
+        </main>
+        </div>
+    <br>
 
     <section class="container">
         <div class="columns features">
             <div class="column is-4 is-offset-1">
-                <h3 class="title has-text-grey">Register a wallet</h3>
-                <p class="subtitle has-text-grey">Create a passphrase protected wallet in this node</p>
+                <h2 class="title has-text-grey has-text-centered">New User</h2>
+                <hr>
+                <p class="subtitle has-text-grey has-text-centered">Create a passphrase protected wallet</p>
                 <div class="box">
-                    <figure class="avatar">
-                        <img src="/static/images/digit.jpg" style="width: 128px;height: 128px">
-                    </figure>
+                    {#                    <figure class="avatar">#}
+                    {#                        <img src="/static/images/digit.jpg" style="width: 128px;height: 128px">#}
+                    {#                    </figure>#}
                     <form class="login-form" action="/register" method="POST">
+                        <br>
                         <div class="field">
                             <div class="control">
-                                <input class="input is-large" type="text" name="name" placeholder=" Wallet name"
+                                <input class="input is-medium" type="text" name="name" placeholder=" Name"
                                        autofocus="">
                             </div>
                         </div>
+                        <br>
+                        <br>
 
                         <div class="field">
                             <div class="control">
-                                <input class="input is-large" name="passphrase" type="password"
-                                       placeholder=" Unlock passphrase">
+                                <input class="input is-medium " name="passphrase" type="password"
+                                       placeholder=" Passphrase">
                             </div>
                         </div>
                         <p class="help is-danger error-text">
                         </p>
-                        <button class="button is-block is-info is-large is-fullwidth">Register</button>
+                        <br>
+                        <br>
+                        <input value='Register' type='submit' class="button is-medium is-link is-fullwidth">
+
                         <p class="help is-success success-text">
                         </p>
                         {{ form.hidden_tag() }}
@@ -51,75 +73,44 @@
                 </div>
             </div>
             <div class="column is-4 is-offset-2">
-                <h3 class="title has-text-grey">Unlock</h3>
-                <p class="subtitle has-text-grey">You need to unlock your existing wallet to use Event Chain</p>
+                <h3 class="title has-text-grey has-text-centered">Existing User</h3>
+                <hr>
+                <p class="subtitle has-text-grey has-text-centered">Load the existing wallet</p>
                 <div class="box">
-                    <figure class="avatar">
-                        <img src="/static/images/key.jpg" style="width: 128px;height: 128px">
-                    </figure>
                     <form action="/login" class="login-form" method="POST">
                         <div class="field">
                             <div class="control">
-                                <input class="input is-large" name="name" type="text" placeholder=" Please input name">
+                                <input class="input is-medium" name="address" type="text"
+                                       placeholder=" Wallet Address">
                             </div>
                         </div>
-
+                        <br>
                         <div class="field">
                             <div class="control">
-                                <input class="input is-large" name="passphrase" type="password"
-                                       placeholder=" Please input passphrase">
+                                <input class="input is-medium" name="name" type="text" placeholder=" Please input name">
                             </div>
                         </div>
-
+                        <br>
                         <div class="field">
                             <div class="control">
-                                <input class="input is-large" name="address" type="text"
-                                       placeholder=" Please input address">
+                                <input class="input is-medium" name="passphrase" type="password"
+                                       placeholder="Passphrase">
                             </div>
                         </div>
+                        <br>
+
                         {{ form.hidden_tag() }}
-                        <input type="submit" class="button is-block is-info is-large is-fullwidth" value="Log In"/>
+                        <div class="field">
+                            <div class="control">
+                                <input type="submit" class="button  is-link is-medium is-fullwidth" value="Log In"/>
+                            </div>
+                        </div>
+
+
                     </form>
                 </div>
 
-{#            </div>#}
-{#            <div class="column is-4 ">#}
-{#                <h3 class="title has-text-grey">Recover a wallet</h3>#}
-{#                <p class="subtitle has-text-grey">Recover a passphrase protected wallet in this node</p>#}
-{#                <div class="box">#}
-{#                    <figure class="avatar">#}
-{#                        <img src="/static/images/digit.jpg" style="width: 128px;height: 128px">#}
-{#                    </figure>#}
-{#                    <form class="login-form" action="/recover" method="POST">#}
-{#                        <div class="field">#}
-{#                            <div class="control">#}
-{#                                <input class="input is-large" type="text" name="data" placeholder="Secret Key"#}
-{#                                       autofocus="">#}
-{#                            </div>#}
-{#                        </div>#}
-{#                        <div class="field">#}
-{#                            <div class="control">#}
-{#                                <input class="input is-large" type="text" name="name" placeholder=" Wallet name"#}
-{#                                       autofocus="">#}
-{#                            </div>#}
-{#                        </div>#}
-{##}
-{#                        <div class="field">#}
-{#                            <div class="control">#}
-{#                                <input class="input is-large" name="passphrase" type="password"#}
-{#                                       placeholder=" Unlock passphrase">#}
-{#                            </div>#}
-{#                        </div>#}
-{#                        <p class="help is-danger error-text">#}
-{#                        </p>#}
-{#                        <button class="button is-block is-info is-large is-fullwidth">Recover</button>#}
-{#                        <p class="help is-success success-text">#}
-{#                        </p>#}
-{#                        {{ form.hidden_tag() }}#}
-{#                    </form>#}
-{#                </div>#}
-{#            </div>#}
-        </div>
+            </div>
 
     </section>
 

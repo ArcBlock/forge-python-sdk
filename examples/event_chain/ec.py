@@ -1,13 +1,14 @@
 import ast
-import base64
 import json
 import logging
 import sqlite3
 import sys
 from time import sleep
 
+import base58
 import event_chain.application.app as app
 import event_chain.config.config as config
+import event_chain.db.utils as db
 import requests
 from event_chain.utils import helpers
 from flask import flash
@@ -19,13 +20,14 @@ from flask import request
 from flask import Response
 from flask import session
 from flask_qrcode import QRcode
+from flask_session import Session
 from flask_wtf import FlaskForm
 from wtforms import IntegerField
 from wtforms import StringField
 from wtforms import SubmitField
+from wtforms import ValidationError
+from wtforms import validators
 from wtforms.validators import DataRequired
-
-from flask_session import Session
 
 application = Flask(__name__)
 application.config['SECRET_KEY'] = 'hihihihihi'
@@ -38,27 +40,97 @@ QRcode(application)
 
 logging.basicConfig(level=logging.DEBUG)
 DB_PATH = config.db_path
+SERVER_ADDRESS = "http://" + config.app_host + ":" + str(config.app_port) + "/"
+
 logging.info('DB: {}'.format(DB_PATH))
 logging.info('forge port {}'.format(config.forge_config.sock_grpc))
-APP_SK = "Usi5RHoF/YGoGvbt7TQMaz55p3" \
-         "+dl4HUi6M9mHkLuzpJLJxpXrvfQ3ZS189YWlieMik3TKqQuk9hhFLcg/WM8A=="
-APP_PK = "SSycaV6730N2UtfPWFpYnjIpN0yqkLpPYYRS3IP1jPA="
-APP_ADDR = "z1gJMDjiA9HfbXw9YD2DWKkKWaBJAAMttGu"
+logging.info('app server address: {}'.format(SERVER_ADDRESS))
 
-HOST = 'http://did-workshop.arcblock.co:5000/'
+APP_SK = "z3m3Sz661YRQWj5DMZhfQgBsYpdSdkEBXb7z2zrbjQ" \
+         "rE9gmXP2CE6jjQhZMpwp72bF8JEKjgMayxrx4fiqgrt8NHs"
+APP_PK = "z8fwfKXGPm4oKF79Ve2qaX2eyH4z35Hogmi3BUgNwxGNy"
+APP_ADDR = "z1gQpyTi3zfQ98Tjwy8cwKiyBxkk5K9C9wD"
+
 ARC = 'https://arcwallet.io/i/'
+
+
+def is_loggedin():
+    if session.get('user'):
+        return True
+    else:
+        return redirect('/login')
 
 
 class EventForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     confirm = SubmitField('Confirm')
-    total = StringField('Total')
-    start_time = StringField("StartTime")
+    total = StringField('Total', validators=[DataRequired()])
+    start_time = StringField("StartTime", validators=[DataRequired()])
     description = StringField("Description")
-    end_time = StringField("EndTime")
-    ticket_price = IntegerField("TicketPrice")
+    end_time = StringField("EndTime", validators=[DataRequired()])
+    ticket_price = IntegerField("TicketPrice", validators=[DataRequired()])
     address = StringField('Address')
-    location = StringField('Location')
+    location = StringField('Location', validators=[DataRequired()])
+
+
+def validate_name(form, field):
+    for i in field.data:
+        if i == ' ':
+            raise ValidationError('Name should not contain white space.')
+        if not i.isalnum():
+            raise ValidationError(
+                'Name should not contain special character',
+            )
+
+
+def validate_passphrase(form, field):
+    has_alpha = False
+    has_num = False
+    for i in field.data:
+        if i.isnumeric():
+            has_num = True
+        if i.isalpha():
+            has_alpha = True
+    if not has_alpha or not has_num:
+        raise ValidationError(
+            "Password must have both letters and numbers!",
+        )
+
+
+def verify_ticket(address):
+    if not address:
+        return response_error("Please provide a valid ticket address.")
+    try:
+        app.verify_ticket_address(address)
+    except Exception as e:
+        return response_error(e.args[0])
+
+
+def verify_event(address):
+    if not address:
+        return response_error("Please provide a valid event address.")
+    try:
+        app.verify_event_address(address)
+    except Exception as e:
+        return response_error(e.args[0])
+
+
+class RegisterForm(FlaskForm):
+    name = StringField(
+        'Name', validators=[
+            DataRequired(),
+            validators.length(min=4, max=10),
+            validate_name,
+        ],
+    )
+    passphrase = StringField(
+        'Passphrase', validators=[
+            DataRequired(),
+            validate_passphrase,
+        ],
+    )
+    confirm = SubmitField('Confirm')
+    address = StringField('Address')
 
 
 def wait():
@@ -87,14 +159,23 @@ def gen_mobile_url(event_address):
         'appPk': APP_PK,
         'appDid': 'did:abt:' + APP_ADDR,
         'action:': 'requestAuth',
-        'url': HOST + 'api/mobile-buy-ticket/{}'.format(event_address),
+        'url': SERVER_ADDRESS + 'api/mobile-buy-ticket/{}'.format(
+            event_address,
+        ),
     }
     r = requests.Request('GET', ARC, params=params).prepare()
-    g.logger.info('Url generated {}'.format(r.url))
+    g.logger.info(u'Url generated {}'.format(r.url))
     return r.url
 
 
-def gen_did_url(url):
+def gen_consume_url(event_address):
+    url = SERVER_ADDRESS + 'api/mobile-require-asset/{}'.format(
+        event_address,
+    )
+    return gen_did_url(url, 'RequestAuth')
+
+
+def gen_did_url(url, action):
     g.logger.debug(
         "Generating url for DID call. Call back url provided is {}".format(
             url,
@@ -103,80 +184,94 @@ def gen_did_url(url):
     params = {
         'appPk': APP_PK,
         'appDid': 'did:abt:' + APP_ADDR,
-        'action:': 'requestAuth',
+        'action:': action,
         'url': url,
     }
     r = requests.Request('GET', ARC, params=params).prepare()
-    g.logger.info('DID Url generated {}'.format(r.url))
     return r.url
 
 
 @application.route("/details/<address>", methods=['GET', 'POST'])
 def event_detail(address):
-    if address and address != '':
-        event = app.get_event_state(address)
-        form = EventForm()
-        if not session.get('user', None):
-            flash('Please register first!')
-            return redirect('/login')
+    error = verify_event(address)
+    if error:
+        return error
+
+    event = app.get_event_state(address)
+    form = EventForm()
+    if is_loggedin():
         url = gen_mobile_url(address)
+        g.logger.info("Url for mobile buy ticket: {}".format(url))
+
+        consume_url = gen_consume_url(address)
+        g.logger.info("Url for mobile consume ticket: {}".format(consume_url))
+
         txs = app.list_ticket_exchange_tx(address)
         tx_lists = chunks(txs, 3)
         return render_template(
             'event_details.html', event=event, form=form,
-            url=url, tx_lists=tx_lists,
+            url=url, tx_lists=tx_lists, consume_url=consume_url,
         )
-    else:
-        g.logger.error("No event address provided.")
-        redirect('/')
+    return redirect('/login')
 
 
 @application.route("/ticket-detail", methods=['GET', 'POST'])
 def ticket_detail():
     form = EventForm()
-    address = request.args.get('address', None)
-    if not address:
-        flash("/tickets")
-        return redirect('/')
-    ticket = app.get_ticket_state(address)
-    if not ticket:
-        flash("Ticket is not available.")
-        return redirect('/')
-
-    event = app.get_event_state(ticket.ticket_info.event_address)
-    if not event:
-        flash("Event is not availlable")
-        return redirect('/')
-    call_back_url = HOST + "api/mobile-consume-ticket/{}".format(
-        address,
+    address = form.address.data if form.address.data else request.args.get(
+        'address',
     )
-    url = gen_did_url(call_back_url)
+    view_only = request.args.get('viewonly', False)
+    error = verify_ticket(address)
+    if error:
+        return error
+    ticket = app.get_ticket_state(address)
+    event = app.get_event_state(ticket.event_address)
+    host = app.get_participant_state(event.owner)
 
     return render_template(
-        "ticket_details.html", ticket=ticket, event=event,
-        url=url,
-        form=form,
+        "ticket_details.html", ticket=ticket, event=event, form=form,
+        host=host, view_only=view_only,
     )
 
 
 @application.route("/buy", methods=['POST'])
 def buy():
+    user = session.get('user')
+    if not user:
+        return redirect('/login')
+
     refresh_token()
     form = EventForm()
     address = form.address.data
-    g.logger.debug('address: {}'.format(form.address))
-    g.logger.debug('submit: {}'.format(form.confirm))
-    if not address or address == '':
-        g.logger.error("No event address.")
+    event = app.get_event_state(address)
+
+    error = verify_event(address)
+    if error:
+        return error
+
+    ticket_address = app.buy_ticket(address, user, g.db)
+    g.logger.info("ticket is bought successfully from web.")
+    if not ticket_address:
+        g.logger.error("Fail to buy ticket from web.")
     else:
-        app.buy_ticket(address, session['user'], g.db)
+        flash(
+            'Congratulations! Ticket for Event "{}" is bought successfully and can be '
+            'viewed under your account!'.format(
+                event.event_info.title))
     return redirect('/')
 
 
 @application.route("/activate/<address>", methods=['GET', 'POST'])
 def use(address):
     refresh_token()
+
+    error = verify_ticket(address)
+    if error:
+        return error
+
     app.consume(address, session['user'])
+    # add flash success message
     return redirect('/')
 
 
@@ -193,38 +288,70 @@ def event_list():
 def get_event_for_ticket(tickets):
     res = {}
     for ticket in tickets:
-        event = app.get_event_state(ticket.ticket_info.event_address)
+        event_address = ticket.ticket_info.event_address
+        event = app.get_event_state(event_address)
         res[ticket.address] = event
     return res
 
 
+@application.route("/logout", methods=['GET', 'POST'])
+def logout():
+    session['user'] = None
+    db.delete_mobile_address(g.db)
+    return redirect('/')
+
+
 @application.route("/tickets")
 def ticket_list():
-    tickets = app.list_unused_tickets(session['user'].address)
+    if not session.get('user'):
+        return redirect('login')
+    tickets = app.list_unused_tickets(session.get('user').address)
+    user = app.get_participant_state(session.get('user').address)
     events = get_event_for_ticket(tickets)
     ticket_lists = chunks(tickets, 3)
     return render_template(
         'tickets.html', ticket_lists=ticket_lists, events=events,
+        user=user, view_only=False
+    )
+
+
+@application.context_processor
+def inject_mobile_address():
+    return dict(mobile_address=db.get_last_mobile_address(g.db))
+
+
+@application.route("/mobile-account", methods=['GET'])
+def mobile_account():
+    address = db.get_last_mobile_address(g.db)
+    if not address:
+        flash("Please use your mobile wallet to buy a ticket first!")
+        return redirect('/')
+    tickets = app.list_unused_tickets(address)
+    user = app.get_participant_state(address)
+    events = get_event_for_ticket(tickets)
+    ticket_lists = chunks(tickets, 3)
+    return render_template(
+        'tickets.html', ticket_lists=ticket_lists, events=events,
+        user=user, view_only=True
     )
 
 
 @application.route("/create", methods=['GET', 'POST'])
 def create_event():
-    if not session.get('user', None):
-        flash('Please register first!')
+    if not session.get('user'):
         return redirect('/login')
     refresh_token()
     form = EventForm()
     if form.validate_on_submit():
         if request.method == "POST":
             app.create_event(
-                user=session['user'],
+                user=session.get('user'),
                 title=form.title.data,
                 total=form.total.data,
                 description=form.description.data,
                 start_time=form.start_time.data,
                 end_time=form.end_time.data,
-                ticket_price=form.ticket_price.data * 10000000000000000,
+                ticket_price=form.ticket_price.data * 1e+16,
                 location=form.location.data,
                 conn=g.db,
             )
@@ -235,44 +362,27 @@ def create_event():
     return render_template('event_create.html', form=form)
 
 
-class RegisterForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired()])
-    passphrase = StringField('Passphrase', validators=[DataRequired()])
-    data = StringField('Data')
-    confirm = SubmitField('Confirm')
-    address = StringField('Address')
-
-
-@application.route("/peek", methods=['GET', 'POST'])
-def peek():
-    ticket_lists = []
-    events = []
-    address = request.form.get('address', None)
-    msg = ''
-    if address:
-        user = app.get_participant_state(address)
-        if user:
-            tickets = app.list_unused_tickets(address)
-            events = get_event_for_ticket(tickets)
-            ticket_lists = chunks(tickets, 3)
-        else:
-            msg = "This user doesn't exist! Try another one!"
-    return render_template(
-        'peek.html', ticket_lists=ticket_lists, msg=msg,
-        events=events,
-    )
-
-
 def refresh_token():
-    user = session['user']
+    user = session.get('user')
     user = app.load_user(
         moniker=user.moniker,
         passphrase=user.passphrase,
         conn=g.db,
         address=user.address,
     )
-    session.clear()
     session['user'] = user
+
+
+def flash_errors(form):
+    """Flashes form errors"""
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(
+                u"Error in the {} field - {}".format(
+                    getattr(form, field).label.text,
+                    error,
+                ), 'error',
+            )
 
 
 @application.route("/login", methods=['GET', 'POST'])
@@ -286,13 +396,14 @@ def login():
         )
         session['user'] = user
         return redirect('/')
+    else:
+        flash_errors(form)
     return render_template('login.html', form=form)
 
 
 @application.route("/register", methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
-
     if form.validate_on_submit():
         user = app.register_user(
             form.name.data,
@@ -308,110 +419,49 @@ def register():
         )
         g.logger.debug("form is validated!!")
         wait()
-        return redirect('/')
+    else:
+        flash_errors(form)
+        return render_template('login.html', form=form)
+    return redirect('/')
 
 
-@application.route("/recover", methods=['GET', 'POST'])
-def recover():
-    form = RegisterForm()
-
-    if form.validate_on_submit():
-        user = app.recover_user(
-            form.data.data.encode('utf8'),
-            form.name.data,
-            form.passphrase.data,
-            g.db,
-        )
-        session['user'] = user
+def send_did_request(
+        url, description, endpoint, workflow, tx=None,
+        target=None,
+):
+    if tx:
+        base58_encoded = (b'z' + base58.b58encode(
+            tx.SerializeToString(),
+        )).decode()
         g.logger.debug(
-            'New User recovered! wallet: {}, token: {}'.format(
-                user.wallet,
-                user.token,
-            ),
+            u"Sending request to DID with base58 encoded tx: {} and"
+            u" url {}".format(base58_encoded, url),
         )
-        g.logger.debug("form is validated!!")
-        return redirect('/')
+    else:
+        base58_encoded = None
 
-
-@application.route(
-    "/api/mobile-consume-ticket/<ticket_address>",
-    methods=['GET', 'POST'],
-)
-def mobile_consume_ticket(ticket_address):
-    user_did = request.args.get('userDid', None)
-    if not user_did:
-        return response_error("Please provide a valid user did.")
-    user_address = user_did.split(":")[2]
-    g.logger.debug(
-        "user address parsed from consume request {}".format(user_address),
-    )
-    ticket = app.get_ticket_state(ticket_address)
-    if not ticket:
-        return response_error("Requested ticket is not available.")
-
-    event = app.get_event_state(ticket.ticket_info.event_address)
-    if not event:
-        return response_error("Requested event is not available.")
-
-    if request.method == 'GET':
-        consume_tx = event.event_info.consume_tx
-        multisig_data = helpers.encode_string_to_any(
-            'fg:x:address',
-            ticket_address,
-        )
-
-        new_tx = helpers.update_tx_multisig(
-            tx=consume_tx, signer=user_address,
-            data=multisig_data,
-        )
-        g.logger.debug('new tx {}:'.format(new_tx))
-        call_back_url = HOST + "api/mobile-consume-ticket/{}".format(
-            ticket_address,
-        )
-        response = send_did_request(new_tx, gen_did_url(call_back_url))
-
-        json_response = json.loads(response.content)
-        g.logger.debug('Response: {}'.format(json_response))
-        return json_response
-
-    if request.method == 'POST':
-        req = ast.literal_eval(request.get_data(as_text=True))
-        g.logger.debug("Receives data from wallet {}".format(req))
-        hash = app.consume_ticket_mobile(ticket_address, req)
-        if hash:
-            g.logger.info(
-                "Ticket {} is consumed successfully by mobile, hash: {"
-                "}.".format(
-                    ticket_address, hash,
-                ),
-            )
-            js = json.dumps({'hash': hash})
-            resp = Response(js, status=200, mimetype='application/json')
-            return resp
-        else:
-            return response_error('error in consumming ticket.')
-
-
-def send_did_request(tx, url):
-    base64_encoded = base64.b64encode(tx)
-    g.logger.debug(
-        "Sending request to DID with base64 encoded tx: {} and url {"
-        "}".format(
-            base64_encoded, url,
-        ),
-    )
     params = {
         'sk': APP_SK,
         'pk': APP_PK,
         'address': APP_ADDR,
-        'tx': base64_encoded,
+        'tx': base58_encoded,
+        'description': description,
+        'target': target,
         'url': url,
+        'workflow': workflow,
     }
     headers = {'content-type': 'application/json'}
-    return requests.post(
-        'http://did-workshop.arcblock.co:4000/api/authinfo',
+    call_url = 'http://localhost:4000/api/' + endpoint
+    g.logger.debug('call url : {}'.format(call_url))
+    response = requests.post(
+        call_url,
         json=params,
         headers=headers,
+    )
+    g.logger.info("Response from did: {}".format(response.content.decode()))
+    return Response(
+        response.content.decode(), status=200,
+        mimetype='application/json',
     )
 
 
@@ -420,68 +470,68 @@ def send_did_request(tx, url):
     methods=['GET', 'POST'],
 )
 def mobile_buy_ticket(event_address):
-    if request.method == 'GET':
-        user_did = request.args.get('userDid', None)
-        if not user_did:
-            return response_error("Please provide a valid user did.")
-        user_address = user_did.split(":")[2]
-        g.logger.debug(
-            "user address parsed from request {}".format(user_address),
-        )
-        event = app.get_event_state(event_address)
-        #
-        # multisig = protos.Multisig(signer=user_address)
-        # parmas = {
-        #     'from': getattr(exchange_tx, 'from'),
-        #     'nonce': exchange_tx.nonce,
-        #     'signature': exchange_tx.signature,
-        #     'chain_id': exchange_tx.chain_id,
-        #     'signatures': [multisig],
-        #     'itx': exchange_tx.itx,
-        # }
-        # new_tx = protos.Transaction(**parmas)
-        new_tx = helpers.update_tx_multisig(
-            event.get_exchange_tx(),
-            user_address,
-        )
-        g.logger.debug('new tx {}:'.format(new_tx))
+    try:
+        error = verify_event(event_address)
+        if error:
+            return error
+        if request.method == 'GET':
+            user_did = request.args.get('userDid', None)
+            if not user_did:
+                return response_error("Please provide a valid user did.")
+            user_address = user_did.split(":")[2]
+            g.logger.debug(
+                "user address parsed from request {}".format(user_address),
+            )
 
-        base64_encoded = base64.b64encode(new_tx.SerializeToString())
-        g.logger.debug("Sent tx base64 encoded: {}".format(base64_encoded))
+            event = app.get_event_state(event_address)
+            updated_exchange_tx = helpers.update_tx_multisig(
+                event.get_exchange_tx(),
+                user_address,
+            )
+            g.logger.debug('new tx {}:'.format(updated_exchange_tx))
+            call_back_url = SERVER_ADDRESS + "api/mobile-buy-ticket/"
+            des = 'Confirm the purchase below.'
+            endpoint = 'requireMultiSig'
 
-        params = {
-            'sk': APP_SK,
-            'pk': APP_PK,
-            'address': APP_ADDR,
-            'tx': base64_encoded,
-            'url': HOST + 'api/mobile-buy-ticket/{}'.format(event_address),
-        }
-        headers = {'content-type': 'application/json'}
-        response = requests.post(
-            'http://did-workshop.arcblock.co:4000/api/authinfo',
-            json=params,
-            headers=headers,
-        )
-        g.logger.debug("mobile-buy got response from did auth service.")
-        json_response = json.loads(response.content)
-        g.logger.debug('Response: {}'.format(json_response))
-        return json_response
+            return send_did_request(
+                url=call_back_url,
+                description=des,
+                endpoint=endpoint,
+                tx=updated_exchange_tx,
+                workflow="buy-ticket",
+            )
 
-    elif request.method == 'POST':
-        req = ast.literal_eval(request.get_data(as_text=True))
-        g.logger.debug("Receives data from wallet {}".format(req))
-        ticket_address = app.buy_ticket_mobile(event_address, req)
+        elif request.method == 'POST':
+            req = ast.literal_eval(request.get_data(as_text=True))
+            g.logger.debug("Receives data from wallet {}".format(req))
+            try:
+                wallet_response = helpers.WalletResponse(req)
+            except Exception:
+                return response_error("Error in parsing wallet data. Original "
+                                      "data received is {}".format(req))
 
-        if ticket_address:
-            g.logger.info("Ticket {} is bought successfully by mobile.".format(
-                ticket_address,
-            ))
-            js = json.dumps({'ticket': ticket_address})
-            resp = Response(js, status=200, mimetype='application/json')
-            return resp
-        else:
-            g.logger.error('No valid address.')
-            return response_error('error in buying ticket.')
+            ticket_address = app.buy_ticket_mobile(
+                event_address,
+                wallet_response.get_address(),
+                wallet_response.get_signature(),
+            )
+
+            if ticket_address:
+                g.logger.info("Ticket {} is bought successfully "
+                              "by mobile.".format(ticket_address))
+                wallet_address = app.get_wallet_address(req)
+
+                db.insert_mobile_address(g.db, wallet_address)
+
+                js = json.dumps({'ticket': ticket_address})
+                resp = Response(js, status=200, mimetype='application/json')
+                return resp
+            else:
+                g.logger.error('Fail to buy ticket.')
+                return response_error('error in buying ticket.')
+    except Exception as e:
+        g.logger.error(e)
+        return response_error('Exception in buying ticket.')
 
 
 def response_error(msg):
@@ -494,17 +544,123 @@ def error():
     return "Sorry there's something wrong in purchasing your ticket."
 
 
-@application.route("/test/<str>", methods=['GET', 'POST'])
-def test(str=None):
-    data = {
-        'hello': 'world',
-        'number': 3,
-        'str': str,
-    }
-    js = json.dumps(data)
+@application.route(
+    "/api/mobile-require-asset/<event_address>",
+    methods=['GET', 'POST'],
+)
+def mobile_require_asset(event_address):
+    try:
+        error = verify_event(event_address)
+        if error:
+            return error
+        event = app.get_event_state(event_address)
 
-    resp = Response(js, status=200, mimetype='application/json')
-    return resp
+        if request.method == 'GET':
+            call_back_url = SERVER_ADDRESS + "api/mobile-require-asset/"
+            des = 'Select a ticket for event.'
+            target = event.event_info.title
+            endpoint = 'requireAsset'
+            return send_did_request(
+                url=call_back_url,
+                description=des,
+                target=target,
+                endpoint=endpoint,
+                workflow='use-ticket',
+            )
+
+        if request.method == 'POST':
+            req = ast.literal_eval(request.get_data(as_text=True))
+            g.logger.debug("Receives data from wallet {}".format(req))
+            try:
+                wallet_response = helpers.WalletResponse(req)
+            except Exception as e:
+                g.logger.error(
+                    "error in parsing wallet data, error:{}".format(e),
+                )
+                return response_error("Error in parsing wallet data. Original "
+                                      "data received is {}".format(req))
+
+            asset_address = wallet_response.get_asset_address()
+            if not asset_address:
+                g.logger.error(
+                    "No available asset address in wallet response.",
+                )
+                return response_error("Please provide an asset address.")
+
+            error = verify_ticket(asset_address)
+            if error:
+                g.logger.error(
+                    "ticket address in wallet response is not valid.",
+                )
+                return response_error("Please provide a valid ticket address.")
+
+            user_address = wallet_response.get_address()
+            call_back_url = SERVER_ADDRESS + "api/mobile-consume/{}".format(
+                asset_address,
+            )
+            des = 'Confirm to use the ticket.'
+            consume_tx = event.event_info.consume_tx
+            multisig_data = helpers.encode_string_to_any(
+                'fg:x:address',
+                asset_address,
+            )
+
+            new_tx = helpers.update_tx_multisig(
+                tx=consume_tx, signer=user_address,
+                data=multisig_data,
+            )
+            endpoint = 'requireMultiSig'
+            return send_did_request(
+                url=call_back_url,
+                description=des,
+                tx=new_tx,
+                endpoint=endpoint,
+                workflow='use-ticket',
+            )
+    except Exception:
+        return response_error("Exception in requesting asset.")
+
+
+@application.route(
+    "/api/mobile-consume/<ticket_address>", methods=['POST'],
+)
+def mobile_consume(ticket_address):
+    try:
+        error = verify_ticket(ticket_address)
+        if error:
+            return error
+
+        ticket = app.get_ticket_state(ticket_address)
+        event = app.get_event_state(ticket.event_address)
+
+        if request.method == 'POST':
+            req = ast.literal_eval(request.get_data(as_text=True))
+            g.logger.debug("Receives data from wallet {}".format(req))
+            try:
+                wallet_response = helpers.WalletResponse(req)
+            except Exception as e:
+                g.logger.exception(e)
+                return response_error("Error in parsing wallet data. Original "
+                                      "data received is {}".format(req))
+
+            hash = app.consume_ticket_mobile(
+                ticket,
+                event.event_info.consume_tx,
+                wallet_response.get_address(),
+                wallet_response.get_signature(),
+            )
+
+            if hash:
+                g.logger.info("ConsumeTx has been sent.")
+                js = json.dumps({'hash': hash})
+                resp = Response(js, status=200, mimetype='application/json')
+                return resp
+            else:
+                g.logger.error('Fail to consume ticket.')
+                return response_error('error in consuming ticket.')
+    except Exception as e:
+        g.logger.exception(e)
+        return response_error("Exception in consuming ticket.")
 
 
 def chunks(l, n):
@@ -518,6 +674,9 @@ if __name__ == '__main__':
     application.jinja_env.auto_reload = True
     application.config['TEMPLATES_AUTO_RELOAD'] = True
     if run_type == 'debug':
-        application.run(debug=True)
+        application.run(debug=True, host='0.0.0.0')
     else:
-        application.run(debug=False, host='0.0.0.0')
+        application.run(
+            debug=False, host='0.0.0.0',
+            port=config.app_port,
+        )

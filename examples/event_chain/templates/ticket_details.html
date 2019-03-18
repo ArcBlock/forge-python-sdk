@@ -14,15 +14,15 @@
             <br>
             <br>
             <div class="columns">
-                <div class="column">
-                    <div class="card" style="height: 350px; width: 380px;">
-
-                        <figure class="image">
-                            <img src="{{ qrcode(url) }}" alt="Image">
-                        </figure>
-
-                    </div>
-                </div>
+{#                <div class="column">#}
+{#                    <div class="card" style="height: 350px; width: 380px;">#}
+{##}
+{#                        <figure class="image">#}
+{#                            <img src="{{ qrcode(url) }}" alt="Image">#}
+{#                        </figure>#}
+{##}
+{#                    </div>#}
+{#                </div>#}
                 <div class="column">
                     <div class="card">
                         <div class="card-content">
@@ -41,7 +41,7 @@
                             <div class="content">
                                 <p>{{ event.event_info.description }} </p>
                                 <br>
-                                {% if ticket.transferrable == True %}
+                                {% if ticket.transferrable == True and view_only==False %}
                                 <a class="button is-link"
                                    href={{ url_for('use',address=ticket.address) }}> Use Ticket</a>
                                 {% else %}

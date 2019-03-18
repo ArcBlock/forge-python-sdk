@@ -11,5 +11,7 @@ forge_config = ForgeConfig(app_config)
 
 app_path = forge_config.get_app_path()
 
+app_host = forge_config.get_app_host()
+app_port = forge_config.get_app_port()
+
 db_path = path.join(app_path, "ec.db")
-logger.info('db_path: {}'.format(db_path))
