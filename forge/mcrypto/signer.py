@@ -19,13 +19,13 @@ class Ed25519Signer:
     @staticmethod
     def keypair():
         sk, pk = ed25519.create_keypair()
-        return sk, pk
+        return sk.to_bytes(), pk.to_bytes()
 
     @staticmethod
     def sk_to_pk(sk):
         secret_key = ed25519.SigningKey(sk)
         public_key = secret_key.get_verifying_key()
-        return public_key
+        return public_key.to_bytes()
 
     @staticmethod
     def sign(data, sk):
@@ -36,8 +36,11 @@ class Ed25519Signer:
     @staticmethod
     def verify(data, signature, pk):
         public_key = ed25519.VerifyingKey(pk)
-        result = public_key.verify(signature, data)
-        return result
+        try:
+            public_key.verify(signature, data)
+            return True
+        except ed25519.BadSignatureError:
+            return False
 
 
 class Secp256k1Signer:
