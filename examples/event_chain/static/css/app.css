@@ -1558,6 +1558,10 @@ a.box:active {
   color: inherit;
 }
 
+.button.is-bold {
+  font-weight: 600;
+}
+
 .button .icon, .button .icon.is-small, .button .icon.is-medium, .button .icon.is-large {
   height: 1.5em;
   width: 1.5em;
@@ -4740,7 +4744,7 @@ a.box:active {
 }
 
 .table {
-  background-color: white;
+  background-color: transparent;
   color: #363636;
 }
 
@@ -4882,6 +4886,11 @@ a.box:active {
 .table.is-bordered td,
 .table.is-bordered th {
   border-width: 1px;
+}
+
+.table.is-no-bordered td,
+.table.is-no-bordered th {
+  border-width: 0px;
 }
 
 .table.is-bordered tr:last-child td,
@@ -5150,6 +5159,10 @@ a.tag:hover {
   line-height: 1.125;
 }
 
+.title.separate {
+   padding-bottom: 10px;
+}
+
 .title strong {
   color: inherit;
   font-weight: inherit;
@@ -5165,11 +5178,10 @@ a.tag:hover {
 
 .title.is-1 {
   font-size: 4rem;
-  padding-bottom: 1rem;
 }
 
 .title.is-2 {
-  font-size: 3rem;
+  font-size: 2.5rem;
 }
 
 .title.is-3 {
@@ -5370,6 +5382,10 @@ a.tag:hover {
   position: relative;
 }
 
+.card.is-transparent {
+  background-color: transparent;
+}
+
 .card-header {
   background-color: transparent;
   align-items: stretch;
@@ -5383,7 +5399,7 @@ a.tag:hover {
   display: flex;
   flex-grow: 1;
   font-weight: 700;
-  padding: 0.75rem;
+  padding: 1rem;
 }
 
 .card-header-title.is-centered {
@@ -6006,14 +6022,17 @@ a.list-item {
   overflow: hidden;
   position: fixed;
   z-index: 40;
+
 }
 
 .modal.is-active {
   display: flex;
+  z-index: 40;
+
 }
 
 .modal-background {
-  background-color: rgba(10, 10, 10, 0.86);
+  background-color: rgba(128, 128, 128, 0.8);
 }
 
 .modal-content,
@@ -6024,6 +6043,7 @@ a.list-item {
   position: relative;
   width: 100%;
 }
+
 
 @media screen and (min-width: 769px), print {
   .modal-content,
@@ -7668,6 +7688,8 @@ label.panel-block:hover {
   flex-shrink: 1;
   flex:1;
   padding: 0.75rem;
+  margin: 20px 0px;
+
 }
 
 .columns.is-mobile > .column.is-narrow {
@@ -10700,6 +10722,10 @@ a {
   border-width: 2px;
 }
 
+.button.fullwidth {
+  width: 100%;
+}
+
 .button.is-active, .button.is-focused, .button:active, .button:focus {
   box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.25);
 }
@@ -10772,7 +10798,7 @@ a {
 .textarea {
   transition: all 200ms ease;
   box-shadow: none;
-  border-width: 2px;
+  border-width: 1px;
 }
 
 .select:after,
@@ -10801,6 +10827,7 @@ a {
   box-shadow: none;
   background-color: rgba(236, 240, 241, 0.8);
   border-radius: 0.4em 0.4em 0 0;
+  font-size: 1.2rem;
 }
 
 .card .card-footer {

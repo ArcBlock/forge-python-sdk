@@ -14,66 +14,65 @@
         .columns:nth-child(2) {
             margin-top: -10rem;
         }
-
     </style>
 </head>
 
 <body>
-<nav class="navbar is-white" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand">
-        <a class="navbar-item">
-            <img src="{{ url_for('static', filename='images/eventchain.png') }}">
-        </a>
-
-        <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
-           data-target="navbar-basic">
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-        </a>
-    </div>
-
-    <div id="navbar-basic" class="navbar-menu">
-        <div class="navbar-start">
-            <a class="navbar-item" href="/">
-                Home
-            </a>
-            <a class="navbar-item" href="/create">
-                Create an Event
-            </a>
-            <a class="navbar-item" href="/tickets">
-                My Account
-            </a>
-            {% if mobile_address %}
-                <a class="navbar-item" href="/mobile-account">
-                    Mobile Account
+<section class="section">
+    <section class="container">
+        <nav class="navbar is-white" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+                <img src="{{ url_for('static', filename='images/eventchain.png') }}" style="height: 80px; width: 90px;">
+                <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
+                   data-target="navbar-basic">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
                 </a>
-            {% endif %}
-        </div>
-        <div class="navbar-end">
-            <!-- {% if not session.user %}
-      <a class="navbar-item" href="/login">log in</a>
-      {% else %}
-      <a class="navbar-item" href="/logout">
-      Logout
-    </a>
-    {% endif %} -->
-            <span class="navbar-item" style="text-align: right;">
-      {% if not session.user %}
-          <a class="button is-link is-large-font" href="/login">
-        <span>Log In</span>
-      </a>
-      {% else %}
-          <a class="button is-link is-large-font" href="/logout">
-        <span>Log Out</span>
-      </a>
-      {% endif %}
-    </span>
+            </div>
+            <div id="navbar-basic" class="navbar-menu">
+                <div class="navbar-start">
+                    <a class="navbar-item" href="/">
+                        Home
+                    </a>
+                    <a class="navbar-item" href="/create">
+                        Create an Event
+                    </a>
+                    <a class="navbar-item" href="/tickets">
+                        My Account
+                    </a>
+                    {% if mobile_address %}
+                        <a class="navbar-item" href="/mobile-account">
+                            Mobile Account
+                        </a>
+                    {% endif %}
+                </div>
+                <div class="navbar-end">
+                    <span class="navbar-item" style="text-align: right;">
+                        {% if not session.user %}
+                            <a class="button is-link is-large-font" href="/login">
+                          <span>Log In</span>
+                        </a>
+                        {% else %}
+                            <a class="button is-link is-large-font" href="/logout">
+                          <span>Log Out</span>
+                        </a>
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+        </nav>
+    </section>
+</section>
 
-        </div>
-
-    </div>
-</nav>
 {% block content %}{% endblock %}
 
-<!-- <script type="text/javascript" src="{{ url_for('static', filename='js/app.js') }}"> -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>

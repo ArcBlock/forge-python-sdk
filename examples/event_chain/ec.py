@@ -119,7 +119,7 @@ class RegisterForm(FlaskForm):
     name = StringField(
         'Name', validators=[
             DataRequired(),
-            validators.length(min=4, max=10),
+            validators.length(min=4, max=20),
             validate_name,
         ],
     )
@@ -198,6 +198,7 @@ def event_detail(address):
         return error
 
     event = app.get_event_state(address)
+    host = app.get_participant_state(event.owner)
     form = EventForm()
     if is_loggedin():
         url = gen_mobile_url(address)
@@ -210,7 +211,7 @@ def event_detail(address):
         tx_lists = chunks(txs, 3)
         return render_template(
             'event_details.html', event=event, form=form,
-            url=url, tx_lists=tx_lists, consume_url=consume_url,
+            url=url, tx_lists=tx_lists, consume_url=consume_url, host=host
         )
     return redirect('/login')
 
@@ -254,12 +255,12 @@ def buy():
     g.logger.info("ticket is bought successfully from web.")
     if not hash:
         g.logger.error("Fail to buy ticket from web.")
+        return redirect('Oops! Someone is faster than you. Get another ticket!')
     else:
         flash(
-            'Congratulations! Ticket for Event "{}" is bought successfully and can be '
-            'viewed under your account!'.format(
+            'Congratulations! Ticket for Event "{}" is bought successfully!'.format(
                 event.event_info.title))
-    return redirect('/')
+    return redirect('/tickets')
 
 
 @application.route("/activate/<address>", methods=['GET', 'POST'])
@@ -359,6 +360,7 @@ def create_event():
             return redirect('/')
     else:
         g.logger.error(form.errors)
+        flash_errors(form)
     return render_template('event_create.html', form=form)
 
 
