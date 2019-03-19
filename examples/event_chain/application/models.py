@@ -301,6 +301,7 @@ class EventAssetState:
             res = forgeRpc.send_tx(buyer_signed)
             if res.code != 0:
                 logger.error(res)
+                return None
             else:
                 logger.debug(
                     u"Ticket {} has been exchanged.".format(
@@ -329,7 +330,9 @@ class EventAssetState:
         if res.code != 0:
             logger.error("Fail to send mobile buyer_signed exchange tx.")
             logger.error(res)
-        return res.hash
+            return None
+        else:
+            return res.hash
 
     def update_token(self, buyer_wallet, buyer_token=''):
         next_ticket = self.get_next_ticket()
@@ -433,7 +436,7 @@ class EventAssetState:
 
             exchange_hash = self.exchange_ticket(buyer_wallet, buyer_token)
             logger.debug("returned exchangeTx hash {}".format(exchange_hash))
-            return create_hash, exchange_hash
+            return exchange_hash
 
     def execute_next_ticket_holder_mobile(
             self, buyer_address,
@@ -457,9 +460,9 @@ class EventAssetState:
         )
         if not exchange_hash:
             logger.error("Fail to process exchange_tx for mobile buy request.")
-            return None
+            return ticket_address, None
         else:
-            return exchange_hash
+            return ticket_address, exchange_hash
 
     def buy_ticket(self, wallet, token):
         ticket = self.get_next_ticket()
@@ -468,7 +471,7 @@ class EventAssetState:
             address=ticket_address,
             user=wallet.address,
         ))
-        create_hash, exchange_hash = self.execute_next_ticket_holder(
+        exchange_hash = self.execute_next_ticket_holder(
             wallet,
             token,
         )
@@ -481,34 +484,25 @@ class EventAssetState:
             logger.error(
                 "Ticket {} exchange TX failed.".format(ticket_address),
             )
-        return ticket_address, create_hash, exchange_hash
+        return exchange_hash
 
     def get_exchange_tx(self):
         ticket = self.get_next_ticket()
         exchange_tx = None if not ticket else ticket.ticket_exchange
-        # encoded = base64.b64encode(exchange_tx.SerializeToString())
-        # logger.debug(
-        #         "Exchange tx for next ticket has been fetched and encoded "
-        #         "successfully.",
-        # )
         return exchange_tx
 
     def buy_ticket_mobile(self, buyer_address, buyer_signature):
-        ticket = self.get_next_ticket()
         logger.debug(
             "User {} is buying ticket from mobile.".format(buyer_address),
         )
-        exchange_hash = self.execute_next_ticket_holder_mobile(
+        ticket_address, exchange_hash = self.execute_next_ticket_holder_mobile(
             buyer_address, buyer_signature,
         )
-
-        address = None
-        if ticket and exchange_hash:
-            address = ticket.address
         logger.debug(
-            "buy_ticket_mobiel is done with addresss{}".format(address),
+            "buy_ticket_mobiel is done with addresss{}".format(buyer_address),
         )
-        return address
+
+        return ticket_address, exchange_hash
 
     def pop_executed_ticket(self):
         logger.debug("Number before pop ticket: {}".format(len(self.tickets)))

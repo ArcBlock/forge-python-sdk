@@ -251,9 +251,9 @@ def buy():
     if error:
         return error
 
-    ticket_address = app.buy_ticket(address, user, g.db)
+    hash = app.buy_ticket(address, user, g.db)
     g.logger.info("ticket is bought successfully from web.")
-    if not ticket_address:
+    if not hash:
         g.logger.error("Fail to buy ticket from web.")
         return redirect('Oops! Someone is faster than you. Get another ticket!')
     else:
@@ -512,7 +512,7 @@ def mobile_buy_ticket(event_address):
                 return response_error("Error in parsing wallet data. Original "
                                       "data received is {}".format(req))
 
-            ticket_address = app.buy_ticket_mobile(
+            ticket_address, hash = app.buy_ticket_mobile(
                 event_address,
                 wallet_response.get_address(),
                 wallet_response.get_signature(),
@@ -525,7 +525,9 @@ def mobile_buy_ticket(event_address):
 
                 db.insert_mobile_address(g.db, wallet_address)
 
-                js = json.dumps({'ticket': ticket_address})
+                js = json.dumps({'ticket': ticket_address,
+                                 'hash': hash})
+                g.logger.debug('success response: {}'.format(str(js)))
                 resp = Response(js, status=200, mimetype='application/json')
                 return resp
             else:
