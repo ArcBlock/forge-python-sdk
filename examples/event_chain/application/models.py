@@ -459,7 +459,9 @@ class EventAssetState:
             buyer_signature,
         )
         if not exchange_hash:
-            logger.error("Fail to process exchange_tx for mobile buy request.")
+            logger.error(
+                "Fail to process exchange_tx for mobile buy request for "
+                "user: {}.".format(buyer_address))
             return ticket_address, None
         else:
             return ticket_address, exchange_hash
@@ -499,7 +501,8 @@ class EventAssetState:
             buyer_address, buyer_signature,
         )
         logger.debug(
-            "buy_ticket_mobiel is done with addresss{}".format(buyer_address),
+            "buy_ticket_mobiel is done with addresss{}".format(
+                buyer_address),
         )
 
         return ticket_address, exchange_hash

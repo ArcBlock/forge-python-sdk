@@ -41,6 +41,7 @@ QRcode(application)
 logging.basicConfig(level=logging.DEBUG)
 DB_PATH = config.db_path
 SERVER_ADDRESS = "http://" + config.app_host + ":" + str(config.app_port) + "/"
+FORGE_WEB = 'http://' + config.app_host + ':8210/node/explorer/txs/'
 
 logging.info('DB: {}'.format(DB_PATH))
 logging.info('forge port {}'.format(config.forge_config.sock_grpc))
@@ -209,9 +210,11 @@ def event_detail(address):
 
         txs = app.list_ticket_exchange_tx(address)
         tx_lists = chunks(txs, 3)
+        g.logger.debug('forgeweb:{}'.format(FORGE_WEB))
         return render_template(
             'event_details.html', event=event, form=form,
-            url=url, tx_lists=tx_lists, consume_url=consume_url, host=host
+            url=url, tx_lists=tx_lists, consume_url=consume_url, host=host,
+            forge_web=FORGE_WEB
         )
     return redirect('/login')
 
@@ -243,6 +246,7 @@ def buy():
         return redirect('/login')
 
     refresh_token()
+    sleep(1)
     form = EventForm()
     address = form.address.data
     event = app.get_event_state(address)
@@ -255,10 +259,12 @@ def buy():
     g.logger.info("ticket is bought successfully from web.")
     if not hash:
         g.logger.error("Fail to buy ticket from web.")
-        return redirect('Oops! Someone is faster than you. Get another ticket!')
+        return redirect(
+            'Oops! Someone is faster than you. Get another ticket!')
     else:
         flash(
-            'Congratulations! Ticket for Event "{}" is bought successfully!'.format(
+            'Congratulations! Ticket for Event "{}" is bought '
+            'successfully!'.format(
                 event.event_info.title))
     return redirect('/tickets')
 
@@ -270,9 +276,8 @@ def use(address):
     error = verify_ticket(address)
     if error:
         return error
-
     app.consume(address, session['user'])
-    # add flash success message
+    flash("Ticket has been used.")
     return redirect('/')
 
 
@@ -512,18 +517,23 @@ def mobile_buy_ticket(event_address):
                 return response_error("Error in parsing wallet data. Original "
                                       "data received is {}".format(req))
 
+            user_address = wallet_response.get_address()
+            participant_state = app.get_participant_state(user_address)
+            if not participant_state:
+                return response_error(
+                    "user {} doesn't exist.".format(user_address))
+
             ticket_address, hash = app.buy_ticket_mobile(
                 event_address,
-                wallet_response.get_address(),
+                user_address,
                 wallet_response.get_signature(),
             )
 
-            if ticket_address:
+            if ticket_address and hash:
                 g.logger.info("Ticket {} is bought successfully "
                               "by mobile.".format(ticket_address))
-                wallet_address = app.get_wallet_address(req)
 
-                db.insert_mobile_address(g.db, wallet_address)
+                db.insert_mobile_address(g.db, user_address)
 
                 js = json.dumps({'ticket': ticket_address,
                                  'hash': hash})
@@ -531,8 +541,11 @@ def mobile_buy_ticket(event_address):
                 resp = Response(js, status=200, mimetype='application/json')
                 return resp
             else:
-                g.logger.error('Fail to buy ticket.')
-                return response_error('error in buying ticket.')
+                g.logger.error(
+                    'Fail to buy ticket. ticket '
+                    'address: {0}, hash : {1}.'.format(ticket_address,
+                                                       hash))
+                return response_error('Please try buying the ticket again.')
     except Exception as e:
         g.logger.error(e)
         return response_error('Exception in buying ticket.')

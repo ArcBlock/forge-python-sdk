@@ -186,18 +186,18 @@
                                             {% for tx in tx_list %}
                                                 <div class="column is-4">
                                                     <div class="card is-shady">
-                                                        <header class="card-header">
-                                                            <p class="card-header-title "
-                                                               style="word-break: break-word;">
-                                                                Tx Hash: {{ tx.hash }}</p>
-                                                        </header>
+                                                        <div class="card-header-title">
+                                                            <a class="subtitle"
+                                                               style="word-break: break-word;"
+                                                               href="{{ forge_web }}{{ tx.hash }}">
+                                                                {{ tx.hash }}</a>
+                                                        </div>
                                                         <div class="card-content">
                                                             <div class="content">
                                                                 <p><strong>Ticket Bought By: </strong></p>
                                                                 <p>{{ tx.receiver }}</p>
                                                                 <p><strong>At Time: </strong></p>
                                                                 <p>{{ tx.time }}</p>
-
                                                             </div>
                                                         </div>
                                                     </div>

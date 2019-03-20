@@ -48,12 +48,12 @@ class Secp256k1Signer:
     @staticmethod
     def keypair():
         sk = secp256k1.PrivateKey()
-        return sk, sk.pubkey
+        return sk.private_key, sk.pubkey.serialize()
 
     @staticmethod
     def sk_to_pk(sk):
         sk = secp256k1.PrivateKey(sk)
-        return sk.pubkey
+        return sk.pubkey.serialize()
 
     @staticmethod
     def sign(data, sk):
@@ -63,6 +63,6 @@ class Secp256k1Signer:
 
     @staticmethod
     def verify(data, signature, pk):
-        pk = secp256k1.PublicKey(pk)
-        result = pk.ecdsa_verify(data, signature)
+        pk_object = secp256k1.PublicKey(pubkey=pk, raw=True)
+        result = pk_object.ecdsa_verify(data, signature)
         return result
