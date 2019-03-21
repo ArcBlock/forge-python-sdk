@@ -168,7 +168,7 @@ def buy_ticket(event_address, user, conn=None):
     exchange_hash = event_asset.buy_ticket(
         user.get_wallet(), user.token,
     )
-    logger.debug("Tick is bought. exchange hash{}".format(
+    logger.debug("Buy ticket process is completed. exchange hash{}".format(
         exchange_hash,
     ))
     return exchange_hash

@@ -11,16 +11,16 @@
   ],
   "events": [
     {
-      "title": "Building Your First DAPP: Part 5",
+      "title": "Build DAPPs",
       "total": "30",
       "description": "The world is being more and more decentralized. How do products envolve in such a place? Join us and learn form Robert how to develop the best best decentralized applications.",
-      "start_time": "2019/4/3",
-      "end_time": "2019/4/4",
+      "start_time": "2019/6/3",
+      "end_time": "2019/6/4",
       "ticket_price": "300000000000000000",
       "location": "Web lecture"
     },
     {
-      "title": "Hackathon: Build Your Own Chain",
+      "title": "Hackathon",
       "total": "30",
       "description": "What would you do if you have your own blockchain? Let's forge our chains and build our own decentralized applications. Beer and refreshments are provided. ",
       "start_time": "2019/7/28",
@@ -29,7 +29,7 @@
       "location": "3150 Richards, Bellevue, WA"
     },
     {
-      "title": "Blockchain Bootcamp: Intro",
+      "title": "Bootcamp",
       "total": "28",
       "description": "Blockchain is getting more and more popular. If you want to learn more about this amazing techonology, join us in this one month crash course and master Blockchain!",
       "start_time": "2019/8/6",
@@ -38,7 +38,7 @@
       "location": "3150 Richards, Bellevue, WA"
     },
     {
-      "title": "Conference-BlockchainConnect",
+      "title": "BlockchainConnect",
       "total": "25",
       "description": "This conference gathers the experts from all all over the world, specializing in different areas of blockchain, to give you insights on the technologies and busienss that are happening.",
       "start_time": "2019/12/18",
@@ -47,7 +47,7 @@
       "location": "Golden Gate Bridge, SF, 94129"
     },
     {
-      "title": "Connect Nodes Conference 2020",
+      "title": "Connect Nodes",
       "total": "18",
       "description": "This conference gathers the experts from all all over the world, specializing in different areas of blockchain, to give you insights on the technologies and busienss that are happening.",
       "start_time": "2020/1/15",
@@ -56,7 +56,7 @@
       "location": "Golden Gate Bridge, SF, 94129"
     },
     {
-      "title": "Crypto Finance Conference",
+      "title": "CryptoFinance",
       "total": "28",
       "description": "This conference gathers the experts from all all over the world, specializing in different areas of blockchain, to give you insights on the technologies and busienss that are happening.",
       "start_time": "2020/11/22",

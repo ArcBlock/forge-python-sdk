@@ -65,7 +65,10 @@ def is_loggedin():
 class EventForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     confirm = SubmitField('Confirm')
-    total = StringField('Total', validators=[DataRequired()])
+    total = StringField('Total', validators=[DataRequired(),
+                                             validators.number_range(min=1,
+                                                                     max=30)
+                                             ])
     start_time = StringField("StartTime", validators=[DataRequired()])
     description = StringField("Description")
     end_time = StringField("EndTime", validators=[DataRequired()])
@@ -259,8 +262,8 @@ def buy():
     g.logger.info("ticket is bought successfully from web.")
     if not hash:
         g.logger.error("Fail to buy ticket from web.")
-        return redirect(
-            'Oops! Someone is faster than you. Get another ticket!')
+        flash('Oops! Someone is faster than you. Get another ticket!')
+        return redirect('/')
     else:
         flash(
             'Congratulations! Ticket for Event "{}" is bought '
@@ -371,6 +374,7 @@ def create_event():
 
 def refresh_token():
     user = session.get('user')
+    g.logger.debug("current token: {}".format(user.token))
     user = app.load_user(
         moniker=user.moniker,
         passphrase=user.passphrase,
@@ -378,6 +382,8 @@ def refresh_token():
         address=user.address,
     )
     session['user'] = user
+    g.logger.info("Token refreshed!")
+    g.logger.debug("new token: {}".format(user.token))
 
 
 def flash_errors(form):
@@ -387,8 +393,7 @@ def flash_errors(form):
             flash(
                 u"Error in the {} field - {}".format(
                     getattr(form, field).label.text,
-                    error,
-                ), 'error',
+                    error), 'error',
             )
 
 
