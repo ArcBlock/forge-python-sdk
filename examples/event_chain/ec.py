@@ -265,7 +265,7 @@ def buy():
         flash(
             'Congratulations! Ticket for Event "{}" is bought '
             'successfully!'.format(
-                event.event_info.title))
+                event.event_info.title), category='info')
     return redirect('/tickets')
 
 
@@ -277,8 +277,10 @@ def use(address):
     if error:
         return error
     app.consume(address, session['user'])
-    flash("Ticket has been used.")
-    return redirect('/')
+    sleep(2)
+    flash('Your ticket has been checked successfully! Enjoy your event!',
+          category='info')
+    return redirect('/tickets')
 
 
 @application.route("/", methods=['GET', 'POST'])
@@ -312,12 +314,13 @@ def ticket_list():
     if not session.get('user'):
         return redirect('login')
     tickets = app.list_unused_tickets(session.get('user').address)
+    num_tickets = len(tickets)
     user = app.get_participant_state(session.get('user').address)
     events = get_event_for_ticket(tickets)
     ticket_lists = chunks(tickets, 3)
     return render_template(
         'tickets.html', ticket_lists=ticket_lists, events=events,
-        user=user, view_only=False
+        user=user, view_only=False, num_tickets=num_tickets
     )
 
 
@@ -330,7 +333,8 @@ def inject_mobile_address():
 def mobile_account():
     address = db.get_last_mobile_address(g.db)
     if not address:
-        flash("Please use your mobile wallet to buy a ticket first!")
+        flash("Please use your mobile wallet to buy a ticket first!",
+              category='info')
         return redirect('/')
     tickets = app.list_unused_tickets(address)
     user = app.get_participant_state(address)
@@ -386,7 +390,7 @@ def flash_errors(form):
     for field, errors in form.errors.items():
         for error in errors:
             flash(
-                u"Error in the {} field - {}".format(
+                "Error in the {} field - {}".format(
                     getattr(form, field).label.text,
                     error), 'error',
             )

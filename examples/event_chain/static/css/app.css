@@ -2889,7 +2889,7 @@ a.box:active {
 .content table th {
   border: 1px solid #dee2e5;
   border-width: 0 0 1px;
-  padding: 0.5em 0.75em;
+  padding: 0.75em 1em;
   vertical-align: top;
 }
 
@@ -4752,8 +4752,9 @@ a.box:active {
 .table th {
   border: 1px solid #dee2e5;
   border-width: 0 0 1px;
-  padding: 0.5em 0.75em;
+  padding: 0.75em 1em;
   vertical-align: top;
+  word-break: break-word;
 }
 
 .table td.is-white,
@@ -6031,8 +6032,14 @@ a.list-item {
 
 }
 
+.modal.is-closed {
+  display: none;
+   z-index: 1;
+
+}
+
 .modal-background {
-  background-color: rgba(128, 128, 128, 0.8);
+  background-color: rgba(10, 10, 10, 0.8);
 }
 
 .modal-content,
@@ -6100,6 +6107,8 @@ a.list-item {
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
   border-top: 1px solid #dee2e5;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .modal-card-foot .button:not(:last-child) {
