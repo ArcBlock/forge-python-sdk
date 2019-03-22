@@ -162,7 +162,7 @@ def gen_mobile_url(event_address):
     params = {
         'appPk': APP_PK,
         'appDid': 'did:abt:' + APP_ADDR,
-        'action:': 'requestAuth',
+        'action': 'requestAuth',
         'url': SERVER_ADDRESS + 'api/mobile-buy-ticket/{}'.format(
             event_address,
         ),
@@ -188,7 +188,7 @@ def gen_did_url(url, action):
     params = {
         'appPk': APP_PK,
         'appDid': 'did:abt:' + APP_ADDR,
-        'action:': action,
+        'action': action,
         'url': url,
     }
     r = requests.Request('GET', ARC, params=params).prepare()
@@ -244,12 +244,9 @@ def ticket_detail():
 
 @application.route("/buy", methods=['POST'])
 def buy():
-    user = session.get('user')
-    if not user:
+    if not session.get('user'):
         return redirect('/login')
-
     refresh_token()
-    sleep(1)
     form = EventForm()
     address = form.address.data
     event = app.get_event_state(address)
@@ -258,7 +255,7 @@ def buy():
     if error:
         return error
 
-    hash = app.buy_ticket(address, user, g.db)
+    hash = app.buy_ticket(address, session.get('user'), g.db)
     g.logger.info("ticket is bought successfully from web.")
     if not hash:
         g.logger.error("Fail to buy ticket from web.")
@@ -383,11 +380,9 @@ def refresh_token():
     )
     session['user'] = user
     g.logger.info("Token refreshed!")
-    g.logger.debug("new token: {}".format(user.token))
 
 
 def flash_errors(form):
-    """Flashes form errors"""
     for field, errors in form.errors.items():
         for error in errors:
             flash(
