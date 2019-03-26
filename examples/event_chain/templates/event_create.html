@@ -8,7 +8,7 @@
       <br>
       <section class="hero is-white">
         <div class="hero-body">
-          <div class="container has-text-left">
+          <div class="container has-text-centered">
             <h1 class="title is-2">Greate Your Own Event!</h1>
             <h2 class="subtitle">Fill in the following information and create your shiny event！</h2>
           </div>
@@ -38,21 +38,21 @@
         {#        </section>#}
 
         <form id="create-product" action="/create" method="POST">
-{#          {% for message in get_flashed_messages() %}#}
-{#            <div class="field">#}
-{#              <label class="label">Subject</label>#}
-{#              <div class="field-body">#}
-{#                <div class="field">#}
-{#                  <div class="control">#}
-{#                    <input class="input is-danger" type="text" placeholder="e.g. Partnership opportunity">#}
-{#                    <p class="help is-danger">#}
-{#                      {{ message }}#}
-{#                    </p>#}
-{#                  </div>#}
-{#                </div>#}
-{#              </div>#}
-{#            </div>#}
-{#          {% endfor %}#}
+          {#          {% for message in get_flashed_messages() %}#}
+          {#            <div class="field">#}
+          {#              <label class="label">Subject</label>#}
+          {#              <div class="field-body">#}
+          {#                <div class="field">#}
+          {#                  <div class="control">#}
+          {#                    <input class="input is-danger" type="text" placeholder="e.g. Partnership opportunity">#}
+          {#                    <p class="help is-danger">#}
+          {#                      {{ message }}#}
+          {#                    </p>#}
+          {#                  </div>#}
+          {#                </div>#}
+          {#              </div>#}
+          {#            </div>#}
+          {#          {% endfor %}#}
           <div class="field">
             <label class="label">Event Title</label>
             <p class="control">
@@ -75,7 +75,7 @@
                   <div class="field">
                     <label class="label">Price</label>
                     <p class="control">
-                      <input class="input is-normal" type="text" value=0 name="ticket_price"
+                      <input class="input is-normal" type="text" name="ticket_price"
                              placeholder="0.00">
                     </p>
                   </div>
@@ -128,11 +128,10 @@
             </p>
           </div>
           <div class="field" style="margin-top: 40px;">
-            <p class="control">
-              <button class="button is-link is-bold is-large-font" name="submit">Make Your Event Live
+            <p class="control has-text-right">
+              <button class="button is-link is-bold is-large-font" name="submit">Publish Event
               </button>
             </p>
-            <p class="help is-success result-text">
           </div>
         </form>
       </div>

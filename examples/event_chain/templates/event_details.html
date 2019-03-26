@@ -183,6 +183,7 @@
                     <th>Time</th>
                   </tr>
                   </thead>
+
                   <tbody>
                   {% if tx_lists %}
                     {% for tx_list in tx_lists %}
@@ -201,9 +202,50 @@
                   {% endif %}
                   </tbody>
                 </table>
+
+
               </div>
             </section>
+
           </section>
+          {#          <div class="section">#}
+          {#            <br>#}
+          {#            <br>#}
+          {#            <h2 class="title">Who already got the tickets?</h2>#}
+          {#            <hr>#}
+          {#            <section class="container">#}
+          {#              {% if tx_lists %}#}
+          {#                {% for tx_list in tx_lists %}#}
+          {#                  <section class="container">#}
+          {#                    <div class="columns is-multiline features">#}
+          {#                      {% for tx in tx_list %}#}
+          {##}
+          {#                        <div class="column is-4">#}
+          {#                          <div class="card is-shady">#}
+          {#                            <div class="card-header-title">#}
+          {#                              <a class="subtitle"#}
+          {#                                 style="word-break: break-word;"#}
+          {#                                 href="{{ forge_web }}{{ tx.hash }}">#}
+          {#                                {{ tx.hash }}</a>#}
+          {#                            </div>#}
+          {#                            <div class="card-content">#}
+          {#                              <div class="content">#}
+          {#                                <p><strong>Ticket Bought By: </strong></p>#}
+          {#                                <p>{{ tx.receiver }}</p>#}
+          {#                                <p><strong>At Time: </strong></p>#}
+          {#                                <p>{{ tx.time }}</p>#}
+          {#                              </div>#}
+          {#                            </div>#}
+          {#                          </div>#}
+          {#                        </div>#}
+          {#                      {% endfor %}#}
+          {#                    </div>#}
+          {#                  </section>#}
+          {#                {% endfor %}#}
+          {#              {% else %}#}
+          {#              {% endif %}#}
+          {#            </section>#}
+          {#          </div>#}
         </section>
       </section>
     </section>

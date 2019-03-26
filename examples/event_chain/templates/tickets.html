@@ -1,18 +1,20 @@
 {% extends "layout.html" %}
 {% block content %}
-  <main role="main" class="container">
 
-    {% for message in get_flashed_messages(category_filter=["info"]) %}
-      <div class="notification is-link" id="layout_msg">
-        {{ message }} </div>
-    {% endfor %}
-  </main>
   <section class="hero">
+  <main role="main" class="container">
+          {% for message in get_flashed_messages() %}
+            <div class="notification is-link" id="layout_msg">
+              {{ message }} </div>
+          {% endfor %}
+  </main>
     <br>
     <br>
     <section class="hero is-white">
       <div class="hero-body">
-        <div class="container has-text-left">
+        <div class="container has-text-centered">
+          <br>
+          <br>
           <h1 class="title is-2 separate">Good morning, {{ user.moniker }}!</h1>
           <h2 class="subtitle">Check your tickets and events here</h2>
         </div>
@@ -22,8 +24,6 @@
     <br>
     <section class="section">
       <section class="container">
-        {#        <h2 class="title"> About My Account </h2>#}
-        {#        <hr>#}
         <br>
         <table class="table is-no-bordered" width="100%">
           <tbody>
@@ -35,8 +35,8 @@
                     src="https://source.unsplash.com/random/96x96" alt="Image"></figure>
                 </div>
                 <div class="media-content">
-                  <p class="title is-4">{{ user.moniker }}</p>
-                  <p class='text-center'><strong>Address:</strong> <i>{{ user.address }}</i></p>
+                  <p class="title is-3">{{ user.moniker }}</p>
+                  <p class='text-center'><b>Address:</b> {{ user.address }}</p>
                 </div>
               </div>
             </td>
@@ -54,12 +54,12 @@
                     <p class="title">{{ num_tickets }}</p>
                   </div>
                 </div>
-                <div class="level-item has-text-centered">
+{#                <div class="level-item has-text-centered">#}
 {#                  <div>#}
 {#                    <p class="heading">Events</p>#}
 {#                    <p class="title">1</p>#}
 {#                  </div>#}
-                </div>
+{#                </div>#}
               </nav>
             </td>
           </tr>
@@ -72,7 +72,9 @@
         <h2 class="title">My Tickets
           <hr>
         </h2>
-        {% if ticket_lists %}
+
+
+      {% if ticket_lists %}
           {% for tickets in ticket_lists %}
             <section class="container">
               <div class="columns is-multiline features">

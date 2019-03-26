@@ -18,11 +18,11 @@
 </head>
 
 <body>
-<section class="section">
+<section class="section" style="padding:0rem 1.5rem;">
     <section class="container">
         <nav class="navbar is-white" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
-                <img src="{{ url_for('static', filename='images/eventchain.png') }}" style="height: 100px; width: 100px; margin-right: 40px;">
+                <img src="{{ url_for('static', filename='images/eventchain_h_2.png') }}" style="height: 60px; width: 120px; margin-right: 40px;">
                 <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
                    data-target="navbar-basic">
                     <span aria-hidden="true"></span>
@@ -33,7 +33,7 @@
             <div id="navbar-basic" class="navbar-menu">
                 <div class="navbar-start">
                     <a class="navbar-item" href="/">
-                        Home
+                        Event List
                     </a>
                     <a class="navbar-item" href="/create">
                         Create an Event
@@ -50,11 +50,11 @@
                 <div class="navbar-end">
                     <span class="navbar-item" style="text-align: right;">
                         {% if not session.user %}
-                            <a class="button is-link is-large-font" href="/login">
+                            <a class="button is-link is-bold" href="/login">
                           <span>Log In</span>
                         </a>
                         {% else %}
-                            <a class="button is-link is-large-font" href="/logout">
+                            <a class="button is-link is-bold" href="/logout">
                           <span>Log Out</span>
                         </a>
                         {% endif %}
