@@ -11,8 +11,7 @@ from . import enum_pb2 as enum__pb2
 from . import state_pb2 as state__pb2
 from . import type_pb2 as type__pb2
 _b = sys.version_info[0] < 3 and (
-    lambda x: x
-) or (lambda x: x.encode('latin1'))
+    lambda x: x) or (lambda x: x.encode('latin1'))
 # @@protoc_insertion_point(imports)
 
 _sym_db = _symbol_database.Default()
@@ -24,10 +23,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
     syntax='proto3',
     serialized_options=None,
     serialized_pb=_b('\n\tabi.proto\x12\tforge_abi\x1a\nenum.proto\x1a\ntype.proto\x1a\x0bstate.proto\"\xff\x01\n\x0fRequestVerifyTx\x12\"\n\x02tx\x18\x01 \x01(\x0b\x32\x16.forge_abi.Transaction\x12\'\n\x06states\x18\x02 \x03(\x0b\x32\x17.forge_abi.AccountState\x12%\n\x06\x61ssets\x18\x03 \x03(\x0b\x32\x15.forge_abi.AssetState\x12%\n\x06stakes\x18\x04 \x03(\x0b\x32\x15.forge_abi.StakeState\x12\'\n\x07\x63ontext\x18\x05 \x01(\x0b\x32\x16.forge_abi.AbciContext\x12(\n\tapp_state\x18\x0f \x01(\x0b\x32\x15.forge_abi.ForgeState\"7\n\x10ResponseVerifyTx\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\"\x82\x02\n\x12RequestUpdateState\x12\"\n\x02tx\x18\x01 \x01(\x0b\x32\x16.forge_abi.Transaction\x12\'\n\x06states\x18\x02 \x03(\x0b\x32\x17.forge_abi.AccountState\x12%\n\x06\x61ssets\x18\x03 \x03(\x0b\x32\x15.forge_abi.AssetState\x12%\n\x06stakes\x18\x04 \x03(\x0b\x32\x15.forge_abi.StakeState\x12\'\n\x07\x63ontext\x18\x05 \x01(\x0b\x32\x16.forge_abi.AbciContext\x12(\n\tapp_state\x18\x0f \x01(\x0b\x32\x15.forge_abi.ForgeState\"\xdb\x01\n\x13ResponseUpdateState\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\'\n\x06states\x18\x02 \x03(\x0b\x32\x17.forge_abi.AccountState\x12%\n\x06\x61ssets\x18\x03 \x03(\x0b\x32\x15.forge_abi.AssetState\x12%\n\x06stakes\x18\x04 \x03(\x0b\x32\x15.forge_abi.StakeState\x12(\n\tapp_state\x18\x0f \x01(\x0b\x32\x15.forge_abi.ForgeState\"$\n\x0bRequestInfo\x12\x15\n\rforge_version\x18\x01 \x01(\t\"3\n\x0cResponseInfo\x12\x11\n\ttype_urls\x18\x01 \x03(\t\x12\x10\n\x08\x61pp_hash\x18\x02 \x01(\x0c\"\xa2\x01\n\x07Request\x12/\n\tverify_tx\x18\x01 \x01(\x0b\x32\x1a.forge_abi.RequestVerifyTxH\x00\x12\x35\n\x0cupdate_state\x18\x02 \x01(\x0b\x32\x1d.forge_abi.RequestUpdateStateH\x00\x12&\n\x04info\x18\x03 \x01(\x0b\x32\x16.forge_abi.RequestInfoH\x00\x42\x07\n\x05value\"\xa6\x01\n\x08Response\x12\x30\n\tverify_tx\x18\x01 \x01(\x0b\x32\x1b.forge_abi.ResponseVerifyTxH\x00\x12\x36\n\x0cupdate_state\x18\x02 \x01(\x0b\x32\x1e.forge_abi.ResponseUpdateStateH\x00\x12\'\n\x04info\x18\x03 \x01(\x0b\x32\x17.forge_abi.ResponseInfoH\x00\x42\x07\n\x05value2}\n\x0b\x46orgeAppRpc\x12\x36\n\x0bprocess_one\x12\x12.forge_abi.Request\x1a\x13.forge_abi.Response\x12\x36\n\x07process\x12\x12.forge_abi.Request\x1a\x13.forge_abi.Response(\x01\x30\x01\x62\x06proto3'),
-    dependencies=[
-        enum__pb2.DESCRIPTOR,
-        type__pb2.DESCRIPTOR, state__pb2.DESCRIPTOR, ],
-)
+    dependencies=[enum__pb2.DESCRIPTOR, type__pb2.DESCRIPTOR, state__pb2.DESCRIPTOR, ])
 
 
 _REQUESTVERIFYTX = _descriptor.Descriptor(
@@ -43,48 +39,42 @@ _REQUESTVERIFYTX = _descriptor.Descriptor(
             has_default_value=False, default_value=None,
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
-            serialized_options=None, file=DESCRIPTOR,
-        ),
+            serialized_options=None, file=DESCRIPTOR),
         _descriptor.FieldDescriptor(
             name='states', full_name='forge_abi.RequestVerifyTx.states', index=1,
             number=2, type=11, cpp_type=10, label=3,
             has_default_value=False, default_value=[],
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
-            serialized_options=None, file=DESCRIPTOR,
-        ),
+            serialized_options=None, file=DESCRIPTOR),
         _descriptor.FieldDescriptor(
             name='assets', full_name='forge_abi.RequestVerifyTx.assets', index=2,
             number=3, type=11, cpp_type=10, label=3,
             has_default_value=False, default_value=[],
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
-            serialized_options=None, file=DESCRIPTOR,
-        ),
+            serialized_options=None, file=DESCRIPTOR),
         _descriptor.FieldDescriptor(
             name='stakes', full_name='forge_abi.RequestVerifyTx.stakes', index=3,
             number=4, type=11, cpp_type=10, label=3,
             has_default_value=False, default_value=[],
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
-            serialized_options=None, file=DESCRIPTOR,
-        ),
+            serialized_options=None, file=DESCRIPTOR),
         _descriptor.FieldDescriptor(
             name='context', full_name='forge_abi.RequestVerifyTx.context', index=4,
             number=5, type=11, cpp_type=10, label=1,
             has_default_value=False, default_value=None,
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
-            serialized_options=None, file=DESCRIPTOR,
-        ),
+            serialized_options=None, file=DESCRIPTOR),
         _descriptor.FieldDescriptor(
             name='app_state', full_name='forge_abi.RequestVerifyTx.app_state', index=5,
             number=15, type=11, cpp_type=10, label=1,
             has_default_value=False, default_value=None,
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
-            serialized_options=None, file=DESCRIPTOR,
-        ),
+            serialized_options=None, file=DESCRIPTOR),
     ],
     extensions=[
     ],
@@ -115,8 +105,7 @@ _RESPONSEVERIFYTX = _descriptor.Descriptor(
             has_default_value=False, default_value=0,
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
-            serialized_options=None, file=DESCRIPTOR,
-        ),
+            serialized_options=None, file=DESCRIPTOR),
     ],
     extensions=[
     ],
@@ -147,48 +136,42 @@ _REQUESTUPDATESTATE = _descriptor.Descriptor(
             has_default_value=False, default_value=None,
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
-            serialized_options=None, file=DESCRIPTOR,
-        ),
+            serialized_options=None, file=DESCRIPTOR),
         _descriptor.FieldDescriptor(
             name='states', full_name='forge_abi.RequestUpdateState.states', index=1,
             number=2, type=11, cpp_type=10, label=3,
             has_default_value=False, default_value=[],
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
-            serialized_options=None, file=DESCRIPTOR,
-        ),
+            serialized_options=None, file=DESCRIPTOR),
         _descriptor.FieldDescriptor(
             name='assets', full_name='forge_abi.RequestUpdateState.assets', index=2,
             number=3, type=11, cpp_type=10, label=3,
             has_default_value=False, default_value=[],
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
-            serialized_options=None, file=DESCRIPTOR,
-        ),
+            serialized_options=None, file=DESCRIPTOR),
         _descriptor.FieldDescriptor(
             name='stakes', full_name='forge_abi.RequestUpdateState.stakes', index=3,
             number=4, type=11, cpp_type=10, label=3,
             has_default_value=False, default_value=[],
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
-            serialized_options=None, file=DESCRIPTOR,
-        ),
+            serialized_options=None, file=DESCRIPTOR),
         _descriptor.FieldDescriptor(
             name='context', full_name='forge_abi.RequestUpdateState.context', index=4,
             number=5, type=11, cpp_type=10, label=1,
             has_default_value=False, default_value=None,
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
-            serialized_options=None, file=DESCRIPTOR,
-        ),
+            serialized_options=None, file=DESCRIPTOR),
         _descriptor.FieldDescriptor(
             name='app_state', full_name='forge_abi.RequestUpdateState.app_state', index=5,
             number=15, type=11, cpp_type=10, label=1,
             has_default_value=False, default_value=None,
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
-            serialized_options=None, file=DESCRIPTOR,
-        ),
+            serialized_options=None, file=DESCRIPTOR),
     ],
     extensions=[
     ],
@@ -219,40 +202,35 @@ _RESPONSEUPDATESTATE = _descriptor.Descriptor(
             has_default_value=False, default_value=0,
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
-            serialized_options=None, file=DESCRIPTOR,
-        ),
+            serialized_options=None, file=DESCRIPTOR),
         _descriptor.FieldDescriptor(
             name='states', full_name='forge_abi.ResponseUpdateState.states', index=1,
             number=2, type=11, cpp_type=10, label=3,
             has_default_value=False, default_value=[],
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
-            serialized_options=None, file=DESCRIPTOR,
-        ),
+            serialized_options=None, file=DESCRIPTOR),
         _descriptor.FieldDescriptor(
             name='assets', full_name='forge_abi.ResponseUpdateState.assets', index=2,
             number=3, type=11, cpp_type=10, label=3,
             has_default_value=False, default_value=[],
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
-            serialized_options=None, file=DESCRIPTOR,
-        ),
+            serialized_options=None, file=DESCRIPTOR),
         _descriptor.FieldDescriptor(
             name='stakes', full_name='forge_abi.ResponseUpdateState.stakes', index=3,
             number=4, type=11, cpp_type=10, label=3,
             has_default_value=False, default_value=[],
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
-            serialized_options=None, file=DESCRIPTOR,
-        ),
+            serialized_options=None, file=DESCRIPTOR),
         _descriptor.FieldDescriptor(
             name='app_state', full_name='forge_abi.ResponseUpdateState.app_state', index=4,
             number=15, type=11, cpp_type=10, label=1,
             has_default_value=False, default_value=None,
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
-            serialized_options=None, file=DESCRIPTOR,
-        ),
+            serialized_options=None, file=DESCRIPTOR),
     ],
     extensions=[
     ],
@@ -283,8 +261,7 @@ _REQUESTINFO = _descriptor.Descriptor(
             has_default_value=False, default_value=_b("").decode('utf-8'),
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
-            serialized_options=None, file=DESCRIPTOR,
-        ),
+            serialized_options=None, file=DESCRIPTOR),
     ],
     extensions=[
     ],
@@ -315,16 +292,14 @@ _RESPONSEINFO = _descriptor.Descriptor(
             has_default_value=False, default_value=[],
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
-            serialized_options=None, file=DESCRIPTOR,
-        ),
+            serialized_options=None, file=DESCRIPTOR),
         _descriptor.FieldDescriptor(
             name='app_hash', full_name='forge_abi.ResponseInfo.app_hash', index=1,
             number=2, type=12, cpp_type=9, label=1,
             has_default_value=False, default_value=_b(""),
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
-            serialized_options=None, file=DESCRIPTOR,
-        ),
+            serialized_options=None, file=DESCRIPTOR),
     ],
     extensions=[
     ],
@@ -355,24 +330,21 @@ _REQUEST = _descriptor.Descriptor(
             has_default_value=False, default_value=None,
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
-            serialized_options=None, file=DESCRIPTOR,
-        ),
+            serialized_options=None, file=DESCRIPTOR),
         _descriptor.FieldDescriptor(
             name='update_state', full_name='forge_abi.Request.update_state', index=1,
             number=2, type=11, cpp_type=10, label=1,
             has_default_value=False, default_value=None,
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
-            serialized_options=None, file=DESCRIPTOR,
-        ),
+            serialized_options=None, file=DESCRIPTOR),
         _descriptor.FieldDescriptor(
             name='info', full_name='forge_abi.Request.info', index=2,
             number=3, type=11, cpp_type=10, label=1,
             has_default_value=False, default_value=None,
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
-            serialized_options=None, file=DESCRIPTOR,
-        ),
+            serialized_options=None, file=DESCRIPTOR),
     ],
     extensions=[
     ],
@@ -386,8 +358,7 @@ _REQUEST = _descriptor.Descriptor(
     oneofs=[
         _descriptor.OneofDescriptor(
             name='value', full_name='forge_abi.Request.value',
-            index=0, containing_type=None, fields=[],
-        ),
+            index=0, containing_type=None, fields=[]),
     ],
     serialized_start=951,
     serialized_end=1113,
@@ -407,24 +378,21 @@ _RESPONSE = _descriptor.Descriptor(
             has_default_value=False, default_value=None,
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
-            serialized_options=None, file=DESCRIPTOR,
-        ),
+            serialized_options=None, file=DESCRIPTOR),
         _descriptor.FieldDescriptor(
             name='update_state', full_name='forge_abi.Response.update_state', index=1,
             number=2, type=11, cpp_type=10, label=1,
             has_default_value=False, default_value=None,
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
-            serialized_options=None, file=DESCRIPTOR,
-        ),
+            serialized_options=None, file=DESCRIPTOR),
         _descriptor.FieldDescriptor(
             name='info', full_name='forge_abi.Response.info', index=2,
             number=3, type=11, cpp_type=10, label=1,
             has_default_value=False, default_value=None,
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
-            serialized_options=None, file=DESCRIPTOR,
-        ),
+            serialized_options=None, file=DESCRIPTOR),
     ],
     extensions=[
     ],
@@ -438,8 +406,7 @@ _RESPONSE = _descriptor.Descriptor(
     oneofs=[
         _descriptor.OneofDescriptor(
             name='value', full_name='forge_abi.Response.value',
-            index=0, containing_type=None, fields=[],
-        ),
+            index=0, containing_type=None, fields=[]),
     ],
     serialized_start=1116,
     serialized_end=1282,
@@ -467,31 +434,25 @@ _REQUEST.fields_by_name['verify_tx'].message_type = _REQUESTVERIFYTX
 _REQUEST.fields_by_name['update_state'].message_type = _REQUESTUPDATESTATE
 _REQUEST.fields_by_name['info'].message_type = _REQUESTINFO
 _REQUEST.oneofs_by_name['value'].fields.append(
-    _REQUEST.fields_by_name['verify_tx'],
-)
+    _REQUEST.fields_by_name['verify_tx'])
 _REQUEST.fields_by_name['verify_tx'].containing_oneof = _REQUEST.oneofs_by_name['value']
 _REQUEST.oneofs_by_name['value'].fields.append(
-    _REQUEST.fields_by_name['update_state'],
-)
+    _REQUEST.fields_by_name['update_state'])
 _REQUEST.fields_by_name['update_state'].containing_oneof = _REQUEST.oneofs_by_name['value']
 _REQUEST.oneofs_by_name['value'].fields.append(
-    _REQUEST.fields_by_name['info'],
-)
+    _REQUEST.fields_by_name['info'])
 _REQUEST.fields_by_name['info'].containing_oneof = _REQUEST.oneofs_by_name['value']
 _RESPONSE.fields_by_name['verify_tx'].message_type = _RESPONSEVERIFYTX
 _RESPONSE.fields_by_name['update_state'].message_type = _RESPONSEUPDATESTATE
 _RESPONSE.fields_by_name['info'].message_type = _RESPONSEINFO
 _RESPONSE.oneofs_by_name['value'].fields.append(
-    _RESPONSE.fields_by_name['verify_tx'],
-)
+    _RESPONSE.fields_by_name['verify_tx'])
 _RESPONSE.fields_by_name['verify_tx'].containing_oneof = _RESPONSE.oneofs_by_name['value']
 _RESPONSE.oneofs_by_name['value'].fields.append(
-    _RESPONSE.fields_by_name['update_state'],
-)
+    _RESPONSE.fields_by_name['update_state'])
 _RESPONSE.fields_by_name['update_state'].containing_oneof = _RESPONSE.oneofs_by_name['value']
 _RESPONSE.oneofs_by_name['value'].fields.append(
-    _RESPONSE.fields_by_name['info'],
-)
+    _RESPONSE.fields_by_name['info'])
 _RESPONSE.fields_by_name['info'].containing_oneof = _RESPONSE.oneofs_by_name['value']
 DESCRIPTOR.message_types_by_name['RequestVerifyTx'] = _REQUESTVERIFYTX
 DESCRIPTOR.message_types_by_name['ResponseVerifyTx'] = _RESPONSEVERIFYTX
@@ -503,76 +464,60 @@ DESCRIPTOR.message_types_by_name['Request'] = _REQUEST
 DESCRIPTOR.message_types_by_name['Response'] = _RESPONSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
-RequestVerifyTx = _reflection.GeneratedProtocolMessageType(
-    'RequestVerifyTx', (_message.Message,), dict(
-        DESCRIPTOR=_REQUESTVERIFYTX,
-        __module__='abi_pb2',
-        # @@protoc_insertion_point(class_scope:forge_abi.RequestVerifyTx)
-    ),
-)
+RequestVerifyTx = _reflection.GeneratedProtocolMessageType('RequestVerifyTx', (_message.Message,), dict(
+    DESCRIPTOR=_REQUESTVERIFYTX,
+    __module__='abi_pb2'
+    # @@protoc_insertion_point(class_scope:forge_abi.RequestVerifyTx)
+))
 _sym_db.RegisterMessage(RequestVerifyTx)
 
-ResponseVerifyTx = _reflection.GeneratedProtocolMessageType(
-    'ResponseVerifyTx', (_message.Message,), dict(
-        DESCRIPTOR=_RESPONSEVERIFYTX,
-        __module__='abi_pb2',
-        # @@protoc_insertion_point(class_scope:forge_abi.ResponseVerifyTx)
-    ),
-)
+ResponseVerifyTx = _reflection.GeneratedProtocolMessageType('ResponseVerifyTx', (_message.Message,), dict(
+    DESCRIPTOR=_RESPONSEVERIFYTX,
+    __module__='abi_pb2'
+    # @@protoc_insertion_point(class_scope:forge_abi.ResponseVerifyTx)
+))
 _sym_db.RegisterMessage(ResponseVerifyTx)
 
-RequestUpdateState = _reflection.GeneratedProtocolMessageType(
-    'RequestUpdateState', (_message.Message,), dict(
-        DESCRIPTOR=_REQUESTUPDATESTATE,
-        __module__='abi_pb2',
-        # @@protoc_insertion_point(class_scope:forge_abi.RequestUpdateState)
-    ),
-)
+RequestUpdateState = _reflection.GeneratedProtocolMessageType('RequestUpdateState', (_message.Message,), dict(
+    DESCRIPTOR=_REQUESTUPDATESTATE,
+    __module__='abi_pb2'
+    # @@protoc_insertion_point(class_scope:forge_abi.RequestUpdateState)
+))
 _sym_db.RegisterMessage(RequestUpdateState)
 
-ResponseUpdateState = _reflection.GeneratedProtocolMessageType(
-    'ResponseUpdateState', (_message.Message,), dict(
-        DESCRIPTOR=_RESPONSEUPDATESTATE,
-        __module__='abi_pb2',
-        # @@protoc_insertion_point(class_scope:forge_abi.ResponseUpdateState)
-    ),
-)
+ResponseUpdateState = _reflection.GeneratedProtocolMessageType('ResponseUpdateState', (_message.Message,), dict(
+    DESCRIPTOR=_RESPONSEUPDATESTATE,
+    __module__='abi_pb2'
+    # @@protoc_insertion_point(class_scope:forge_abi.ResponseUpdateState)
+))
 _sym_db.RegisterMessage(ResponseUpdateState)
 
-RequestInfo = _reflection.GeneratedProtocolMessageType(
-    'RequestInfo', (_message.Message,), dict(
-        DESCRIPTOR=_REQUESTINFO,
-        __module__='abi_pb2',
-        # @@protoc_insertion_point(class_scope:forge_abi.RequestInfo)
-    ),
-)
+RequestInfo = _reflection.GeneratedProtocolMessageType('RequestInfo', (_message.Message,), dict(
+    DESCRIPTOR=_REQUESTINFO,
+    __module__='abi_pb2'
+    # @@protoc_insertion_point(class_scope:forge_abi.RequestInfo)
+))
 _sym_db.RegisterMessage(RequestInfo)
 
-ResponseInfo = _reflection.GeneratedProtocolMessageType(
-    'ResponseInfo', (_message.Message,), dict(
-        DESCRIPTOR=_RESPONSEINFO,
-        __module__='abi_pb2',
-        # @@protoc_insertion_point(class_scope:forge_abi.ResponseInfo)
-    ),
-)
+ResponseInfo = _reflection.GeneratedProtocolMessageType('ResponseInfo', (_message.Message,), dict(
+    DESCRIPTOR=_RESPONSEINFO,
+    __module__='abi_pb2'
+    # @@protoc_insertion_point(class_scope:forge_abi.ResponseInfo)
+))
 _sym_db.RegisterMessage(ResponseInfo)
 
-Request = _reflection.GeneratedProtocolMessageType(
-    'Request', (_message.Message,), dict(
-        DESCRIPTOR=_REQUEST,
-        __module__='abi_pb2',
-        # @@protoc_insertion_point(class_scope:forge_abi.Request)
-    ),
-)
+Request = _reflection.GeneratedProtocolMessageType('Request', (_message.Message,), dict(
+    DESCRIPTOR=_REQUEST,
+    __module__='abi_pb2'
+    # @@protoc_insertion_point(class_scope:forge_abi.Request)
+))
 _sym_db.RegisterMessage(Request)
 
-Response = _reflection.GeneratedProtocolMessageType(
-    'Response', (_message.Message,), dict(
-        DESCRIPTOR=_RESPONSE,
-        __module__='abi_pb2',
-        # @@protoc_insertion_point(class_scope:forge_abi.Response)
-    ),
-)
+Response = _reflection.GeneratedProtocolMessageType('Response', (_message.Message,), dict(
+    DESCRIPTOR=_RESPONSE,
+    __module__='abi_pb2'
+    # @@protoc_insertion_point(class_scope:forge_abi.Response)
+))
 _sym_db.RegisterMessage(Response)
 
 
@@ -603,8 +548,7 @@ _FORGEAPPRPC = _descriptor.ServiceDescriptor(
             output_type=_RESPONSE,
             serialized_options=None,
         ),
-    ],
-)
+    ])
 _sym_db.RegisterServiceDescriptor(_FORGEAPPRPC)
 
 DESCRIPTOR.services_by_name['ForgeAppRpc'] = _FORGEAPPRPC

@@ -1,8 +1,8 @@
 syntax = "proto3";
 package forge_abi;
+
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/any.proto";
-
 import "vendor.proto";
 import "enum.proto";
 
@@ -64,8 +64,9 @@ message NodeInfo {
   string data_version = 14; // current data version
   map<string, string> forge_apps_version = 15;
   repeated string supported_txs = 16;
-  string ip = 17;        // self node ip
-  GeoInfo geo_info = 18; // self node geo info
+  string ip = 17;          // self node ip
+  GeoInfo geo_info = 18;   // self node geo info
+  string p2p_address = 19; // id@ip:port
 }
 
 message Validator {
@@ -113,26 +114,34 @@ message AbciContext {
   google.protobuf.Timestamp last_block_time = 7;
 }
 message Multisig {
+  // signer address
   string signer = 1;
-  bytes signature = 2;
-  google.protobuf.Any data = 3;
+  // public key for signer
+  bytes pk = 2;
+  // signature
+  bytes signature = 3;
+
+  // extra data
+  google.protobuf.Any data = 15;
 }
 
 message Transaction {
   string from = 1;
   uint64 nonce = 2;
-  bytes signature = 3;
+
   // use DID for the chain. "did:" prefix is omitted
-  string chain_id = 4;
+  string chain_id = 3;
+  // public key of the sender
+  bytes pk = 4;
+
+  // signature of the transaction
+  bytes signature = 13;
   // we will support multiple signatures in case of certain tx need multiple
   // parties' signature.
-  repeated Multisig signatures = 5;
-  // at current version we don't have a VM to process byte
-  // code so this should always be empty. Forge will reject
-  // tx with non-empty byte_code
-  // bytes byte_code = 6;
 
-  google.protobuf.Any itx = 7;
+  repeated Multisig signatures = 14;
+
+  google.protobuf.Any itx = 15;
 }
 
 message TransactionInfo {
@@ -142,16 +151,40 @@ message TransactionInfo {
   string hash = 4;
   repeated abci_vendor.KVPair tags = 5;
   StatusCode code = 6;
+  google.protobuf.Timestamp time = 7;
+  oneof extra_meta {
+    ExtraCreateAsset create_asset = 8;
+    ExtraAccountMigrate account_migrate = 9;
+  }
+}
+
+message TransactionConfig {
+  uint32 max_asset_size = 1;
+  uint32 max_list_size = 2;
+  uint32 max_multisig = 3;
+  uint64 minimum_stake = 4;
 }
 
 message BlockInfo {
   uint64 height = 1;
   uint32 num_txs = 2;
   google.protobuf.Timestamp time = 3;
-  string app_hash = 4;
-  string proposer = 5;
+  bytes app_hash = 4;
+  bytes proposer = 5;
   repeated TransactionInfo txs = 6;
   uint64 total_txs = 7;
+  repeated TransactionInfo invalid_txs = 8;
+  repeated string txs_hashes = 9;
+  repeated string invalid_txs_hashes = 10;
+  bytes consensus_hash = 11;
+  bytes data_hash = 12;
+  bytes evidence_hash = 13;
+  bytes last_commit_hash = 14;
+  bytes last_results_hash = 15;
+  bytes next_validators_hash = 16;
+  bytes validators_hash = 17;
+  abci_vendor.Version version = 18;
+  abci_vendor.BlockID last_block_id = 19;
 }
 
 message TxStatus {
@@ -202,6 +235,11 @@ message StakeSummary {
   StateContext context = 3;
 }
 
+message StakeConfig {
+  uint32 timeout_general = 1;
+  uint32 timeout_stake_for_node = 2;
+}
+
 message UnconfirmedTxs {
   uint32 n_txs = 1;
   repeated Transaction txs = 2;
@@ -241,6 +279,7 @@ message ValidatorInfo {
   uint64 voting_power = 3;
   string proposer_priority = 4;
   string name = 5;
+  GeoInfo geo_info = 6; // validator geo info
 }
 
 message GenesisInfo {
@@ -267,6 +306,10 @@ message ForgeStatistics {
   repeated uint64 num_transfer_txs = 13;
   repeated uint64 num_update_asset_txs = 14;
   repeated uint64 num_consume_asset_txs = 15;
+  repeated uint64 num_poke_txs = 16;
+  repeated uint32 tps = 17;
+  uint32 max_tps = 18;
+  uint32 avg_tps = 19;
 }
 
 message TxStatistics {
@@ -281,4 +324,34 @@ message TxStatistics {
   uint64 num_transfer_txs = 9;
   uint64 num_update_asset_txs = 10;
   uint64 num_consume_asset_txs = 11;
+  uint64 num_poke_txs = 12;
 }
+
+message ForgeToken {
+  string name = 1;           // token name
+  string symbol = 2;         // token symbol
+  string unit = 3;           // token smallest unit
+  string description = 4;    // token description
+  bytes icon = 5;            // token icon file in bytes
+  uint32 decimal = 6;        // token decimal
+  uint64 initial_supply = 7; // token initial supply amount
+  uint64 total_supply = 8;   // token total supply amount
+  uint32 inflation_rate = 9; // token inflation rate in integer
+}
+
+message PokeInfo {
+  BigUint daily_limit = 1; // poke daily supply amount
+  BigUint leftover = 2;    // remaining poke daily supply amount
+  BigUint amount = 3;      // poke once supply amount
+}
+
+message PokeConfig {
+  string address = 1;
+  uint64 daily_limit = 2;
+  uint64 balance = 3;
+  uint64 amount = 4;
+}
+
+message ExtraCreateAsset { string asset = 1; }
+
+message ExtraAccountMigrate { string address = 1; }

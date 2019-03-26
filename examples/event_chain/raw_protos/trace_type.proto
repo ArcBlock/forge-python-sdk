@@ -50,6 +50,13 @@ message IndexedTransaction {
   string time = 4;
   string type = 5;
   Transaction tx = 6;
+  oneof value {
+    IndexedConsumeAsset consume_asset = 7;
+    IndexedCreateAsset create_asset = 8;
+    IndexedExchange exchange = 9;
+    IndexedTransfer transfer =  10;
+    IndexedUpdateAsset update_asset = 11;
+  }
 }
 
 message IndexedAccountState {
@@ -87,4 +94,90 @@ message IndexedStakeState {
   string renaissance_time = 6;
   string message = 7;
   uint32 type = 8;
+}
+
+message IndexedConsumeAsset {
+  string asset = 1;
+}
+
+message IndexedCreateAsset {
+  string asset = 1;
+}
+
+message IndexedExchange {
+  repeated string sender_assets = 1;
+  repeated string receiver_assets = 2;
+}
+
+message IndexedTransfer {
+  repeated string assets = 1;
+}
+
+message IndexedUpdateAsset {
+  string asset = 1;
+}
+
+message HeightFilter {
+  uint64 from_height = 1;
+  uint64 to_height = 2;
+}
+
+message NumTxsFilter {
+  uint64 min_num_txs = 1;
+  uint64 max_num_txs = 2;
+}
+
+message NumInvalidTxsFilter {
+  uint64 min_num_invalid_txs = 1;
+  uint64 max_num_invalid_txs = 2;
+}
+
+message IndexedBlock {
+  uint64 height = 1;
+  string time = 2;
+  string proposer = 3;
+  uint64 num_txs = 4;
+  uint64 num_invalid_txs = 5;
+}
+
+message HealthStatus {
+  ConsensusStatus consensus = 1;
+  NetworkStatus network = 2;
+  StorageStatus storage = 3;
+  ForgeStatus forge = 4;
+}
+
+message ConsensusStatus{
+  bool health = 1;
+  bool synced = 2;
+  uint64 block_height = 3;
+}
+
+message NetworkStatus{
+  bool health = 1;
+  uint32 num_peers = 2;
+}
+
+message StorageStatus{
+  bool health = 1;
+  string indexer_server = 2;
+  string state_db = 3;
+  DiskSpaceStatus disk_space = 4;
+}
+
+message DiskSpaceStatus {
+  string forge_usage = 1;
+  string total = 2;
+}
+
+message ForgeStatus{
+  bool health = 1;
+  string abi_server = 2;
+  string forge_web = 3;
+  AbciServerStatus abci_server = 4;
+}
+
+message AbciServerStatus{
+  string abci_consensus = 1;
+  string abci_info = 2;
 }

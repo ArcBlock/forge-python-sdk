@@ -216,6 +216,5 @@ def add_ABCIApplicationServicer_to_server(servicer, server):
         ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-        'abci_vendor.ABCIApplication', rpc_method_handlers,
-    )
+        'abci_vendor.ABCIApplication', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))

@@ -1,8 +1,8 @@
 syntax = "proto3";
 package forge_abi;
+
 import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
-
 import "type.proto";
 
 // State definition
@@ -29,6 +29,7 @@ message AccountState {
 
   StakeContext stake = 16;
   CircularQueue pinned_files = 17;
+  PokeInfo poke = 18;
 
   google.protobuf.Any data = 50;
 }
@@ -67,8 +68,12 @@ message ForgeState {
   bytes forge_app_hash = 7;
 
   // 8-14 is reserved for future
+  ForgeToken token = 8;
+  TransactionConfig tx_config = 9;
+  StakeConfig stake_config = 10;
+  PokeConfig poke_config = 11;
 
-  google.protobuf.Any data = 15; // forge app can define their ow app state
+  google.protobuf.Any data = 15; // forge app can define their own app state
 }
 
 // keep a list of state root for different dbs (column families).

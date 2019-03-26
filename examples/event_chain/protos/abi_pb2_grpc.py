@@ -59,6 +59,5 @@ def add_ForgeAppRpcServicer_to_server(servicer, server):
         ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-        'forge_abi.ForgeAppRpc', rpc_method_handlers,
-    )
+        'forge_abi.ForgeAppRpc', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))

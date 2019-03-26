@@ -2,7 +2,6 @@ syntax = "proto3";
 package forge_abi;
 
 import "google/protobuf/any.proto";
-
 import "vendor.proto";
 import "enum.proto";
 import "type.proto";
@@ -407,4 +406,38 @@ message ResponseListAssetTransactions {
   StatusCode code = 1;
   PageInfo page = 2;
   repeated IndexedTransaction transactions = 3;
+}
+
+message RequestListBlocks {
+  PageInput paging = 1;
+  string proposer = 2;
+  TimeFilter time_filter = 3;
+  HeightFilter height_filter = 4;
+  NumTxsFilter num_txs_filter = 5;
+  NumInvalidTxsFilter num_invalid_txs_filter = 6;
+}
+
+message ResponseListBlocks {
+  StatusCode code = 1;
+  PageInfo page = 2;
+  repeated IndexedBlock blocks = 3;
+}
+
+message RequestListAssets {
+  PageInput paging = 1;
+  string owner_address = 2;
+}
+
+message ResponseListAssets {
+  StatusCode code = 1;
+  PageInfo page = 2;
+  IndexedAccountState account = 3;
+  repeated IndexedAssetState assets = 4;
+}
+
+message RequestGetHealthStatus {}
+
+message ResponseGetHealthStatus {
+  StatusCode code = 1;
+  HealthStatus health_status = 2;
 }

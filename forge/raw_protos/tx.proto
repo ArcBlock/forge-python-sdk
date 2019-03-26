@@ -1,5 +1,6 @@
 syntax = "proto3";
 package forge_abi;
+
 import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
 import "type.proto";
@@ -9,6 +10,9 @@ import "type.proto";
 message AccountMigrateTx {
   bytes pk = 1;        // new public key
   WalletType type = 2; // new wallet type
+
+  // forge won't touch this field. Only forge app shall handle it.
+  google.protobuf.Any data = 15;
 }
 
 message ConsensusUpgradeTx {
@@ -62,9 +66,7 @@ message CreateAssetTx {
 
 message DeclareTx {
   string moniker = 1;
-  bytes pk = 2;
-  WalletType type = 3;
-  string issuer = 4;
+  string issuer = 2;
 
   // forge won't update data into state if app is interested in this tx.
   google.protobuf.Any data = 15;
@@ -146,5 +148,14 @@ message UpdateAssetTx {
   string moniker = 2;
 
   // forge won't update data into state if app is interested in this tx.
+  google.protobuf.Any data = 15;
+}
+
+message PokeTx {
+  // type url: fg:x:poke
+  string date = 1;
+  string address = 2;
+
+  // forge won't touch this field. Only forge app shall handle it.
   google.protobuf.Any data = 15;
 }

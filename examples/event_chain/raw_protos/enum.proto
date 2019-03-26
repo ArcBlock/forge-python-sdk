@@ -16,6 +16,7 @@ enum StatusCode {
   invalid_tx = 8;
   unsupported_tx = 9;
   expired_tx = 10;
+  too_many_txs = 11;
 
   // 16 - 2047 various errors
   invalid_moniker = 16;
@@ -46,6 +47,7 @@ enum StatusCode {
 
   forbidden = 403;
   internal = 500;
+  timeout = 504;
 
   // user defined status code shall start from 600
 }
@@ -74,6 +76,7 @@ enum TopicType {
   sys_upgrade = 23;
   application = 24;
   consume_asset = 25;
+  poke = 26;
 
   // 24-128 reserved for future infrequent forge tx
 
@@ -93,8 +96,9 @@ enum KeyType {
 enum HashType {
   keccak = 0;
   sha3 = 1;
+  sha2 = 2;
 
-  // 2-5 reserved
+  // 3-5 reserved
 
   keccak_384 = 6;
   sha3_384 = 7;

@@ -31,8 +31,8 @@ message Proof { repeated ProofOp ops = 1; }
 //----------------------------------------
 // Misc.
 
-// BlockSize contains limits on the block size.
-message BlockSizeParams {
+// BlockParams contains limits on the block size and timestamp.
+message BlockParams {
   // Note: must be greater than 0
   int64 max_bytes = 1;
   // Note: must be greater or equal to -1
@@ -46,12 +46,14 @@ message EvidenceParams {
 }
 
 // ValidatorParams contains limits on validators.
-message ValidatorParams { repeated string pub_key_types = 1; }
+message ValidatorParams {
+  repeated string pub_key_types = 1;
+}
 
 // ConsensusParams contains all consensus-relevant parameters
 // that can be adjusted by the abci app
 message ConsensusParams {
-  BlockSizeParams block_size = 1;
+  BlockParams block = 1;
   EvidenceParams evidence = 2;
   ValidatorParams validator = 3;
 }
@@ -69,27 +71,21 @@ message Version {
   uint64 App = 2;
 }
 
-message PartSetHeader {
-  int32 total = 1;
-  bytes hash = 2;
-}
-
 message BlockID {
   bytes hash = 1;
   PartSetHeader parts_header = 2;
 }
 
+message PartSetHeader {
+  int32 total = 1;
+  bytes hash = 2;
+}
 
 // Validator
 message Validator {
   bytes address = 1;
-  // PubKey pub_key = 2;
+  //PubKey pub_key = 2;
   int64 power = 3;
-}
-
-message PubKey {
-  string type = 1;
-  bytes data = 2;
 }
 
 // ValidatorUpdate
@@ -102,6 +98,11 @@ message ValidatorUpdate {
 message VoteInfo {
   Validator validator = 1;
   bool signed_last_block = 2;
+}
+
+message PubKey {
+  string type = 1;
+  bytes  data = 2;
 }
 
 message Evidence {
@@ -129,17 +130,17 @@ message Header {
   bytes data_hash = 9;        // transactions
 
   // hashes from the app output from the prev block
-  bytes validators_hash = 10;      // validators for the current block
-  bytes next_validators_hash = 11; // validators for the next block
-  bytes consensus_hash = 12;       // consensus params for current block
-  bytes app_hash = 13;             // state after txs from the previous block
-  bytes last_results_hash =
-      14; // root hash of all results from the txs from the previous block
+  bytes validators_hash = 10;   // validators for the current block
+  bytes next_validators_hash = 11;   // validators for the next block
+  bytes consensus_hash = 12;   // consensus params for current block
+  bytes app_hash = 13;         // state after txs from the previous block
+  bytes last_results_hash = 14;// root hash of all results from the txs from the previous block
 
   // consensus info
   bytes evidence_hash = 15;    // evidence included in the block
   bytes proposer_address = 16; // original proposer of the block
 }
+
 
 // ================================================================
 // import "github.com/tendermint/tendermint/abci/types/proto";

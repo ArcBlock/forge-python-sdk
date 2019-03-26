@@ -86,6 +86,7 @@ class RpcTest(unittest.TestCase):
         tx = self.rpc.create_tx(**kwargs).tx
         res = self.rpc.send_tx(tx=tx, token=self.wallet1.token)
         assert (res.code == 0)
+        return res
 
     def test_get_chain_info(self):
         res = self.rpc.get_chain_info()

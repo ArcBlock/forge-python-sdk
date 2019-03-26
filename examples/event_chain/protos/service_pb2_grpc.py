@@ -292,8 +292,7 @@ def add_ChainRpcServicer_to_server(servicer, server):
         ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-        'forge_abi.ChainRpc', rpc_method_handlers,
-    )
+        'forge_abi.ChainRpc', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
@@ -352,8 +351,7 @@ def add_EventRpcServicer_to_server(servicer, server):
         ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-        'forge_abi.EventRpc', rpc_method_handlers,
-    )
+        'forge_abi.EventRpc', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
@@ -429,8 +427,7 @@ def add_FileRpcServicer_to_server(servicer, server):
         ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-        'forge_abi.FileRpc', rpc_method_handlers,
-    )
+        'forge_abi.FileRpc', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
@@ -523,8 +520,7 @@ def add_StateRpcServicer_to_server(servicer, server):
         ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-        'forge_abi.StateRpc', rpc_method_handlers,
-    )
+        'forge_abi.StateRpc', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
@@ -651,8 +647,7 @@ def add_WalletRpcServicer_to_server(servicer, server):
         ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-        'forge_abi.WalletRpc', rpc_method_handlers,
-    )
+        'forge_abi.WalletRpc', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
@@ -695,6 +690,21 @@ class StatisticRpcStub(object):
             '/forge_abi.StatisticRpc/list_asset_transactions',
             request_serializer=rpc__pb2.RequestListAssetTransactions.SerializeToString,
             response_deserializer=rpc__pb2.ResponseListAssetTransactions.FromString,
+        )
+        self.list_blocks = channel.unary_unary(
+            '/forge_abi.StatisticRpc/list_blocks',
+            request_serializer=rpc__pb2.RequestListBlocks.SerializeToString,
+            response_deserializer=rpc__pb2.ResponseListBlocks.FromString,
+        )
+        self.list_assets = channel.unary_unary(
+            '/forge_abi.StatisticRpc/list_assets',
+            request_serializer=rpc__pb2.RequestListAssets.SerializeToString,
+            response_deserializer=rpc__pb2.ResponseListAssets.FromString,
+        )
+        self.get_health_status = channel.unary_unary(
+            '/forge_abi.StatisticRpc/get_health_status',
+            request_serializer=rpc__pb2.RequestGetHealthStatus.SerializeToString,
+            response_deserializer=rpc__pb2.ResponseGetHealthStatus.FromString,
         )
 
 
@@ -744,6 +754,27 @@ class StatisticRpcServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def list_blocks(self, request, context):
+        # missing associated documentation comment in .proto file
+        pass
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def list_assets(self, request, context):
+        # missing associated documentation comment in .proto file
+        pass
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def get_health_status(self, request, context):
+        # missing associated documentation comment in .proto file
+        pass
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_StatisticRpcServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -777,8 +808,22 @@ def add_StatisticRpcServicer_to_server(servicer, server):
             request_deserializer=rpc__pb2.RequestListAssetTransactions.FromString,
             response_serializer=rpc__pb2.ResponseListAssetTransactions.SerializeToString,
         ),
+        'list_blocks': grpc.unary_unary_rpc_method_handler(
+            servicer.list_blocks,
+            request_deserializer=rpc__pb2.RequestListBlocks.FromString,
+            response_serializer=rpc__pb2.ResponseListBlocks.SerializeToString,
+        ),
+        'list_assets': grpc.unary_unary_rpc_method_handler(
+            servicer.list_assets,
+            request_deserializer=rpc__pb2.RequestListAssets.FromString,
+            response_serializer=rpc__pb2.ResponseListAssets.SerializeToString,
+        ),
+        'get_health_status': grpc.unary_unary_rpc_method_handler(
+            servicer.get_health_status,
+            request_deserializer=rpc__pb2.RequestGetHealthStatus.FromString,
+            response_serializer=rpc__pb2.ResponseGetHealthStatus.SerializeToString,
+        ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-        'forge_abi.StatisticRpc', rpc_method_handlers,
-    )
+        'forge_abi.StatisticRpc', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
