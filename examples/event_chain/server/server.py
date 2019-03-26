@@ -32,7 +32,7 @@ def exchange_verify(request):
         )
     else:
         logger.error(
-            "Received an update_reqeust for ExchangeTx not recognized.",
+            "Received an verify_reqeust for ExchangeTx not recognized.",
         )
 
     return protos.ResponseVerifyTx(code=0)

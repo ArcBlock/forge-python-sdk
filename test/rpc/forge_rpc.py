@@ -1,4 +1,5 @@
 import unittest
+from datetime import datetime
 from time import sleep
 
 from google.protobuf.any_pb2 import Any
@@ -10,7 +11,7 @@ from forge.protos import BigUint
 from forge.protos import TransferTx
 
 FORGE_TEST_SOCKET = '127.0.0.1:27210'
-SLEEP_SECS = 5
+SLEEP_SECS = 1
 
 
 def verify_tx_response(response):
@@ -130,7 +131,7 @@ class RpcTest(unittest.TestCase):
         assert (res.code == 0)
 
     def test_get_account_state(self):
-        sleep(SLEEP_SECS)
+        sleep(5)
 
         def verify_result(req):
             res = self.rpc.get_account_state(req)
@@ -224,6 +225,21 @@ class RpcTest(unittest.TestCase):
             print(res)
         assert (res.code == 0)
         print(res)
+
+    def test_poke_tx(self):
+
+        pokeTx = protos.PokeTx(
+            date=str(datetime.now().date()),
+            address='zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz',
+        )
+        res = self.rpc.send_itx(
+            type_url='fg:t:poke',
+            itx=pokeTx,
+            wallet=self.wallet1.wallet,
+            token=self.wallet1.token,
+            nonce=0
+        )
+        assert(res.code == 0)
 
     def test_consume_asset(self):
         sleep(5)

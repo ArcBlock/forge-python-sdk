@@ -1,10 +1,10 @@
 import base64
 import json
 import logging
+from enum import Enum
 
 import base58
 import event_chain.protos as protos
-from enum import Enum
 from google.protobuf.any_pb2 import Any
 from google.protobuf.timestamp_pb2 import Timestamp
 
@@ -77,7 +77,8 @@ class WalletResponse:
         str_sig = str(sig)
         decoded_sig = base58.b58decode(str_sig[1:])
         logger.debug(
-            "Wallet Response:sig after base58 decode: {}".format(decoded_sig),
+            "Wallet Response:sig after base58 decode: {}".format(
+                decoded_sig),
         )
         return decoded_sig
 
@@ -141,7 +142,7 @@ def to_display_time(timestamp):
 
 
 def time_diff(t1, t2):
-    return t2.ToDatetime()-t1.ToDatetime()
+    return t2.ToDatetime() - t1.ToDatetime()
 
 
 def update_tx_multisig(tx, signer, signature=None, data=None):
@@ -149,6 +150,7 @@ def update_tx_multisig(tx, signer, signature=None, data=None):
         signer=signer,
         signature=signature,
         data=data,
+        pk=tx.pk,
     )
     params = {
         'from': getattr(tx, 'from'),
@@ -157,6 +159,7 @@ def update_tx_multisig(tx, signer, signature=None, data=None):
         'chain_id': tx.chain_id,
         'signatures': [multisig],
         'itx': tx.itx,
+        'pk': tx.pk,
     }
     new_tx = protos.Transaction(**params)
     return new_tx

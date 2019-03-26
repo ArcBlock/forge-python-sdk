@@ -24,6 +24,7 @@ def connect(db_path):
 def register_user(moniker, passphrase, conn=None):
     user = models.User(moniker, passphrase)
     logger.info("User {} created successfully!".format(moniker))
+    user.poke()
     if conn:
         db.insert_user(conn, user.address, moniker, passphrase)
     return user

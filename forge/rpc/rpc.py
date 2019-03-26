@@ -65,11 +65,11 @@ class ForgeRpc:
         self.list_asset_transactions = self.statistic.list_asset_transactions
         self.list_transactions = self.statistic.list_transactions
 
-    def send_itx(self, type_url, itx, wallet, token):
+    def send_itx(self, type_url, itx, wallet, token, nonce=1):
         encoded_itx = utils.encode_to_any(type_url, itx)
         tx = self.create_tx(
             itx=encoded_itx, from_address=wallet.address,
-            wallet=wallet, token=token,
+            wallet=wallet, token=token, nonce=nonce
         )
         return self.send_tx(tx.tx)
 

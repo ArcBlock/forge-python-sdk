@@ -1,5 +1,6 @@
 import base64
 import logging
+from datetime import datetime
 from time import sleep
 
 import event_chain.config.config as config
@@ -290,12 +291,14 @@ class EventAssetState:
         ticket_holder = self.get_next_ticket()
         exchange_tx = ticket_holder.ticket_exchange
         res1 = forgeRpc.multisig(
-            exchange_tx, buyer_wallet,
-            buyer_token,
+            tx=exchange_tx,
+            wallet=buyer_wallet,
+            token=buyer_token,
         )
         if res1.code != 0:
-            logger.error(u"Buyer multisig failed!")
+            logger.error("Buyer multisig failed!")
             logger.error(res1)
+            logger.error(exchange_tx)
         else:
             buyer_signed = res1.tx
             res = forgeRpc.send_tx(buyer_signed)
@@ -333,27 +336,6 @@ class EventAssetState:
             return None
         else:
             return res.hash
-
-    def update_token(self, buyer_wallet, buyer_token=''):
-        next_ticket = self.get_next_ticket()
-        ticket_info = protos.TicketInfo(
-            id=next_ticket.id,
-            token=gen_ticket_token(
-                next_ticket.id,
-                buyer_wallet,
-            ),
-        )
-        res = forgeRpc.update_asset(
-            'ec:s:ticket_info', next_ticket.address,
-            ticket_info,
-            buyer_wallet, buyer_token,
-        )
-        logger.debug(
-            "executing-ticket: ticket has been updated with the new "
-            "token.",
-        )
-        if res.code != 0:
-            logger.error(res)
 
     def update(self, wallet, token, **kwargs):
         event_info = protos.EventInfo(
@@ -652,6 +634,21 @@ class User:
     def get_state(self):
         state = get_participant_state(self.address)
         return state
+
+    def poke(self):
+        pokeTx = protos.PokeTx(date=str(datetime.now().date()),
+                               address='zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
+        res = forgeRpc.send_itx(type_url='fg:t:poke',
+                                itx=pokeTx,
+                                wallet=self.get_wallet(),
+                                token=self.token,
+                                nonce=0)
+
+        if res.code != 0:
+            logger.error("Poke Failed.")
+            logger.error(res)
+        else:
+            logger.debug('Poke successfully.')
 
 
 class ParticipantAccountState:

@@ -16,7 +16,7 @@
       "description": "The world is being more and more decentralized. How do products envolve in such a place? Join us and learn form Robert how to develop the best best decentralized applications.",
       "start_time": "2019/6/3",
       "end_time": "2019/6/4",
-      "ticket_price": "300000000000000000",
+      "ticket_price": "50000000000000000",
       "location": "Web lecture"
     },
     {
@@ -25,7 +25,7 @@
       "description": "What would you do if you have your own blockchain? Let's forge our chains and build our own decentralized applications. Beer and refreshments are provided. ",
       "start_time": "2019/7/28",
       "end_time": "2019/7/30",
-      "ticket_price": "300000000000000000",
+      "ticket_price": "30000000000000000",
       "location": "3150 Richards, Bellevue, WA"
     },
     {
@@ -34,7 +34,7 @@
       "description": "Blockchain is getting more and more popular. If you want to learn more about this amazing techonology, join us in this one month crash course and master Blockchain!",
       "start_time": "2019/8/6",
       "end_time": "2019/9/6",
-      "ticket_price": "1880000000000000000",
+      "ticket_price": "110000000000000000",
       "location": "3150 Richards, Bellevue, WA"
     },
     {
@@ -43,7 +43,7 @@
       "description": "This conference gathers the experts from all all over the world, specializing in different areas of blockchain, to give you insights on the technologies and busienss that are happening.",
       "start_time": "2019/12/18",
       "end_time": "2019/12/20",
-      "ticket_price": "500000000000000000",
+      "ticket_price": "30000000000000000",
       "location": "Golden Gate Bridge, SF, 94129"
     },
     {
@@ -52,7 +52,7 @@
       "description": "This conference gathers the experts from all all over the world, specializing in different areas of blockchain, to give you insights on the technologies and busienss that are happening.",
       "start_time": "2020/1/15",
       "end_time": "2020/1/19",
-      "ticket_price": "850000000000000000",
+      "ticket_price": "10000000000000000",
       "location": "Golden Gate Bridge, SF, 94129"
     },
     {
@@ -61,7 +61,7 @@
       "description": "This conference gathers the experts from all all over the world, specializing in different areas of blockchain, to give you insights on the technologies and busienss that are happening.",
       "start_time": "2020/11/22",
       "end_time": "2020/11/25",
-      "ticket_price": "1000000000000000000",
+      "ticket_price": "0",
       "location": "Golden Gate Bridge, SF, 94129"
     }
   ]

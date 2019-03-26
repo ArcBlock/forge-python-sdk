@@ -65,14 +65,14 @@ def is_loggedin():
 class EventForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     confirm = SubmitField('Confirm')
-    total = StringField('Total', validators=[DataRequired(),
-                                             validators.number_range(min=1,
-                                                                     max=30)
-                                             ])
+    total = IntegerField('Total', validators=[DataRequired(),
+                                              validators.number_range(min=1,
+                                                                      max=30)
+                                              ])
     start_time = StringField("StartTime", validators=[DataRequired()])
     description = StringField("Description")
     end_time = StringField("EndTime", validators=[DataRequired()])
-    ticket_price = IntegerField("TicketPrice", validators=[DataRequired()])
+    ticket_price = IntegerField("TicketPrice")
     address = StringField('Address')
     location = StringField('Location', validators=[DataRequired()])
 
@@ -256,12 +256,12 @@ def buy():
         return error
 
     hash = app.buy_ticket(address, session.get('user'), g.db)
-    g.logger.info("ticket is bought successfully from web.")
     if not hash:
         g.logger.error("Fail to buy ticket from web.")
         flash('Oops! Someone is faster than you. Get another ticket!')
         return redirect('/')
     else:
+        g.logger.info("ticket is bought successfully from web.")
         flash(
             'Congratulations! Ticket for Event "{}" is bought '
             'successfully!'.format(
@@ -375,7 +375,6 @@ def create_event():
 
 def refresh_token():
     user = session.get('user')
-    g.logger.debug("current token: {}".format(user.token))
     user = app.load_user(
         moniker=user.moniker,
         passphrase=user.passphrase,
@@ -486,6 +485,7 @@ def mobile_buy_ticket(event_address):
         if error:
             return error
         if request.method == 'GET':
+            g.logger.debug("Receives get request for mobile-buy-ticket.")
             user_did = request.args.get('userDid', None)
             if not user_did:
                 return response_error("Please provide a valid user did.")
@@ -513,13 +513,15 @@ def mobile_buy_ticket(event_address):
             )
 
         elif request.method == 'POST':
-            req = ast.literal_eval(request.get_data(as_text=True))
-            g.logger.debug("Receives data from wallet {}".format(req))
+            g.logger.debug("Receives post request for mobile-buy-ticket.")
             try:
+                req_data = request.get_data(as_text=True)
+                g.logger.debug("Receives data from wallet {}".format(req_data))
+                req = ast.literal_eval(req_data)
                 wallet_response = helpers.WalletResponse(req)
-            except Exception:
-                return response_error("Error in parsing wallet data. Original "
-                                      "data received is {}".format(req))
+            except Exception as e:
+                g.logger.error(e, exc_info=True)
+                return response_error("Error in parsing wallet data.")
 
             user_address = wallet_response.get_address()
             participant_state = app.get_participant_state(user_address)
@@ -551,7 +553,7 @@ def mobile_buy_ticket(event_address):
                                                        hash))
                 return response_error('Please try buying the ticket again.')
     except Exception as e:
-        g.logger.error(e)
+        g.logger.error(e, exc_info=True)
         return response_error('Exception in buying ticket.')
 
 
@@ -590,14 +592,16 @@ def mobile_require_asset(event_address):
             )
 
         if request.method == 'POST':
-            req = ast.literal_eval(request.get_data(as_text=True))
-            g.logger.debug("Receives data from wallet {}".format(req))
             try:
+                req_data = request.get_data(as_text=True)
+                g.logger.debug("Receives data from wallet {}".format(req_data))
+                req = ast.literal_eval(req_data)
                 wallet_response = helpers.WalletResponse(req)
             except Exception as e:
                 g.logger.error(
                     "error in parsing wallet data, error:{}".format(e),
                 )
+                g.logger.error(e, exc_info=True)
                 return response_error("Error in parsing wallet data. Original "
                                       "data received is {}".format(req))
 
@@ -638,7 +642,8 @@ def mobile_require_asset(event_address):
                 endpoint=endpoint,
                 workflow='use-ticket',
             )
-    except Exception:
+    except Exception as e:
+        g.logger.error(e, exc_info=True)
         return response_error("Exception in requesting asset.")
 
 
@@ -655,12 +660,13 @@ def mobile_consume(ticket_address):
         event = app.get_event_state(ticket.event_address)
 
         if request.method == 'POST':
-            req = ast.literal_eval(request.get_data(as_text=True))
-            g.logger.debug("Receives data from wallet {}".format(req))
             try:
+                req_data = request.get_data(as_text=True)
+                g.logger.debug("Receives data from wallet {}".format(req_data))
+                req = ast.literal_eval(req_data)
                 wallet_response = helpers.WalletResponse(req)
             except Exception as e:
-                g.logger.exception(e)
+                g.logger.error(e, exc_info=True)
                 return response_error("Error in parsing wallet data. Original "
                                       "data received is {}".format(req))
 
@@ -680,7 +686,7 @@ def mobile_consume(ticket_address):
                 g.logger.error('Fail to consume ticket.')
                 return response_error('error in consuming ticket.')
     except Exception as e:
-        g.logger.exception(e)
+        g.logger.error(e, exc_info=True)
         return response_error("Exception in consuming ticket.")
 
 
