@@ -1,13 +1,21 @@
+import ast
+import base64
 import codecs
+import json
+import logging
 import math
 from collections import Iterable
+from datetime import datetime
 from functools import reduce
 
+import base58
 from google.protobuf.any_pb2 import Any
 from google.protobuf.internal.decoder import _DecodeVarint32
 from google.protobuf.internal.encoder import _VarintBytes
 
 from .. import protos
+
+logger = logging.getLogger('forge-util')
 
 
 def parse_to_proto(binary, proto_message):
@@ -99,3 +107,54 @@ def int_to_bytes(n):
 
 def bytes_to_int(bytes):
     return reduce(lambda s, x: (s << 8) + x, bytearray(bytes))
+
+
+def multibase_b58encode(data):
+    raw = base58.b58encode(data)
+    return 'z' + raw.decode()
+
+
+def multibase_b58decode(data):
+    if data.startswith('z'):
+        return base58.b58decode((data[1:]).encode())
+    raise ValueError('{} cannot be decoded by multibase'
+                     ' base58.'.format(str(data)))
+
+
+def to_json_b64urlsafe(dictionary):
+    json_data = json.dumps(dictionary)
+    return b64encode_no_padding(json_data)
+
+
+def b64encode_no_padding(data):
+    if isinstance(data, str):
+        data = data.encode()
+    return base64.urlsafe_b64encode(data) \
+        .decode() \
+        .rstrip('=')
+
+
+def b64decode_padding_safe(data):
+    if isinstance(data, str):
+        data = data.encode()
+    return base64.urlsafe_b64decode(
+        (data + b'=' * (-len(data) % 4)))
+
+
+def b64encoded_to_dict(data):
+    try:
+        dict_string = b64decode_padding_safe(data).decode()
+        return ast.literal_eval(dict_string)
+    except Exception as e:
+        logger.error('Error in decoding b64urlsafe '
+                     'encoded data to dictionary.')
+        logger.error(e, exc_info=True)
+        return {}
+
+
+def current_utc_timestamp():
+    return round(datetime.utcnow().timestamp())
+
+
+def clean_dict(d):
+    return {k: v for k, v in d.items() if v and v != ''}
