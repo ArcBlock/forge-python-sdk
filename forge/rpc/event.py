@@ -6,7 +6,7 @@ class RpcEvent:
     def __init__(self, chan):
         self.stub = protos.EventRpcStub(chan)
 
-    def subscribe(self, req=None, type=0, filter=''):
+    def subscribe(self, req=None, type=0, filter=None):
         """
 
         Parameters
@@ -20,12 +20,15 @@ class RpcEvent:
         ResponseSubscribe
 
         """
-        if not req:
-            return self.stub.subscribe(req)
+        if req:
+            res = self.stub.subscribe(req)
+
         else:
-            return self.stub.subscribe(
+            res = self.stub.subscribe(
                 protos.RequestSubscribe(type=type, filter=filter),
             )
+        for r in res:
+            yield r
 
     def unsubscribe(self, topic='', req=None):
         """
@@ -40,7 +43,7 @@ class RpcEvent:
         ResponseUnsubscribe
 
         """
-        if not req:
+        if req:
             return self.stub.unsubscribe(req)
         else:
             return self.stub.unsubscribe(
