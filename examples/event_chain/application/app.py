@@ -4,6 +4,7 @@ from time import sleep
 
 import event_chain.config.config as config
 import event_chain.db.utils as db
+from event_chain.application import did_auth
 from event_chain.application import models
 from event_chain.utils import helpers
 
@@ -301,6 +302,10 @@ def verify_ticket_address(ticket_address):
                 ticket_address, state.type_url,
             ),
         )
+
+
+def did_auth_mobile_buy(**kwargs):
+    return did_auth.response_require_multisig(**kwargs)
 
 
 def refresh():

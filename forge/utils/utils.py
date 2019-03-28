@@ -129,9 +129,7 @@ def to_json_b64urlsafe(dictionary):
 def b64encode_no_padding(data):
     if isinstance(data, str):
         data = data.encode()
-    return base64.urlsafe_b64encode(data) \
-        .decode() \
-        .rstrip('=')
+    return base64.urlsafe_b64encode(data).decode().rstrip('=')
 
 
 def b64decode_padding_safe(data):
@@ -152,8 +150,9 @@ def b64encoded_to_dict(data):
         return {}
 
 
+# TODO: utc timestamp
 def current_utc_timestamp():
-    return round(datetime.utcnow().timestamp())
+    return round(datetime.now().timestamp())
 
 
 def clean_dict(d):

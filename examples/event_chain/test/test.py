@@ -2,7 +2,8 @@ import logging
 import os.path as path
 from time import sleep
 
-from . import app
+from event_chain.application import app
+
 from forge import ForgeConfig
 from forge import ForgeSdk
 

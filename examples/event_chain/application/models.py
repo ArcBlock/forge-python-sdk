@@ -636,7 +636,7 @@ class User:
         return state
 
     def poke(self):
-        pokeTx = protos.PokeTx(date=str(datetime.now().date()),
+        pokeTx = protos.PokeTx(date=str(datetime.utcnow().date()),
                                address='zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
         res = forgeRpc.send_itx(type_url='fg:t:poke',
                                 itx=pokeTx,
@@ -648,7 +648,7 @@ class User:
             logger.error("Poke Failed.")
             logger.error(res)
         else:
-            logger.debug('Poke successfully.')
+            logger.debug('Poke successfully.hash: {}'.format(res.hash))
 
 
 class ParticipantAccountState:

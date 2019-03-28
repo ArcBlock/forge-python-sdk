@@ -1,7 +1,7 @@
 import logging
 
-from forge.mcrypto import Hasher
-from forge.mcrypto import Signer
+from forge.mcrypto.hasher import Hasher
+from forge.mcrypto.signer import Signer
 from forge.utils import utils
 
 logger = logging.getLogger('abt-did')
@@ -141,14 +141,9 @@ class AbtDid:
                       key_type=key_type,
                       hash_type=hash_type)
 
-    def gen_and_sign(self, sk, extra, did=None):
-        if not did:
-            did = self.sk_to_did(sk)
-        elif not did.startswith('did'):
-            did = AbtDid.PREFIX + did
-
+    def gen_and_sign(self, sk, extra):
         now = utils.current_utc_timestamp()
-        middle = utils.clean_dict({'iss': did,
+        middle = utils.clean_dict({'iss': self.sk_to_did(sk),
                                    'iat': now,
                                    'nbf': now,
                                    'exp': now + AbtDid.MIN_30,

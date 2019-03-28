@@ -20,7 +20,6 @@ from flask import request
 from flask import Response
 from flask import session
 from flask_qrcode import QRcode
-from flask_session import Session
 from flask_wtf import FlaskForm
 from wtforms import IntegerField
 from wtforms import StringField
@@ -28,6 +27,8 @@ from wtforms import SubmitField
 from wtforms import ValidationError
 from wtforms import validators
 from wtforms.validators import DataRequired
+
+from flask_session import Session
 
 application = Flask(__name__)
 application.config['SECRET_KEY'] = 'hihihihihi'
@@ -41,16 +42,16 @@ QRcode(application)
 logging.basicConfig(level=logging.DEBUG)
 DB_PATH = config.db_path
 SERVER_ADDRESS = "http://" + config.app_host + ":" + str(config.app_port) + "/"
-FORGE_WEB = 'http://' + config.app_host + ':8210/node/explorer/txs/'
+FORGE_WEB = 'http://' + config.app_host + ':8211/node/explorer/txs/'
 
 logging.info('DB: {}'.format(DB_PATH))
 logging.info('forge port {}'.format(config.forge_config.sock_grpc))
 logging.info('app server address: {}'.format(SERVER_ADDRESS))
 
-APP_SK = "z3m3Sz661YRQWj5DMZhfQgBsYpdSdkEBXb7z2zrbjQ" \
-         "rE9gmXP2CE6jjQhZMpwp72bF8JEKjgMayxrx4fiqgrt8NHs"
-APP_PK = "z8fwfKXGPm4oKF79Ve2qaX2eyH4z35Hogmi3BUgNwxGNy"
-APP_ADDR = "z1gQpyTi3zfQ98Tjwy8cwKiyBxkk5K9C9wD"
+APP_SK = 'zyQBXZ7NijYQQRzLUryjkd1Mj4qSpofcnsgEh8a8ZrtbgM1jSKHrC85V' \
+         'edZsQ5N3x5M298zpridcq2bKBZtmqroT'
+APP_PK = "zExrfT2pXtVqdAqgZwjvdMBo5RpqSqn1fa43Wp93peuSR"
+APP_ADDR = "z1UT9an1Z4W1gnmzASneER2J5eqtx5jfwgx"
 
 ARC = 'https://arcwallet.io/i/'
 
@@ -504,13 +505,25 @@ def mobile_buy_ticket(event_address):
             des = 'Confirm the purchase below.'
             endpoint = 'requireMultiSig'
 
-            return send_did_request(
-                url=call_back_url,
-                description=des,
-                endpoint=endpoint,
-                tx=updated_exchange_tx,
-                workflow="buy-ticket",
-            )
+            # return send_did_request(
+            #     url=call_back_url,
+            #     description=des,
+            #     endpoint=endpoint,
+            #     tx=updated_exchange_tx,
+            #     workflow="buy-ticket",
+            # )
+            did_request_params = {
+                'user_did': user_did,
+                'tx': updated_exchange_tx,
+                'url': call_back_url,
+                'description': des,
+                'action': 'responseAuth',
+                'workflow': 'buy-ticket',
+                'background_img': 'https://unsplash.it/350/150/'
+            }
+            response = app.did_auth_mobile_buy(**did_request_params)
+            g.logger.debug('did auth response: {}'.format(response))
+            return response
 
         elif request.method == 'POST':
             g.logger.debug("Receives post request for mobile-buy-ticket.")
@@ -540,9 +553,15 @@ def mobile_buy_ticket(event_address):
                               "by mobile.".format(ticket_address))
 
                 db.insert_mobile_address(g.db, user_address)
-
+                base58_encoded = helpers.base58_encode_tx(
+                    helpers.update_tx_multisig(
+                        app.get_event_state(
+                            event_address).get_exchange_tx(),
+                        user_address,
+                    ))
                 js = json.dumps({'ticket': ticket_address,
-                                 'hash': hash})
+                                 'hash': hash,
+                                 'tx': base58_encoded})
                 g.logger.debug('success response: {}'.format(str(js)))
                 resp = Response(js, status=200, mimetype='application/json')
                 return resp
@@ -583,13 +602,23 @@ def mobile_require_asset(event_address):
             des = 'Select a ticket for event.'
             target = event.event_info.title
             endpoint = 'requireAsset'
-            return send_did_request(
-                url=call_back_url,
-                description=des,
-                target=target,
-                endpoint=endpoint,
-                workflow='use-ticket',
-            )
+            # return send_did_request(
+            #     url=call_back_url,
+            #     description=des,
+            #     target=target,
+            #     endpoint=endpoint,
+            #     workflow='use-ticket',
+            # )
+            did_request_params = {
+                'url': call_back_url,
+                'description': des,
+                'action': 'responseAuth',
+                'workflow': 'use-ticket',
+                'background_img': 'https://unsplash.it/350/150/',
+                'target': target,
+            }
+            response = app.did_auth_mobile_buy(**did_request_params)
+            return response
 
         if request.method == 'POST':
             try:
@@ -635,13 +664,25 @@ def mobile_require_asset(event_address):
                 data=multisig_data,
             )
             endpoint = 'requireMultiSig'
-            return send_did_request(
-                url=call_back_url,
-                description=des,
-                tx=new_tx,
-                endpoint=endpoint,
-                workflow='use-ticket',
-            )
+            # return send_did_request(
+            #     url=call_back_url,
+            #     description=des,
+            #     tx=new_tx,
+            #     endpoint=endpoint,
+            #     workflow='use-ticket',
+            # )
+            did_request_params = {
+                'user_did': user_address,
+                'tx': new_tx,
+                'url': call_back_url,
+                'description': des,
+                'action': 'responseAuth',
+                'workflow': 'use-ticket',
+                'background_img': 'https://unsplash.it/350/150/'
+            }
+            response = app.did_auth_mobile_buy(**did_request_params)
+            return response
+
     except Exception as e:
         g.logger.error(e, exc_info=True)
         return response_error("Exception in requesting asset.")
@@ -676,15 +717,26 @@ def mobile_consume(ticket_address):
                 wallet_response.get_address(),
                 wallet_response.get_signature(),
             )
-
+            multisig_data = helpers.encode_string_to_any(
+                'fg:x:address',
+                ticket_address,
+            )
+            base58_tx = helpers.base58_encode_tx(helpers.update_tx_multisig(
+                tx=event.event_info.consume_tx,
+                signer=wallet_response.get_address(),
+                data=multisig_data
+            ))
             if hash:
                 g.logger.info("ConsumeTx has been sent.")
-                js = json.dumps({'hash': hash})
+                js = json.dumps({'hash': hash,
+                                 'tx': base58_tx})
                 resp = Response(js, status=200, mimetype='application/json')
                 return resp
             else:
                 g.logger.error('Fail to consume ticket.')
-                return response_error('error in consuming ticket.')
+                return response_error('Your ticket might have been '
+                                      'checked out before. '
+                                      'Please wait and try again.')
     except Exception as e:
         g.logger.error(e, exc_info=True)
         return response_error("Exception in consuming ticket.")

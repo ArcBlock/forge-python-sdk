@@ -1,5 +1,6 @@
 from forge import protos
 from forge.config import ForgeConfig
+from forge.did import AbtDid
 from forge.forge_sdk import ForgeSdk
 from forge.mcrypto import Hasher
 from forge.mcrypto import Signer

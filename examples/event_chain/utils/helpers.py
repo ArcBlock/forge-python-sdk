@@ -8,6 +8,8 @@ import event_chain.protos as protos
 from google.protobuf.any_pb2 import Any
 from google.protobuf.timestamp_pb2 import Timestamp
 
+from forge.utils import utils as forge_utils
+
 logger = logging.getLogger('ec-helpers')
 
 
@@ -170,6 +172,11 @@ def encode_string_to_any(type_url, str):
         type_url=type_url,
         value=str.encode(),
     )
+
+
+def base58_encode_tx(tx):
+    b = tx.SerializeToString()
+    return forge_utils.multibase_b58encode(b)
 
 
 class ForgeTxType(Enum):

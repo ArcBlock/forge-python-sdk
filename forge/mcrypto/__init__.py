@@ -1,2 +1,2 @@
-from .hasher import Hasher
-from .signer import Signer
+from forge.mcrypto.hasher import Hasher
+from forge.mcrypto.signer import Signer
