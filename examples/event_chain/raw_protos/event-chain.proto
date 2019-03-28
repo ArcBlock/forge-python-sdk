@@ -15,6 +15,7 @@ message EventInfo {
     uint32 remaining = 11;
     string location = 12;
     forge_abi.Transaction consume_tx=13;
+    string img_url=14;
 }
 
 //type_url: ec:t:update_hosted

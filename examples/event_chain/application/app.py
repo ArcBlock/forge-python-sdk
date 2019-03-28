@@ -65,6 +65,7 @@ def parse_date(str_date):
 
 
 def create_event(user, conn=None, **kwargs):
+    random_img = 'https://unsplash.it/800/450/'
     event_info = models.EventInfo(
         wallet=user.get_wallet(),
         token=user.token,
@@ -75,6 +76,7 @@ def create_event(user, conn=None, **kwargs):
         end_time=parse_date(kwargs.get('end_time')),
         ticket_price=int(kwargs.get('ticket_price')),
         location=kwargs.get('location'),
+        img_url=kwargs.get('img_url', random_img)
     )
     if event_info.finished and conn:
         db.insert_event(conn, event_info.address, user.address)

@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
     package='',
     syntax='proto3',
     serialized_options=None,
-    serialized_pb=_b('\n\x11\x65vent-chain.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\ntype.proto\"\xb9\x02\n\tEventInfo\x12\r\n\x05title\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\r\n\x05total\x18\x04 \x01(\r\x12\x1e\n\x07tickets\x18\x05 \x03(\x0b\x32\r.TicketHolder\x12.\n\nstart_time\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\x08 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x14\n\x0cticket_price\x18\t \x01(\x04\x12\x14\n\x0cparticipants\x18\n \x03(\t\x12\x11\n\tremaining\x18\x0b \x01(\r\x12\x10\n\x08location\x18\x0c \x01(\t\x12*\n\nconsume_tx\x18\r \x01(\x0b\x32\x16.forge_abi.Transaction\"!\n\x0eUpdateHostedTx\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\"U\n\x0fParticipantInfo\x12\x0e\n\x06hosted\x18\x01 \x03(\t\x12\x14\n\x0cparticipated\x18\x02 \x03(\t\x12\x0e\n\x06unused\x18\x03 \x03(\t\x12\x0c\n\x04used\x18\x04 \x03(\t\"@\n\nTicketInfo\x12\n\n\x02id\x18\x03 \x01(\r\x12\x15\n\revent_address\x18\x04 \x01(\t\x12\x0f\n\x07is_used\x18\x05 \x01(\x08\"\x8b\x01\n\x0cTicketHolder\x12-\n\rticket_create\x18\x01 \x01(\x0b\x32\x16.forge_abi.Transaction\x12/\n\x0fticket_exchange\x18\x02 \x01(\x0b\x32\x16.forge_abi.Transaction\x12\n\n\x02id\x18\x04 \x01(\r\x12\x0f\n\x07\x61\x64\x64ress\x18\x05 \x01(\tb\x06proto3'),
+    serialized_pb=_b('\n\x11\x65vent-chain.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\ntype.proto\"\xca\x02\n\tEventInfo\x12\r\n\x05title\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\r\n\x05total\x18\x04 \x01(\r\x12\x1e\n\x07tickets\x18\x05 \x03(\x0b\x32\r.TicketHolder\x12.\n\nstart_time\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\x08 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x14\n\x0cticket_price\x18\t \x01(\x04\x12\x14\n\x0cparticipants\x18\n \x03(\t\x12\x11\n\tremaining\x18\x0b \x01(\r\x12\x10\n\x08location\x18\x0c \x01(\t\x12*\n\nconsume_tx\x18\r \x01(\x0b\x32\x16.forge_abi.Transaction\x12\x0f\n\x07img_url\x18\x0e \x01(\t\"!\n\x0eUpdateHostedTx\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\"U\n\x0fParticipantInfo\x12\x0e\n\x06hosted\x18\x01 \x03(\t\x12\x14\n\x0cparticipated\x18\x02 \x03(\t\x12\x0e\n\x06unused\x18\x03 \x03(\t\x12\x0c\n\x04used\x18\x04 \x03(\t\"@\n\nTicketInfo\x12\n\n\x02id\x18\x03 \x01(\r\x12\x15\n\revent_address\x18\x04 \x01(\t\x12\x0f\n\x07is_used\x18\x05 \x01(\x08\"\x8b\x01\n\x0cTicketHolder\x12-\n\rticket_create\x18\x01 \x01(\x0b\x32\x16.forge_abi.Transaction\x12/\n\x0fticket_exchange\x18\x02 \x01(\x0b\x32\x16.forge_abi.Transaction\x12\n\n\x02id\x18\x04 \x01(\r\x12\x0f\n\x07\x61\x64\x64ress\x18\x05 \x01(\tb\x06proto3'),
     dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR, type__pb2.DESCRIPTOR, ])
 
 
@@ -109,6 +109,13 @@ _EVENTINFO = _descriptor.Descriptor(
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
             serialized_options=None, file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='img_url', full_name='EventInfo.img_url', index=11,
+            number=14, type=9, cpp_type=9, label=1,
+            has_default_value=False, default_value=_b("").decode('utf-8'),
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR),
     ],
     extensions=[
     ],
@@ -122,7 +129,7 @@ _EVENTINFO = _descriptor.Descriptor(
     oneofs=[
     ],
     serialized_start=67,
-    serialized_end=380,
+    serialized_end=397,
 )
 
 
@@ -152,8 +159,8 @@ _UPDATEHOSTEDTX = _descriptor.Descriptor(
     extension_ranges=[],
     oneofs=[
     ],
-    serialized_start=382,
-    serialized_end=415,
+    serialized_start=399,
+    serialized_end=432,
 )
 
 
@@ -204,8 +211,8 @@ _PARTICIPANTINFO = _descriptor.Descriptor(
     extension_ranges=[],
     oneofs=[
     ],
-    serialized_start=417,
-    serialized_end=502,
+    serialized_start=434,
+    serialized_end=519,
 )
 
 
@@ -249,8 +256,8 @@ _TICKETINFO = _descriptor.Descriptor(
     extension_ranges=[],
     oneofs=[
     ],
-    serialized_start=504,
-    serialized_end=568,
+    serialized_start=521,
+    serialized_end=585,
 )
 
 
@@ -301,8 +308,8 @@ _TICKETHOLDER = _descriptor.Descriptor(
     extension_ranges=[],
     oneofs=[
     ],
-    serialized_start=571,
-    serialized_end=710,
+    serialized_start=588,
+    serialized_end=727,
 )
 
 _EVENTINFO.fields_by_name['tickets'].message_type = _TICKETHOLDER

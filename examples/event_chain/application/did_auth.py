@@ -63,7 +63,6 @@ def response(claims, **kwargs):
                     "/eventchain.png",
             'name': 'Event Chain',
             'subtitle': 'A decentralized solution for events',
-            'background_img': kwargs.get('background_img'),
         },
         'requestedClaims': claims,
         'workflow': {

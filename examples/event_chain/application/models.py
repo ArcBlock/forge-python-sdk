@@ -79,6 +79,7 @@ class EventInfo:
         self.description = kwargs.get('description', 'No description :(')
         self.type_url = 'ec:s:event_info'
         self.consume_tx = self.gen_consume_tx()
+        self.img_url = kwargs.get('img_url')
         self.address = self.create()
         self.finished = self.update_generated_tickets()
 
@@ -117,6 +118,7 @@ class EventInfo:
             participants=[],
             remaining=self.total,
             consume_tx=self.consume_tx,
+            img_url=self.img_url,
         )
         create_asset_itx = protos.CreateAssetTx(
             data=utils.encode_to_any(self.type_url, event_info),
@@ -197,7 +199,7 @@ class EventInfo:
 
     def update_generated_tickets(self):
         if not self.address:
-            logger.error(u"No event address available.")
+            logger.error("No event address available.")
         else:
             tickets = self.gen_tickets()
             event_info = protos.EventInfo(
@@ -212,6 +214,7 @@ class EventInfo:
                 remaining=self.total,
                 location=self.location,
                 consume_tx=self.consume_tx,
+                img_url=self.img_url,
             )
             res = forgeRpc.update_asset(
                 self.type_url,
@@ -380,6 +383,7 @@ class EventAssetState:
             participants=self.participants,
             location=self.event_info.location,
             consume_tx=self.event_info.consume_tx,
+            img_url=self.event_info.img_url,
 
         )
         state = protos.AssetState(

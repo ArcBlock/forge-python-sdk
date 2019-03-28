@@ -17,7 +17,8 @@
       "start_time": "2019/6/3",
       "end_time": "2019/6/4",
       "ticket_price": "50000000000000000",
-      "location": "Web lecture"
+      "location": "Web lecture",
+      "img_url": "https://drive.google.com/uc?id=1I13Oguyf_YlwgSmMNudHUEmfelLlTYO8"
     },
     {
       "title": "Hackathon",
@@ -26,7 +27,8 @@
       "start_time": "2019/7/28",
       "end_time": "2019/7/30",
       "ticket_price": "30000000000000000",
-      "location": "3150 Richards, Bellevue, WA"
+      "location": "3150 Richards, Bellevue, WA",
+      "img_url": "https://drive.google.com/uc?id=1dtwHkohXP9KMr8YXvX8hT0POeYXVtxT8"
     },
     {
       "title": "Bootcamp",
@@ -35,7 +37,8 @@
       "start_time": "2019/8/6",
       "end_time": "2019/9/6",
       "ticket_price": "110000000000000000",
-      "location": "3150 Richards, Bellevue, WA"
+      "location": "3150 Richards, Bellevue, WA",
+      "img_url": "https://drive.google.com/uc?id=1lGgL_NdJSOWK6IUZOe9HQTuL2nP2k8Yv"
     },
     {
       "title": "BlockchainConnect",
@@ -44,7 +47,8 @@
       "start_time": "2019/12/18",
       "end_time": "2019/12/20",
       "ticket_price": "30000000000000000",
-      "location": "Golden Gate Bridge, SF, 94129"
+      "location": "Golden Gate Bridge, SF, 94129",
+      "img_url": "https://drive.google.com/uc?id=1uYFLI6tHPR8bAXRQwZG64ctY47VoglLM"
     },
     {
       "title": "Connect Nodes",
@@ -53,7 +57,8 @@
       "start_time": "2020/1/15",
       "end_time": "2020/1/19",
       "ticket_price": "10000000000000000",
-      "location": "Golden Gate Bridge, SF, 94129"
+      "location": "Golden Gate Bridge, SF, 94129",
+      "img_url": "https://drive.google.com/uc?id=1r70yMJBlj3jtBqCSeCeJIIzce27lGNQn"
     },
     {
       "title": "CryptoFinance",
@@ -62,7 +67,8 @@
       "start_time": "2020/11/22",
       "end_time": "2020/11/25",
       "ticket_price": "0",
-      "location": "Golden Gate Bridge, SF, 94129"
+      "location": "Golden Gate Bridge, SF, 94129",
+      "img_url": "https://drive.google.com/uc?id=16FFkegLGFC5x75HYVTRKZSF8pCfi4uiU"
     }
   ]
 }

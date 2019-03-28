@@ -519,7 +519,6 @@ def mobile_buy_ticket(event_address):
                 'description': des,
                 'action': 'responseAuth',
                 'workflow': 'buy-ticket',
-                'background_img': 'https://unsplash.it/350/150/'
             }
             response = app.did_auth_mobile_buy(**did_request_params)
             g.logger.debug('did auth response: {}'.format(response))
@@ -614,7 +613,6 @@ def mobile_require_asset(event_address):
                 'description': des,
                 'action': 'responseAuth',
                 'workflow': 'use-ticket',
-                'background_img': 'https://unsplash.it/350/150/',
                 'target': target,
             }
             response = app.did_auth_mobile_buy(**did_request_params)
@@ -678,7 +676,6 @@ def mobile_require_asset(event_address):
                 'description': des,
                 'action': 'responseAuth',
                 'workflow': 'use-ticket',
-                'background_img': 'https://unsplash.it/350/150/'
             }
             response = app.did_auth_mobile_buy(**did_request_params)
             return response
