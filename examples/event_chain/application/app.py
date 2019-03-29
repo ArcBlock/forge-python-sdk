@@ -160,10 +160,10 @@ def buy_ticket(event_address, user, conn=None):
     return exchange_hash
 
 
-def buy_ticket_mobile(event_address, address, signature, conn=None):
+def buy_ticket_mobile(event_address, address, signature, user_pk, conn=None):
     state = get_event_state(event_address)
     ticket_address, hash = state.buy_ticket_mobile(
-        address, signature,
+        address, signature, user_pk
     )
     if hash and conn:
         db.insert_exchange_tx(conn, event_address, hash)
@@ -213,8 +213,8 @@ def consume(ticket_address, user):
     return res.hash
 
 
-def consume_ticket_mobile(ticket, consume_tx, address, signature):
-    res = ticket.consume_mobile(consume_tx, address, signature)
+def consume_ticket_mobile(ticket, consume_tx, address, signature, user_pk):
+    res = ticket.consume_mobile(consume_tx, address, signature, user_pk)
 
     if res.code != 0 or res.hash is None:
         logger.error(res)
@@ -282,8 +282,12 @@ def verify_ticket_address(ticket_address):
         )
 
 
-def did_auth_mobile_buy(**kwargs):
+def did_auth_require_multisig(**kwargs):
     return did_auth.response_require_multisig(**kwargs)
+
+
+def did_auth_require_asset(**kwargs):
+    return did_auth.response_require_asset(**kwargs)
 
 
 def refresh():

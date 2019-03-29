@@ -1,4 +1,5 @@
 import logging
+import os
 import os.path as path
 
 from forge import ForgeConfig
@@ -15,3 +16,5 @@ app_host = forge_config.get_app_host()
 app_port = forge_config.get_app_port()
 
 db_path = path.join(app_path, "ec.db")
+
+googlemaps_key = os.environ.get('GOOGLEMAPS_KEY')

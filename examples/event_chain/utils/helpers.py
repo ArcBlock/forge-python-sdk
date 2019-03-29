@@ -37,6 +37,11 @@ class WalletResponse:
         self.decoded_info = self.decode_user_info()
         self.requested_claim = self.decoded_info.get('requestedClaims')[0]
 
+    def get_user_pk(self):
+        pk = self.response.get('userPk')
+        logger.debug("Got userpk from wallet {}".format(pk))
+        return forge_utils.multibase_b58decode(pk)
+
     def decode_user_info(self):
         if not self.user_info:
             logger.error(
@@ -111,7 +116,7 @@ class WalletResponse:
     #     return event_address
 
 
-def add_multi_sig_to_tx(tx, address, signature):
+def add_multi_sig_to_tx(tx, address, signature, user_pk):
     logger.debug("Adding multisig to tx...")
     logger.debug("tx: {}".format(tx))
     logger.debug("address: {}".format(address))
@@ -131,7 +136,7 @@ def add_multi_sig_to_tx(tx, address, signature):
     #     'signatures': [multisig],
     #     'itx': tx.itx,
     # }
-    new_tx = update_tx_multisig(tx, address, signature)
+    new_tx = update_tx_multisig(tx, address, user_pk, signature)
     logger.debug("Address and signature has been added to tx: ")
     logger.debug("new tx: {}".format(new_tx))
 
@@ -147,12 +152,12 @@ def time_diff(t1, t2):
     return t2.ToDatetime() - t1.ToDatetime()
 
 
-def update_tx_multisig(tx, signer, signature=None, data=None):
+def update_tx_multisig(tx, signer, pk, signature=None, data=None):
     multisig = protos.Multisig(
         signer=signer,
         signature=signature,
         data=data,
-        pk=tx.pk,
+        pk=pk,
     )
     params = {
         'from': getattr(tx, 'from'),

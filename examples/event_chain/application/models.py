@@ -316,7 +316,7 @@ class EventAssetState:
                 )
                 return res.hash
 
-    def exchange_ticket_mobile(self, buyer_address, buyer_signature):
+    def exchange_ticket_mobile(self, buyer_address, buyer_signature, user_pk):
         logger.debug(u"Preparing to send exchange_tx with mobile data.")
         ticket_holder = self.get_next_ticket()
         exchange_tx = ticket_holder.ticket_exchange
@@ -324,6 +324,7 @@ class EventAssetState:
             exchange_tx,
             buyer_address,
             buyer_signature,
+            user_pk
         )
         logger.debug(
             "Buyer multisig kv pair has been inserted into tx "
@@ -426,7 +427,7 @@ class EventAssetState:
 
     def execute_next_ticket_holder_mobile(
             self, buyer_address,
-            buyer_signature,
+            buyer_signature, user_pk
     ):
         logger.debug(
             "Executing next ticket holder for event {}".format(
@@ -442,7 +443,7 @@ class EventAssetState:
 
         exchange_hash = self.exchange_ticket_mobile(
             buyer_address,
-            buyer_signature,
+            buyer_signature, user_pk
         )
         if not exchange_hash:
             logger.error(
@@ -479,12 +480,12 @@ class EventAssetState:
         exchange_tx = None if not ticket else ticket.ticket_exchange
         return exchange_tx
 
-    def buy_ticket_mobile(self, buyer_address, buyer_signature):
+    def buy_ticket_mobile(self, buyer_address, buyer_signature, user_pk):
         logger.debug(
             "User {} is buying ticket from mobile.".format(buyer_address),
         )
         ticket_address, exchange_hash = self.execute_next_ticket_holder_mobile(
-            buyer_address, buyer_signature,
+            buyer_address, buyer_signature, user_pk
         )
         logger.debug(
             "buy_ticket_mobiel is done with addresss{}".format(
@@ -566,7 +567,7 @@ class TicketAssetState:
         else:
             return forgeRpc.send_tx(res.tx)
 
-    def consume_mobile(self, consume_tx, address, signature):
+    def consume_mobile(self, consume_tx, address, signature, user_pk):
         multisig_data = helpers.encode_string_to_any(
             'fg:x:address',
             self.address,
@@ -575,6 +576,7 @@ class TicketAssetState:
         tx = helpers.update_tx_multisig(
             tx=consume_tx, signer=address,
             signature=signature,
+            pk=user_pk,
             data=multisig_data,
         )
         return forgeRpc.send_tx(tx)

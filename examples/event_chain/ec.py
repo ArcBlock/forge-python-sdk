@@ -30,14 +30,15 @@ from wtforms import validators
 from wtforms.validators import DataRequired
 
 from flask_session import Session
+from forge.utils import utils
 
 application = Flask(__name__)
 application.config['SECRET_KEY'] = 'hihihihihi'
 application.config['WTF_CSRF_ENABLED'] = False
 SESSION_TYPE = 'filesystem'
-application.config['GOOGLEMAPS_KEY'] = "AIzaSyB5Tj_eDYEDCGyAyeCVL6fCHKhqb1AIgsM"
+application.config[
+    'GOOGLEMAPS_KEY'] = config.googlemaps_key
 application.config.from_object(__name__)
-
 Session(application)
 QRcode(application)
 GoogleMaps(application)
@@ -45,7 +46,6 @@ GoogleMaps(application)
 logging.basicConfig(level=logging.DEBUG)
 DB_PATH = config.db_path
 SERVER_ADDRESS = "http://" + config.app_host + ":" + str(config.app_port) + "/"
-
 
 logging.info('DB: {}'.format(DB_PATH))
 logging.info('forge port {}'.format(config.forge_config.sock_grpc))
@@ -218,7 +218,6 @@ def event_detail(address):
 
         txs = app.list_event_exchange_txs(g.db, address)
         num_txs = len(txs)
-        print(num_txs)
         tx_lists = chunks(txs, 3)
         g.logger.debug('forgeweb:{}'.format(forge_web))
         return render_template(
@@ -493,7 +492,8 @@ def mobile_buy_ticket(event_address):
             return error
         if request.method == 'GET':
             g.logger.debug("Receives get request for mobile-buy-ticket.")
-            user_did = request.args.get('userDid', None)
+            user_did = request.args.get('userDid')
+            user_pk = utils.multibase_b58decode(request.args.get('userPk'))
             if not user_did:
                 return response_error("Please provide a valid user did.")
             user_address = user_did.split(":")[2]
@@ -505,6 +505,7 @@ def mobile_buy_ticket(event_address):
             updated_exchange_tx = helpers.update_tx_multisig(
                 event.get_exchange_tx(),
                 user_address,
+                user_pk
             )
             g.logger.debug('new tx {}:'.format(updated_exchange_tx))
             call_back_url = SERVER_ADDRESS + "api/mobile-buy-ticket/"
@@ -518,7 +519,7 @@ def mobile_buy_ticket(event_address):
                 'action': 'responseAuth',
                 'workflow': 'buy-ticket',
             }
-            response = app.did_auth_mobile_buy(**did_request_params)
+            response = app.did_auth_require_multisig(**did_request_params)
             g.logger.debug('did auth response: {}'.format(response))
             return response
 
@@ -543,6 +544,7 @@ def mobile_buy_ticket(event_address):
                 event_address,
                 user_address,
                 wallet_response.get_signature(),
+                wallet_response.get_user_pk(),
             )
 
             if ticket_address and hash:
@@ -556,6 +558,7 @@ def mobile_buy_ticket(event_address):
                         app.get_event_state(
                             event_address).get_exchange_tx(),
                         user_address,
+                        wallet_response.get_user_pk(),
                     ))
                 js = json.dumps({'ticket': ticket_address,
                                  'hash': hash,
@@ -599,14 +602,6 @@ def mobile_require_asset(event_address):
             call_back_url = SERVER_ADDRESS + "api/mobile-require-asset/"
             des = 'Select a ticket for event.'
             target = event.event_info.title
-            endpoint = 'requireAsset'
-            # return send_did_request(
-            #     url=call_back_url,
-            #     description=des,
-            #     target=target,
-            #     endpoint=endpoint,
-            #     workflow='use-ticket',
-            # )
             did_request_params = {
                 'url': call_back_url,
                 'description': des,
@@ -614,7 +609,7 @@ def mobile_require_asset(event_address):
                 'workflow': 'use-ticket',
                 'target': target,
             }
-            response = app.did_auth_mobile_buy(**did_request_params)
+            response = app.did_auth_require_asset(**did_request_params)
             return response
 
         if request.method == 'POST':
@@ -658,16 +653,10 @@ def mobile_require_asset(event_address):
 
             new_tx = helpers.update_tx_multisig(
                 tx=consume_tx, signer=user_address,
+                pk=wallet_response.get_user_pk(),
                 data=multisig_data,
             )
-            endpoint = 'requireMultiSig'
-            # return send_did_request(
-            #     url=call_back_url,
-            #     description=des,
-            #     tx=new_tx,
-            #     endpoint=endpoint,
-            #     workflow='use-ticket',
-            # )
+
             did_request_params = {
                 'user_did': user_address,
                 'tx': new_tx,
@@ -676,7 +665,7 @@ def mobile_require_asset(event_address):
                 'action': 'responseAuth',
                 'workflow': 'use-ticket',
             }
-            response = app.did_auth_mobile_buy(**did_request_params)
+            response = app.did_auth_require_multisig(**did_request_params)
             return response
 
     except Exception as e:
@@ -712,6 +701,7 @@ def mobile_consume(ticket_address):
                 event.event_info.consume_tx,
                 wallet_response.get_address(),
                 wallet_response.get_signature(),
+                wallet_response.get_user_pk(),
             )
             multisig_data = helpers.encode_string_to_any(
                 'fg:x:address',
@@ -720,12 +710,14 @@ def mobile_consume(ticket_address):
             base58_tx = helpers.base58_encode_tx(helpers.update_tx_multisig(
                 tx=event.event_info.consume_tx,
                 signer=wallet_response.get_address(),
+                pk=wallet_response.get_user_pk(),
                 data=multisig_data
             ))
             if hash:
                 g.logger.info("ConsumeTx has been sent.")
                 js = json.dumps({'hash': hash,
                                  'tx': base58_tx})
+                g.logger.debug('success response: {}'.format(js))
                 resp = Response(js, status=200, mimetype='application/json')
                 return resp
             else:
