@@ -360,6 +360,8 @@ img {
   max-width: 100%;
 }
 
+
+
 input[type="checkbox"],
 input[type="radio"] {
   vertical-align: baseline;
@@ -11245,4 +11247,10 @@ body > .navbar {
   background-position: 30px 30px;
   background-repeat: no-repeat;
   opacity: 0.7;
+}
+
+.image.event-3by1{
+  object-fit: cover;
+  width: auto;
+  height: 100px;
 }

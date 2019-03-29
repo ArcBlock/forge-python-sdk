@@ -19,6 +19,7 @@ from flask import render_template
 from flask import request
 from flask import Response
 from flask import session
+from flask_googlemaps import GoogleMaps
 from flask_qrcode import QRcode
 from flask_wtf import FlaskForm
 from wtforms import IntegerField
@@ -34,15 +35,17 @@ application = Flask(__name__)
 application.config['SECRET_KEY'] = 'hihihihihi'
 application.config['WTF_CSRF_ENABLED'] = False
 SESSION_TYPE = 'filesystem'
+application.config['GOOGLEMAPS_KEY'] = "AIzaSyB5Tj_eDYEDCGyAyeCVL6fCHKhqb1AIgsM"
 application.config.from_object(__name__)
 
 Session(application)
 QRcode(application)
+GoogleMaps(application)
 
 logging.basicConfig(level=logging.DEBUG)
 DB_PATH = config.db_path
 SERVER_ADDRESS = "http://" + config.app_host + ":" + str(config.app_port) + "/"
-FORGE_WEB = 'http://' + config.app_host + ':8211/node/explorer/txs/'
+
 
 logging.info('DB: {}'.format(DB_PATH))
 logging.info('forge port {}'.format(config.forge_config.sock_grpc))
@@ -201,6 +204,7 @@ def event_detail(address):
     error = verify_event(address)
     if error:
         return error
+    forge_web = 'http://' + config.app_host + ':8211/node/explorer/txs/'
 
     event = app.get_event_state(address)
     host = app.get_participant_state(event.owner)
@@ -212,13 +216,14 @@ def event_detail(address):
         consume_url = gen_consume_url(address)
         g.logger.info("Url for mobile consume ticket: {}".format(consume_url))
 
-        txs = app.list_ticket_exchange_tx(address)
+        txs = app.list_event_exchange_txs(g.db, address)
+        num_txs = len(txs)
+        print(num_txs)
         tx_lists = chunks(txs, 3)
-        g.logger.debug('forgeweb:{}'.format(FORGE_WEB))
+        g.logger.debug('forgeweb:{}'.format(forge_web))
         return render_template(
-            'event_details.html', event=event, form=form,
-            url=url, tx_lists=tx_lists, consume_url=consume_url, host=host,
-            forge_web=FORGE_WEB
+            'event_details.html', **locals(),
+            to_display_time=helpers.to_display_time
         )
     return redirect('/login')
 
@@ -262,6 +267,7 @@ def buy():
         flash('Oops! Someone is faster than you. Get another ticket!')
         return redirect('/')
     else:
+        db.insert_exchange_tx(g.db, event.address, hash)
         g.logger.info("ticket is bought successfully from web.")
         flash(
             'Congratulations! Ticket for Event "{}" is bought '
@@ -503,15 +509,7 @@ def mobile_buy_ticket(event_address):
             g.logger.debug('new tx {}:'.format(updated_exchange_tx))
             call_back_url = SERVER_ADDRESS + "api/mobile-buy-ticket/"
             des = 'Confirm the purchase below.'
-            endpoint = 'requireMultiSig'
 
-            # return send_did_request(
-            #     url=call_back_url,
-            #     description=des,
-            #     endpoint=endpoint,
-            #     tx=updated_exchange_tx,
-            #     workflow="buy-ticket",
-            # )
             did_request_params = {
                 'user_did': user_did,
                 'tx': updated_exchange_tx,
@@ -552,6 +550,7 @@ def mobile_buy_ticket(event_address):
                               "by mobile.".format(ticket_address))
 
                 db.insert_mobile_address(g.db, user_address)
+                db.insert_exchange_tx(g.db, event_address, hash)
                 base58_encoded = helpers.base58_encode_tx(
                     helpers.update_tx_multisig(
                         app.get_event_state(

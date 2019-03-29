@@ -41,19 +41,6 @@ def load_user(moniker, passphrase, conn=None, address=None):
     return user
 
 
-def recover_user(data, passphrase, moniker, conn=None):
-    user = models.User(moniker=moniker, passphrase=passphrase, data=data)
-    if conn:
-        db.insert_user(conn, user.address, moniker, passphrase)
-    return user
-
-
-def get_user_from_info(user_info):
-    return models.User(
-        user_info['moniker'], user_info['passphrase'],
-    )
-
-
 def parse_date(str_date):
     logger.debug(str_date)
     data = str_date.split('/')
@@ -98,6 +85,16 @@ def list_events(conn):
     return event_states
 
 
+def list_event_exchange_txs(conn, event_address):
+    hashes = db.select_exchange_txs(conn, event_address)
+    tx_list = []
+    for hash in hashes:
+        tx = get_tx_info(hash)
+        if tx:
+            tx_list.append(tx)
+    return tx_list
+
+
 def list_event_detail(addr):
     event = get_event_state(addr)
     event_info = event.event_info
@@ -114,30 +111,13 @@ class TransactionInfo:
         self.height = state.height
         self.hash = state.hash
         self.tx = state.tx
+        self.time = state.time
 
 
 def get_tx_info(hash):
     info = forgeRpc.get_single_tx_info(hash)
-    return TransactionInfo(info)
-
-
-def get_ticket_exchange_tx(ticket_address, conn):
-    row = db.select_ticket_hash(conn, ticket_address)
-    hash = row['exchange_hash']
-    logger.debug('Exchange hash for ticket {} is {}'.format(
-        ticket_address,
-        row[
-            'exchange_hash'
-        ],
-    ))
-    return get_tx_info(hash)
-
-
-def list_tickets(conn, user):
-    lst = db.select_tickets(conn, owner=user.address)
-    logger.debug('ticket list:{}'.format(lst))
-    ticket_states = [get_ticket_state(row['address']) for row in lst]
-    return ticket_states
+    if info:
+        return TransactionInfo(info)
 
 
 def list_unused_tickets(user_address):
@@ -175,14 +155,18 @@ def buy_ticket(event_address, user, conn=None):
     logger.debug("Buy ticket process is completed. exchange hash{}".format(
         exchange_hash,
     ))
+    if exchange_hash and conn:
+        db.insert_exchange_tx(conn, event_address, exchange_hash)
     return exchange_hash
 
 
-def buy_ticket_mobile(event_address, address, signature):
+def buy_ticket_mobile(event_address, address, signature, conn=None):
     state = get_event_state(event_address)
     ticket_address, hash = state.buy_ticket_mobile(
         address, signature,
     )
+    if hash and conn:
+        db.insert_exchange_tx(conn, event_address, hash)
     return ticket_address, hash
 
 
@@ -244,21 +228,13 @@ def consume_ticket_mobile(ticket, consume_tx, address, signature):
     return res.hash
 
 
-def list_ticket_exchange_tx(event_address):
-    res = forgeRpc.list_asset_transactions(event_address)
-    if res.code != 0:
-        logger.error(
-            "Fail to get transactions for event {}".format(event_address),
-        )
-        logger.error(res)
-        return []
-    elif len(res.transactions) == 0:
-        logger.debug("rpc returned Empty exchange txs for event {}".format(
-            event_address,
-        ))
-        return []
-    else:
-        return [tx for tx in res.transactions if tx.type == 'exchange']
+def list_ticket_exchange_tx(conn, event_address):
+    tx_list = []
+    res = db.select_exchange_txs(conn, event_address)
+    for tx in res.transactions:
+        if tx.type == 'exchange':
+            tx_list.append(tx)
+    return tx_list
 
 
 def verify_event_address(event_address):
