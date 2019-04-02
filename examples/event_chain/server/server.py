@@ -7,10 +7,9 @@ from event_chain.config import config
 from forge import ForgeSdk
 from forge import helper as forge_helper
 from forge import utils as forge_utils
+from forge.sdk import sdk
 
 logger = logging.getLogger('ec-server')
-forgeSdk = ForgeSdk(config=config.forge_config)
-forgeRpc = forgeSdk.rpc
 
 INVALID_SENDER_STATE = protos.StatusCode.Value('invalid_sender_state')
 OK = protos.StatusCode.Value('ok')
@@ -91,4 +90,5 @@ exchange_tx_handler = forge_helper.TxHandler(
     exchange_update,
 )
 
-forgeSdk.register_handler(exchange_tx_handler)
+sdk.init_server([exchange_tx_handler])
+forgeRpc = sdk.rpc

@@ -1,51 +1,50 @@
 from forge import protos
+from forge.config import config
+
+stub = protos.EventRpcStub(config.get_grpc_channel())
 
 
-class RpcEvent:
+def subscribe(req=None, type=0, filter=None):
+    """
 
-    def __init__(self, chan):
-        self.stub = protos.EventRpcStub(chan)
+    Parameters
+    ----------
+    req: RequestSubscribe
+    type: protos.TopicType
+    filter: str
 
-    def subscribe(self, req=None, type=0, filter=None):
-        """
+    Returns
+    -------
+    ResponseSubscribe
 
-        Parameters
-        ----------
-        req: RequestSubscribe
-        type: protos.TopicType
-        filter: str
+    """
+    if req:
+        res = stub.subscribe(req)
 
-        Returns
-        -------
-        ResponseSubscribe
+    else:
+        res = stub.subscribe(
+            protos.RequestSubscribe(type=type, filter=filter),
+        )
+    for r in res:
+        yield r
 
-        """
-        if req:
-            res = self.stub.subscribe(req)
 
-        else:
-            res = self.stub.subscribe(
-                protos.RequestSubscribe(type=type, filter=filter),
-            )
-        for r in res:
-            yield r
+def unsubscribe(topic='', req=None):
+    """
 
-    def unsubscribe(self, topic='', req=None):
-        """
+    Parameters
+    ----------
+    topic: str
+    req: RequestUnsubscribe
 
-        Parameters
-        ----------
-        topic: str
-        req: RequestUnsubscribe
+    Returns
+    -------
+    ResponseUnsubscribe
 
-        Returns
-        -------
-        ResponseUnsubscribe
-
-        """
-        if req:
-            return self.stub.unsubscribe(req)
-        else:
-            return self.stub.unsubscribe(
-                protos.RequestUnsubscribe(topic=topic),
-            )
+    """
+    if req:
+        return stub.unsubscribe(req)
+    else:
+        return stub.unsubscribe(
+            protos.RequestUnsubscribe(topic=topic),
+        )

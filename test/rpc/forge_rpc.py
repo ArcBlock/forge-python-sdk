@@ -4,13 +4,12 @@ from time import sleep
 
 from google.protobuf.any_pb2 import Any
 
-from forge import ForgeRpc
 from forge import protos
 from forge import utils
 from forge.protos import BigUint
 from forge.protos import TransferTx
+from forge.rpc import rpc
 
-FORGE_TEST_SOCKET = '127.0.0.1:27210'
 SLEEP_SECS = 1
 
 
@@ -24,7 +23,6 @@ def verify_tx_response(response):
 class RpcTest(unittest.TestCase):
 
     def setUp(self):
-        self.rpc = ForgeRpc(socket=FORGE_TEST_SOCKET)
         self.wallet_type = protos.WalletType(pk=0, hash=1, address=1)
         self.wallet1 = self.init_wallet('wallet1')
         self.wallet2 = self.init_wallet('wallet2')
@@ -37,7 +35,7 @@ class RpcTest(unittest.TestCase):
         )
 
     def init_wallet(self, moniker):
-        res = self.rpc.create_wallet(
+        res = rpc.create_wallet(
             wallet_type=self.wallet_type,
             moniker=moniker,
             passphrase='abc123',
@@ -52,7 +50,7 @@ class RpcTest(unittest.TestCase):
             'nonce': 2,
             'token': self.wallet1.token,
         }
-        res = self.rpc.create_tx(**kwargs)
+        res = rpc.create_tx(**kwargs)
         assert res.code == 0
 
     def test_get_tx(self):
@@ -63,14 +61,14 @@ class RpcTest(unittest.TestCase):
         print("hash to get", tx_hash)
         sleep(1)
 
-        res = self.rpc.get_tx(tx_hash=hash_list)
+        res = rpc.get_tx(tx_hash=hash_list)
         for i in res:
             print(i)
             assert (i.code == 0)
 
     def test_get_block(self):
         height_list = [1, 2, 3]
-        res = self.rpc.get_block(height=height_list)
+        res = rpc.get_block(height=height_list)
         for i in res:
             assert (i.code == 0)
             print(i)
@@ -84,34 +82,34 @@ class RpcTest(unittest.TestCase):
             'nonce': 2,
             'token': self.wallet1.token,
         }
-        tx = self.rpc.create_tx(**kwargs).tx
-        res = self.rpc.send_tx(tx=tx, token=self.wallet1.token)
+        tx = rpc.create_tx(**kwargs).tx
+        res = rpc.send_tx(tx=tx, token=self.wallet1.token)
         assert (res.code == 0)
         return res
 
     def test_get_chain_info(self):
-        res = self.rpc.get_chain_info()
+        res = rpc.get_chain_info()
         assert (res.code == 0)
 
     def test_search(self):
-        res = self.rpc.search(key='1', value='2')
+        res = rpc.search(key='1', value='2')
         assert (res.code == 0)
 
     # def test_create_wallet(self):
-    #     res = self.rpc.create_wallet(moniker='test', passphrase='abc123')
+    #     res = rpc.create_wallet(moniker='test', passphrase='abc123')
     #     print(res)
     #     assert (res.code == 0)
 
     def test_load_wallet(self):
-        res = self.rpc.load_wallet(
+        res = rpc.load_wallet(
             address=self.wallet1.wallet.address,
             passphrase='abc123',
         )
         assert (res.code == 0)
 
     def test_recover_wallet(self):
-        temp_wallet = self.rpc.create_wallet(passphrase='abcd123')
-        res = self.rpc.recover_wallet(
+        temp_wallet = rpc.create_wallet(passphrase='abcd123')
+        res = rpc.recover_wallet(
             req=protos.RequestRecoverWallet(
                 type=self.wallet_type,
                 data=temp_wallet.wallet.sk,
@@ -122,19 +120,19 @@ class RpcTest(unittest.TestCase):
         assert (res.code == 0)
 
     def test_list_wallet(self):
-        res = self.rpc.list_wallet()
+        res = rpc.list_wallet()
         for i in res:
             assert (i.code == 0)
 
     def test_remove_wallet(self):
-        res = self.rpc.remove_wallet(address=self.wallet1.wallet.address)
+        res = rpc.remove_wallet(address=self.wallet1.wallet.address)
         assert (res.code == 0)
 
     def test_get_account_state(self):
         sleep(5)
 
         def verify_result(req):
-            res = self.rpc.get_account_state(req)
+            res = rpc.get_account_state(req)
             for i in res:
                 print(i)
                 assert (i.code == 0)
@@ -160,7 +158,7 @@ class RpcTest(unittest.TestCase):
         verify_result(dict_list)
         verify_result(single_req)
         verify_result(single_dict)
-        res = self.rpc.get_account_state(single_req)
+        res = rpc.get_account_state(single_req)
         for i in res:
             print(type(i.state.pk))
 
@@ -174,12 +172,12 @@ class RpcTest(unittest.TestCase):
                 address=self.wallet1.wallet.address,
             ),
         ]
-        res = self.rpc.get_asset_state(req=reqs.__iter__())
+        res = rpc.get_asset_state(req=reqs.__iter__())
         for i in res:
             assert (i.code == 0)
 
     def test_forge_state(self):
-        res = self.rpc.get_forge_state(req=protos.RequestGetForgeState())
+        res = rpc.get_forge_state(req=protos.RequestGetForgeState())
         assert (res.code == 0)
 
     def test_send_itx(self):
@@ -187,7 +185,7 @@ class RpcTest(unittest.TestCase):
             to=self.wallet2.wallet.address,
             value=BigUint(value=b'11'),
         )
-        res = self.rpc.send_itx(
+        res = rpc.send_itx(
             'fg:t:transfer', trans_itx,
             self.wallet1.wallet, self.wallet1.token,
         )
@@ -203,7 +201,7 @@ class RpcTest(unittest.TestCase):
                 value=protos.BigUint(value=bytes(3)),
             ),
         )
-        sender_signed = self.rpc.create_tx(
+        sender_signed = rpc.create_tx(
             itx=utils.encode_to_any('fg:t:exchange', exchange_itx),
             from_address=self.wallet1.wallet.address,
             wallet=self.wallet1.wallet,
@@ -211,12 +209,12 @@ class RpcTest(unittest.TestCase):
         ).tx
         print(sender_signed)
         sleep(5)
-        receiver_signed = self.rpc.multisig(
+        receiver_signed = rpc.multisig(
             tx=sender_signed, wallet=self.wallet2.wallet,
             token=self.wallet2.token,
         ).tx
         print(receiver_signed)
-        res = self.rpc.send_tx(
+        res = rpc.send_tx(
             tx=receiver_signed,
             wallet=self.wallet2.wallet,
             token=self.wallet2.token,
@@ -232,14 +230,14 @@ class RpcTest(unittest.TestCase):
             date=str(datetime.now().date()),
             address='zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz',
         )
-        res = self.rpc.send_itx(
+        res = rpc.send_itx(
             type_url='fg:t:poke',
             itx=pokeTx,
             wallet=self.wallet1.wallet,
             token=self.wallet1.token,
             nonce=0
         )
-        assert(res.code == 0)
+        assert (res.code == 0)
 
     def test_consume_asset(self):
         sleep(5)
@@ -250,12 +248,12 @@ class RpcTest(unittest.TestCase):
                 value=b'hello',
             ),
         )
-        asset_address = self.rpc.get_asset_address(
+        asset_address = rpc.get_asset_address(
             self.wallet1.wallet.address,
             asset_create_itx,
             self.wallet1.wallet.type, ).asset_address
 
-        res = self.rpc.send_itx(
+        res = rpc.send_itx(
             'fg:t:create_asset', asset_create_itx,
             self.wallet1.wallet,
             self.wallet1.token,
@@ -269,7 +267,7 @@ class RpcTest(unittest.TestCase):
             receiver=protos.ExchangeInfo(value=BigUint(value=bytes(10))),
         )
 
-        sender_exchange_signed = self.rpc.create_tx(
+        sender_exchange_signed = rpc.create_tx(
             itx=utils.encode_to_any(
                 'fg:t:exchange',
                 exchange_itx,
@@ -281,7 +279,7 @@ class RpcTest(unittest.TestCase):
 
         assert (sender_exchange_signed.tx is not None)
 
-        receiver_exchange_signed = self.rpc.multisig(
+        receiver_exchange_signed = rpc.multisig(
             tx=sender_exchange_signed.tx,
             wallet=self.wallet2.wallet,
             token=self.wallet2.token,
@@ -289,7 +287,7 @@ class RpcTest(unittest.TestCase):
 
         assert (receiver_exchange_signed.tx is not None)
 
-        res = self.rpc.send_tx(receiver_exchange_signed.tx)
+        res = rpc.send_tx(receiver_exchange_signed.tx)
 
         assert (verify_tx_response(res))
 
@@ -299,7 +297,7 @@ class RpcTest(unittest.TestCase):
             issuer=self.wallet1.wallet.address,
         )
 
-        issuer_signed = self.rpc.create_tx(
+        issuer_signed = rpc.create_tx(
             from_address=self.wallet1.wallet.address,
             wallet=self.wallet1.wallet,
             token=self.wallet1.token,
@@ -312,7 +310,7 @@ class RpcTest(unittest.TestCase):
             print(res)
         assert (issuer_signed.code == 0)
 
-        res_both_sig = self.rpc.multisig(
+        res_both_sig = rpc.multisig(
             tx=issuer_signed.tx,
             wallet=self.wallet2.wallet,
             token=self.wallet2.token,
@@ -323,13 +321,13 @@ class RpcTest(unittest.TestCase):
         )
         assert (res_both_sig.code == 0)
 
-        res = self.rpc.send_tx(res_both_sig.tx)
+        res = rpc.send_tx(res_both_sig.tx)
         assert (verify_tx_response(res))
 
         sleep(5)
 
         # check asset state
-        asset = self.rpc.get_single_asset_state(asset_address)
+        asset = rpc.get_single_asset_state(asset_address)
         assert (not asset.transferrable)
         assert (asset.readonly)
 

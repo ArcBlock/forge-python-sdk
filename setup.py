@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="forge-python-sdk",
-    version="0.14.4",
+    version="0.17.0",
     author="Riley Shu",
     author_email="riley@arcblock.io",
     description="A small example package",
@@ -20,6 +20,7 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     install_requires=[
+        'base58',
         'grpcio',
         'grpcio-tools',
         'toml',

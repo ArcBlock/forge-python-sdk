@@ -1,264 +1,271 @@
 from forge import protos
+from forge.config import config
 from forge.utils import utils
 
+stub = protos.ChainRpcStub(config.get_grpc_channel())
 
-class RpcChain:
-    def __init__(self, chan):
-        self.stub = protos.ChainRpcStub(chan)
 
-    def create_tx(
-            self, itx=None, from_address='',
-            wallet=None, token=None, req=None, nonce=1,
-    ):
-        """
-        RPC call to create transaction.
+def create_tx(itx=None, from_address='',
+              wallet=None, token=None, req=None, nonce=1,
+              ):
+    """RPC call to create transaction.
 
-        Parameters
-        ----------
-        req : RequestCreateTx
-        itx : google.protobuf.An
-        from_address : string
-        nonce : uint64
-        wallet : WalletInfo
-        token : string
+    Parameters
+    ----------
+    req : RequestCreateTx
+    itx : google.protobuf.An
+    from_address : string
+    nonce : uint64
+    wallet : WalletInfo
+    token : string
 
-        Returns
-        -------
-        ResponseCreateTx
+    Returns
+    -------
+    ResponseCreateTx
 
-        """
+    """
 
-        if req is not None:
-            return self.stub.create_tx(req)
+    if req is not None:
+        return stub.create_tx(req)
+    else:
+        req_kwargs = {
+            'itx': itx,
+            'from': from_address,
+            'nonce': nonce,
+            'wallet': wallet,
+            'token': token,
+        }
+        return stub.create_tx(protos.RequestCreateTx(**req_kwargs))
+
+
+def send_tx(
+        tx=None, wallet=None, token=None, commit=False, req=None,
+):
+    """
+    RPC call to send transaction.
+
+    Parameters
+    ----------
+    req: RequestSendTx
+    tx : Transaction
+    wallet: WalletInfo
+    token: string
+    commit: bool
+
+    Returns
+    -------
+    ResponseSendTx
+
+    """
+    if req is not None:
+        return stub.send_tx(req)
+    else:
+        req_kwargs = {
+            'tx': tx,
+            'wallet': wallet,
+            'token': token,
+            'commit': commit,
+        }
+        req = protos.RequestSendTx(**req_kwargs)
+        return stub.send_tx(req)
+
+
+def get_tx(tx_hash='', req=None):
+    """
+    RPC call to get transaction.
+
+    Parameters
+    ----------
+    req: stream RequestGetTx
+    tx_hash: single string or string iterator
+
+    Returns
+    -------
+    stream  ResponseGetTx
+
+    """
+
+    def to_req(item):
+        if isinstance(item, protos.RequestGetTx):
+            return item
         else:
-            req_kwargs = {
-                'itx': itx,
-                'from': from_address,
-                'nonce': nonce,
-                'wallet': wallet,
-                'token': token,
-            }
-            return self.stub.create_tx(protos.RequestCreateTx(**req_kwargs))
+            return protos.RequestGetTx(hash=item)
 
-    def send_tx(
-            self, tx=None, wallet=None, token=None, commit=False, req=None,
-    ):
-        """
-        RPC call to send transaction.
+    if req is not None:
+        return stub.get_tx(utils.to_iter(to_req, req))
+    else:
+        return stub.get_tx(utils.to_iter(to_req, tx_hash))
 
-        Parameters
-        ----------
-        req: RequestSendTx
-        tx : Transaction
-        wallet: WalletInfo
-        token: string
-        commit: bool
 
-        Returns
-        -------
-        ResponseSendTx
+def get_block(height=0, req=None):
+    """
+    RPC call to get blocks.
 
-        """
-        if req is not None:
-            return self.stub.send_tx(req)
+    Parameters
+    ----------
+    req: RequestGetBlock
+    height: uint64
+
+    Returns
+    -------
+    stream ResponseGetBlock
+
+    """
+
+    def to_req(item):
+        if isinstance(item, protos.RequestGetBlock):
+            return item
         else:
-            req_kwargs = {
-                'tx': tx,
-                'wallet': wallet,
-                'token': token,
-                'commit': commit,
-            }
-            req = protos.RequestSendTx(**req_kwargs)
-            return self.stub.send_tx(req)
+            return protos.RequestGetBlock(height=item)
 
-    def get_tx(self, tx_hash='', req=None):
-        """
-        RPC call to get transaction.
+    if req is not None:
+        return stub.get_block(utils.to_iter(to_req, req))
+    else:
+        return stub.get_block(utils.to_iter(to_req, height))
 
-        Parameters
-        ----------
-        req: stream RequestGetTx
-        tx_hash: single string or string iterator
 
-        Returns
-        -------
-        stream  ResponseGetTx
+def search(key='', value='', req=None):
+    """
 
-        """
+    Parameters
+    ----------
+    req: RequestSearch
+    key: string
+    value: string
 
-        def to_req(item):
-            if isinstance(item, protos.RequestGetTx):
-                return item
-            else:
-                return protos.RequestGetTx(hash=item)
+    Returns
+    -------
+    ResponseSearch
 
-        if req is not None:
-            return self.stub.get_tx(utils.to_iter(to_req, req))
-        else:
-            return self.stub.get_tx(utils.to_iter(to_req, tx_hash))
+    """
+    if req is not None:
+        return stub.search(req)
+    else:
+        req_kwargs = {
+            'key': key,
+            'value': value,
+        }
+        return stub.search(protos.RequestSearch(**req_kwargs))
 
-    def get_block(self, height=0, req=None):
-        """
-        RPC call to get blocks.
 
-        Parameters
-        ----------
-        req: RequestGetBlock
-        height: uint64
+def get_unconfirmed_tx(req=None, limit=1):
+    """
 
-        Returns
-        -------
-        stream ResponseGetBlock
+    Parameters
+    ----------
+    req: RequestGetUnconfirmedTxs
+    limit: int
 
-        """
+    Returns
+    -------
+    ResponseGetUnconfirmedTxs
 
-        def to_req(item):
-            if isinstance(item, protos.RequestGetBlock):
-                return item
-            else:
-                return protos.RequestGetBlock(height=item)
+    """
+    if req is not None:
+        return stub.get_unconfirmed_txs(req)
+    else:
+        return stub.get_unconfirmed_txs(
+            protos.RequestGetUnconfirmedTxs(limit=limit),
+        )
 
-        if req is not None:
-            return self.stub.get_block(utils.to_iter(to_req, req))
-        else:
-            return self.stub.get_block(utils.to_iter(to_req, height))
 
-    def search(self, key='', value='', req=None):
-        """
+def get_chain_info(req=None):
+    """
 
-        Parameters
-        ----------
-        req: RequestSearch
-        key: string
-        value: string
+    Parameters
+    ----------
+    req: RequestGetChainInfo
 
-        Returns
-        -------
-        ResponseSearch
+    Returns
+    -------
+    ResponseGetChainInfo
 
-        """
-        if req is not None:
-            return self.stub.search(req)
-        else:
-            req_kwargs = {
-                'key': key,
-                'value': value,
-            }
-            return self.stub.search(protos.RequestSearch(**req_kwargs))
+    """
+    if req is not None:
+        return stub.get_chain_info(req)
+    else:
+        return stub.get_chain_info(protos.RequestGetChainInfo())
 
-    def get_unconfirmed_tx(self, req=None, limit=1):
-        """
 
-        Parameters
-        ----------
-        req: RequestGetUnconfirmedTxs
-        limit: int
+def get_net_info(req=None):
+    """
 
-        Returns
-        -------
-        ResponseGetUnconfirmedTxs
+    Parameters
+    ----------
+    req: RequestGetNetInfo
 
-        """
-        if req is not None:
-            return self.stub.get_unconfirmed_txs(req)
-        else:
-            return self.stub.get_unconfirmed_txs(
-                protos.RequestGetUnconfirmedTxs(limit=limit),
-            )
+    Returns
+    -------
+    ResponseGetNetInfo
 
-    def get_chain_info(self, req=None):
-        """
+    """
+    if req is not None:
+        return stub.get_net_info(req)
+    else:
+        return stub.get_net_info(protos.RequestGetNetInfo())
 
-        Parameters
-        ----------
-        req: RequestGetChainInfo
 
-        Returns
-        -------
-        ResponseGetChainInfo
+def get_validators_info(req=None):
+    """
 
-        """
-        if req is not None:
-            return self.stub.get_chain_info(req)
-        else:
-            return self.stub.get_chain_info(protos.RequestGetChainInfo())
+    Parameters
+    ----------
+    req: RequestGetValidatorsInfo
 
-    def get_net_info(self, req=None):
-        """
+    Returns
+    -------
+    ResponseGetValidatorsInfo
 
-        Parameters
-        ----------
-        req: RequestGetNetInfo
+    """
+    if req is not None:
+        return stub.get_validators_info(req)
+    else:
+        return stub.get_validators_info(
+            protos.RequestGetValidatorsInfo(),
+        )
 
-        Returns
-        -------
-        ResponseGetNetInfo
 
-        """
-        if req is not None:
-            return self.stub.get_net_info(req)
-        else:
-            return self.stub.get_net_info(protos.RequestGetNetInfo())
+def get_config(req=None):
+    """
 
-    def get_validators_info(self, req=None):
-        """
+    Parameters
+    ----------
+    req: RequestGetConfig
 
-        Parameters
-        ----------
-        req: RequestGetValidatorsInfo
+    Returns
+    -------
+    ResponseGetConfig
 
-        Returns
-        -------
-        ResponseGetValidatorsInfo
+    """
+    if req is not None:
+        return stub.get_config(req)
+    else:
+        return stub.get_config(
+            protos.RequestGetConfig(),
+        )
 
-        """
-        if req is not None:
-            return self.stub.get_validators_info(req)
-        else:
-            return self.stub.get_validators_info(
-                protos.RequestGetValidatorsInfo(),
-            )
 
-    def get_config(self, req=None):
-        """
+def multisig(tx=None, wallet=None, token=None, data=None, req=None):
+    if req is not None:
+        return stub.multisig(req)
+    else:
+        req = protos.RequestMultisig(
+            tx=tx, wallet=wallet, token=token,
+            data=data,
+        )
+        return stub.multisig(req)
 
-        Parameters
-        ----------
-        req: RequestGetConfig
 
-        Returns
-        -------
-        ResponseGetConfig
-
-        """
-        if req is not None:
-            return self.stub.get_config(req)
-        else:
-            return self.stub.get_config(
-                protos.RequestGetConfig(),
-            )
-
-    def multisig(self, tx=None, wallet=None, token=None, data=None, req=None):
-
-        if req is not None:
-            return self.stub.multisig(req)
-        else:
-            req = protos.RequestMultisig(
-                tx=tx, wallet=wallet, token=token,
-                data=data,
-            )
-            return self.stub.multisig(req)
-
-    def get_asset_address(
-            self, sender_address='', itx=None,
-            wallet_type=None, req=None,
-    ):
-        if req is not None:
-            return self.stub.get_asset_address(req)
-        else:
-            return self.stub.get_asset_address(
-                protos.RequestGetAssetAddress(
-                    sender_address=sender_address, itx=itx,
-                    wallet_type=wallet_type,
-                ),
-            )
+def get_asset_address(
+        sender_address='', itx=None,
+        wallet_type=None, req=None,
+):
+    if req is not None:
+        return stub.get_asset_address(req)
+    else:
+        return stub.get_asset_address(
+            protos.RequestGetAssetAddress(
+                sender_address=sender_address, itx=itx,
+                wallet_type=wallet_type,
+            ),
+        )

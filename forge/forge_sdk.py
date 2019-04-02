@@ -1,7 +1,6 @@
 import logging
 
 from .config import ForgeConfig
-from .rpc import ForgeRpc
 from .server import ForgeServer
 
 
