@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="forge-python-sdk",
-    version="0.17.0",
+    version="0.18.5",
     author="Riley Shu",
     author_email="riley@arcblock.io",
     description="A small example package",
@@ -26,7 +26,6 @@ setuptools.setup(
         'toml',
         'deepmerge',
         'pysha3',
-        'secp256k1',
         'ed25519',
     ],
 )

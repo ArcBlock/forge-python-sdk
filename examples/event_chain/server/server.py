@@ -2,9 +2,7 @@ import logging
 
 from event_chain import protos
 from event_chain.application import models
-from event_chain.config import config
 
-from forge import ForgeSdk
 from forge import helper as forge_helper
 from forge import utils as forge_utils
 from forge.sdk import sdk
@@ -91,4 +89,3 @@ exchange_tx_handler = forge_helper.TxHandler(
 )
 
 sdk.init_server([exchange_tx_handler])
-forgeRpc = sdk.rpc

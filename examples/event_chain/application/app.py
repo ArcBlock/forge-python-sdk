@@ -2,18 +2,14 @@ import logging
 from datetime import datetime
 from time import sleep
 
-import event_chain.config.config as config
 import event_chain.db.utils as db
 from event_chain.application import did_auth
 from event_chain.application import models
 from event_chain.utils import helpers
 
-from forge import ForgeSdk
+from forge.rpc import rpc as forge_rpc
 
 logger = logging.getLogger('ec-app')
-
-forgeSdk = ForgeSdk(config=config.forge_config)
-forgeRpc = forgeSdk.rpc
 
 
 def connect(db_path):
@@ -115,7 +111,7 @@ class TransactionInfo:
 
 
 def get_tx_info(hash):
-    info = forgeRpc.get_single_tx_info(hash)
+    info = forge_rpc.get_single_tx_info(hash)
     if info:
         return TransactionInfo(info)
 

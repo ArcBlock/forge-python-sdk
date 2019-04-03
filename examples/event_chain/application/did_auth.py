@@ -4,7 +4,7 @@ from event_chain.config import config
 from event_chain.utils import helpers
 
 from forge import AbtDid
-from forge import ForgeSdk
+from forge.rpc import rpc as forge_rpc
 from forge.utils import utils as forge_utils
 
 APP_SK = b'0\243\016\303\017\r\305\026#~\301\227\033;\274\303pl\243 \004,' \
@@ -15,7 +15,6 @@ APP_PK = b'\317w\007P\234\211g\246Q\264P\325\346/}E\020\304\365\216\242\033o' \
          b'\302\206v\203\303+\206n\212'
 APP_ADDR = "z1UT9an1Z4W1gnmzASneER2J5eqtx5jfwgx"
 APP_DID_TYPE = AbtDid.parse_type_from_did(APP_ADDR)
-RPC = ForgeSdk().rpc
 
 
 def response_require_multisig(**kwargs):
@@ -55,7 +54,7 @@ def response(claims, **kwargs):
         'action': kwargs.get('action'),
         'appInfo': {
             'chainHost': 'http://{}:8211/api'.format(config.app_host),
-            'chainId': RPC.get_chain_info().info.network,
+            'chainId': forge_rpc.get_chain_info().info.network,
             'chain_token': 'TBA',
             'decimals': 16,
             'description': 'Create and join events on Event Chain',

@@ -5,9 +5,9 @@ from socket import AF_UNIX
 from socket import SOCK_STREAM
 from socket import socket
 
-from .. import protos
-from ..utils import utils
-from ..utils.helper import SupportedActions
+from forge import protos
+from forge.utils import utils
+from forge.utils.helper import SupportedActions
 
 
 class ForgeServer:

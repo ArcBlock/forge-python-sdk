@@ -5,9 +5,9 @@ from forge.server import ForgeServer
 
 logger = logging.getLogger('forge-sdk')
 
-server = NotImplemented
-
+server = None
 
 def init_server(handlers):
     global server
-    server = ForgeServer(handlers, config.get_tcp_socket())
+    if not server:
+        server = ForgeServer(handlers, config.get_tcp_socket())

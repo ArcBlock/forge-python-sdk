@@ -45,10 +45,10 @@ GoogleMaps(application)
 
 logging.basicConfig(level=logging.DEBUG)
 DB_PATH = config.db_path
-SERVER_ADDRESS = "http://" + config.app_host + ":" + str(config.app_port) + "/"
+SERVER_ADDRESS = "http://" + config.app_host + ":5000/"
 
 logging.info('DB: {}'.format(DB_PATH))
-logging.info('forge port {}'.format(config.forge_config.sock_grpc))
+logging.info('forge port {}'.format(config.forge_config.get_grpc_socket()))
 logging.info('app server address: {}'.format(SERVER_ADDRESS))
 
 APP_SK = 'zyQBXZ7NijYQQRzLUryjkd1Mj4qSpofcnsgEh8a8ZrtbgM1jSKHrC85V' \
@@ -744,6 +744,5 @@ if __name__ == '__main__':
         application.run(debug=True, host='0.0.0.0')
     else:
         application.run(
-            debug=False, host='0.0.0.0',
-            port=config.app_port,
+            debug=False, host='0.0.0.0'
         )

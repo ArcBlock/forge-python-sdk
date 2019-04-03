@@ -14,7 +14,22 @@ default_forge_toml = path.join(path.dirname(__file__), "forge_default.toml")
 config = toml.load(default_forge_toml)
 
 
-def use_config(config_path):
+
+def use_config(user_config=None, env=True):
+    # Use Environment FORGE_CONFIG if exists
+    env_config = os.environ.get('FORGE_CONFIG')
+    if env:
+        logger.info("Reading config from environment...")
+        merge_config(env_config)
+    elif user_config:
+        logger.info("FORGE_CONFIG not found!")
+        merge_config(user_config)
+    else:
+        logger.error("Please either specify a config path or "
+                     "set FORGE_CONFIG in the environment!")
+
+
+def merge_config(config_path):
     if path.exists(config_path):
         logger.info("Using config in {}".format(config_path))
         try:
@@ -40,6 +55,8 @@ def use_config(config_path):
             logger.error(e, exc_info=True)
             logger.error("Fail to parse toml config in {}".format(config_path))
 
+
+use_config()
 
 def __parse_socket(forge_path, forge_socket):
     """
@@ -72,12 +89,6 @@ def __parse_socket_grpc(forge_path, forge_socket):
         return socket_addr
     elif socket_type == 'tcp':
         return socket_addr.split('://')[1]
-
-
-# Use Environment FORGE_CONFIG if exists
-env_config = os.environ.get('FORGE_CONFIG')
-if env_config:
-    use_config(env_config)
 
 
 def get_app_path():

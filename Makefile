@@ -107,6 +107,20 @@ init-event-chain:
 	@python -m examples.event_chain.db_helper
 	@echo "DB for Event-Chain has been initialized!"
 
+pack-ec:
+	@cd examples
+	@python ./setup.py sdist bdist_wheel
+	@twine upload -r pypi ./dist/*
+	@rm -rf ./build
+	@rm -rf ./dist
+	@echo "Event chain has been uploaded to pypi."
+
+pack-sdk:
+	@python ./setup.py sdist bdist_wheel
+	@twine upload -r pypi ./dist/*
+	@rm -rf ./build
+	@rm -rf ./dist
+	@echo "forge sdk has been uploaded to pypi."
 
 include .makefiles/*.mk
 

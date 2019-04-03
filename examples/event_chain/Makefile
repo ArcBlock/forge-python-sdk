@@ -73,3 +73,12 @@ rebuild-ec-proto:
 	@python -m grpc_tools.protoc -I ./raw_protos --python_out=./protos  ./raw_protos/event-chain.proto
 	@sed -i -E 's/^import.*_pb2/from . \0/' ./protos/*.py
 	@echo "All protobuf files are built and ready to use!.."
+
+pack-ec:
+	@rm -rf ./build
+	@rm -rf ./dist
+	@python ./setup.py sdist bdist_wheel
+	@twine upload -r pypi ./dist/*
+	@rm -rf ./build
+	@rm -rf ./dist
+	@echo "Event chain has been uploaded to pypi."
