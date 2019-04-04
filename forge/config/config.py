@@ -14,7 +14,6 @@ default_forge_toml = path.join(path.dirname(__file__), "forge_default.toml")
 config = toml.load(default_forge_toml)
 
 
-
 def use_config(user_config=None, env=True):
     # Use Environment FORGE_CONFIG if exists
     env_config = os.environ.get('FORGE_CONFIG')
@@ -57,6 +56,7 @@ def merge_config(config_path):
 
 
 use_config()
+
 
 def __parse_socket(forge_path, forge_socket):
     """
@@ -115,6 +115,10 @@ def get_tcp_socket():
         get_app_path(),
         config['app']['sock_tcp'],
     )
+
+
+def get_forge_port():
+    return config['app']['forge_port']
 
 
 def get_grpc_channel():
