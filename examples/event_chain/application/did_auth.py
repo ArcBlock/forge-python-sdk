@@ -49,12 +49,15 @@ def response_require_asset(**kwargs):
 
 
 def response(claims, **kwargs):
+    chain_info = forge_rpc.get_chain_info().info
     extra = {
         'url': kwargs.get('url'),
         'action': kwargs.get('action'),
         'appInfo': {
-            'chainHost': 'http://{}:8211/api'.format(config.app_host),
-            'chainId': forge_rpc.get_chain_info().info.network,
+            'chainHost': 'http://{0}:{1}/api'.format(config.app_host,
+                                                     config.forge_port),
+            'chainId': chain_info.network,
+            'chainVersion': chain_info.version,
             'chain_token': 'TBA',
             'decimals': 16,
             'description': 'Create and join events on Event Chain',

@@ -14,6 +14,8 @@ app_path = forge_config.get_app_path()
 
 app_host = forge_config.get_app_host()
 
+forge_port = forge_config.get_forge_port()
+
 db_path = path.join(app_path, "ec.db")
 
 googlemaps_key = os.environ.get('GOOGLEMAPS_KEY')

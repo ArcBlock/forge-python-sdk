@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="forge-event-chain",
-    version="0.18.7",
+    version="0.18.8",
     author="Riley Shu",
     author_email="riley@arcblock.io",
     description="A small example package",

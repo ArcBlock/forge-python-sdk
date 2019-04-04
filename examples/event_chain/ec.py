@@ -204,7 +204,9 @@ def event_detail(address):
     error = verify_event(address)
     if error:
         return error
-    forge_web = 'http://' + config.app_host + ':8211/node/explorer/txs/'
+    forge_web = 'http://{0}:{1}/node/explorer/txs/'.format(
+        config.app_host, config.forge_port
+    )
 
     event = app.get_event_state(address)
     host = app.get_participant_state(event.owner)
