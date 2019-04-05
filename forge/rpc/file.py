@@ -54,3 +54,10 @@ def load_file(file_hash='', req=None):
             'hash': file_hash,
         }
         return stub.load_file(protos.RequestLoadFile(**req_kwargs))
+
+
+def pin_file(hash, req=None):
+    if req:
+        return stub.pin_file(req)
+    else:
+        return stub.pin_file(protos.RequestPinFile(hash=hash))

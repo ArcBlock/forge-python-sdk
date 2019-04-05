@@ -269,3 +269,37 @@ def get_asset_address(
                 wallet_type=wallet_type,
             ),
         )
+
+
+def get_blocks(min_height,
+               max_height,
+               empty_excluded=False,
+               paging=None,
+               req=None):
+    if req:
+        return stub.get_blocks(req)
+    else:
+        return stub.get_blocks(
+            protos.RequestGetBlocks(
+                paging=paging,
+                min_height=min_height,
+                max_height=max_height,
+                empty_excluded=empty_excluded
+            )
+        )
+
+
+def get_node_info(req=None):
+    if req:
+        return stub.get_node_info(req)
+    else:
+        return stub.get_node_info(protos.RequestGetNodeInfo())
+
+
+def sign_data(data, wallet, token, req=None):
+    if req:
+        return stub.sign_data(req)
+    else:
+        return stub.sign_data(protos.RequestSignData(
+            data=data, wallet=wallet, token=token
+        ))

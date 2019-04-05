@@ -45,9 +45,16 @@ def encode(proto_data):
 
 
 def encode_to_any(type_url, data):
+    if isinstance(data, str):
+        value = data.encode()
+    elif isinstance(data, int):
+        value = int_to_bytes(data)
+    else:
+        value = data.SerializeToString()
+
     return Any(
         type_url=type_url,
-        value=data.SerializeToString(),
+        value=value
     )
 
 

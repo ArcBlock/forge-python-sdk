@@ -17,15 +17,12 @@ config = toml.load(default_forge_toml)
 def use_config(user_config=None, env=True):
     # Use Environment FORGE_CONFIG if exists
     env_config = os.environ.get('FORGE_CONFIG')
-    if env:
+    if env and env_config:
         logger.info("Reading config from environment...")
         merge_config(env_config)
     elif user_config:
-        logger.info("FORGE_CONFIG not found!")
+        logger.info("FORGE_CONFIG not found!Using user_config...")
         merge_config(user_config)
-    else:
-        logger.error("Please either specify a config path or "
-                     "set FORGE_CONFIG in the environment!")
 
 
 def merge_config(config_path):
