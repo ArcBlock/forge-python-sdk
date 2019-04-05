@@ -152,7 +152,7 @@ def b64encoded_to_dict(data):
 
 # TODO: utc timestamp
 def current_utc_timestamp():
-    return round(datetime.now().timestamp())
+    return round(datetime.utcnow().timestamp())
 
 
 def clean_dict(d):
