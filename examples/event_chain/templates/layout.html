@@ -8,7 +8,10 @@
     <link rel="shortcut icon" href="/images/fav_icon.png" type="image/x-icon">
     <title>Event Chain</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}"/>
     <style>
         .columns:nth-child(2) {
@@ -20,17 +23,20 @@
 <body>
 <section class="section" style="padding:0rem 1.5rem;">
     <section class="container">
-        <nav class="navbar is-white" role="navigation" aria-label="main navigation">
+        <nav class="navbar is-white">
             <div class="navbar-brand">
-                <img src="{{ url_for('static', filename='images/eventchain_h_2.png') }}" style="height: 60px; width: 120px; margin-right: 40px;">
-                <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
-                   data-target="navbar-basic">
-                    <span aria-hidden="true"></span>
-                    <span aria-hidden="true"></span>
-                    <span aria-hidden="true"></span>
+                <a href="/"><img src="{{ url_for('static', filename='images/eventchain_h_2.png') }}"
+                                     style="height: 70px; width: 140px; margin-right: 40px;object-fit:cover;"></a>
+                {#                <div class="navbar-burger burger" data-target="basicNav">#}
+                {#                    <span></span>#}
+                {#                    <span></span>#}
+                {#                    <span></span>#}
+                {#                </div>#}
+                <a class="navbar-item is-hidden-desktop" href="/tickets">
+                    My Account
                 </a>
             </div>
-            <div id="navbar-basic" class="navbar-menu">
+            <div id="basicNav" class="navbar-menu">
                 <div class="navbar-start">
                     <a class="navbar-item" href="/">
                         Event List
@@ -41,11 +47,11 @@
                     <a class="navbar-item" href="/tickets">
                         My Account
                     </a>
-                    {% if mobile_address %}
-                        <a class="navbar-item" href="/mobile-account">
-                            Mobile Account
-                        </a>
-                    {% endif %}
+                    {#                    {% if mobile_address %}#}
+                    {#                        <a class="navbar-item" href="/mobile-account">#}
+                    {#                            Mobile Account#}
+                    {#                        </a>#}
+                    {#                    {% endif %}#}
                 </div>
                 <div class="navbar-end">
                     <span class="navbar-item" style="text-align: right;">
@@ -66,7 +72,6 @@
 </section>
 
 {% block content %}{% endblock %}
-
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
@@ -76,3 +81,5 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+</body>
+</html>

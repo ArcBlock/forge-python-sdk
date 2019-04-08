@@ -11254,3 +11254,15 @@ body > .navbar {
   width: auto;
   height: 100px;
 }
+.short-text{
+  display:none
+}
+
+@media (max-width: 800px) {
+  .short-text {
+    display: block;
+  }
+  .full-text {
+    display: none
+  }
+}

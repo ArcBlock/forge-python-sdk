@@ -148,6 +148,17 @@ def to_display_time(timestamp):
     return dt.strftime("%a, %b %d, %Y")
 
 
+def to_short_time(time):
+    dt = time.ToDatetime()
+    return dt.strftime("%Y/%m/%d")
+
+
+def shorten_hash(data):
+    head = data[0:6]
+    tail = data[-4:]
+    return head + "..." + tail
+
+
 def time_diff(t1, t2):
     return t2.ToDatetime() - t1.ToDatetime()
 

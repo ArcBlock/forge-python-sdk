@@ -224,7 +224,9 @@ def event_detail(address):
         g.logger.debug('forgeweb:{}'.format(forge_web))
         return render_template(
             'event_details.html', **locals(),
-            to_display_time=helpers.to_display_time
+            to_display_time=helpers.to_display_time,
+            shorten_hash=helpers.shorten_hash,
+            to_short_time=helpers.to_short_time
         )
     return redirect('/login')
 
