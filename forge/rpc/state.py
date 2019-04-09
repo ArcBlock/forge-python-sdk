@@ -5,17 +5,15 @@ from forge.utils import utils
 stub = protos.StateRpcStub(config.get_grpc_channel())
 
 
-def get_account_state(req):
-    """
-    RPC call to get account state.
+def get_account_state(queries, reqs=None):
+    """GRPC call to get detailed of account
 
-    Parameters
-    ----------
-    req: stream RequestGetAccountState
+    Args:
+        queries(dict): dictionaries of requested parameters
+        reqs(list[:obj:`RequestGetAccountState`): stream of completed request
 
-    Returns
-    -------
-    stream ResponseGetAccountState
+    Returns:
+        ResponseGetAccountState(stream)
 
     """
 
@@ -26,27 +24,23 @@ def get_account_state(req):
             kwargs = {
                 'address': item.get('address'),
                 'keys': item.get('keys', []),
-                # 'height': item.get('height', ''),
             }
             return protos.RequestGetAccountState(**kwargs)
 
-    requests = utils.to_iter(to_req, req)
+    requests = reqs if reqs else utils.to_iter(to_req, queries)
 
     return stub.get_account_state(requests)
 
 
-def get_asset_state(req=None):
-    """
-    RPC call to get asset state.
+def get_asset_state(queries, reqs=None):
+    """GRPC call to get detailed of asset
 
-    Parameters
-    ----------
-    req: stream RequestGetAssetState
+    Args:
+        queries(dict): dictionaries of requested parameters
+        reqs(list[:obj:`RequestGetAssetState`): stream of completed request
 
-    Returns
-    -------
-    stream ResponseGetAssetState
-
+    Returns:
+        ResponseGetAssetState(stream)
     """
 
     def to_req(item):
@@ -61,22 +55,20 @@ def get_asset_state(req=None):
             req = protos.RequestGetAssetState(**kwargs)
             return req
 
-    requests = utils.to_iter(to_req, req)
+    requests = reqs if reqs else utils.to_iter(to_req, queries)
 
     return stub.get_asset_state(requests)
 
 
-def get_stake_state(req=None):
-    """
-    RPC call to get stake state.
+def get_stake_state(queries, reqs=None):
+    """GRPC call to get detailed of stake
 
-    Parameters
-    ----------
-    req: stream RequestGetStakeState
+    Args:
+        queries(dict): dictionaries of requested parameters
+        reqs(list[:obj:`RequestGetStakeState`): stream of completed request
 
-    Returns
-    -------
-    stream ResponseGetChannelState
+    Returns:
+        ResponseGetStakeState(stream)
 
     """
 
@@ -87,25 +79,24 @@ def get_stake_state(req=None):
             kwargs = {
                 'address': item.get('address'),
                 'keys': item.get('keys', []),
-                # 'app_hash': item.get('app_hash', ''),
             }
             return protos.RequestGetStakeState(**kwargs)
 
-    requests = utils.to_iter(to_req, req)
+    requests = reqs if reqs else utils.to_iter(to_req, queries)
     return stub.get_stake_state(requests)
 
 
-def get_forge_state(keys='', app_hash='', req=None):
-    """
-    RPC call to get forge state.
+def get_forge_state(keys=[], height=None, req=None):
+    """ GRPC call to get forge state
 
-    Parameters
-    ----------
-    req: RequestGetForgeState
+    Args:
+        keys(list[string]): optional, list of keys to receive. GRPC returns
+            all keys if not specified.
+        height(int): optional, forge state of specific block height
+        req(:obj:`RequestGetForgeState`): completed request
 
-    Returns
-    -------
-    ResponseGetForgeState
+    Returns:
+        ResponseGetForgeState
 
     """
     if req is not None:
@@ -113,7 +104,7 @@ def get_forge_state(keys='', app_hash='', req=None):
     else:
         req_kwargs = {
             'keys': keys,
-            # 'app_hash': app_hash,
+            'height': height,
         }
         return stub.get_forge_state(
             protos.RequestGetForgeState(**req_kwargs),

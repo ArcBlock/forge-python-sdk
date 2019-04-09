@@ -10,18 +10,21 @@ def create_wallet(
         wallet_type=__wallet_type, moniker='',
         passphrase='', req=None,
 ):
-    """
+    """GRPC call to create a wallet on Forge
 
-    Parameters
-    ----------
-    req: RequestCreateWallet
-    wallet_type: WalletType
-    moniker: string
-    passphrase: string
+    Note:
+        the wallet created by this GRPC call will save encrypted private key
+        on Forge node.
 
-    Returns
-    -------
-    ResponseCreateWallet
+    Args:
+        wallet_type(:obj:`WalletType`): the wallet type to create
+        moniker(string): optional, nickname for wallet. Wallet will not be
+            declared if no moniker is provided.
+        passphrase(string): required, password to encrypt wallet
+        req(:obj:`RequestCreateWallet`): completed request
+
+    Returns:
+        ResponseCreateWallet
 
     """
     if req is not None:
@@ -37,19 +40,16 @@ def create_wallet(
         )
 
 
-def load_wallet(address='', passphrase='', req=None):
-    """
-    rpc call to load wallet.
+def load_wallet(address, passphrase, req=None):
+    """GRPC call to load wallet stored on Forge
 
-    parameters
-    ----------
-    req: requestloadwallet
-    address: string
-    passphrase: string
+    Args:
+        address(string): address of the wallet stored
+        passphrase(string): password used to create the wallet
+        req(:obj:`ReqeustLoadWallet`): completed request
 
-    returns
-    -------
-    responseloadwallet
+    Returns:
+        ResponseLoadWallet
 
     """
     if req is not None:
@@ -65,26 +65,27 @@ def load_wallet(address='', passphrase='', req=None):
 
 
 def recover_wallet(
-        passphrase='', moniker='', data=b'',
+        passphrase, moniker, data,
         wallet_type=__wallet_type, req=None,
 ):
+    """GRPC call to recover a wallet on forge
+
+    Note:
+        This GRPC call requires your private key. Please be careful when
+        providing that information
+
+    Args:
+        passphrase(string): new passphrase to encrypt this wallet on Forge
+        moniker(string): nickname for this wallet
+        data(bytes): seed word or private key
+        wallet_type(:obj:`WalletType`): deprecated
+        req(:obj:`ReqeustRecoverWallet`): completed request
+
+    Returns:
+        ResponseRecoverWallet
+
     """
-    rpc call to recover wallet with given passphrase.
 
-    parameters
-    ----------
-    passphrase: string
-    moniker: string
-    req: requestrecoverwallet
-    data: bytes
-        data could be bytes of seed words or secret key
-    wallet_type: walletType
-
-    Returns
-    -------
-    ResponseRecoverWallet
-
-    """
     if req is not None:
         return stub.recover_wallet(req)
     else:
@@ -100,29 +101,24 @@ def recover_wallet(
 
 
 def list_wallet():
-    """
-    RPC call to list wallets
+    """ GRPC call to list al wallets on current Forge Node
 
     Returns
-    -------
-    stream ResponseListWallets
+        ResponseListWallets(stream)
 
     """
     return stub.list_wallet(protos.RequestListWallet())
 
 
-def remove_wallet(address='', req=None):
-    """
-    RPC call to remove wallet with given address
+def remove_wallet(address, req=None):
+    """GRPC call to remove wallet with given address
 
-    Parameters
-    ----------
-    req: RequestRemoveWallet
-    address: string
+    Args:
+        address(string): address of wallet to be removed from Forge
+        req(:obj:`RequestRemoveWallet`): completed request
 
-    Returns
-    -------
-    ResponseRemoveWallet
+    Returns:
+        ResponseRemoveWallet
 
     """
     if req is not None:
@@ -137,18 +133,16 @@ def remove_wallet(address='', req=None):
 
 
 def declare_node(req):
-    """
+    """GRPC call to declare current node
 
-    Parameters
-    ----------
-    req: RequestDeclareNode
+    Args:
+        req(:obj:`RequestDeclareNode`: completed request
 
-    Returns
-    -------
-    ResponseDeclareNode
+    Returns:
+        ResponseDeclareNode
 
     """
-    if req is not None:
+    if req:
         return stub.declare_node(req)
     else:
         return stub.declare_node(protos.RequestDeclareNode())

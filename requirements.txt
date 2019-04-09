@@ -23,5 +23,6 @@ pre-commit-hooks
 pysha3
 secp256k1
 sphinx
+sphinx-rtd-theme
 sphinxcontrib-napoleon
 toml

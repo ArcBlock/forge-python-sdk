@@ -34,6 +34,19 @@ __wallet_type = protos.WalletType(pk=0, hash=1, address=1)
 
 
 def send_itx(type_url, itx, wallet, token, nonce=1):
+    """GRPC call to send inner transaction
+
+    Args:
+        type_url(string): type_url for this itx
+        itx(:obj:`protos.object`): inner transactions defined in protos
+        wallet(:obj:`WalletInfo`): sender's wallet
+        token(string): sender's token
+        nonce(int): need to be set to 0 if itx is pokeTx
+
+    Returns:
+        ResponseSendTx
+
+    """
     encoded_itx = utils.encode_to_any(type_url, itx)
     tx = create_tx(
         itx=encoded_itx, from_address=wallet.address,
@@ -43,6 +56,19 @@ def send_itx(type_url, itx, wallet, token, nonce=1):
 
 
 def create_asset(type_url, asset, wallet, token):
+    """GRPC call to create asset
+
+    Args:
+        type_url(string): type_url for this itx
+        asset(object): asset to be included in itx, can be string, bytes,
+            or protobuf objects
+        wallet(:obj:`WalletInfo`): sender's wallet
+        token(string): sender's token
+
+    Returns:
+        ResponseSendTx
+
+    """
     encoded_asset = utils.encode_to_any(type_url, asset)
     create_asset_itx = utils.encode_to_any(
         type_url='fg:t:create_asset',
@@ -55,6 +81,20 @@ def create_asset(type_url, asset, wallet, token):
 
 
 def update_asset(type_url, address, asset, wallet, token):
+    """GRPC call to create asset
+
+        Args:
+            type_url(string): type_url for this itx
+            address(string): address of asset to update
+            asset(object): asset to be updated in itx, can be string, bytes,
+                or protobuf objects
+            wallet(:obj:`WalletInfo`): sender's wallet
+            token(string): sender's token
+
+        Returns:
+            ResponseSendTx
+
+        """
     encoded_asset = utils.encode_to_any(type_url, asset)
     update_asset_itx = utils.encode_to_any(
         type_url='fg:t:update_asset',
@@ -70,6 +110,15 @@ def update_asset(type_url, address, asset, wallet, token):
 
 
 def get_single_account_state(address):
+    """GRPC call to get account state of a single address
+
+    Args:
+        address(string): address of the account
+
+    Returns:
+        AccountState
+
+    """
     if address:
         accounts = get_account_state({'address': address})
         account = next(accounts)
@@ -80,6 +129,15 @@ def get_single_account_state(address):
 
 
 def get_single_tx_info(hash):
+    """GRPC call to get transaction state of a single hash
+
+    Args:
+        hash(string): hash of the transaction
+
+    Returns:
+        TransactionInfo
+
+    """
     if hash:
         infos = get_tx(hash)
         info = next(infos)
@@ -90,17 +148,17 @@ def get_single_tx_info(hash):
 
 
 def get_single_asset_state(address):
+    """GRPC call to get asset state of a single address
+
+    Args:
+        address(string): address of the asset
+
+    Returns:
+        AssetState
+
+    """
     if address:
         assets = get_asset_state({'address': address})
         asset = next(assets)
         if not utils.is_proto_empty(asset):
             return asset.state
-
-
-def get_nonce(address):
-    account = get_single_account_state(address)
-    return account.nonce
-
-
-def multisig_consume_asset_tx(tx, wallet, token, data):
-    return multisig(tx, wallet, token, data=data)

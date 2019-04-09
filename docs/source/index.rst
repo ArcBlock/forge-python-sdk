@@ -1,15 +1,17 @@
 
-Welcome to forge-python-sdk's documentation!
-============================================
-.. automodule:: forge.rpc.chain
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+    :maxdepth: 2
+    :caption: SDK Documentation
 
+    sdk
+
+
+.. toctree::
+    :maxdepth: 3
+    :caption: RPC Documentation
+
+    rpc
 
 
 Indices and tables

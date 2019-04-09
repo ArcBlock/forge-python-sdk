@@ -5,23 +5,31 @@ from forge.utils import utils
 stub = protos.ChainRpcStub(config.get_grpc_channel())
 
 
-def create_tx(itx=None, from_address='',
-              wallet=None, token=None, req=None, nonce=1,
+def create_tx(itx, from_address,
+              wallet, token=None, req=None, nonce=1,
               ):
-    """RPC call to create transaction.
+    """ GRPC call to build a complete transaction, including sender's pk and
+    sender's signature
 
-    Parameters
-    ----------
-    req : RequestCreateTx
-    itx : google.protobuf.An
-    from_address : string
-    nonce : uint64
-    wallet : WalletInfo
-    token : string
+    Note:
+        To sign a transaction successfully, either a wallet with private key or
+        a token should be provided. However, this practice is not recommended
+        for safety concern. Users should keep their own private keys and sign
+        transactions locally.
 
-    Returns
-    -------
-    ResponseCreateTx
+    Args:
+        itx (:obj:`google.protobuf.Any`): Inner transaction that should be
+            included in this transaction
+        from_address (string) : address of user responsible for sending this
+            transactions
+        wallet (:obj:`WalletInfo`) : user wallet
+        token (string): token provided by forge for using wallets stored on
+            forge
+        req (:obj:`RequestCreateTx`): complete request
+        nonce (int): optional, number of tx this account has sent
+
+    Returns:
+        ResponseCreateTx
 
     """
 
@@ -39,22 +47,20 @@ def create_tx(itx=None, from_address='',
 
 
 def send_tx(
-        tx=None, wallet=None, token=None, commit=False, req=None,
+        tx, wallet=None, token=None, commit=False, req=None,
 ):
-    """
-    RPC call to send transaction.
+    """GRPC call to send the included transaction
 
-    Parameters
-    ----------
-    req: RequestSendTx
-    tx : Transaction
-    wallet: WalletInfo
-    token: string
-    commit: bool
+    Args:
+        tx(:obj:`Transaction`): transaction to be sent
+        wallet (:obj:`WalletInfo`) : user wallet
+        token (string): token provided by forge for using wallets stored on
+            forge
+        commit(bool): option to wait until transaction was included in a block
+        req(:obj: `RequestSendTx`): complete request
 
-    Returns
-    -------
-    ResponseSendTx
+    Returns:
+            ResponseSendTx
 
     """
     if req is not None:
@@ -70,18 +76,15 @@ def send_tx(
         return stub.send_tx(req)
 
 
-def get_tx(tx_hash='', req=None):
-    """
-    RPC call to get transaction.
+def get_tx(tx_hash, reqs=None):
+    """ GRPC call to get detailed information of a transaction
 
-    Parameters
-    ----------
-    req: stream RequestGetTx
-    tx_hash: single string or string iterator
+    Args:
+        tx_hash(string or list[string]): hash of the transaction
+        reqs (RequestGetTx): list of request
 
-    Returns
-    -------
-    stream  ResponseGetTx
+    Returns:
+         ResponseGetTx(stream)
 
     """
 
@@ -91,24 +94,21 @@ def get_tx(tx_hash='', req=None):
         else:
             return protos.RequestGetTx(hash=item)
 
-    if req is not None:
-        return stub.get_tx(utils.to_iter(to_req, req))
+    if reqs is not None:
+        return stub.get_tx(utils.to_iter(to_req, reqs))
     else:
         return stub.get_tx(utils.to_iter(to_req, tx_hash))
 
 
-def get_block(height=0, req=None):
-    """
-    RPC call to get blocks.
+def get_block(height, req=None):
+    """ GRPC call to get blocks information
 
-    Parameters
-    ----------
-    req: RequestGetBlock
-    height: uint64
+    Args:
+        height(int or list[int]): height of the block
+        req(:obj: `RequestGetBlock`): sream of requests
 
-    Returns
-    -------
-    stream ResponseGetBlock
+    Returns:
+        ResponseGetBlock(stream)
 
     """
 
@@ -124,18 +124,16 @@ def get_block(height=0, req=None):
         return stub.get_block(utils.to_iter(to_req, height))
 
 
-def search(key='', value='', req=None):
-    """
+def search(key, value, req=None):
+    """GRPC call to search for specific key-value pair
 
-    Parameters
-    ----------
-    req: RequestSearch
-    key: string
-    value: string
+    Args:
+        key(string): key
+        value(string): value
+        req(:obj:`RequestSearch`): request
 
-    Returns
-    -------
-    ResponseSearch
+    Returns:
+        ResponseSearch(stream)
 
     """
     if req is not None:
@@ -148,17 +146,15 @@ def search(key='', value='', req=None):
         return stub.search(protos.RequestSearch(**req_kwargs))
 
 
-def get_unconfirmed_tx(req=None, limit=1):
-    """
+def get_unconfirmed_tx(limit=1, req=None):
+    """GRPC call to get currently unconfirmed transactions
 
-    Parameters
-    ----------
-    req: RequestGetUnconfirmedTxs
-    limit: int
+    Args:
+        limit(int): maximum number of transactions to get
+        req(:obj:`RequestGetUnconfirmedTx`): request
 
-    Returns
-    -------
-    ResponseGetUnconfirmedTxs
+    Returns:
+        ResponseGetUnconfirmedTxs
 
     """
     if req is not None:
@@ -170,15 +166,13 @@ def get_unconfirmed_tx(req=None, limit=1):
 
 
 def get_chain_info(req=None):
-    """
+    """ RPC call to get information about current chain
 
-    Parameters
-    ----------
-    req: RequestGetChainInfo
+    Args:
+        req(:obj:`RequestGetChainInfo`): request
 
-    Returns
-    -------
-    ResponseGetChainInfo
+    Returns:
+        ResponseGetChainInfo
 
     """
     if req is not None:
@@ -188,16 +182,13 @@ def get_chain_info(req=None):
 
 
 def get_net_info(req=None):
-    """
+    """RPC call to get information of the net
 
-    Parameters
-    ----------
-    req: RequestGetNetInfo
+    Args:
+        req(:obj:`RequestGetNetInfo`): Request
 
-    Returns
-    -------
-    ResponseGetNetInfo
-
+    Returns:
+        ResponseGetNetInfo
     """
     if req is not None:
         return stub.get_net_info(req)
@@ -206,17 +197,16 @@ def get_net_info(req=None):
 
 
 def get_validators_info(req=None):
-    """
+    """GRPC call to get informations about al current validators
 
-    Parameters
-    ----------
-    req: RequestGetValidatorsInfo
+    Args:
+        req(:obj:`RequestGetValidatorsInfo`: completed request
 
-    Returns
-    -------
-    ResponseGetValidatorsInfo
+    Returns:
+        ResponseGetValidatorsInfo
 
     """
+
     if req is not None:
         return stub.get_validators_info(req)
     else:
@@ -226,17 +216,16 @@ def get_validators_info(req=None):
 
 
 def get_config(req=None):
-    """
+    """ RPC call to get detailed configuration current chain is using
 
-    Parameters
-    ----------
-    req: RequestGetConfig
+    Args:
+        req(:obj:`RequestGetConfig`): completed Request
 
-    Returns
-    -------
-    ResponseGetConfig
+    Returns:
+        ResponseGetConfig
 
     """
+
     if req is not None:
         return stub.get_config(req)
     else:
@@ -245,7 +234,23 @@ def get_config(req=None):
         )
 
 
-def multisig(tx=None, wallet=None, token=None, data=None, req=None):
+def multisig(tx, wallet=None, token=None, data=None, req=None):
+    """GRPC call to get multi-signature of a transaction. When executing this
+    transactions, Forge will insert the address to `signatures` field as
+    `Multisig.signer`, then create a signature of the entire transaction
+
+    Args:
+        tx(:obj:`Trasnaction`): transaction to be signed
+        wallet (:obj:`WalletInfo`) : user wallet
+        token (string): token provided by forge for using wallets stored on
+            forge
+        data(:obj:`google.protobuf.Any`): extra data to be included in multisig
+        req(:obj:`RequestMultisig`): completed request
+
+    Returns:
+        ResponseMultisig
+
+    """
     if req is not None:
         return stub.multisig(req)
     else:
@@ -257,9 +262,22 @@ def multisig(tx=None, wallet=None, token=None, data=None, req=None):
 
 
 def get_asset_address(
-        sender_address='', itx=None,
+        sender_address, itx,
         wallet_type=None, req=None,
 ):
+    """RPC call to get asset address calculated from createAssetTx and
+    sender address
+
+    Args:
+        sender_address(string): address of the creator of this asset
+        itx(:obj:`CreateAssetTx`): the inner transaction to create asset
+        wallet_type(:obj:`WalletType`): deprecated
+        req(:obj:`RequestGetAssetAddress`): completed request
+
+    Returns:
+        ResponseGetAssetAddress
+
+    """
     if req is not None:
         return stub.get_asset_address(req)
     else:
@@ -276,6 +294,19 @@ def get_blocks(min_height,
                empty_excluded=False,
                paging=None,
                req=None):
+    """GRPC call to get information of blocks
+
+    Args:
+        min_height(int): minimum height of blocks
+        max_height(int): maximum height of blocks
+        empty_excluded(bool): whether to include empty blocks or not
+        paging(:obj:`PageInput`): optional, paging preference
+        req(:obj:`RequestGetBlocks`): completed request
+
+    Returns:
+        ResponseGetBlocks
+
+    """
     if req:
         return stub.get_blocks(req)
     else:
@@ -290,6 +321,15 @@ def get_blocks(min_height,
 
 
 def get_node_info(req=None):
+    """GRPC call to get information of current node
+
+    Args:
+        req(:obj:`RequestGetNodeInfo`): completed request
+
+    Returns:
+        ResponseGetNodeInfo
+
+    """
     if req:
         return stub.get_node_info(req)
     else:
@@ -297,6 +337,19 @@ def get_node_info(req=None):
 
 
 def sign_data(data, wallet, token, req=None):
+    """ GRPC call to get signature for specific data
+
+    Args:
+        data(bytes): data needs to be signed
+        wallet (:obj:`WalletInfo`) : user wallet
+        token (string): token provided by forge for using wallets stored on
+            forge
+        req(:obj:`RequestSignData`): completed request
+
+    Returns:
+        ResponseSignData
+
+    """
     if req:
         return stub.sign_data(req)
     else:

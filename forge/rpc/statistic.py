@@ -5,6 +5,18 @@ stub = protos.StatisticRpcStub(config.get_grpc_channel())
 
 
 def get_forge_statistics(day_info=None, date=None, req=None):
+    """GRPC call to get statistics about forge
+
+    Args:
+        day_info(:obj:`Byday`): optional, date filter for information
+        date(:obj:`ByHour`): optional, information returned by hour in specific
+         day
+        req(:obj:`RequestGetForgeStatics`): completed request
+
+    Returns:
+        ResponseForgeStatistics
+
+    """
     if req:
         return stub.get_forge_statistics(req)
     elif day_info:
@@ -19,6 +31,17 @@ def get_forge_statistics(day_info=None, date=None, req=None):
 
 
 def list_assets(owner_address, paging=None, req=None):
+    """GRPC call to list all assets under the given account address
+
+    Args:
+        owner_address(string): target account address
+        paging(:obj:`PageInput`): optional, paging preference
+        req(:obj:`RequestListAssets`): completed request
+
+    Returns:
+        ResponseListAssets
+
+    """
     if req:
         return stub.list_assets(req)
     else:
@@ -27,7 +50,18 @@ def list_assets(owner_address, paging=None, req=None):
                                      paging=paging))
 
 
-def get_stakes(address_filter=None, paging=None, req=None):
+def get_stakes(address_filter, paging=None, req=None):
+    """ GRPC call to get stakes
+
+    Args:
+        address_filter(string): filter stakes to get
+        paging(:obj:`PageInput`): paging preferences
+        req(:obj:`RequestGetStakes`): completed request
+
+    Returns:
+        ResponseGetStakes
+
+    """
     if req:
         return stub.get_stakes(req)
     else:
@@ -37,6 +71,16 @@ def get_stakes(address_filter=None, paging=None, req=None):
 
 
 def get_top_accounts(paging=None, req=None):
+    """GRPC call to get top accounts
+
+    Args:
+        paging(:obj:`PageInput`): paging preferences
+        req(:obj:`RequestGetTopAccounts`): completed request
+
+    Returns:
+        ResponseGetTopAccounts
+
+    """
     if req:
         return stub.get_top_accounts(req)
     else:
@@ -47,6 +91,22 @@ def get_top_accounts(paging=None, req=None):
 def list_blocks(paging=None, proposer=None, time_filter=None,
                 height_filter=None, num_txs_filter=None,
                 num_invalid_txs_filter=None, req=None):
+    """GRPC call to list information of blocks
+
+    Args:
+        paging(:obj:`PageInput`): paging preferences
+        proposer(string): address that proposed the block
+        time_filter(:obj:`TimeFilter`): time filter
+        height_filter(:obj: `HeightFilter`): height filter
+        num_txs_filter(:obj:`NumTxsFilter`): number of transaction filter
+        num_invalid_txs_filter(:obj:`NumInvalidTxsFilter` ): number of invalie
+            transaction filter
+        req(:obj:`RequestListBlocks`): completed request
+
+    Returns:
+        ResponseListBlocks
+
+    """
     if req:
         return stub.list_blocks(req)
     else:
@@ -57,14 +117,28 @@ def list_blocks(paging=None, proposer=None, time_filter=None,
         ))
 
 
-def get_health_status(req=None):
-    if req:
-        return stub.get_health_status(req)
-    else:
-        return stub.get_health_status(protos.RequestGetHealthStatus())
+def get_health_status():
+    """GRPC call to get Forge health status
+
+    Returns:
+        ResponseGetHealthStatus
+
+    """
+    return stub.get_health_status(protos.RequestGetHealthStatus())
 
 
-def list_asset_transactions(address=None, paging=None, req=None):
+def list_asset_transactions(address, paging=None, req=None):
+    """GRPC call to list transactions related to specific asset
+
+    Args:
+        address(string): asset address
+        paging(:obj:`PageInput`): paging preferences
+        req(:obj:`RequestListAssetTransactions`): completed request
+
+    Returns:
+        ResponseListAssetTransaction
+
+    """
     if req:
         return stub.list_asset_transactions(req)
     else:
@@ -80,6 +154,18 @@ def list_transactions(
         address_filter=None, time_filter=None,
         type_filter=None, paging=None,
 ):
+    """GRPC call to list transactions
+
+    Args:
+        address_filter(string): address filter
+        time_filter(:obj:`TimeFilter`): time filter
+        type_filter(:obj:`TypeFilter`): type filter
+        paging(:obj:`PagingInput`): paging preference
+
+    Returns:
+        ResponseListTransactions
+
+    """
     req = protos.RequestListTransactions(
         paging=paging,
         time_filter=time_filter,

@@ -5,18 +5,15 @@ from forge.utils import utils
 stub = protos.FileRpcStub(config.get_grpc_channel())
 
 
-def store_file(chunk=b'', req=None):
-    """
-    RPC call to store file
+def store_file(chunk, req=None):
+    """GRPC call to store file
 
-    Parameters
-    ----------
-    req: stream RequestStoreFile
-    chunk: iterator of bytes
+    Args:
+        chunk(bytes or list[bytes]): file bytes to store
+        req(:obj:`RequestStoreFile`): stream of completed request
 
-    Returns
-    -------
-    ResponseStoreFile
+    Returns:
+        ResponseStoreFile
 
     """
 
@@ -33,20 +30,18 @@ def store_file(chunk=b'', req=None):
         return stub.store_file(chunks)
 
 
-def load_file(file_hash='', req=None):
-    """
-    RPC call to load file.
+def load_file(file_hash, req=None):
+    """GRPC call to load stored file
 
-    Parameters
-    ----------
-    req: RequestLoadFile
-    file_hash: string
+    Args:
+        file_hash(string): hash of stored file
+        req(:obj:`RequestLoadFile`): completed request
 
-    Returns
-    -------
-    stream ResponseLoadFile
+    Returns:
+        ResponseLoadFile(stream)
 
     """
+
     if req is not None:
         return stub.load_file(req)
     else:
@@ -56,8 +51,18 @@ def load_file(file_hash='', req=None):
         return stub.load_file(protos.RequestLoadFile(**req_kwargs))
 
 
-def pin_file(hash, req=None):
+def pin_file(file_hash, req=None):
+    """GRPC call to pin file so Forge will keep the file
+
+    Args:
+        file_hash(string): hash of the file to pin
+        req(:obj:`ReqeustPinFile`): completedRequest
+
+    Returns:
+        ResponsePinFile
+
+    """
     if req:
         return stub.pin_file(req)
     else:
-        return stub.pin_file(protos.RequestPinFile(hash=hash))
+        return stub.pin_file(protos.RequestPinFile(hash=file_hash))
