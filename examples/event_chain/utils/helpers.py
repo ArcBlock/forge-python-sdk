@@ -121,21 +121,6 @@ def add_multi_sig_to_tx(tx, address, signature, user_pk):
     logger.debug("tx: {}".format(tx))
     logger.debug("address: {}".format(address))
     logger.debug("signature: {}".format(signature))
-    # #
-    # # parsed_address = tx.signatures[0].signer
-    # # assert (address == parsed_address)
-    # multisig = protos.Multisig(
-    #     signer=address,
-    #     signature=signature,
-    # )
-    # parmas = {
-    #     'from': getattr(tx, 'from'),
-    #     'nonce': tx.nonce,
-    #     'signature': tx.signature,
-    #     'chain_id': tx.chain_id,
-    #     'signatures': [multisig],
-    #     'itx': tx.itx,
-    # }
     new_tx = update_tx_multisig(tx, address, user_pk, signature)
     logger.debug("Address and signature has been added to tx: ")
     logger.debug("new tx: {}".format(new_tx))
@@ -176,6 +161,20 @@ def update_tx_multisig(tx, signer, pk, signature=None, data=None):
         'signature': tx.signature,
         'chain_id': tx.chain_id,
         'signatures': [multisig],
+        'itx': tx.itx,
+        'pk': tx.pk,
+    }
+    new_tx = protos.Transaction(**params)
+    return new_tx
+
+
+def update_tx_signature(tx, signature):
+    params = {
+        'from': getattr(tx, 'from'),
+        'nonce': tx.nonce,
+        'signature': signature,
+        'chain_id': tx.chain_id,
+        'signatures': tx.signatures,
         'itx': tx.itx,
         'pk': tx.pk,
     }

@@ -17,7 +17,7 @@ APP_ADDR = "z1UT9an1Z4W1gnmzASneER2J5eqtx5jfwgx"
 APP_DID_TYPE = AbtDid.parse_type_from_did(APP_ADDR)
 
 
-def response_require_multisig(**kwargs):
+def response_require_sig(**kwargs):
     user_did_type = AbtDid.parse_type_from_did(kwargs.get('user_did'))
 
     claim = {
@@ -61,8 +61,8 @@ def response(claims, **kwargs):
             'chain_token': 'TBA',
             'decimals': 16,
             'description': 'Create and join events on Event Chain',
-            'icon': "http://did-workshop.arcblock.co:5000/static/images"
-                    "/eventchain.png",
+            'icon': "http://eventchain.arcblock.co:5000/static/images"
+                    "/eventchain_h_2.png",
             'name': 'Event Chain',
             'subtitle': 'A decentralized solution for events',
         },

@@ -3,11 +3,14 @@ from datetime import datetime
 from time import sleep
 
 import event_chain.db.utils as db
+from event_chain import protos
 from event_chain.application import did_auth
 from event_chain.application import models
+from event_chain.config import config
 from event_chain.utils import helpers
 
 from forge.rpc import rpc as forge_rpc
+from forge.utils import utils as forge_utils
 
 logger = logging.getLogger('ec-app')
 
@@ -278,12 +281,39 @@ def verify_ticket_address(ticket_address):
         )
 
 
-def did_auth_require_multisig(**kwargs):
-    return did_auth.response_require_multisig(**kwargs)
+def did_auth_require_sig(**kwargs):
+    return did_auth.response_require_sig(**kwargs)
 
 
 def did_auth_require_asset(**kwargs):
     return did_auth.response_require_asset(**kwargs)
+
+
+def gen_poke_tx(address, pk):
+    poke_itx = protos.PokeTx(
+        date=str(
+            datetime.now().date()),
+        address='zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz',
+    )
+    itx = forge_utils.encode_to_any('fg:t:poke', poke_itx)
+    params = {
+        'from': address,
+        'chain_id': config.chain_id,
+        'nonce': 0,
+        'pk': pk,
+        'itx': itx
+    }
+    return protos.Transaction(**params)
+
+
+def send_poke_tx(poke_tx, signature):
+    complete_tx = helpers.update_tx_signature(poke_tx, signature)
+    res = forge_rpc.send_tx(complete_tx)
+    if res.code != 0:
+        logger.error('Fail to send poke tx.')
+        logger.error(res)
+    else:
+        return res.hash
 
 
 def refresh():

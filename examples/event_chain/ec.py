@@ -42,6 +42,7 @@ application.config.from_object(__name__)
 Session(application)
 QRcode(application)
 GoogleMaps(application)
+# db=SQLAlchemy(application)
 
 logging.basicConfig(level=logging.DEBUG)
 DB_PATH = config.db_path
@@ -184,11 +185,7 @@ def gen_consume_url(event_address):
 
 
 def gen_did_url(url, action):
-    g.logger.debug(
-        "Generating url for DID call. Call back url provided is {}".format(
-            url,
-        ),
-    )
+
     params = {
         'appPk': APP_PK,
         'appDid': 'did:abt:' + APP_ADDR,
@@ -196,6 +193,11 @@ def gen_did_url(url, action):
         'url': url,
     }
     r = requests.Request('GET', ARC, params=params).prepare()
+    g.logger.debug(
+        "Generating url for DID call. {}".format(
+            r.url,
+        ),
+    )
     return r.url
 
 
@@ -297,9 +299,10 @@ def use(address):
 def event_list():
     events = app.list_events(g.db)
     event_lists = chunks(events, 3)
+
     return render_template(
         'event_list.html', event_lists=event_lists,
-        session=session, number=len(events),
+        session=session, number=len(events)
     )
 
 
@@ -335,8 +338,10 @@ def ticket_list():
 
 
 @application.context_processor
-def inject_mobile_address():
-    return dict(mobile_address=db.get_last_mobile_address(g.db))
+def inject_poke_url():
+    poke_url = gen_did_url(f'{SERVER_ADDRESS}api/mobile-poke',
+                           'RequestAuth')
+    return dict(poke_url=poke_url)
 
 
 @application.route("/mobile-account", methods=['GET'])
@@ -523,7 +528,7 @@ def mobile_buy_ticket(event_address):
                 'action': 'responseAuth',
                 'workflow': 'buy-ticket',
             }
-            response = app.did_auth_require_multisig(**did_request_params)
+            response = app.did_auth_require_sig(**did_request_params)
             g.logger.debug('did auth response: {}'.format(response))
             return response
 
@@ -589,6 +594,67 @@ def response_error(msg):
 @application.route("/error", methods=['GET', 'POST'])
 def error():
     return "Sorry there's something wrong in purchasing your ticket."
+
+
+@application.route(
+    "/api/mobile-poke",
+    methods=['GET', 'POST'],
+)
+def mobile_poke():
+    try:
+        if request.method == 'GET':
+            g.logger.debug("Receives get request for mobile-poke.")
+            user_did = request.args.get('userDid')
+            user_pk = utils.multibase_b58decode(request.args.get('userPk'))
+            if not user_did:
+                return response_error("Please provide a valid user did.")
+            user_address = user_did.split(":")[2]
+            g.logger.debug(
+                "user address parsed from request {}".format(user_address),
+            )
+            poke_tx = app.gen_poke_tx(user_address, user_pk)
+            g.logger.debug('poke tx {}:'.format(poke_tx))
+            call_back_url = SERVER_ADDRESS + "api/mobile-poke/"
+            des = 'Poke and get reward.'
+
+            did_request_params = {
+                'user_did': user_did,
+                'tx': poke_tx,
+                'url': call_back_url,
+                'description': des,
+                'action': 'responseAuth',
+                'workflow': 'poke',
+            }
+            response = app.did_auth_require_sig(**did_request_params)
+            g.logger.debug('did auth response: {}'.format(response))
+            return response
+
+        elif request.method == 'POST':
+            g.logger.debug("Receives post request for mobile-poke.")
+            try:
+                req_data = request.get_data(as_text=True)
+                g.logger.debug("Receives data from wallet {}".format(req_data))
+                req = ast.literal_eval(req_data)
+                wallet_response = helpers.WalletResponse(req)
+            except Exception as e:
+                g.logger.error(e, exc_info=True)
+                return response_error("Error in parsing wallet data.")
+            user_sig = wallet_response.get_signature()
+            poke_tx = wallet_response.get_origin_tx()
+            hash = app.send_poke_tx(poke_tx, user_sig)
+            if hash:
+                js = json.dumps({'hash': hash,
+                                 'tx': helpers.base58_encode_tx(poke_tx)})
+                g.logger.debug('success response: {}'.format(str(js)))
+                resp = Response(js, status=200, mimetype='application/json')
+                return resp
+            else:
+                return response_error('Whoops! All rewards are taken.'
+                                      ' Please try again tomorrow.')
+    except Exception as e:
+        g.logger.error(e, exc_info=True)
+        return response_error('Whoops! All rewards are taken.'
+                              ' Please try again tomorrow.')
 
 
 @application.route(
@@ -669,7 +735,7 @@ def mobile_require_asset(event_address):
                 'action': 'responseAuth',
                 'workflow': 'use-ticket',
             }
-            response = app.did_auth_require_multisig(**did_request_params)
+            response = app.did_auth_require_sig(**did_request_params)
             return response
 
     except Exception as e:

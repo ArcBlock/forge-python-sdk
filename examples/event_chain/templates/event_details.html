@@ -54,7 +54,7 @@
                                             <div class="level-item has-text-centered">
                                                 <div>
                                                     <p class="heading">Price</p>
-                                                    <p class="title">{{ event.display_price }} ABT</p>
+                                                    <p class="title">{{ event.display_price }} TBA</p>
                                                 </div>
                                             </div>
                                         </nav>
@@ -181,11 +181,12 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="content full-text" style="width:100%">
+                                        <div class="content" style="width:100%">
                                             <div>
                                                 <div>
-                                                {{ googlemap("simple-map", 47.6101, -122.2015, markers=[(47.6101, -122.2015)]) }}
+                                                    {{ googlemap("simple-map", 47.6101, -122.2015, markers=[(47.6101, -122.2015)]) }}
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -193,76 +194,62 @@
                             </div>
                         </div>
                         <section class="section">
-                            <h1 class="title is-3"> How many tickets have been sold? </h1>
+                            <h1 class="title is-3"> How Many People Have Tried? </h1>
                             <hr>
                             {% if num_txs > 0 %}
-                                <section class="section">
+                                <div class="content">
+                                    <p class="subtitle">Not all attempts are created equal.
+                                Click to see if that purchase succeeded.</p>
                                     <table class="table" style="width: 100%;">
-                                        <thead class="full-text">
+                                        <thead>
                                         <tr>
-                                            <th>Hash</th>
-                                            <th style="width: 30%;text-align: center;">Time</th>
+                                            <th style="text-align: center;">Hash</th>
+                                            <th style="text-align: center;">Time</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         {% for tx_list in tx_lists %}
                                             {% for tx in tx_list %}
                                                 <tr class="full-text">
-                                                    <td>
+                                                    <td style="text-align: left;">
                                                         <a href="{{ forge_web }}{{ tx.hash }}"
                                                            target="_blank">{{ tx.hash }}</a>
                                                     </td>
-                                                    <td>
+                                                    <td style=text-align:center;">
                                                         {{ to_display_time(tx.time) }}
                                                     </td>
                                                 </tr>
                                                 <tr class="short-text">
-                                                    <td style="width:70%;">
+                                                    <td style="word-break: keep-all;text-align: center">
                                                         <a href="{{ forge_web }}{{ tx.hash }}"
-                                                           target="_blank">{{ tx.hash }}</a>
+                                                           target="_blank">{{ shorten_hash(tx.hash) }}</a>
                                                     </td>
-                                                    <td style="width:30%;">
+                                                    <td style="word-break: keep-all;text-align: center">
                                                         {{ to_short_time(tx.time) }}
                                                     </td>
                                                 </tr>
-
                                             {% endfor %}
                                         {% endfor %}
                                         </tbody>
                                     </table>
-                                    <div class="content" style="padding-top:30px">
-                                        {% for tx_list in tx_lists %}
-                                            {% for tx in tx_list %}
-                                                <div class="columns">
-                                                    <div class="column  full-text">
-                                                        <a href="{{ forge_web }}{{ tx.hash }}"
-                                                           target="_blank">{{ tx.hash }}</a>
-                                                    </div>
-                                                    <div class="column is-offset-1 full-text">
-                                                        {{ to_display_time(tx.time) }}
-                                                    </div>
-                                                    <div class="column  short-text">
-                                                        <a href="{{ forge_web }}{{ tx.hash }}"
-                                                           target="_blank">{{ shorten_hash(tx.hash) }}</a>
-                                                    </div>
-                                                    <div class="column is-offset-2 short-text">
-                                                        {{ to_short_time(tx.time) }}
-                                                    </div>
-                                                </div>
-                                            {% endfor %}
-                                        {% endfor %}
-                                    </div>
-
-
-                                </section>
+                                </div>
                             {% else %}
                                 <br>
                                 <p class="subtitle" style="text-align: center;"><i>No one has got the ticket yet. Be the
                                     first one on the list ! </i></p>
                             {% endif %}
                         </section>
+                    </div>
                 </section>
             </section>
         </section>
     </section>
+
+    <script>
+        function adjustGoogleMapSize() {
+            document.getElementById("simple-map").style.width = "100%";
+        }
+
+        window.onload = adjustGoogleMapSize;
+    </script>
 {% endblock %}

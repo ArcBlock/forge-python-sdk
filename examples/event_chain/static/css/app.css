@@ -5169,6 +5169,7 @@ a.tag:hover {
   font-size: 2rem;
   font-weight: 500;
   line-height: 1.125;
+  font-family: "Avenir";
 }
 
 .title.separate {
@@ -5221,6 +5222,7 @@ a.tag:hover {
   font-size: 1.25rem;
   font-weight: 400;
   line-height: 1.25;
+  font-family: "Avenir";
 }
 
 .subtitle strong {
@@ -5919,7 +5921,7 @@ a.list-item {
 
 .message.is-link .message-header {
   background-color: #5c4899;
-  color: #fff;
+  color: #ffff;
 }
 
 .message.is-link .message-body {
@@ -10225,7 +10227,7 @@ label.panel-block:hover {
 }
 
 .hero.is-link .title {
-  color: #fff;
+  color: #ffffff;
 }
 
 .hero.is-link .subtitle {
@@ -10234,7 +10236,7 @@ label.panel-block:hover {
 
 .hero.is-link .subtitle a:not(.button),
 .hero.is-link .subtitle strong {
-  color: #fff;
+  color: #ffffff;
 }
 
 @media screen and (max-width: 1087px) {
@@ -10256,7 +10258,7 @@ label.panel-block:hover {
 }
 
 .hero.is-link .tabs a {
-  color: #fff;
+  color: #ffffff;
   opacity: 0.9;
 }
 
@@ -10269,7 +10271,7 @@ label.panel-block:hover {
 }
 
 .hero.is-link .tabs.is-boxed a, .hero.is-link .tabs.is-toggle a {
-  color: #fff;
+  color: #ffffff;
 }
 
 .hero.is-link .tabs.is-boxed a:hover, .hero.is-link .tabs.is-toggle a:hover {
@@ -10277,8 +10279,8 @@ label.panel-block:hover {
 }
 
 .hero.is-link .tabs.is-boxed li.is-active a, .hero.is-link .tabs.is-boxed li.is-active a:hover, .hero.is-link .tabs.is-toggle li.is-active a, .hero.is-link .tabs.is-toggle li.is-active a:hover {
-  background-color: #fff;
-  border-color: #fff;
+  background-color: #ffffff;
+  border-color: #ffffff;
   color: #5c4899;
 }
 
@@ -11260,7 +11262,7 @@ body > .navbar {
 
 @media (max-width: 800px) {
   .short-text {
-    display: block;
+    display: table-row;
   }
   .full-text {
     display: none

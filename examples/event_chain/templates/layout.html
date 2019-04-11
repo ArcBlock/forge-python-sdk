@@ -26,12 +26,7 @@
         <nav class="navbar is-white">
             <div class="navbar-brand">
                 <a href="/"><img src="{{ url_for('static', filename='images/eventchain_h_2.png') }}"
-                                     style="height: 70px; width: 140px; margin-right: 40px;object-fit:cover;"></a>
-                {#                <div class="navbar-burger burger" data-target="basicNav">#}
-                {#                    <span></span>#}
-                {#                    <span></span>#}
-                {#                    <span></span>#}
-                {#                </div>#}
+                                 style="height: 70px; width: 140px; margin-right: 40px;object-fit:cover;"></a>
                 <a class="navbar-item is-hidden-desktop" href="/tickets">
                     My Account
                 </a>
@@ -47,14 +42,14 @@
                     <a class="navbar-item" href="/tickets">
                         My Account
                     </a>
-                    {#                    {% if mobile_address %}#}
-                    {#                        <a class="navbar-item" href="/mobile-account">#}
-                    {#                            Mobile Account#}
-                    {#                        </a>#}
-                    {#                    {% endif %}#}
+
                 </div>
                 <div class="navbar-end">
+
                     <span class="navbar-item" style="text-align: right;">
+                        <a class="button is-link is-bold"
+                           onclick="$('#pokeTx').toggleClass('is-active')"
+                           style="color:#ffffff; margin-right: 15px; ">Feeling Lucky !</a>
                         {% if not session.user %}
                             <a class="button is-link is-bold" href="/login">
                           <span>Log In</span>
@@ -70,6 +65,31 @@
         </nav>
     </section>
 </section>
+<div class="content">
+    <div class="modal" id="pokeTx">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <article class="message is-light">
+                <div class="message-header">
+                    <h4 class="subtitle" style="margin-bottom:-6px;">Is Today Your Lucky Day ?</h4>
+                    <button class="delete"
+                            onclick="$('#pokeTx').toggleClass('is-active')"></button>
+                </div>
+                <div class="message-body" style="padding-bottom: 60px;">
+                    <div class="contents">
+                        <br>
+                        <p class="subtitle">🏖️ Scan to find out if you are <i>lucky</i> to get 25 TBA reward! </p>
+                        <figure class="image"
+                                style="display: block; margin-left: auto; margin-right: auto; width: 50%;">
+                            <img src="{{ qrcode(poke_url, border=2) }}"
+                                 alt="Image">
+                        </figure>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
+</div>
 
 {% block content %}{% endblock %}
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

@@ -6,7 +6,7 @@ stub = protos.ChainRpcStub(config.get_grpc_channel())
 
 
 def create_tx(itx, from_address,
-              wallet, token=None, req=None, nonce=1,
+              wallet=None, token=None, req=None, nonce=1,
               ):
     """ GRPC call to build a complete transaction, including sender's pk and
     sender's signature
