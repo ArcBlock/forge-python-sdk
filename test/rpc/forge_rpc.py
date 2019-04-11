@@ -110,12 +110,10 @@ class RpcTest(unittest.TestCase):
     def test_recover_wallet(self):
         temp_wallet = rpc.create_wallet(passphrase='abcd123')
         res = rpc.recover_wallet(
-            req=protos.RequestRecoverWallet(
-                type=self.wallet_type,
-                data=temp_wallet.wallet.sk,
-                passphrase='abcd123',
-                moniker='bobalice',
-            ),
+            wallet_type=self.wallet_type,
+            data=temp_wallet.wallet.sk,
+            passphrase='abcd123',
+            moniker='bobalice',
         )
         assert (res.code == 0)
 
@@ -172,7 +170,7 @@ class RpcTest(unittest.TestCase):
                 address=self.wallet1.wallet.address,
             ),
         ]
-        res = rpc.get_asset_state(req=reqs.__iter__())
+        res = rpc.get_asset_state(reqs=reqs.__iter__())
         for i in res:
             assert (i.code == 0)
 

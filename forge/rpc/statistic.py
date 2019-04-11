@@ -1,10 +1,10 @@
 from forge import protos
 from forge.config import config
 
-stub = protos.StatisticRpcStub(config.get_grpc_channel())
+stub = protos.StatsRpcStub(config.get_grpc_channel())
 
 
-def get_forge_statistics(day_info=None, date=None, req=None):
+def get_forge_stats(day_info=None, date=None, req=None):
     """GRPC call to get statistics about forge
 
     Args:
@@ -18,13 +18,13 @@ def get_forge_statistics(day_info=None, date=None, req=None):
 
     """
     if req:
-        return stub.get_forge_statistics(req)
+        return stub.get_forge_stats(req)
     elif day_info:
-        return stub.get_forge_statistics(
-            protos.RequestGetForgeStatistics(day_info=day_info))
+        return stub.get_forge_stats(
+            protos.RequestGetForgeStats(day_info=day_info))
     elif date:
-        return stub.get_forge_statistics(
-            protos.RequestGetForgeStatistics(date=date))
+        return stub.get_(
+            protos.RequestGetForgeStats(date=date))
     else:
         raise ValueError('Please pass either day_info or date for grpc call'
                          'get_forge_statistics.')
@@ -50,11 +50,11 @@ def list_assets(owner_address, paging=None, req=None):
                                      paging=paging))
 
 
-def get_stakes(address_filter, paging=None, req=None):
+def list_stakes(address_filter=None, paging=None, req=None):
     """ GRPC call to get stakes
 
     Args:
-        address_filter(string): filter stakes to get
+        address_filter(:obj:`AddressFilter`): filter stakes to get
         paging(:obj:`PageInput`): paging preferences
         req(:obj:`RequestGetStakes`): completed request
 
@@ -63,14 +63,14 @@ def get_stakes(address_filter, paging=None, req=None):
 
     """
     if req:
-        return stub.get_stakes(req)
+        return stub.list_stakes(req)
     else:
-        return stub.get_stakes(
-            protos.RequestGetStakes(address_filter=address_filter,
-                                    paging=paging))
+        return stub.list_stakes(
+            protos.RequestListStakes(address_filter=address_filter,
+                                     paging=paging))
 
 
-def get_top_accounts(paging=None, req=None):
+def list_top_accounts(paging=None, req=None):
     """GRPC call to get top accounts
 
     Args:
@@ -82,10 +82,10 @@ def get_top_accounts(paging=None, req=None):
 
     """
     if req:
-        return stub.get_top_accounts(req)
+        return stub.list_top_accounts(req)
     else:
-        return stub.get_top_accounts(
-            protos.RequestGetTopAccounts(paging=paging))
+        return stub.list_top_accounts(
+            protos.RequestListTopAccounts(paging=paging))
 
 
 def list_blocks(paging=None, proposer=None, time_filter=None,
@@ -97,9 +97,9 @@ def list_blocks(paging=None, proposer=None, time_filter=None,
         paging(:obj:`PageInput`): paging preferences
         proposer(string): address that proposed the block
         time_filter(:obj:`TimeFilter`): time filter
-        height_filter(:obj: `HeightFilter`): height filter
-        num_txs_filter(:obj:`NumTxsFilter`): number of transaction filter
-        num_invalid_txs_filter(:obj:`NumInvalidTxsFilter` ): number of invalie
+        height_filter(:obj: `RangeFilter`): height filter
+        num_txs_filter(:obj:`RangeFilter`): number of transaction filter
+        num_invalid_txs_filter(:obj:`RangeFilter` ): number of invalid
             transaction filter
         req(:obj:`RequestListBlocks`): completed request
 
@@ -152,7 +152,7 @@ def list_asset_transactions(address, paging=None, req=None):
 
 def list_transactions(
         address_filter=None, time_filter=None,
-        type_filter=None, paging=None,
+        type_filter=None, validity_filter=None, paging=None,
 ):
     """GRPC call to list transactions
 
@@ -160,6 +160,7 @@ def list_transactions(
         address_filter(string): address filter
         time_filter(:obj:`TimeFilter`): time filter
         type_filter(:obj:`TypeFilter`): type filter
+        validity_filter(:obj:`ValidityFilter`): validity filter
         paging(:obj:`PagingInput`): paging preference
 
     Returns:
@@ -171,5 +172,6 @@ def list_transactions(
         time_filter=time_filter,
         address_filter=address_filter,
         type_filter=type_filter,
+        validity_filter=validity_filter,
     )
     return stub.list_transactions(req)

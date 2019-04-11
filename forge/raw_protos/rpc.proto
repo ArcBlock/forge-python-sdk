@@ -71,15 +71,14 @@ message ResponseGetBlock {
 
 message RequestGetBlocks {
   PageInput paging = 1;
-  uint64 min_height = 2;
-  uint64 max_height = 3;
-  bool empty_excluded = 4;
+  RangeFilter height_filter = 2;
+  bool empty_excluded = 3;
 }
 
 message ResponseGetBlocks {
   StatusCode code = 1;
   PageInfo page = 2;
-  repeated BlockInfo blocks = 3;
+  repeated BlockInfoSimple blocks = 3;
 }
 
 // create_wallet(moniker, passphrase): create an account locally
@@ -239,11 +238,14 @@ message ResponseSearch {
   repeated TransactionInfo txs = 2;
 }
 
-message RequestGetUnconfirmedTxs { uint32 limit = 1; }
+message RequestGetUnconfirmedTxs {
+  PageInput paging = 1;
+}
 
 message ResponseGetUnconfirmedTxs {
   StatusCode code = 1;
-  UnconfirmedTxs unconfirmed_txs = 2;
+  PageInfo page = 2;
+  UnconfirmedTxs unconfirmed_txs = 3;
 }
 
 message RequestGetNetInfo {}
@@ -318,16 +320,16 @@ message ByHour {
 }
 
 
-message RequestGetForgeStatistics {
+message RequestGetForgeStats {
   oneof value {
     ByDay day_info = 1;
     ByHour date = 2;
   }
 }
 
-message ResponseGetForgeStatistics {
+message ResponseGetForgeStats {
   StatusCode code = 1;
-  ForgeStatistics forge_statistics = 2;
+  ForgeStats forge_stats = 2;
 }
 
 message RequestListTransactions {
@@ -335,6 +337,7 @@ message RequestListTransactions {
   TimeFilter time_filter = 2;
   AddressFilter address_filter = 3;
   TypeFilter type_filter = 4;
+  ValidityFilter validity_filter = 5;
 }
 
 message ResponseListTransactions {
@@ -365,33 +368,42 @@ message ResponseSignData {
   bytes signature = 2;
 }
 
-message RequestGetAssets {
+message RequestListAssets {
   PageInput paging = 1;
   string owner_address = 2;
 }
 
-message ResponseGetAssets {
+message ResponseListAssets {
   StatusCode code = 1;
   PageInfo page = 2;
   repeated IndexedAssetState assets = 3;
 }
 
-message RequestGetStakes {
+message RequestListStakes {
   PageInput paging = 1;
   AddressFilter address_filter = 2;
 }
 
-message ResponseGetStakes {
+message ResponseListStakes {
   StatusCode code = 1;
   PageInfo page = 2;
   repeated IndexedStakeState stakes = 3;
 }
 
-message RequestGetTopAccounts {
+message RequestListAccount {
+  string owner_address = 1;
+}
+
+message ResponseListAccount {
+  StatusCode code = 1;
+  IndexedAccountState account = 2;
+}
+
+message RequestListTopAccounts {
   PageInput paging = 1;
 }
 
-message ResponseGetTopAccounts {
+message ResponseListTopAccounts {
   StatusCode code = 1;
   PageInfo page = 2;
   repeated IndexedAccountState accounts = 3;
@@ -412,27 +424,15 @@ message RequestListBlocks {
   PageInput paging = 1;
   string proposer = 2;
   TimeFilter time_filter = 3;
-  HeightFilter height_filter = 4;
-  NumTxsFilter num_txs_filter = 5;
-  NumInvalidTxsFilter num_invalid_txs_filter = 6;
+  RangeFilter height_filter = 4;
+  RangeFilter num_txs_filter = 5;
+  RangeFilter num_invalid_txs_filter = 6;
 }
 
 message ResponseListBlocks {
   StatusCode code = 1;
   PageInfo page = 2;
   repeated IndexedBlock blocks = 3;
-}
-
-message RequestListAssets {
-  PageInput paging = 1;
-  string owner_address = 2;
-}
-
-message ResponseListAssets {
-  StatusCode code = 1;
-  PageInfo page = 2;
-  IndexedAccountState account = 3;
-  repeated IndexedAssetState assets = 4;
 }
 
 message RequestGetHealthStatus {}

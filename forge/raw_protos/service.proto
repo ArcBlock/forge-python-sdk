@@ -66,16 +66,14 @@ service WalletRpc {
   rpc declare_node(RequestDeclareNode) returns (ResponseDeclareNode);
 }
 
-service StatisticRpc {
-  rpc get_forge_statistics(RequestGetForgeStatistics)
-      returns (ResponseGetForgeStatistics);
-  rpc list_transactions(RequestListTransactions)
-      returns (ResponseListTransactions);
-  rpc get_assets(RequestGetAssets) returns (ResponseGetAssets);
-  rpc get_stakes(RequestGetStakes) returns (ResponseGetStakes);
-  rpc get_top_accounts(RequestGetTopAccounts) returns (ResponseGetTopAccounts);
+service StatsRpc {
+  rpc get_forge_stats(RequestGetForgeStats) returns (ResponseGetForgeStats);
+  rpc list_transactions(RequestListTransactions) returns (ResponseListTransactions);
+  rpc list_assets(RequestListAssets) returns (ResponseListAssets);
+  rpc list_stakes(RequestListStakes) returns (ResponseListStakes);
+  rpc list_account(RequestListAccount) returns (ResponseListAccount);
+  rpc list_top_accounts(RequestListTopAccounts) returns (ResponseListTopAccounts);
   rpc list_asset_transactions(RequestListAssetTransactions) returns (ResponseListAssetTransactions);
   rpc list_blocks(RequestListBlocks) returns (ResponseListBlocks);
-  rpc list_assets(RequestListAssets) returns (ResponseListAssets);
   rpc get_health_status(RequestGetHealthStatus) returns (ResponseGetHealthStatus);
 }

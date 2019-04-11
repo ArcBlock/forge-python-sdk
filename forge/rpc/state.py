@@ -32,7 +32,7 @@ def get_account_state(queries, reqs=None):
     return stub.get_account_state(requests)
 
 
-def get_asset_state(queries, reqs=None):
+def get_asset_state(queries=None, reqs=None):
     """GRPC call to get detailed of asset
 
     Args:

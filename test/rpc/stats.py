@@ -31,10 +31,10 @@ class StatisticsTest(unittest.TestCase):
                                self.test_account.token)
         verify(res)
 
-    def test_get_forge_statistics(self):
+    def test_get_forge_stats(self):
         day_info = protos.ByDay(start_date=self.yesterday,
                                 end_date=self.yesterday)
-        res = rpc.get_forge_statistics(day_info=day_info)
+        res = rpc.get_forge_stats(day_info=day_info)
         verify(res)
 
     def test_list_transactions(self):
@@ -42,11 +42,11 @@ class StatisticsTest(unittest.TestCase):
         verify(res)
 
     def test_get_stakes(self):
-        res = rpc.get_stakes()
+        res = rpc.list_stakes()
         verify(res)
 
     def test_get_top_accounts(self):
-        res = rpc.get_top_accounts()
+        res = rpc.list_top_accounts()
         verify(res)
         assert res.accounts
 

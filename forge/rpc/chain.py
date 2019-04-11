@@ -146,11 +146,11 @@ def search(key, value, req=None):
         return stub.search(protos.RequestSearch(**req_kwargs))
 
 
-def get_unconfirmed_tx(limit=1, req=None):
+def get_unconfirmed_tx(paging=None, req=None):
     """GRPC call to get currently unconfirmed transactions
 
     Args:
-        limit(int): maximum number of transactions to get
+        paging(:obj:`PageInput`): paging preference
         req(:obj:`RequestGetUnconfirmedTx`): request
 
     Returns:
@@ -161,7 +161,7 @@ def get_unconfirmed_tx(limit=1, req=None):
         return stub.get_unconfirmed_txs(req)
     else:
         return stub.get_unconfirmed_txs(
-            protos.RequestGetUnconfirmedTxs(limit=limit),
+            protos.RequestGetUnconfirmedTxs(paging=paging),
         )
 
 
@@ -289,16 +289,14 @@ def get_asset_address(
         )
 
 
-def get_blocks(min_height,
-               max_height,
+def get_blocks(height_filter,
                empty_excluded=False,
                paging=None,
                req=None):
     """GRPC call to get information of blocks
 
     Args:
-        min_height(int): minimum height of blocks
-        max_height(int): maximum height of blocks
+        height_filter(:obj:`RangeFilter`): range filter for blocks
         empty_excluded(bool): whether to include empty blocks or not
         paging(:obj:`PageInput`): optional, paging preference
         req(:obj:`RequestGetBlocks`): completed request
@@ -312,9 +310,8 @@ def get_blocks(min_height,
     else:
         return stub.get_blocks(
             protos.RequestGetBlocks(
+                height_filter=height_filter,
                 paging=paging,
-                min_height=min_height,
-                max_height=max_height,
                 empty_excluded=empty_excluded
             )
         )

@@ -26,7 +26,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='forge_abi',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\trpc.proto\x12\tforge_abi\x1a\x19google/protobuf/any.proto\x1a\x0cvendor.proto\x1a\nenum.proto\x1a\ntype.proto\x1a\x0bstate.proto\x1a\x08tx.proto\x1a\x10trace_type.proto\"\x87\x01\n\x0fRequestCreateTx\x12!\n\x03itx\x18\x01 \x01(\x0b\x32\x14.google.protobuf.Any\x12\x0c\n\x04\x66rom\x18\x02 \x01(\t\x12\r\n\x05nonce\x18\x03 \x01(\x04\x12%\n\x06wallet\x18\x04 \x01(\x0b\x32\x15.forge_abi.WalletInfo\x12\r\n\x05token\x18\x05 \x01(\t\"[\n\x10ResponseCreateTx\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\"\n\x02tx\x18\x02 \x01(\x0b\x32\x16.forge_abi.Transaction\"\x8f\x01\n\x0fRequestMultisig\x12\"\n\x02tx\x18\x01 \x01(\x0b\x32\x16.forge_abi.Transaction\x12\"\n\x04\x64\x61ta\x18\x02 \x01(\x0b\x32\x14.google.protobuf.Any\x12%\n\x06wallet\x18\x03 \x01(\x0b\x32\x15.forge_abi.WalletInfo\x12\r\n\x05token\x18\x04 \x01(\t\"[\n\x10ResponseMultisig\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\"\n\x02tx\x18\x02 \x01(\x0b\x32\x16.forge_abi.Transaction\"y\n\rRequestSendTx\x12\"\n\x02tx\x18\x01 \x01(\x0b\x32\x16.forge_abi.Transaction\x12%\n\x06wallet\x18\x02 \x01(\x0b\x32\x15.forge_abi.WalletInfo\x12\r\n\x05token\x18\x03 \x01(\t\x12\x0e\n\x06\x63ommit\x18\x04 \x01(\x08\"C\n\x0eResponseSendTx\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\x0c\n\x04hash\x18\x02 \x01(\t\"\x1c\n\x0cRequestGetTx\x12\x0c\n\x04hash\x18\x01 \x01(\t\"^\n\rResponseGetTx\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12(\n\x04info\x18\x02 \x01(\x0b\x32\x1a.forge_abi.TransactionInfo\"!\n\x0fRequestGetBlock\x12\x0e\n\x06height\x18\x01 \x01(\x04\"\\\n\x10ResponseGetBlock\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12#\n\x05\x62lock\x18\x02 \x01(\x0b\x32\x14.forge_abi.BlockInfo\"x\n\x10RequestGetBlocks\x12$\n\x06paging\x18\x01 \x01(\x0b\x32\x14.forge_abi.PageInput\x12\x12\n\nmin_height\x18\x02 \x01(\x04\x12\x12\n\nmax_height\x18\x03 \x01(\x04\x12\x16\n\x0e\x65mpty_excluded\x18\x04 \x01(\x08\"\x81\x01\n\x11ResponseGetBlocks\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12!\n\x04page\x18\x02 \x01(\x0b\x32\x13.forge_abi.PageInfo\x12$\n\x06\x62locks\x18\x03 \x03(\x0b\x32\x14.forge_abi.BlockInfo\"_\n\x13RequestCreateWallet\x12\x12\n\npassphrase\x18\x01 \x01(\t\x12#\n\x04type\x18\x02 \x01(\x0b\x32\x15.forge_abi.WalletType\x12\x0f\n\x07moniker\x18\x03 \x01(\t\"q\n\x14ResponseCreateWallet\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\r\n\x05token\x18\x02 \x01(\t\x12%\n\x06wallet\x18\x03 \x01(\x0b\x32\x15.forge_abi.WalletInfo\"8\n\x11RequestLoadWallet\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x12\n\npassphrase\x18\x02 \x01(\t\"o\n\x12ResponseLoadWallet\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\r\n\x05token\x18\x02 \x01(\t\x12%\n\x06wallet\x18\x03 \x01(\x0b\x32\x15.forge_abi.WalletInfo\"n\n\x14RequestRecoverWallet\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\x0c\x12#\n\x04type\x18\x02 \x01(\x0b\x32\x15.forge_abi.WalletType\x12\x12\n\npassphrase\x18\x03 \x01(\t\x12\x0f\n\x07moniker\x18\x04 \x01(\t\"r\n\x15ResponseRecoverWallet\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\r\n\x05token\x18\x02 \x01(\t\x12%\n\x06wallet\x18\x03 \x01(\x0b\x32\x15.forge_abi.WalletInfo\"\x13\n\x11RequestListWallet\"J\n\x12ResponseListWallet\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\x0f\n\x07\x61\x64\x64ress\x18\x02 \x01(\t\"&\n\x13RequestRemoveWallet\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\";\n\x14ResponseRemoveWallet\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\"\'\n\x12RequestDeclareNode\x12\x11\n\tvalidator\x18\x01 \x01(\x08\"a\n\x13ResponseDeclareNode\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12%\n\x06wallet\x18\x03 \x01(\x0b\x32\x15.forge_abi.WalletInfo\"G\n\x16RequestGetAccountState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x0c\n\x04keys\x18\x02 \x03(\t\x12\x0e\n\x06height\x18\x03 \x01(\x04\"f\n\x17ResponseGetAccountState\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12&\n\x05state\x18\x02 \x01(\x0b\x32\x17.forge_abi.AccountState\"E\n\x14RequestGetAssetState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x0c\n\x04keys\x18\x02 \x03(\t\x12\x0e\n\x06height\x18\x03 \x01(\x04\"b\n\x15ResponseGetAssetState\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12$\n\x05state\x18\x02 \x01(\x0b\x32\x15.forge_abi.AssetState\"E\n\x14RequestGetStakeState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x0c\n\x04keys\x18\x02 \x03(\t\x12\x0e\n\x06height\x18\x03 \x01(\x04\"b\n\x15ResponseGetStakeState\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12$\n\x05state\x18\x02 \x01(\x0b\x32\x15.forge_abi.StakeState\"4\n\x14RequestGetForgeState\x12\x0c\n\x04keys\x18\x01 \x03(\t\x12\x0e\n\x06height\x18\x03 \x01(\x04\"b\n\x15ResponseGetForgeState\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12$\n\x05state\x18\x02 \x01(\x0b\x32\x15.forge_abi.ForgeState\"!\n\x10RequestStoreFile\x12\r\n\x05\x63hunk\x18\x01 \x01(\x0c\"F\n\x11ResponseStoreFile\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\x0c\n\x04hash\x18\x02 \x01(\t\"\x1f\n\x0fRequestLoadFile\x12\x0c\n\x04hash\x18\x01 \x01(\t\"F\n\x10ResponseLoadFile\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\r\n\x05\x63hunk\x18\x02 \x01(\x0c\"\x1e\n\x0eRequestPinFile\x12\x0c\n\x04hash\x18\x01 \x01(\t\"6\n\x0fResponsePinFile\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\"\x15\n\x13RequestGetChainInfo\"_\n\x14ResponseGetChainInfo\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\"\n\x04info\x18\x02 \x01(\x0b\x32\x14.forge_abi.ChainInfo\"\x14\n\x12RequestGetNodeInfo\"]\n\x13ResponseGetNodeInfo\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12!\n\x04info\x18\x02 \x01(\x0b\x32\x13.forge_abi.NodeInfo\"+\n\rRequestSearch\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"^\n\x0eResponseSearch\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\'\n\x03txs\x18\x02 \x03(\x0b\x32\x1a.forge_abi.TransactionInfo\")\n\x18RequestGetUnconfirmedTxs\x12\r\n\x05limit\x18\x01 \x01(\r\"t\n\x19ResponseGetUnconfirmedTxs\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\x32\n\x0funconfirmed_txs\x18\x02 \x01(\x0b\x32\x19.forge_abi.UnconfirmedTxs\"\x13\n\x11RequestGetNetInfo\"_\n\x12ResponseGetNetInfo\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12$\n\x08net_info\x18\x02 \x01(\x0b\x32\x12.forge_abi.NetInfo\"\x1a\n\x18RequestGetValidatorsInfo\"t\n\x19ResponseGetValidatorsInfo\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\x32\n\x0fvalidators_info\x18\x02 \x01(\x0b\x32\x19.forge_abi.ValidatorsInfo\"F\n\x10RequestSubscribe\x12\"\n\x04type\x18\x01 \x01(\x0e\x32\x14.forge_abi.TopicType\x12\x0e\n\x06\x66ilter\x18\x02 \x01(\t\"\xa6\x07\n\x11ResponseSubscribe\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\x0f\n\x05topic\x18\x02 \x01(\tH\x00\x12*\n\x08transfer\x18\x03 \x01(\x0b\x32\x16.forge_abi.TransactionH\x00\x12\x31\n\x0f\x61\x63\x63ount_migrate\x18\x04 \x01(\x0b\x32\x16.forge_abi.TransactionH\x00\x12)\n\x07\x63onfirm\x18\x05 \x01(\x0b\x32\x16.forge_abi.TransactionH\x00\x12.\n\x0c\x63reate_asset\x18\x06 \x01(\x0b\x32\x16.forge_abi.TransactionH\x00\x12*\n\x08\x65xchange\x18\x07 \x01(\x0b\x32\x16.forge_abi.TransactionH\x00\x12(\n\x06revoke\x18\x08 \x01(\x0b\x32\x16.forge_abi.TransactionH\x00\x12\x35\n\x0b\x62\x65gin_block\x18\x10 \x01(\x0b\x32\x1e.abci_vendor.RequestBeginBlockH\x00\x12\x31\n\tend_block\x18\x11 \x01(\x0b\x32\x1c.abci_vendor.RequestEndBlockH\x00\x12)\n\x07\x64\x65\x63lare\x18\x13 \x01(\x0b\x32\x16.forge_abi.TransactionH\x00\x12.\n\x0cupdate_asset\x18\x14 \x01(\x0b\x32\x16.forge_abi.TransactionH\x00\x12\x33\n\x11\x63onsensus_upgrade\x18\x15 \x01(\x0b\x32\x16.forge_abi.TransactionH\x00\x12.\n\x0c\x64\x65\x63lare_file\x18\x16 \x01(\x0b\x32\x16.forge_abi.TransactionH\x00\x12-\n\x0bsys_upgrade\x18\x17 \x01(\x0b\x32\x16.forge_abi.TransactionH\x00\x12\'\n\x05stake\x18\x18 \x01(\x0b\x32\x16.forge_abi.TransactionH\x00\x12\x30\n\raccount_state\x18\x81\x01 \x01(\x0b\x32\x16.forge_abi.TransactionH\x00\x12.\n\x0b\x61sset_state\x18\x82\x01 \x01(\x0b\x32\x16.forge_abi.TransactionH\x00\x12.\n\x0b\x66orge_state\x18\x83\x01 \x01(\x0b\x32\x16.forge_abi.TransactionH\x00\x12.\n\x0bstake_state\x18\x84\x01 \x01(\x0b\x32\x16.forge_abi.TransactionH\x00\x42\x07\n\x05value\"#\n\x12RequestUnsubscribe\x12\r\n\x05topic\x18\x01 \x01(\t\":\n\x13ResponseUnsubscribe\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\"\x12\n\x10RequestGetConfig\"H\n\x11ResponseGetConfig\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\x0e\n\x06\x63onfig\x18\x02 \x01(\t\"-\n\x05\x42yDay\x12\x12\n\nstart_date\x18\x01 \x01(\t\x12\x10\n\x08\x65nd_date\x18\x02 \x01(\t\"\x16\n\x06\x42yHour\x12\x0c\n\x04\x64\x61te\x18\x01 \x01(\t\"m\n\x19RequestGetForgeStatistics\x12$\n\x08\x64\x61y_info\x18\x01 \x01(\x0b\x32\x10.forge_abi.ByDayH\x00\x12!\n\x04\x64\x61te\x18\x02 \x01(\x0b\x32\x11.forge_abi.ByHourH\x00\x42\x07\n\x05value\"w\n\x1aResponseGetForgeStatistics\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\x34\n\x10\x66orge_statistics\x18\x02 \x01(\x0b\x32\x1a.forge_abi.ForgeStatistics\"\xc9\x01\n\x17RequestListTransactions\x12$\n\x06paging\x18\x01 \x01(\x0b\x32\x14.forge_abi.PageInput\x12*\n\x0btime_filter\x18\x02 \x01(\x0b\x32\x15.forge_abi.TimeFilter\x12\x30\n\x0e\x61\x64\x64ress_filter\x18\x03 \x01(\x0b\x32\x18.forge_abi.AddressFilter\x12*\n\x0btype_filter\x18\x04 \x01(\x0b\x32\x15.forge_abi.TypeFilter\"\x97\x01\n\x18ResponseListTransactions\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12!\n\x04page\x18\x02 \x01(\x0b\x32\x13.forge_abi.PageInfo\x12\x33\n\x0ctransactions\x18\x03 \x03(\x0b\x32\x1d.forge_abi.IndexedTransaction\"\x83\x01\n\x16RequestGetAssetAddress\x12\x16\n\x0esender_address\x18\x01 \x01(\t\x12%\n\x03itx\x18\x02 \x01(\x0b\x32\x18.forge_abi.CreateAssetTx\x12*\n\x0bwallet_type\x18\x03 \x01(\x0b\x32\x15.forge_abi.WalletType\"U\n\x17ResponseGetAssetAddress\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\x15\n\rasset_address\x18\x02 \x01(\t\"U\n\x0fRequestSignData\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\x0c\x12%\n\x06wallet\x18\x02 \x01(\x0b\x32\x15.forge_abi.WalletInfo\x12\r\n\x05token\x18\x03 \x01(\t\"J\n\x10ResponseSignData\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\x11\n\tsignature\x18\x02 \x01(\x0c\"O\n\x10RequestGetAssets\x12$\n\x06paging\x18\x01 \x01(\x0b\x32\x14.forge_abi.PageInput\x12\x15\n\rowner_address\x18\x02 \x01(\t\"\x89\x01\n\x11ResponseGetAssets\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12!\n\x04page\x18\x02 \x01(\x0b\x32\x13.forge_abi.PageInfo\x12,\n\x06\x61ssets\x18\x03 \x03(\x0b\x32\x1c.forge_abi.IndexedAssetState\"j\n\x10RequestGetStakes\x12$\n\x06paging\x18\x01 \x01(\x0b\x32\x14.forge_abi.PageInput\x12\x30\n\x0e\x61\x64\x64ress_filter\x18\x02 \x01(\x0b\x32\x18.forge_abi.AddressFilter\"\x89\x01\n\x11ResponseGetStakes\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12!\n\x04page\x18\x02 \x01(\x0b\x32\x13.forge_abi.PageInfo\x12,\n\x06stakes\x18\x03 \x03(\x0b\x32\x1c.forge_abi.IndexedStakeState\"=\n\x15RequestGetTopAccounts\x12$\n\x06paging\x18\x01 \x01(\x0b\x32\x14.forge_abi.PageInput\"\x92\x01\n\x16ResponseGetTopAccounts\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12!\n\x04page\x18\x02 \x01(\x0b\x32\x13.forge_abi.PageInfo\x12\x30\n\x08\x61\x63\x63ounts\x18\x03 \x03(\x0b\x32\x1e.forge_abi.IndexedAccountState\"U\n\x1cRequestListAssetTransactions\x12$\n\x06paging\x18\x01 \x01(\x0b\x32\x14.forge_abi.PageInput\x12\x0f\n\x07\x61\x64\x64ress\x18\x02 \x01(\t\"\x9c\x01\n\x1dResponseListAssetTransactions\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12!\n\x04page\x18\x02 \x01(\x0b\x32\x13.forge_abi.PageInfo\x12\x33\n\x0ctransactions\x18\x03 \x03(\x0b\x32\x1d.forge_abi.IndexedTransaction\"\x98\x02\n\x11RequestListBlocks\x12$\n\x06paging\x18\x01 \x01(\x0b\x32\x14.forge_abi.PageInput\x12\x10\n\x08proposer\x18\x02 \x01(\t\x12*\n\x0btime_filter\x18\x03 \x01(\x0b\x32\x15.forge_abi.TimeFilter\x12.\n\rheight_filter\x18\x04 \x01(\x0b\x32\x17.forge_abi.HeightFilter\x12/\n\x0enum_txs_filter\x18\x05 \x01(\x0b\x32\x17.forge_abi.NumTxsFilter\x12>\n\x16num_invalid_txs_filter\x18\x06 \x01(\x0b\x32\x1e.forge_abi.NumInvalidTxsFilter\"\x85\x01\n\x12ResponseListBlocks\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12!\n\x04page\x18\x02 \x01(\x0b\x32\x13.forge_abi.PageInfo\x12\'\n\x06\x62locks\x18\x03 \x03(\x0b\x32\x17.forge_abi.IndexedBlock\"P\n\x11RequestListAssets\x12$\n\x06paging\x18\x01 \x01(\x0b\x32\x14.forge_abi.PageInput\x12\x15\n\rowner_address\x18\x02 \x01(\t\"\xbb\x01\n\x12ResponseListAssets\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12!\n\x04page\x18\x02 \x01(\x0b\x32\x13.forge_abi.PageInfo\x12/\n\x07\x61\x63\x63ount\x18\x03 \x01(\x0b\x32\x1e.forge_abi.IndexedAccountState\x12,\n\x06\x61ssets\x18\x04 \x03(\x0b\x32\x1c.forge_abi.IndexedAssetState\"\x18\n\x16RequestGetHealthStatus\"n\n\x17ResponseGetHealthStatus\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12.\n\rhealth_status\x18\x02 \x01(\x0b\x32\x17.forge_abi.HealthStatusb\x06proto3')
+  serialized_pb=_b('\n\trpc.proto\x12\tforge_abi\x1a\x19google/protobuf/any.proto\x1a\x0cvendor.proto\x1a\nenum.proto\x1a\ntype.proto\x1a\x0bstate.proto\x1a\x08tx.proto\x1a\x10trace_type.proto\"\x87\x01\n\x0fRequestCreateTx\x12!\n\x03itx\x18\x01 \x01(\x0b\x32\x14.google.protobuf.Any\x12\x0c\n\x04\x66rom\x18\x02 \x01(\t\x12\r\n\x05nonce\x18\x03 \x01(\x04\x12%\n\x06wallet\x18\x04 \x01(\x0b\x32\x15.forge_abi.WalletInfo\x12\r\n\x05token\x18\x05 \x01(\t\"[\n\x10ResponseCreateTx\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\"\n\x02tx\x18\x02 \x01(\x0b\x32\x16.forge_abi.Transaction\"\x8f\x01\n\x0fRequestMultisig\x12\"\n\x02tx\x18\x01 \x01(\x0b\x32\x16.forge_abi.Transaction\x12\"\n\x04\x64\x61ta\x18\x02 \x01(\x0b\x32\x14.google.protobuf.Any\x12%\n\x06wallet\x18\x03 \x01(\x0b\x32\x15.forge_abi.WalletInfo\x12\r\n\x05token\x18\x04 \x01(\t\"[\n\x10ResponseMultisig\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\"\n\x02tx\x18\x02 \x01(\x0b\x32\x16.forge_abi.Transaction\"y\n\rRequestSendTx\x12\"\n\x02tx\x18\x01 \x01(\x0b\x32\x16.forge_abi.Transaction\x12%\n\x06wallet\x18\x02 \x01(\x0b\x32\x15.forge_abi.WalletInfo\x12\r\n\x05token\x18\x03 \x01(\t\x12\x0e\n\x06\x63ommit\x18\x04 \x01(\x08\"C\n\x0eResponseSendTx\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\x0c\n\x04hash\x18\x02 \x01(\t\"\x1c\n\x0cRequestGetTx\x12\x0c\n\x04hash\x18\x01 \x01(\t\"^\n\rResponseGetTx\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12(\n\x04info\x18\x02 \x01(\x0b\x32\x1a.forge_abi.TransactionInfo\"!\n\x0fRequestGetBlock\x12\x0e\n\x06height\x18\x01 \x01(\x04\"\\\n\x10ResponseGetBlock\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12#\n\x05\x62lock\x18\x02 \x01(\x0b\x32\x14.forge_abi.BlockInfo\"\x7f\n\x10RequestGetBlocks\x12$\n\x06paging\x18\x01 \x01(\x0b\x32\x14.forge_abi.PageInput\x12-\n\rheight_filter\x18\x02 \x01(\x0b\x32\x16.forge_abi.RangeFilter\x12\x16\n\x0e\x65mpty_excluded\x18\x03 \x01(\x08\"\x87\x01\n\x11ResponseGetBlocks\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12!\n\x04page\x18\x02 \x01(\x0b\x32\x13.forge_abi.PageInfo\x12*\n\x06\x62locks\x18\x03 \x03(\x0b\x32\x1a.forge_abi.BlockInfoSimple\"_\n\x13RequestCreateWallet\x12\x12\n\npassphrase\x18\x01 \x01(\t\x12#\n\x04type\x18\x02 \x01(\x0b\x32\x15.forge_abi.WalletType\x12\x0f\n\x07moniker\x18\x03 \x01(\t\"q\n\x14ResponseCreateWallet\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\r\n\x05token\x18\x02 \x01(\t\x12%\n\x06wallet\x18\x03 \x01(\x0b\x32\x15.forge_abi.WalletInfo\"8\n\x11RequestLoadWallet\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x12\n\npassphrase\x18\x02 \x01(\t\"o\n\x12ResponseLoadWallet\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\r\n\x05token\x18\x02 \x01(\t\x12%\n\x06wallet\x18\x03 \x01(\x0b\x32\x15.forge_abi.WalletInfo\"n\n\x14RequestRecoverWallet\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\x0c\x12#\n\x04type\x18\x02 \x01(\x0b\x32\x15.forge_abi.WalletType\x12\x12\n\npassphrase\x18\x03 \x01(\t\x12\x0f\n\x07moniker\x18\x04 \x01(\t\"r\n\x15ResponseRecoverWallet\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\r\n\x05token\x18\x02 \x01(\t\x12%\n\x06wallet\x18\x03 \x01(\x0b\x32\x15.forge_abi.WalletInfo\"\x13\n\x11RequestListWallet\"J\n\x12ResponseListWallet\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\x0f\n\x07\x61\x64\x64ress\x18\x02 \x01(\t\"&\n\x13RequestRemoveWallet\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\";\n\x14ResponseRemoveWallet\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\"\'\n\x12RequestDeclareNode\x12\x11\n\tvalidator\x18\x01 \x01(\x08\"a\n\x13ResponseDeclareNode\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12%\n\x06wallet\x18\x03 \x01(\x0b\x32\x15.forge_abi.WalletInfo\"G\n\x16RequestGetAccountState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x0c\n\x04keys\x18\x02 \x03(\t\x12\x0e\n\x06height\x18\x03 \x01(\x04\"f\n\x17ResponseGetAccountState\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12&\n\x05state\x18\x02 \x01(\x0b\x32\x17.forge_abi.AccountState\"E\n\x14RequestGetAssetState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x0c\n\x04keys\x18\x02 \x03(\t\x12\x0e\n\x06height\x18\x03 \x01(\x04\"b\n\x15ResponseGetAssetState\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12$\n\x05state\x18\x02 \x01(\x0b\x32\x15.forge_abi.AssetState\"E\n\x14RequestGetStakeState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x0c\n\x04keys\x18\x02 \x03(\t\x12\x0e\n\x06height\x18\x03 \x01(\x04\"b\n\x15ResponseGetStakeState\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12$\n\x05state\x18\x02 \x01(\x0b\x32\x15.forge_abi.StakeState\"4\n\x14RequestGetForgeState\x12\x0c\n\x04keys\x18\x01 \x03(\t\x12\x0e\n\x06height\x18\x03 \x01(\x04\"b\n\x15ResponseGetForgeState\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12$\n\x05state\x18\x02 \x01(\x0b\x32\x15.forge_abi.ForgeState\"!\n\x10RequestStoreFile\x12\r\n\x05\x63hunk\x18\x01 \x01(\x0c\"F\n\x11ResponseStoreFile\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\x0c\n\x04hash\x18\x02 \x01(\t\"\x1f\n\x0fRequestLoadFile\x12\x0c\n\x04hash\x18\x01 \x01(\t\"F\n\x10ResponseLoadFile\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\r\n\x05\x63hunk\x18\x02 \x01(\x0c\"\x1e\n\x0eRequestPinFile\x12\x0c\n\x04hash\x18\x01 \x01(\t\"6\n\x0fResponsePinFile\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\"\x15\n\x13RequestGetChainInfo\"_\n\x14ResponseGetChainInfo\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\"\n\x04info\x18\x02 \x01(\x0b\x32\x14.forge_abi.ChainInfo\"\x14\n\x12RequestGetNodeInfo\"]\n\x13ResponseGetNodeInfo\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12!\n\x04info\x18\x02 \x01(\x0b\x32\x13.forge_abi.NodeInfo\"+\n\rRequestSearch\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"^\n\x0eResponseSearch\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\'\n\x03txs\x18\x02 \x03(\x0b\x32\x1a.forge_abi.TransactionInfo\"@\n\x18RequestGetUnconfirmedTxs\x12$\n\x06paging\x18\x01 \x01(\x0b\x32\x14.forge_abi.PageInput\"\x97\x01\n\x19ResponseGetUnconfirmedTxs\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12!\n\x04page\x18\x02 \x01(\x0b\x32\x13.forge_abi.PageInfo\x12\x32\n\x0funconfirmed_txs\x18\x03 \x01(\x0b\x32\x19.forge_abi.UnconfirmedTxs\"\x13\n\x11RequestGetNetInfo\"_\n\x12ResponseGetNetInfo\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12$\n\x08net_info\x18\x02 \x01(\x0b\x32\x12.forge_abi.NetInfo\"\x1a\n\x18RequestGetValidatorsInfo\"t\n\x19ResponseGetValidatorsInfo\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\x32\n\x0fvalidators_info\x18\x02 \x01(\x0b\x32\x19.forge_abi.ValidatorsInfo\"F\n\x10RequestSubscribe\x12\"\n\x04type\x18\x01 \x01(\x0e\x32\x14.forge_abi.TopicType\x12\x0e\n\x06\x66ilter\x18\x02 \x01(\t\"\xa6\x07\n\x11ResponseSubscribe\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\x0f\n\x05topic\x18\x02 \x01(\tH\x00\x12*\n\x08transfer\x18\x03 \x01(\x0b\x32\x16.forge_abi.TransactionH\x00\x12\x31\n\x0f\x61\x63\x63ount_migrate\x18\x04 \x01(\x0b\x32\x16.forge_abi.TransactionH\x00\x12)\n\x07\x63onfirm\x18\x05 \x01(\x0b\x32\x16.forge_abi.TransactionH\x00\x12.\n\x0c\x63reate_asset\x18\x06 \x01(\x0b\x32\x16.forge_abi.TransactionH\x00\x12*\n\x08\x65xchange\x18\x07 \x01(\x0b\x32\x16.forge_abi.TransactionH\x00\x12(\n\x06revoke\x18\x08 \x01(\x0b\x32\x16.forge_abi.TransactionH\x00\x12\x35\n\x0b\x62\x65gin_block\x18\x10 \x01(\x0b\x32\x1e.abci_vendor.RequestBeginBlockH\x00\x12\x31\n\tend_block\x18\x11 \x01(\x0b\x32\x1c.abci_vendor.RequestEndBlockH\x00\x12)\n\x07\x64\x65\x63lare\x18\x13 \x01(\x0b\x32\x16.forge_abi.TransactionH\x00\x12.\n\x0cupdate_asset\x18\x14 \x01(\x0b\x32\x16.forge_abi.TransactionH\x00\x12\x33\n\x11\x63onsensus_upgrade\x18\x15 \x01(\x0b\x32\x16.forge_abi.TransactionH\x00\x12.\n\x0c\x64\x65\x63lare_file\x18\x16 \x01(\x0b\x32\x16.forge_abi.TransactionH\x00\x12-\n\x0bsys_upgrade\x18\x17 \x01(\x0b\x32\x16.forge_abi.TransactionH\x00\x12\'\n\x05stake\x18\x18 \x01(\x0b\x32\x16.forge_abi.TransactionH\x00\x12\x30\n\raccount_state\x18\x81\x01 \x01(\x0b\x32\x16.forge_abi.TransactionH\x00\x12.\n\x0b\x61sset_state\x18\x82\x01 \x01(\x0b\x32\x16.forge_abi.TransactionH\x00\x12.\n\x0b\x66orge_state\x18\x83\x01 \x01(\x0b\x32\x16.forge_abi.TransactionH\x00\x12.\n\x0bstake_state\x18\x84\x01 \x01(\x0b\x32\x16.forge_abi.TransactionH\x00\x42\x07\n\x05value\"#\n\x12RequestUnsubscribe\x12\r\n\x05topic\x18\x01 \x01(\t\":\n\x13ResponseUnsubscribe\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\"\x12\n\x10RequestGetConfig\"H\n\x11ResponseGetConfig\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\x0e\n\x06\x63onfig\x18\x02 \x01(\t\"-\n\x05\x42yDay\x12\x12\n\nstart_date\x18\x01 \x01(\t\x12\x10\n\x08\x65nd_date\x18\x02 \x01(\t\"\x16\n\x06\x42yHour\x12\x0c\n\x04\x64\x61te\x18\x01 \x01(\t\"h\n\x14RequestGetForgeStats\x12$\n\x08\x64\x61y_info\x18\x01 \x01(\x0b\x32\x10.forge_abi.ByDayH\x00\x12!\n\x04\x64\x61te\x18\x02 \x01(\x0b\x32\x11.forge_abi.ByHourH\x00\x42\x07\n\x05value\"h\n\x15ResponseGetForgeStats\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12*\n\x0b\x66orge_stats\x18\x02 \x01(\x0b\x32\x15.forge_abi.ForgeStats\"\xfd\x01\n\x17RequestListTransactions\x12$\n\x06paging\x18\x01 \x01(\x0b\x32\x14.forge_abi.PageInput\x12*\n\x0btime_filter\x18\x02 \x01(\x0b\x32\x15.forge_abi.TimeFilter\x12\x30\n\x0e\x61\x64\x64ress_filter\x18\x03 \x01(\x0b\x32\x18.forge_abi.AddressFilter\x12*\n\x0btype_filter\x18\x04 \x01(\x0b\x32\x15.forge_abi.TypeFilter\x12\x32\n\x0fvalidity_filter\x18\x05 \x01(\x0b\x32\x19.forge_abi.ValidityFilter\"\x97\x01\n\x18ResponseListTransactions\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12!\n\x04page\x18\x02 \x01(\x0b\x32\x13.forge_abi.PageInfo\x12\x33\n\x0ctransactions\x18\x03 \x03(\x0b\x32\x1d.forge_abi.IndexedTransaction\"\x83\x01\n\x16RequestGetAssetAddress\x12\x16\n\x0esender_address\x18\x01 \x01(\t\x12%\n\x03itx\x18\x02 \x01(\x0b\x32\x18.forge_abi.CreateAssetTx\x12*\n\x0bwallet_type\x18\x03 \x01(\x0b\x32\x15.forge_abi.WalletType\"U\n\x17ResponseGetAssetAddress\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\x15\n\rasset_address\x18\x02 \x01(\t\"U\n\x0fRequestSignData\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\x0c\x12%\n\x06wallet\x18\x02 \x01(\x0b\x32\x15.forge_abi.WalletInfo\x12\r\n\x05token\x18\x03 \x01(\t\"J\n\x10ResponseSignData\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12\x11\n\tsignature\x18\x02 \x01(\x0c\"P\n\x11RequestListAssets\x12$\n\x06paging\x18\x01 \x01(\x0b\x32\x14.forge_abi.PageInput\x12\x15\n\rowner_address\x18\x02 \x01(\t\"\x8a\x01\n\x12ResponseListAssets\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12!\n\x04page\x18\x02 \x01(\x0b\x32\x13.forge_abi.PageInfo\x12,\n\x06\x61ssets\x18\x03 \x03(\x0b\x32\x1c.forge_abi.IndexedAssetState\"k\n\x11RequestListStakes\x12$\n\x06paging\x18\x01 \x01(\x0b\x32\x14.forge_abi.PageInput\x12\x30\n\x0e\x61\x64\x64ress_filter\x18\x02 \x01(\x0b\x32\x18.forge_abi.AddressFilter\"\x8a\x01\n\x12ResponseListStakes\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12!\n\x04page\x18\x02 \x01(\x0b\x32\x13.forge_abi.PageInfo\x12,\n\x06stakes\x18\x03 \x03(\x0b\x32\x1c.forge_abi.IndexedStakeState\"+\n\x12RequestListAccount\x12\x15\n\rowner_address\x18\x01 \x01(\t\"k\n\x13ResponseListAccount\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12/\n\x07\x61\x63\x63ount\x18\x02 \x01(\x0b\x32\x1e.forge_abi.IndexedAccountState\">\n\x16RequestListTopAccounts\x12$\n\x06paging\x18\x01 \x01(\x0b\x32\x14.forge_abi.PageInput\"\x93\x01\n\x17ResponseListTopAccounts\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12!\n\x04page\x18\x02 \x01(\x0b\x32\x13.forge_abi.PageInfo\x12\x30\n\x08\x61\x63\x63ounts\x18\x03 \x03(\x0b\x32\x1e.forge_abi.IndexedAccountState\"U\n\x1cRequestListAssetTransactions\x12$\n\x06paging\x18\x01 \x01(\x0b\x32\x14.forge_abi.PageInput\x12\x0f\n\x07\x61\x64\x64ress\x18\x02 \x01(\t\"\x9c\x01\n\x1dResponseListAssetTransactions\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12!\n\x04page\x18\x02 \x01(\x0b\x32\x13.forge_abi.PageInfo\x12\x33\n\x0ctransactions\x18\x03 \x03(\x0b\x32\x1d.forge_abi.IndexedTransaction\"\x8e\x02\n\x11RequestListBlocks\x12$\n\x06paging\x18\x01 \x01(\x0b\x32\x14.forge_abi.PageInput\x12\x10\n\x08proposer\x18\x02 \x01(\t\x12*\n\x0btime_filter\x18\x03 \x01(\x0b\x32\x15.forge_abi.TimeFilter\x12-\n\rheight_filter\x18\x04 \x01(\x0b\x32\x16.forge_abi.RangeFilter\x12.\n\x0enum_txs_filter\x18\x05 \x01(\x0b\x32\x16.forge_abi.RangeFilter\x12\x36\n\x16num_invalid_txs_filter\x18\x06 \x01(\x0b\x32\x16.forge_abi.RangeFilter\"\x85\x01\n\x12ResponseListBlocks\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12!\n\x04page\x18\x02 \x01(\x0b\x32\x13.forge_abi.PageInfo\x12\'\n\x06\x62locks\x18\x03 \x03(\x0b\x32\x17.forge_abi.IndexedBlock\"\x18\n\x16RequestGetHealthStatus\"n\n\x17ResponseGetHealthStatus\x12#\n\x04\x63ode\x18\x01 \x01(\x0e\x32\x15.forge_abi.StatusCode\x12.\n\rhealth_status\x18\x02 \x01(\x0b\x32\x17.forge_abi.HealthStatusb\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_any__pb2.DESCRIPTOR,vendor__pb2.DESCRIPTOR,enum__pb2.DESCRIPTOR,type__pb2.DESCRIPTOR,state__pb2.DESCRIPTOR,tx__pb2.DESCRIPTOR,trace__type__pb2.DESCRIPTOR,])
 
@@ -463,22 +463,15 @@ _REQUESTGETBLOCKS = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='min_height', full_name='forge_abi.RequestGetBlocks.min_height', index=1,
-      number=2, type=4, cpp_type=4, label=1,
-      has_default_value=False, default_value=0,
+      name='height_filter', full_name='forge_abi.RequestGetBlocks.height_filter', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='max_height', full_name='forge_abi.RequestGetBlocks.max_height', index=2,
-      number=3, type=4, cpp_type=4, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='empty_excluded', full_name='forge_abi.RequestGetBlocks.empty_excluded', index=3,
-      number=4, type=8, cpp_type=7, label=1,
+      name='empty_excluded', full_name='forge_abi.RequestGetBlocks.empty_excluded', index=2,
+      number=3, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -496,7 +489,7 @@ _REQUESTGETBLOCKS = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=1047,
-  serialized_end=1167,
+  serialized_end=1174,
 )
 
 
@@ -540,8 +533,8 @@ _RESPONSEGETBLOCKS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1170,
-  serialized_end=1299,
+  serialized_start=1177,
+  serialized_end=1312,
 )
 
 
@@ -585,8 +578,8 @@ _REQUESTCREATEWALLET = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1301,
-  serialized_end=1396,
+  serialized_start=1314,
+  serialized_end=1409,
 )
 
 
@@ -630,8 +623,8 @@ _RESPONSECREATEWALLET = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1398,
-  serialized_end=1511,
+  serialized_start=1411,
+  serialized_end=1524,
 )
 
 
@@ -668,8 +661,8 @@ _REQUESTLOADWALLET = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1513,
-  serialized_end=1569,
+  serialized_start=1526,
+  serialized_end=1582,
 )
 
 
@@ -713,8 +706,8 @@ _RESPONSELOADWALLET = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1571,
-  serialized_end=1682,
+  serialized_start=1584,
+  serialized_end=1695,
 )
 
 
@@ -765,8 +758,8 @@ _REQUESTRECOVERWALLET = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1684,
-  serialized_end=1794,
+  serialized_start=1697,
+  serialized_end=1807,
 )
 
 
@@ -810,8 +803,8 @@ _RESPONSERECOVERWALLET = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1796,
-  serialized_end=1910,
+  serialized_start=1809,
+  serialized_end=1923,
 )
 
 
@@ -834,8 +827,8 @@ _REQUESTLISTWALLET = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1912,
-  serialized_end=1931,
+  serialized_start=1925,
+  serialized_end=1944,
 )
 
 
@@ -872,8 +865,8 @@ _RESPONSELISTWALLET = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1933,
-  serialized_end=2007,
+  serialized_start=1946,
+  serialized_end=2020,
 )
 
 
@@ -903,8 +896,8 @@ _REQUESTREMOVEWALLET = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2009,
-  serialized_end=2047,
+  serialized_start=2022,
+  serialized_end=2060,
 )
 
 
@@ -934,8 +927,8 @@ _RESPONSEREMOVEWALLET = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2049,
-  serialized_end=2108,
+  serialized_start=2062,
+  serialized_end=2121,
 )
 
 
@@ -965,8 +958,8 @@ _REQUESTDECLARENODE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2110,
-  serialized_end=2149,
+  serialized_start=2123,
+  serialized_end=2162,
 )
 
 
@@ -1003,8 +996,8 @@ _RESPONSEDECLARENODE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2151,
-  serialized_end=2248,
+  serialized_start=2164,
+  serialized_end=2261,
 )
 
 
@@ -1048,8 +1041,8 @@ _REQUESTGETACCOUNTSTATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2250,
-  serialized_end=2321,
+  serialized_start=2263,
+  serialized_end=2334,
 )
 
 
@@ -1086,8 +1079,8 @@ _RESPONSEGETACCOUNTSTATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2323,
-  serialized_end=2425,
+  serialized_start=2336,
+  serialized_end=2438,
 )
 
 
@@ -1131,8 +1124,8 @@ _REQUESTGETASSETSTATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2427,
-  serialized_end=2496,
+  serialized_start=2440,
+  serialized_end=2509,
 )
 
 
@@ -1169,8 +1162,8 @@ _RESPONSEGETASSETSTATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2498,
-  serialized_end=2596,
+  serialized_start=2511,
+  serialized_end=2609,
 )
 
 
@@ -1214,8 +1207,8 @@ _REQUESTGETSTAKESTATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2598,
-  serialized_end=2667,
+  serialized_start=2611,
+  serialized_end=2680,
 )
 
 
@@ -1252,8 +1245,8 @@ _RESPONSEGETSTAKESTATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2669,
-  serialized_end=2767,
+  serialized_start=2682,
+  serialized_end=2780,
 )
 
 
@@ -1290,8 +1283,8 @@ _REQUESTGETFORGESTATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2769,
-  serialized_end=2821,
+  serialized_start=2782,
+  serialized_end=2834,
 )
 
 
@@ -1328,8 +1321,8 @@ _RESPONSEGETFORGESTATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2823,
-  serialized_end=2921,
+  serialized_start=2836,
+  serialized_end=2934,
 )
 
 
@@ -1359,8 +1352,8 @@ _REQUESTSTOREFILE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2923,
-  serialized_end=2956,
+  serialized_start=2936,
+  serialized_end=2969,
 )
 
 
@@ -1397,8 +1390,8 @@ _RESPONSESTOREFILE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2958,
-  serialized_end=3028,
+  serialized_start=2971,
+  serialized_end=3041,
 )
 
 
@@ -1428,8 +1421,8 @@ _REQUESTLOADFILE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3030,
-  serialized_end=3061,
+  serialized_start=3043,
+  serialized_end=3074,
 )
 
 
@@ -1466,8 +1459,8 @@ _RESPONSELOADFILE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3063,
-  serialized_end=3133,
+  serialized_start=3076,
+  serialized_end=3146,
 )
 
 
@@ -1497,8 +1490,8 @@ _REQUESTPINFILE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3135,
-  serialized_end=3165,
+  serialized_start=3148,
+  serialized_end=3178,
 )
 
 
@@ -1528,8 +1521,8 @@ _RESPONSEPINFILE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3167,
-  serialized_end=3221,
+  serialized_start=3180,
+  serialized_end=3234,
 )
 
 
@@ -1552,8 +1545,8 @@ _REQUESTGETCHAININFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3223,
-  serialized_end=3244,
+  serialized_start=3236,
+  serialized_end=3257,
 )
 
 
@@ -1590,8 +1583,8 @@ _RESPONSEGETCHAININFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3246,
-  serialized_end=3341,
+  serialized_start=3259,
+  serialized_end=3354,
 )
 
 
@@ -1614,8 +1607,8 @@ _REQUESTGETNODEINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3343,
-  serialized_end=3363,
+  serialized_start=3356,
+  serialized_end=3376,
 )
 
 
@@ -1652,8 +1645,8 @@ _RESPONSEGETNODEINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3365,
-  serialized_end=3458,
+  serialized_start=3378,
+  serialized_end=3471,
 )
 
 
@@ -1690,8 +1683,8 @@ _REQUESTSEARCH = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3460,
-  serialized_end=3503,
+  serialized_start=3473,
+  serialized_end=3516,
 )
 
 
@@ -1728,8 +1721,8 @@ _RESPONSESEARCH = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3505,
-  serialized_end=3599,
+  serialized_start=3518,
+  serialized_end=3612,
 )
 
 
@@ -1741,9 +1734,9 @@ _REQUESTGETUNCONFIRMEDTXS = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='limit', full_name='forge_abi.RequestGetUnconfirmedTxs.limit', index=0,
-      number=1, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
+      name='paging', full_name='forge_abi.RequestGetUnconfirmedTxs.paging', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -1759,8 +1752,8 @@ _REQUESTGETUNCONFIRMEDTXS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3601,
-  serialized_end=3642,
+  serialized_start=3614,
+  serialized_end=3678,
 )
 
 
@@ -1779,8 +1772,15 @@ _RESPONSEGETUNCONFIRMEDTXS = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='unconfirmed_txs', full_name='forge_abi.ResponseGetUnconfirmedTxs.unconfirmed_txs', index=1,
+      name='page', full_name='forge_abi.ResponseGetUnconfirmedTxs.page', index=1,
       number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='unconfirmed_txs', full_name='forge_abi.ResponseGetUnconfirmedTxs.unconfirmed_txs', index=2,
+      number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -1797,8 +1797,8 @@ _RESPONSEGETUNCONFIRMEDTXS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3644,
-  serialized_end=3760,
+  serialized_start=3681,
+  serialized_end=3832,
 )
 
 
@@ -1821,8 +1821,8 @@ _REQUESTGETNETINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3762,
-  serialized_end=3781,
+  serialized_start=3834,
+  serialized_end=3853,
 )
 
 
@@ -1859,8 +1859,8 @@ _RESPONSEGETNETINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3783,
-  serialized_end=3878,
+  serialized_start=3855,
+  serialized_end=3950,
 )
 
 
@@ -1883,8 +1883,8 @@ _REQUESTGETVALIDATORSINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3880,
-  serialized_end=3906,
+  serialized_start=3952,
+  serialized_end=3978,
 )
 
 
@@ -1921,8 +1921,8 @@ _RESPONSEGETVALIDATORSINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3908,
-  serialized_end=4024,
+  serialized_start=3980,
+  serialized_end=4096,
 )
 
 
@@ -1959,8 +1959,8 @@ _REQUESTSUBSCRIBE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4026,
-  serialized_end=4096,
+  serialized_start=4098,
+  serialized_end=4168,
 )
 
 
@@ -2126,8 +2126,8 @@ _RESPONSESUBSCRIBE = _descriptor.Descriptor(
       name='value', full_name='forge_abi.ResponseSubscribe.value',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=4099,
-  serialized_end=5033,
+  serialized_start=4171,
+  serialized_end=5105,
 )
 
 
@@ -2157,8 +2157,8 @@ _REQUESTUNSUBSCRIBE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5035,
-  serialized_end=5070,
+  serialized_start=5107,
+  serialized_end=5142,
 )
 
 
@@ -2188,8 +2188,8 @@ _RESPONSEUNSUBSCRIBE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5072,
-  serialized_end=5130,
+  serialized_start=5144,
+  serialized_end=5202,
 )
 
 
@@ -2212,8 +2212,8 @@ _REQUESTGETCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5132,
-  serialized_end=5150,
+  serialized_start=5204,
+  serialized_end=5222,
 )
 
 
@@ -2250,8 +2250,8 @@ _RESPONSEGETCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5152,
-  serialized_end=5224,
+  serialized_start=5224,
+  serialized_end=5296,
 )
 
 
@@ -2288,8 +2288,8 @@ _BYDAY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5226,
-  serialized_end=5271,
+  serialized_start=5298,
+  serialized_end=5343,
 )
 
 
@@ -2319,27 +2319,27 @@ _BYHOUR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5273,
-  serialized_end=5295,
+  serialized_start=5345,
+  serialized_end=5367,
 )
 
 
-_REQUESTGETFORGESTATISTICS = _descriptor.Descriptor(
-  name='RequestGetForgeStatistics',
-  full_name='forge_abi.RequestGetForgeStatistics',
+_REQUESTGETFORGESTATS = _descriptor.Descriptor(
+  name='RequestGetForgeStats',
+  full_name='forge_abi.RequestGetForgeStats',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='day_info', full_name='forge_abi.RequestGetForgeStatistics.day_info', index=0,
+      name='day_info', full_name='forge_abi.RequestGetForgeStats.day_info', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='date', full_name='forge_abi.RequestGetForgeStatistics.date', index=1,
+      name='date', full_name='forge_abi.RequestGetForgeStats.date', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -2357,30 +2357,30 @@ _REQUESTGETFORGESTATISTICS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
     _descriptor.OneofDescriptor(
-      name='value', full_name='forge_abi.RequestGetForgeStatistics.value',
+      name='value', full_name='forge_abi.RequestGetForgeStats.value',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=5297,
-  serialized_end=5406,
+  serialized_start=5369,
+  serialized_end=5473,
 )
 
 
-_RESPONSEGETFORGESTATISTICS = _descriptor.Descriptor(
-  name='ResponseGetForgeStatistics',
-  full_name='forge_abi.ResponseGetForgeStatistics',
+_RESPONSEGETFORGESTATS = _descriptor.Descriptor(
+  name='ResponseGetForgeStats',
+  full_name='forge_abi.ResponseGetForgeStats',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='code', full_name='forge_abi.ResponseGetForgeStatistics.code', index=0,
+      name='code', full_name='forge_abi.ResponseGetForgeStats.code', index=0,
       number=1, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='forge_statistics', full_name='forge_abi.ResponseGetForgeStatistics.forge_statistics', index=1,
+      name='forge_stats', full_name='forge_abi.ResponseGetForgeStats.forge_stats', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -2398,8 +2398,8 @@ _RESPONSEGETFORGESTATISTICS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5408,
-  serialized_end=5527,
+  serialized_start=5475,
+  serialized_end=5579,
 )
 
 
@@ -2438,6 +2438,13 @@ _REQUESTLISTTRANSACTIONS = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='validity_filter', full_name='forge_abi.RequestListTransactions.validity_filter', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -2450,8 +2457,8 @@ _REQUESTLISTTRANSACTIONS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5530,
-  serialized_end=5731,
+  serialized_start=5582,
+  serialized_end=5835,
 )
 
 
@@ -2495,8 +2502,8 @@ _RESPONSELISTTRANSACTIONS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5734,
-  serialized_end=5885,
+  serialized_start=5838,
+  serialized_end=5989,
 )
 
 
@@ -2540,8 +2547,8 @@ _REQUESTGETASSETADDRESS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5888,
-  serialized_end=6019,
+  serialized_start=5992,
+  serialized_end=6123,
 )
 
 
@@ -2578,8 +2585,8 @@ _RESPONSEGETASSETADDRESS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6021,
-  serialized_end=6106,
+  serialized_start=6125,
+  serialized_end=6210,
 )
 
 
@@ -2623,8 +2630,8 @@ _REQUESTSIGNDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6108,
-  serialized_end=6193,
+  serialized_start=6212,
+  serialized_end=6297,
 )
 
 
@@ -2661,27 +2668,27 @@ _RESPONSESIGNDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6195,
-  serialized_end=6269,
+  serialized_start=6299,
+  serialized_end=6373,
 )
 
 
-_REQUESTGETASSETS = _descriptor.Descriptor(
-  name='RequestGetAssets',
-  full_name='forge_abi.RequestGetAssets',
+_REQUESTLISTASSETS = _descriptor.Descriptor(
+  name='RequestListAssets',
+  full_name='forge_abi.RequestListAssets',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='paging', full_name='forge_abi.RequestGetAssets.paging', index=0,
+      name='paging', full_name='forge_abi.RequestListAssets.paging', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='owner_address', full_name='forge_abi.RequestGetAssets.owner_address', index=1,
+      name='owner_address', full_name='forge_abi.RequestListAssets.owner_address', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -2699,34 +2706,34 @@ _REQUESTGETASSETS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6271,
-  serialized_end=6350,
+  serialized_start=6375,
+  serialized_end=6455,
 )
 
 
-_RESPONSEGETASSETS = _descriptor.Descriptor(
-  name='ResponseGetAssets',
-  full_name='forge_abi.ResponseGetAssets',
+_RESPONSELISTASSETS = _descriptor.Descriptor(
+  name='ResponseListAssets',
+  full_name='forge_abi.ResponseListAssets',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='code', full_name='forge_abi.ResponseGetAssets.code', index=0,
+      name='code', full_name='forge_abi.ResponseListAssets.code', index=0,
       number=1, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='page', full_name='forge_abi.ResponseGetAssets.page', index=1,
+      name='page', full_name='forge_abi.ResponseListAssets.page', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='assets', full_name='forge_abi.ResponseGetAssets.assets', index=2,
+      name='assets', full_name='forge_abi.ResponseListAssets.assets', index=2,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -2744,27 +2751,27 @@ _RESPONSEGETASSETS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6353,
-  serialized_end=6490,
+  serialized_start=6458,
+  serialized_end=6596,
 )
 
 
-_REQUESTGETSTAKES = _descriptor.Descriptor(
-  name='RequestGetStakes',
-  full_name='forge_abi.RequestGetStakes',
+_REQUESTLISTSTAKES = _descriptor.Descriptor(
+  name='RequestListStakes',
+  full_name='forge_abi.RequestListStakes',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='paging', full_name='forge_abi.RequestGetStakes.paging', index=0,
+      name='paging', full_name='forge_abi.RequestListStakes.paging', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='address_filter', full_name='forge_abi.RequestGetStakes.address_filter', index=1,
+      name='address_filter', full_name='forge_abi.RequestListStakes.address_filter', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -2782,34 +2789,34 @@ _REQUESTGETSTAKES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6492,
-  serialized_end=6598,
+  serialized_start=6598,
+  serialized_end=6705,
 )
 
 
-_RESPONSEGETSTAKES = _descriptor.Descriptor(
-  name='ResponseGetStakes',
-  full_name='forge_abi.ResponseGetStakes',
+_RESPONSELISTSTAKES = _descriptor.Descriptor(
+  name='ResponseListStakes',
+  full_name='forge_abi.ResponseListStakes',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='code', full_name='forge_abi.ResponseGetStakes.code', index=0,
+      name='code', full_name='forge_abi.ResponseListStakes.code', index=0,
       number=1, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='page', full_name='forge_abi.ResponseGetStakes.page', index=1,
+      name='page', full_name='forge_abi.ResponseListStakes.page', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='stakes', full_name='forge_abi.ResponseGetStakes.stakes', index=2,
+      name='stakes', full_name='forge_abi.ResponseListStakes.stakes', index=2,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -2827,20 +2834,89 @@ _RESPONSEGETSTAKES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6601,
-  serialized_end=6738,
+  serialized_start=6708,
+  serialized_end=6846,
 )
 
 
-_REQUESTGETTOPACCOUNTS = _descriptor.Descriptor(
-  name='RequestGetTopAccounts',
-  full_name='forge_abi.RequestGetTopAccounts',
+_REQUESTLISTACCOUNT = _descriptor.Descriptor(
+  name='RequestListAccount',
+  full_name='forge_abi.RequestListAccount',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='paging', full_name='forge_abi.RequestGetTopAccounts.paging', index=0,
+      name='owner_address', full_name='forge_abi.RequestListAccount.owner_address', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=6848,
+  serialized_end=6891,
+)
+
+
+_RESPONSELISTACCOUNT = _descriptor.Descriptor(
+  name='ResponseListAccount',
+  full_name='forge_abi.ResponseListAccount',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='code', full_name='forge_abi.ResponseListAccount.code', index=0,
+      number=1, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='account', full_name='forge_abi.ResponseListAccount.account', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=6893,
+  serialized_end=7000,
+)
+
+
+_REQUESTLISTTOPACCOUNTS = _descriptor.Descriptor(
+  name='RequestListTopAccounts',
+  full_name='forge_abi.RequestListTopAccounts',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='paging', full_name='forge_abi.RequestListTopAccounts.paging', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -2858,34 +2934,34 @@ _REQUESTGETTOPACCOUNTS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6740,
-  serialized_end=6801,
+  serialized_start=7002,
+  serialized_end=7064,
 )
 
 
-_RESPONSEGETTOPACCOUNTS = _descriptor.Descriptor(
-  name='ResponseGetTopAccounts',
-  full_name='forge_abi.ResponseGetTopAccounts',
+_RESPONSELISTTOPACCOUNTS = _descriptor.Descriptor(
+  name='ResponseListTopAccounts',
+  full_name='forge_abi.ResponseListTopAccounts',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='code', full_name='forge_abi.ResponseGetTopAccounts.code', index=0,
+      name='code', full_name='forge_abi.ResponseListTopAccounts.code', index=0,
       number=1, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='page', full_name='forge_abi.ResponseGetTopAccounts.page', index=1,
+      name='page', full_name='forge_abi.ResponseListTopAccounts.page', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='accounts', full_name='forge_abi.ResponseGetTopAccounts.accounts', index=2,
+      name='accounts', full_name='forge_abi.ResponseListTopAccounts.accounts', index=2,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -2903,8 +2979,8 @@ _RESPONSEGETTOPACCOUNTS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6804,
-  serialized_end=6950,
+  serialized_start=7067,
+  serialized_end=7214,
 )
 
 
@@ -2941,8 +3017,8 @@ _REQUESTLISTASSETTRANSACTIONS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6952,
-  serialized_end=7037,
+  serialized_start=7216,
+  serialized_end=7301,
 )
 
 
@@ -2986,8 +3062,8 @@ _RESPONSELISTASSETTRANSACTIONS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7040,
-  serialized_end=7196,
+  serialized_start=7304,
+  serialized_end=7460,
 )
 
 
@@ -3052,8 +3128,8 @@ _REQUESTLISTBLOCKS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7199,
-  serialized_end=7479,
+  serialized_start=7463,
+  serialized_end=7733,
 )
 
 
@@ -3097,98 +3173,8 @@ _RESPONSELISTBLOCKS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7482,
-  serialized_end=7615,
-)
-
-
-_REQUESTLISTASSETS = _descriptor.Descriptor(
-  name='RequestListAssets',
-  full_name='forge_abi.RequestListAssets',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='paging', full_name='forge_abi.RequestListAssets.paging', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='owner_address', full_name='forge_abi.RequestListAssets.owner_address', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=7617,
-  serialized_end=7697,
-)
-
-
-_RESPONSELISTASSETS = _descriptor.Descriptor(
-  name='ResponseListAssets',
-  full_name='forge_abi.ResponseListAssets',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='code', full_name='forge_abi.ResponseListAssets.code', index=0,
-      number=1, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='page', full_name='forge_abi.ResponseListAssets.page', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='account', full_name='forge_abi.ResponseListAssets.account', index=2,
-      number=3, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='assets', full_name='forge_abi.ResponseListAssets.assets', index=3,
-      number=4, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=7700,
-  serialized_end=7887,
+  serialized_start=7736,
+  serialized_end=7869,
 )
 
 
@@ -3211,8 +3197,8 @@ _REQUESTGETHEALTHSTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7889,
-  serialized_end=7913,
+  serialized_start=7871,
+  serialized_end=7895,
 )
 
 
@@ -3249,8 +3235,8 @@ _RESPONSEGETHEALTHSTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7915,
-  serialized_end=8025,
+  serialized_start=7897,
+  serialized_end=8007,
 )
 
 _REQUESTCREATETX.fields_by_name['itx'].message_type = google_dot_protobuf_dot_any__pb2._ANY
@@ -3270,9 +3256,10 @@ _RESPONSEGETTX.fields_by_name['info'].message_type = type__pb2._TRANSACTIONINFO
 _RESPONSEGETBLOCK.fields_by_name['code'].enum_type = enum__pb2._STATUSCODE
 _RESPONSEGETBLOCK.fields_by_name['block'].message_type = type__pb2._BLOCKINFO
 _REQUESTGETBLOCKS.fields_by_name['paging'].message_type = trace__type__pb2._PAGEINPUT
+_REQUESTGETBLOCKS.fields_by_name['height_filter'].message_type = trace__type__pb2._RANGEFILTER
 _RESPONSEGETBLOCKS.fields_by_name['code'].enum_type = enum__pb2._STATUSCODE
 _RESPONSEGETBLOCKS.fields_by_name['page'].message_type = trace__type__pb2._PAGEINFO
-_RESPONSEGETBLOCKS.fields_by_name['blocks'].message_type = type__pb2._BLOCKINFO
+_RESPONSEGETBLOCKS.fields_by_name['blocks'].message_type = type__pb2._BLOCKINFOSIMPLE
 _REQUESTCREATEWALLET.fields_by_name['type'].message_type = type__pb2._WALLETTYPE
 _RESPONSECREATEWALLET.fields_by_name['code'].enum_type = enum__pb2._STATUSCODE
 _RESPONSECREATEWALLET.fields_by_name['wallet'].message_type = type__pb2._WALLETINFO
@@ -3302,7 +3289,9 @@ _RESPONSEGETNODEINFO.fields_by_name['code'].enum_type = enum__pb2._STATUSCODE
 _RESPONSEGETNODEINFO.fields_by_name['info'].message_type = type__pb2._NODEINFO
 _RESPONSESEARCH.fields_by_name['code'].enum_type = enum__pb2._STATUSCODE
 _RESPONSESEARCH.fields_by_name['txs'].message_type = type__pb2._TRANSACTIONINFO
+_REQUESTGETUNCONFIRMEDTXS.fields_by_name['paging'].message_type = trace__type__pb2._PAGEINPUT
 _RESPONSEGETUNCONFIRMEDTXS.fields_by_name['code'].enum_type = enum__pb2._STATUSCODE
+_RESPONSEGETUNCONFIRMEDTXS.fields_by_name['page'].message_type = trace__type__pb2._PAGEINFO
 _RESPONSEGETUNCONFIRMEDTXS.fields_by_name['unconfirmed_txs'].message_type = type__pb2._UNCONFIRMEDTXS
 _RESPONSEGETNETINFO.fields_by_name['code'].enum_type = enum__pb2._STATUSCODE
 _RESPONSEGETNETINFO.fields_by_name['net_info'].message_type = type__pb2._NETINFO
@@ -3387,20 +3376,21 @@ _RESPONSESUBSCRIBE.oneofs_by_name['value'].fields.append(
 _RESPONSESUBSCRIBE.fields_by_name['stake_state'].containing_oneof = _RESPONSESUBSCRIBE.oneofs_by_name['value']
 _RESPONSEUNSUBSCRIBE.fields_by_name['code'].enum_type = enum__pb2._STATUSCODE
 _RESPONSEGETCONFIG.fields_by_name['code'].enum_type = enum__pb2._STATUSCODE
-_REQUESTGETFORGESTATISTICS.fields_by_name['day_info'].message_type = _BYDAY
-_REQUESTGETFORGESTATISTICS.fields_by_name['date'].message_type = _BYHOUR
-_REQUESTGETFORGESTATISTICS.oneofs_by_name['value'].fields.append(
-  _REQUESTGETFORGESTATISTICS.fields_by_name['day_info'])
-_REQUESTGETFORGESTATISTICS.fields_by_name['day_info'].containing_oneof = _REQUESTGETFORGESTATISTICS.oneofs_by_name['value']
-_REQUESTGETFORGESTATISTICS.oneofs_by_name['value'].fields.append(
-  _REQUESTGETFORGESTATISTICS.fields_by_name['date'])
-_REQUESTGETFORGESTATISTICS.fields_by_name['date'].containing_oneof = _REQUESTGETFORGESTATISTICS.oneofs_by_name['value']
-_RESPONSEGETFORGESTATISTICS.fields_by_name['code'].enum_type = enum__pb2._STATUSCODE
-_RESPONSEGETFORGESTATISTICS.fields_by_name['forge_statistics'].message_type = type__pb2._FORGESTATISTICS
+_REQUESTGETFORGESTATS.fields_by_name['day_info'].message_type = _BYDAY
+_REQUESTGETFORGESTATS.fields_by_name['date'].message_type = _BYHOUR
+_REQUESTGETFORGESTATS.oneofs_by_name['value'].fields.append(
+  _REQUESTGETFORGESTATS.fields_by_name['day_info'])
+_REQUESTGETFORGESTATS.fields_by_name['day_info'].containing_oneof = _REQUESTGETFORGESTATS.oneofs_by_name['value']
+_REQUESTGETFORGESTATS.oneofs_by_name['value'].fields.append(
+  _REQUESTGETFORGESTATS.fields_by_name['date'])
+_REQUESTGETFORGESTATS.fields_by_name['date'].containing_oneof = _REQUESTGETFORGESTATS.oneofs_by_name['value']
+_RESPONSEGETFORGESTATS.fields_by_name['code'].enum_type = enum__pb2._STATUSCODE
+_RESPONSEGETFORGESTATS.fields_by_name['forge_stats'].message_type = type__pb2._FORGESTATS
 _REQUESTLISTTRANSACTIONS.fields_by_name['paging'].message_type = trace__type__pb2._PAGEINPUT
 _REQUESTLISTTRANSACTIONS.fields_by_name['time_filter'].message_type = trace__type__pb2._TIMEFILTER
 _REQUESTLISTTRANSACTIONS.fields_by_name['address_filter'].message_type = trace__type__pb2._ADDRESSFILTER
 _REQUESTLISTTRANSACTIONS.fields_by_name['type_filter'].message_type = trace__type__pb2._TYPEFILTER
+_REQUESTLISTTRANSACTIONS.fields_by_name['validity_filter'].message_type = trace__type__pb2._VALIDITYFILTER
 _RESPONSELISTTRANSACTIONS.fields_by_name['code'].enum_type = enum__pb2._STATUSCODE
 _RESPONSELISTTRANSACTIONS.fields_by_name['page'].message_type = trace__type__pb2._PAGEINFO
 _RESPONSELISTTRANSACTIONS.fields_by_name['transactions'].message_type = trace__type__pb2._INDEXEDTRANSACTION
@@ -3409,36 +3399,33 @@ _REQUESTGETASSETADDRESS.fields_by_name['wallet_type'].message_type = type__pb2._
 _RESPONSEGETASSETADDRESS.fields_by_name['code'].enum_type = enum__pb2._STATUSCODE
 _REQUESTSIGNDATA.fields_by_name['wallet'].message_type = type__pb2._WALLETINFO
 _RESPONSESIGNDATA.fields_by_name['code'].enum_type = enum__pb2._STATUSCODE
-_REQUESTGETASSETS.fields_by_name['paging'].message_type = trace__type__pb2._PAGEINPUT
-_RESPONSEGETASSETS.fields_by_name['code'].enum_type = enum__pb2._STATUSCODE
-_RESPONSEGETASSETS.fields_by_name['page'].message_type = trace__type__pb2._PAGEINFO
-_RESPONSEGETASSETS.fields_by_name['assets'].message_type = trace__type__pb2._INDEXEDASSETSTATE
-_REQUESTGETSTAKES.fields_by_name['paging'].message_type = trace__type__pb2._PAGEINPUT
-_REQUESTGETSTAKES.fields_by_name['address_filter'].message_type = trace__type__pb2._ADDRESSFILTER
-_RESPONSEGETSTAKES.fields_by_name['code'].enum_type = enum__pb2._STATUSCODE
-_RESPONSEGETSTAKES.fields_by_name['page'].message_type = trace__type__pb2._PAGEINFO
-_RESPONSEGETSTAKES.fields_by_name['stakes'].message_type = trace__type__pb2._INDEXEDSTAKESTATE
-_REQUESTGETTOPACCOUNTS.fields_by_name['paging'].message_type = trace__type__pb2._PAGEINPUT
-_RESPONSEGETTOPACCOUNTS.fields_by_name['code'].enum_type = enum__pb2._STATUSCODE
-_RESPONSEGETTOPACCOUNTS.fields_by_name['page'].message_type = trace__type__pb2._PAGEINFO
-_RESPONSEGETTOPACCOUNTS.fields_by_name['accounts'].message_type = trace__type__pb2._INDEXEDACCOUNTSTATE
+_REQUESTLISTASSETS.fields_by_name['paging'].message_type = trace__type__pb2._PAGEINPUT
+_RESPONSELISTASSETS.fields_by_name['code'].enum_type = enum__pb2._STATUSCODE
+_RESPONSELISTASSETS.fields_by_name['page'].message_type = trace__type__pb2._PAGEINFO
+_RESPONSELISTASSETS.fields_by_name['assets'].message_type = trace__type__pb2._INDEXEDASSETSTATE
+_REQUESTLISTSTAKES.fields_by_name['paging'].message_type = trace__type__pb2._PAGEINPUT
+_REQUESTLISTSTAKES.fields_by_name['address_filter'].message_type = trace__type__pb2._ADDRESSFILTER
+_RESPONSELISTSTAKES.fields_by_name['code'].enum_type = enum__pb2._STATUSCODE
+_RESPONSELISTSTAKES.fields_by_name['page'].message_type = trace__type__pb2._PAGEINFO
+_RESPONSELISTSTAKES.fields_by_name['stakes'].message_type = trace__type__pb2._INDEXEDSTAKESTATE
+_RESPONSELISTACCOUNT.fields_by_name['code'].enum_type = enum__pb2._STATUSCODE
+_RESPONSELISTACCOUNT.fields_by_name['account'].message_type = trace__type__pb2._INDEXEDACCOUNTSTATE
+_REQUESTLISTTOPACCOUNTS.fields_by_name['paging'].message_type = trace__type__pb2._PAGEINPUT
+_RESPONSELISTTOPACCOUNTS.fields_by_name['code'].enum_type = enum__pb2._STATUSCODE
+_RESPONSELISTTOPACCOUNTS.fields_by_name['page'].message_type = trace__type__pb2._PAGEINFO
+_RESPONSELISTTOPACCOUNTS.fields_by_name['accounts'].message_type = trace__type__pb2._INDEXEDACCOUNTSTATE
 _REQUESTLISTASSETTRANSACTIONS.fields_by_name['paging'].message_type = trace__type__pb2._PAGEINPUT
 _RESPONSELISTASSETTRANSACTIONS.fields_by_name['code'].enum_type = enum__pb2._STATUSCODE
 _RESPONSELISTASSETTRANSACTIONS.fields_by_name['page'].message_type = trace__type__pb2._PAGEINFO
 _RESPONSELISTASSETTRANSACTIONS.fields_by_name['transactions'].message_type = trace__type__pb2._INDEXEDTRANSACTION
 _REQUESTLISTBLOCKS.fields_by_name['paging'].message_type = trace__type__pb2._PAGEINPUT
 _REQUESTLISTBLOCKS.fields_by_name['time_filter'].message_type = trace__type__pb2._TIMEFILTER
-_REQUESTLISTBLOCKS.fields_by_name['height_filter'].message_type = trace__type__pb2._HEIGHTFILTER
-_REQUESTLISTBLOCKS.fields_by_name['num_txs_filter'].message_type = trace__type__pb2._NUMTXSFILTER
-_REQUESTLISTBLOCKS.fields_by_name['num_invalid_txs_filter'].message_type = trace__type__pb2._NUMINVALIDTXSFILTER
+_REQUESTLISTBLOCKS.fields_by_name['height_filter'].message_type = trace__type__pb2._RANGEFILTER
+_REQUESTLISTBLOCKS.fields_by_name['num_txs_filter'].message_type = trace__type__pb2._RANGEFILTER
+_REQUESTLISTBLOCKS.fields_by_name['num_invalid_txs_filter'].message_type = trace__type__pb2._RANGEFILTER
 _RESPONSELISTBLOCKS.fields_by_name['code'].enum_type = enum__pb2._STATUSCODE
 _RESPONSELISTBLOCKS.fields_by_name['page'].message_type = trace__type__pb2._PAGEINFO
 _RESPONSELISTBLOCKS.fields_by_name['blocks'].message_type = trace__type__pb2._INDEXEDBLOCK
-_REQUESTLISTASSETS.fields_by_name['paging'].message_type = trace__type__pb2._PAGEINPUT
-_RESPONSELISTASSETS.fields_by_name['code'].enum_type = enum__pb2._STATUSCODE
-_RESPONSELISTASSETS.fields_by_name['page'].message_type = trace__type__pb2._PAGEINFO
-_RESPONSELISTASSETS.fields_by_name['account'].message_type = trace__type__pb2._INDEXEDACCOUNTSTATE
-_RESPONSELISTASSETS.fields_by_name['assets'].message_type = trace__type__pb2._INDEXEDASSETSTATE
 _RESPONSEGETHEALTHSTATUS.fields_by_name['code'].enum_type = enum__pb2._STATUSCODE
 _RESPONSEGETHEALTHSTATUS.fields_by_name['health_status'].message_type = trace__type__pb2._HEALTHSTATUS
 DESCRIPTOR.message_types_by_name['RequestCreateTx'] = _REQUESTCREATETX
@@ -3499,26 +3486,26 @@ DESCRIPTOR.message_types_by_name['RequestGetConfig'] = _REQUESTGETCONFIG
 DESCRIPTOR.message_types_by_name['ResponseGetConfig'] = _RESPONSEGETCONFIG
 DESCRIPTOR.message_types_by_name['ByDay'] = _BYDAY
 DESCRIPTOR.message_types_by_name['ByHour'] = _BYHOUR
-DESCRIPTOR.message_types_by_name['RequestGetForgeStatistics'] = _REQUESTGETFORGESTATISTICS
-DESCRIPTOR.message_types_by_name['ResponseGetForgeStatistics'] = _RESPONSEGETFORGESTATISTICS
+DESCRIPTOR.message_types_by_name['RequestGetForgeStats'] = _REQUESTGETFORGESTATS
+DESCRIPTOR.message_types_by_name['ResponseGetForgeStats'] = _RESPONSEGETFORGESTATS
 DESCRIPTOR.message_types_by_name['RequestListTransactions'] = _REQUESTLISTTRANSACTIONS
 DESCRIPTOR.message_types_by_name['ResponseListTransactions'] = _RESPONSELISTTRANSACTIONS
 DESCRIPTOR.message_types_by_name['RequestGetAssetAddress'] = _REQUESTGETASSETADDRESS
 DESCRIPTOR.message_types_by_name['ResponseGetAssetAddress'] = _RESPONSEGETASSETADDRESS
 DESCRIPTOR.message_types_by_name['RequestSignData'] = _REQUESTSIGNDATA
 DESCRIPTOR.message_types_by_name['ResponseSignData'] = _RESPONSESIGNDATA
-DESCRIPTOR.message_types_by_name['RequestGetAssets'] = _REQUESTGETASSETS
-DESCRIPTOR.message_types_by_name['ResponseGetAssets'] = _RESPONSEGETASSETS
-DESCRIPTOR.message_types_by_name['RequestGetStakes'] = _REQUESTGETSTAKES
-DESCRIPTOR.message_types_by_name['ResponseGetStakes'] = _RESPONSEGETSTAKES
-DESCRIPTOR.message_types_by_name['RequestGetTopAccounts'] = _REQUESTGETTOPACCOUNTS
-DESCRIPTOR.message_types_by_name['ResponseGetTopAccounts'] = _RESPONSEGETTOPACCOUNTS
+DESCRIPTOR.message_types_by_name['RequestListAssets'] = _REQUESTLISTASSETS
+DESCRIPTOR.message_types_by_name['ResponseListAssets'] = _RESPONSELISTASSETS
+DESCRIPTOR.message_types_by_name['RequestListStakes'] = _REQUESTLISTSTAKES
+DESCRIPTOR.message_types_by_name['ResponseListStakes'] = _RESPONSELISTSTAKES
+DESCRIPTOR.message_types_by_name['RequestListAccount'] = _REQUESTLISTACCOUNT
+DESCRIPTOR.message_types_by_name['ResponseListAccount'] = _RESPONSELISTACCOUNT
+DESCRIPTOR.message_types_by_name['RequestListTopAccounts'] = _REQUESTLISTTOPACCOUNTS
+DESCRIPTOR.message_types_by_name['ResponseListTopAccounts'] = _RESPONSELISTTOPACCOUNTS
 DESCRIPTOR.message_types_by_name['RequestListAssetTransactions'] = _REQUESTLISTASSETTRANSACTIONS
 DESCRIPTOR.message_types_by_name['ResponseListAssetTransactions'] = _RESPONSELISTASSETTRANSACTIONS
 DESCRIPTOR.message_types_by_name['RequestListBlocks'] = _REQUESTLISTBLOCKS
 DESCRIPTOR.message_types_by_name['ResponseListBlocks'] = _RESPONSELISTBLOCKS
-DESCRIPTOR.message_types_by_name['RequestListAssets'] = _REQUESTLISTASSETS
-DESCRIPTOR.message_types_by_name['ResponseListAssets'] = _RESPONSELISTASSETS
 DESCRIPTOR.message_types_by_name['RequestGetHealthStatus'] = _REQUESTGETHEALTHSTATUS
 DESCRIPTOR.message_types_by_name['ResponseGetHealthStatus'] = _RESPONSEGETHEALTHSTATUS
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
@@ -3929,19 +3916,19 @@ ByHour = _reflection.GeneratedProtocolMessageType('ByHour', (_message.Message,),
   ))
 _sym_db.RegisterMessage(ByHour)
 
-RequestGetForgeStatistics = _reflection.GeneratedProtocolMessageType('RequestGetForgeStatistics', (_message.Message,), dict(
-  DESCRIPTOR = _REQUESTGETFORGESTATISTICS,
+RequestGetForgeStats = _reflection.GeneratedProtocolMessageType('RequestGetForgeStats', (_message.Message,), dict(
+  DESCRIPTOR = _REQUESTGETFORGESTATS,
   __module__ = 'rpc_pb2'
-  # @@protoc_insertion_point(class_scope:forge_abi.RequestGetForgeStatistics)
+  # @@protoc_insertion_point(class_scope:forge_abi.RequestGetForgeStats)
   ))
-_sym_db.RegisterMessage(RequestGetForgeStatistics)
+_sym_db.RegisterMessage(RequestGetForgeStats)
 
-ResponseGetForgeStatistics = _reflection.GeneratedProtocolMessageType('ResponseGetForgeStatistics', (_message.Message,), dict(
-  DESCRIPTOR = _RESPONSEGETFORGESTATISTICS,
+ResponseGetForgeStats = _reflection.GeneratedProtocolMessageType('ResponseGetForgeStats', (_message.Message,), dict(
+  DESCRIPTOR = _RESPONSEGETFORGESTATS,
   __module__ = 'rpc_pb2'
-  # @@protoc_insertion_point(class_scope:forge_abi.ResponseGetForgeStatistics)
+  # @@protoc_insertion_point(class_scope:forge_abi.ResponseGetForgeStats)
   ))
-_sym_db.RegisterMessage(ResponseGetForgeStatistics)
+_sym_db.RegisterMessage(ResponseGetForgeStats)
 
 RequestListTransactions = _reflection.GeneratedProtocolMessageType('RequestListTransactions', (_message.Message,), dict(
   DESCRIPTOR = _REQUESTLISTTRANSACTIONS,
@@ -3985,47 +3972,61 @@ ResponseSignData = _reflection.GeneratedProtocolMessageType('ResponseSignData', 
   ))
 _sym_db.RegisterMessage(ResponseSignData)
 
-RequestGetAssets = _reflection.GeneratedProtocolMessageType('RequestGetAssets', (_message.Message,), dict(
-  DESCRIPTOR = _REQUESTGETASSETS,
+RequestListAssets = _reflection.GeneratedProtocolMessageType('RequestListAssets', (_message.Message,), dict(
+  DESCRIPTOR = _REQUESTLISTASSETS,
   __module__ = 'rpc_pb2'
-  # @@protoc_insertion_point(class_scope:forge_abi.RequestGetAssets)
+  # @@protoc_insertion_point(class_scope:forge_abi.RequestListAssets)
   ))
-_sym_db.RegisterMessage(RequestGetAssets)
+_sym_db.RegisterMessage(RequestListAssets)
 
-ResponseGetAssets = _reflection.GeneratedProtocolMessageType('ResponseGetAssets', (_message.Message,), dict(
-  DESCRIPTOR = _RESPONSEGETASSETS,
+ResponseListAssets = _reflection.GeneratedProtocolMessageType('ResponseListAssets', (_message.Message,), dict(
+  DESCRIPTOR = _RESPONSELISTASSETS,
   __module__ = 'rpc_pb2'
-  # @@protoc_insertion_point(class_scope:forge_abi.ResponseGetAssets)
+  # @@protoc_insertion_point(class_scope:forge_abi.ResponseListAssets)
   ))
-_sym_db.RegisterMessage(ResponseGetAssets)
+_sym_db.RegisterMessage(ResponseListAssets)
 
-RequestGetStakes = _reflection.GeneratedProtocolMessageType('RequestGetStakes', (_message.Message,), dict(
-  DESCRIPTOR = _REQUESTGETSTAKES,
+RequestListStakes = _reflection.GeneratedProtocolMessageType('RequestListStakes', (_message.Message,), dict(
+  DESCRIPTOR = _REQUESTLISTSTAKES,
   __module__ = 'rpc_pb2'
-  # @@protoc_insertion_point(class_scope:forge_abi.RequestGetStakes)
+  # @@protoc_insertion_point(class_scope:forge_abi.RequestListStakes)
   ))
-_sym_db.RegisterMessage(RequestGetStakes)
+_sym_db.RegisterMessage(RequestListStakes)
 
-ResponseGetStakes = _reflection.GeneratedProtocolMessageType('ResponseGetStakes', (_message.Message,), dict(
-  DESCRIPTOR = _RESPONSEGETSTAKES,
+ResponseListStakes = _reflection.GeneratedProtocolMessageType('ResponseListStakes', (_message.Message,), dict(
+  DESCRIPTOR = _RESPONSELISTSTAKES,
   __module__ = 'rpc_pb2'
-  # @@protoc_insertion_point(class_scope:forge_abi.ResponseGetStakes)
+  # @@protoc_insertion_point(class_scope:forge_abi.ResponseListStakes)
   ))
-_sym_db.RegisterMessage(ResponseGetStakes)
+_sym_db.RegisterMessage(ResponseListStakes)
 
-RequestGetTopAccounts = _reflection.GeneratedProtocolMessageType('RequestGetTopAccounts', (_message.Message,), dict(
-  DESCRIPTOR = _REQUESTGETTOPACCOUNTS,
+RequestListAccount = _reflection.GeneratedProtocolMessageType('RequestListAccount', (_message.Message,), dict(
+  DESCRIPTOR = _REQUESTLISTACCOUNT,
   __module__ = 'rpc_pb2'
-  # @@protoc_insertion_point(class_scope:forge_abi.RequestGetTopAccounts)
+  # @@protoc_insertion_point(class_scope:forge_abi.RequestListAccount)
   ))
-_sym_db.RegisterMessage(RequestGetTopAccounts)
+_sym_db.RegisterMessage(RequestListAccount)
 
-ResponseGetTopAccounts = _reflection.GeneratedProtocolMessageType('ResponseGetTopAccounts', (_message.Message,), dict(
-  DESCRIPTOR = _RESPONSEGETTOPACCOUNTS,
+ResponseListAccount = _reflection.GeneratedProtocolMessageType('ResponseListAccount', (_message.Message,), dict(
+  DESCRIPTOR = _RESPONSELISTACCOUNT,
   __module__ = 'rpc_pb2'
-  # @@protoc_insertion_point(class_scope:forge_abi.ResponseGetTopAccounts)
+  # @@protoc_insertion_point(class_scope:forge_abi.ResponseListAccount)
   ))
-_sym_db.RegisterMessage(ResponseGetTopAccounts)
+_sym_db.RegisterMessage(ResponseListAccount)
+
+RequestListTopAccounts = _reflection.GeneratedProtocolMessageType('RequestListTopAccounts', (_message.Message,), dict(
+  DESCRIPTOR = _REQUESTLISTTOPACCOUNTS,
+  __module__ = 'rpc_pb2'
+  # @@protoc_insertion_point(class_scope:forge_abi.RequestListTopAccounts)
+  ))
+_sym_db.RegisterMessage(RequestListTopAccounts)
+
+ResponseListTopAccounts = _reflection.GeneratedProtocolMessageType('ResponseListTopAccounts', (_message.Message,), dict(
+  DESCRIPTOR = _RESPONSELISTTOPACCOUNTS,
+  __module__ = 'rpc_pb2'
+  # @@protoc_insertion_point(class_scope:forge_abi.ResponseListTopAccounts)
+  ))
+_sym_db.RegisterMessage(ResponseListTopAccounts)
 
 RequestListAssetTransactions = _reflection.GeneratedProtocolMessageType('RequestListAssetTransactions', (_message.Message,), dict(
   DESCRIPTOR = _REQUESTLISTASSETTRANSACTIONS,
@@ -4054,20 +4055,6 @@ ResponseListBlocks = _reflection.GeneratedProtocolMessageType('ResponseListBlock
   # @@protoc_insertion_point(class_scope:forge_abi.ResponseListBlocks)
   ))
 _sym_db.RegisterMessage(ResponseListBlocks)
-
-RequestListAssets = _reflection.GeneratedProtocolMessageType('RequestListAssets', (_message.Message,), dict(
-  DESCRIPTOR = _REQUESTLISTASSETS,
-  __module__ = 'rpc_pb2'
-  # @@protoc_insertion_point(class_scope:forge_abi.RequestListAssets)
-  ))
-_sym_db.RegisterMessage(RequestListAssets)
-
-ResponseListAssets = _reflection.GeneratedProtocolMessageType('ResponseListAssets', (_message.Message,), dict(
-  DESCRIPTOR = _RESPONSELISTASSETS,
-  __module__ = 'rpc_pb2'
-  # @@protoc_insertion_point(class_scope:forge_abi.ResponseListAssets)
-  ))
-_sym_db.RegisterMessage(ResponseListAssets)
 
 RequestGetHealthStatus = _reflection.GeneratedProtocolMessageType('RequestGetHealthStatus', (_message.Message,), dict(
   DESCRIPTOR = _REQUESTGETHEALTHSTATUS,

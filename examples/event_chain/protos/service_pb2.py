@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
     package='forge_abi',
     syntax='proto3',
     serialized_options=None,
-    serialized_pb=_b('\n\rservice.proto\x12\tforge_abi\x1a\trpc.proto2\x87\t\n\x08\x43hainRpc\x12\x44\n\tcreate_tx\x12\x1a.forge_abi.RequestCreateTx\x1a\x1b.forge_abi.ResponseCreateTx\x12\x43\n\x08multisig\x12\x1a.forge_abi.RequestMultisig\x1a\x1b.forge_abi.ResponseMultisig\x12>\n\x07send_tx\x12\x18.forge_abi.RequestSendTx\x1a\x19.forge_abi.ResponseSendTx\x12?\n\x06get_tx\x12\x17.forge_abi.RequestGetTx\x1a\x18.forge_abi.ResponseGetTx(\x01\x30\x01\x12H\n\tget_block\x12\x1a.forge_abi.RequestGetBlock\x1a\x1b.forge_abi.ResponseGetBlock(\x01\x30\x01\x12G\n\nget_blocks\x12\x1b.forge_abi.RequestGetBlocks\x1a\x1c.forge_abi.ResponseGetBlocks\x12`\n\x13get_unconfirmed_txs\x12#.forge_abi.RequestGetUnconfirmedTxs\x1a$.forge_abi.ResponseGetUnconfirmedTxs\x12Q\n\x0eget_chain_info\x12\x1e.forge_abi.RequestGetChainInfo\x1a\x1f.forge_abi.ResponseGetChainInfo\x12N\n\rget_node_info\x12\x1d.forge_abi.RequestGetNodeInfo\x1a\x1e.forge_abi.ResponseGetNodeInfo\x12=\n\x06search\x12\x18.forge_abi.RequestSearch\x1a\x19.forge_abi.ResponseSearch\x12K\n\x0cget_net_info\x12\x1c.forge_abi.RequestGetNetInfo\x1a\x1d.forge_abi.ResponseGetNetInfo\x12`\n\x13get_validators_info\x12#.forge_abi.RequestGetValidatorsInfo\x1a$.forge_abi.ResponseGetValidatorsInfo\x12G\n\nget_config\x12\x1b.forge_abi.RequestGetConfig\x1a\x1c.forge_abi.ResponseGetConfig\x12Z\n\x11get_asset_address\x12!.forge_abi.RequestGetAssetAddress\x1a\".forge_abi.ResponseGetAssetAddress\x12\x44\n\tsign_data\x12\x1a.forge_abi.RequestSignData\x1a\x1b.forge_abi.ResponseSignData2\xa2\x01\n\x08\x45ventRpc\x12H\n\tsubscribe\x12\x1b.forge_abi.RequestSubscribe\x1a\x1c.forge_abi.ResponseSubscribe0\x01\x12L\n\x0bunsubscribe\x12\x1d.forge_abi.RequestUnsubscribe\x1a\x1e.forge_abi.ResponseUnsubscribe2\xdf\x01\n\x07\x46ileRpc\x12I\n\nstore_file\x12\x1b.forge_abi.RequestStoreFile\x1a\x1c.forge_abi.ResponseStoreFile(\x01\x12\x46\n\tload_file\x12\x1a.forge_abi.RequestLoadFile\x1a\x1b.forge_abi.ResponseLoadFile0\x01\x12\x41\n\x08pin_file\x12\x19.forge_abi.RequestPinFile\x1a\x1a.forge_abi.ResponsePinFile2\xf4\x02\n\x08StateRpc\x12^\n\x11get_account_state\x12!.forge_abi.RequestGetAccountState\x1a\".forge_abi.ResponseGetAccountState(\x01\x30\x01\x12X\n\x0fget_asset_state\x12\x1f.forge_abi.RequestGetAssetState\x1a .forge_abi.ResponseGetAssetState(\x01\x30\x01\x12X\n\x0fget_stake_state\x12\x1f.forge_abi.RequestGetStakeState\x1a .forge_abi.ResponseGetStakeState(\x01\x30\x01\x12T\n\x0fget_forge_state\x12\x1f.forge_abi.RequestGetForgeState\x1a .forge_abi.ResponseGetForgeState2\xed\x03\n\tWalletRpc\x12P\n\rcreate_wallet\x12\x1e.forge_abi.RequestCreateWallet\x1a\x1f.forge_abi.ResponseCreateWallet\x12J\n\x0bload_wallet\x12\x1c.forge_abi.RequestLoadWallet\x1a\x1d.forge_abi.ResponseLoadWallet\x12S\n\x0erecover_wallet\x12\x1f.forge_abi.RequestRecoverWallet\x1a .forge_abi.ResponseRecoverWallet\x12L\n\x0blist_wallet\x12\x1c.forge_abi.RequestListWallet\x1a\x1d.forge_abi.ResponseListWallet0\x01\x12P\n\rremove_wallet\x12\x1e.forge_abi.RequestRemoveWallet\x1a\x1f.forge_abi.ResponseRemoveWallet\x12M\n\x0c\x64\x65\x63lare_node\x12\x1d.forge_abi.RequestDeclareNode\x1a\x1e.forge_abi.ResponseDeclareNode2\x9e\x06\n\x0cStatisticRpc\x12\x63\n\x14get_forge_statistics\x12$.forge_abi.RequestGetForgeStatistics\x1a%.forge_abi.ResponseGetForgeStatistics\x12\\\n\x11list_transactions\x12\".forge_abi.RequestListTransactions\x1a#.forge_abi.ResponseListTransactions\x12G\n\nget_assets\x12\x1b.forge_abi.RequestGetAssets\x1a\x1c.forge_abi.ResponseGetAssets\x12G\n\nget_stakes\x12\x1b.forge_abi.RequestGetStakes\x1a\x1c.forge_abi.ResponseGetStakes\x12W\n\x10get_top_accounts\x12 .forge_abi.RequestGetTopAccounts\x1a!.forge_abi.ResponseGetTopAccounts\x12l\n\x17list_asset_transactions\x12\'.forge_abi.RequestListAssetTransactions\x1a(.forge_abi.ResponseListAssetTransactions\x12J\n\x0blist_blocks\x12\x1c.forge_abi.RequestListBlocks\x1a\x1d.forge_abi.ResponseListBlocks\x12J\n\x0blist_assets\x12\x1c.forge_abi.RequestListAssets\x1a\x1d.forge_abi.ResponseListAssets\x12Z\n\x11get_health_status\x12!.forge_abi.RequestGetHealthStatus\x1a\".forge_abi.ResponseGetHealthStatusb\x06proto3'),
+    serialized_pb=_b('\n\rservice.proto\x12\tforge_abi\x1a\trpc.proto2\x87\t\n\x08\x43hainRpc\x12\x44\n\tcreate_tx\x12\x1a.forge_abi.RequestCreateTx\x1a\x1b.forge_abi.ResponseCreateTx\x12\x43\n\x08multisig\x12\x1a.forge_abi.RequestMultisig\x1a\x1b.forge_abi.ResponseMultisig\x12>\n\x07send_tx\x12\x18.forge_abi.RequestSendTx\x1a\x19.forge_abi.ResponseSendTx\x12?\n\x06get_tx\x12\x17.forge_abi.RequestGetTx\x1a\x18.forge_abi.ResponseGetTx(\x01\x30\x01\x12H\n\tget_block\x12\x1a.forge_abi.RequestGetBlock\x1a\x1b.forge_abi.ResponseGetBlock(\x01\x30\x01\x12G\n\nget_blocks\x12\x1b.forge_abi.RequestGetBlocks\x1a\x1c.forge_abi.ResponseGetBlocks\x12`\n\x13get_unconfirmed_txs\x12#.forge_abi.RequestGetUnconfirmedTxs\x1a$.forge_abi.ResponseGetUnconfirmedTxs\x12Q\n\x0eget_chain_info\x12\x1e.forge_abi.RequestGetChainInfo\x1a\x1f.forge_abi.ResponseGetChainInfo\x12N\n\rget_node_info\x12\x1d.forge_abi.RequestGetNodeInfo\x1a\x1e.forge_abi.ResponseGetNodeInfo\x12=\n\x06search\x12\x18.forge_abi.RequestSearch\x1a\x19.forge_abi.ResponseSearch\x12K\n\x0cget_net_info\x12\x1c.forge_abi.RequestGetNetInfo\x1a\x1d.forge_abi.ResponseGetNetInfo\x12`\n\x13get_validators_info\x12#.forge_abi.RequestGetValidatorsInfo\x1a$.forge_abi.ResponseGetValidatorsInfo\x12G\n\nget_config\x12\x1b.forge_abi.RequestGetConfig\x1a\x1c.forge_abi.ResponseGetConfig\x12Z\n\x11get_asset_address\x12!.forge_abi.RequestGetAssetAddress\x1a\".forge_abi.ResponseGetAssetAddress\x12\x44\n\tsign_data\x12\x1a.forge_abi.RequestSignData\x1a\x1b.forge_abi.ResponseSignData2\xa2\x01\n\x08\x45ventRpc\x12H\n\tsubscribe\x12\x1b.forge_abi.RequestSubscribe\x1a\x1c.forge_abi.ResponseSubscribe0\x01\x12L\n\x0bunsubscribe\x12\x1d.forge_abi.RequestUnsubscribe\x1a\x1e.forge_abi.ResponseUnsubscribe2\xdf\x01\n\x07\x46ileRpc\x12I\n\nstore_file\x12\x1b.forge_abi.RequestStoreFile\x1a\x1c.forge_abi.ResponseStoreFile(\x01\x12\x46\n\tload_file\x12\x1a.forge_abi.RequestLoadFile\x1a\x1b.forge_abi.ResponseLoadFile0\x01\x12\x41\n\x08pin_file\x12\x19.forge_abi.RequestPinFile\x1a\x1a.forge_abi.ResponsePinFile2\xf4\x02\n\x08StateRpc\x12^\n\x11get_account_state\x12!.forge_abi.RequestGetAccountState\x1a\".forge_abi.ResponseGetAccountState(\x01\x30\x01\x12X\n\x0fget_asset_state\x12\x1f.forge_abi.RequestGetAssetState\x1a .forge_abi.ResponseGetAssetState(\x01\x30\x01\x12X\n\x0fget_stake_state\x12\x1f.forge_abi.RequestGetStakeState\x1a .forge_abi.ResponseGetStakeState(\x01\x30\x01\x12T\n\x0fget_forge_state\x12\x1f.forge_abi.RequestGetForgeState\x1a .forge_abi.ResponseGetForgeState2\xed\x03\n\tWalletRpc\x12P\n\rcreate_wallet\x12\x1e.forge_abi.RequestCreateWallet\x1a\x1f.forge_abi.ResponseCreateWallet\x12J\n\x0bload_wallet\x12\x1c.forge_abi.RequestLoadWallet\x1a\x1d.forge_abi.ResponseLoadWallet\x12S\n\x0erecover_wallet\x12\x1f.forge_abi.RequestRecoverWallet\x1a .forge_abi.ResponseRecoverWallet\x12L\n\x0blist_wallet\x12\x1c.forge_abi.RequestListWallet\x1a\x1d.forge_abi.ResponseListWallet0\x01\x12P\n\rremove_wallet\x12\x1e.forge_abi.RequestRemoveWallet\x1a\x1f.forge_abi.ResponseRemoveWallet\x12M\n\x0c\x64\x65\x63lare_node\x12\x1d.forge_abi.RequestDeclareNode\x1a\x1e.forge_abi.ResponseDeclareNode2\x97\x06\n\x08StatsRpc\x12T\n\x0fget_forge_stats\x12\x1f.forge_abi.RequestGetForgeStats\x1a .forge_abi.ResponseGetForgeStats\x12\\\n\x11list_transactions\x12\".forge_abi.RequestListTransactions\x1a#.forge_abi.ResponseListTransactions\x12J\n\x0blist_assets\x12\x1c.forge_abi.RequestListAssets\x1a\x1d.forge_abi.ResponseListAssets\x12J\n\x0blist_stakes\x12\x1c.forge_abi.RequestListStakes\x1a\x1d.forge_abi.ResponseListStakes\x12M\n\x0clist_account\x12\x1d.forge_abi.RequestListAccount\x1a\x1e.forge_abi.ResponseListAccount\x12Z\n\x11list_top_accounts\x12!.forge_abi.RequestListTopAccounts\x1a\".forge_abi.ResponseListTopAccounts\x12l\n\x17list_asset_transactions\x12\'.forge_abi.RequestListAssetTransactions\x1a(.forge_abi.ResponseListAssetTransactions\x12J\n\x0blist_blocks\x12\x1c.forge_abi.RequestListBlocks\x1a\x1d.forge_abi.ResponseListBlocks\x12Z\n\x11get_health_status\x12!.forge_abi.RequestGetHealthStatus\x1a\".forge_abi.ResponseGetHealthStatusb\x06proto3'),
     dependencies=[rpc__pb2.DESCRIPTOR, ])
 
 
@@ -372,27 +372,27 @@ _sym_db.RegisterServiceDescriptor(_WALLETRPC)
 DESCRIPTOR.services_by_name['WalletRpc'] = _WALLETRPC
 
 
-_STATISTICRPC = _descriptor.ServiceDescriptor(
-    name='StatisticRpc',
-    full_name='forge_abi.StatisticRpc',
+_STATSRPC = _descriptor.ServiceDescriptor(
+    name='StatsRpc',
+    full_name='forge_abi.StatsRpc',
     file=DESCRIPTOR,
     index=5,
     serialized_options=None,
     serialized_start=2464,
-    serialized_end=3262,
+    serialized_end=3255,
     methods=[
         _descriptor.MethodDescriptor(
-            name='get_forge_statistics',
-            full_name='forge_abi.StatisticRpc.get_forge_statistics',
+            name='get_forge_stats',
+            full_name='forge_abi.StatsRpc.get_forge_stats',
             index=0,
             containing_service=None,
-            input_type=rpc__pb2._REQUESTGETFORGESTATISTICS,
-            output_type=rpc__pb2._RESPONSEGETFORGESTATISTICS,
+            input_type=rpc__pb2._REQUESTGETFORGESTATS,
+            output_type=rpc__pb2._RESPONSEGETFORGESTATS,
             serialized_options=None,
         ),
         _descriptor.MethodDescriptor(
             name='list_transactions',
-            full_name='forge_abi.StatisticRpc.list_transactions',
+            full_name='forge_abi.StatsRpc.list_transactions',
             index=1,
             containing_service=None,
             input_type=rpc__pb2._REQUESTLISTTRANSACTIONS,
@@ -400,36 +400,45 @@ _STATISTICRPC = _descriptor.ServiceDescriptor(
             serialized_options=None,
         ),
         _descriptor.MethodDescriptor(
-            name='get_assets',
-            full_name='forge_abi.StatisticRpc.get_assets',
+            name='list_assets',
+            full_name='forge_abi.StatsRpc.list_assets',
             index=2,
             containing_service=None,
-            input_type=rpc__pb2._REQUESTGETASSETS,
-            output_type=rpc__pb2._RESPONSEGETASSETS,
+            input_type=rpc__pb2._REQUESTLISTASSETS,
+            output_type=rpc__pb2._RESPONSELISTASSETS,
             serialized_options=None,
         ),
         _descriptor.MethodDescriptor(
-            name='get_stakes',
-            full_name='forge_abi.StatisticRpc.get_stakes',
+            name='list_stakes',
+            full_name='forge_abi.StatsRpc.list_stakes',
             index=3,
             containing_service=None,
-            input_type=rpc__pb2._REQUESTGETSTAKES,
-            output_type=rpc__pb2._RESPONSEGETSTAKES,
+            input_type=rpc__pb2._REQUESTLISTSTAKES,
+            output_type=rpc__pb2._RESPONSELISTSTAKES,
             serialized_options=None,
         ),
         _descriptor.MethodDescriptor(
-            name='get_top_accounts',
-            full_name='forge_abi.StatisticRpc.get_top_accounts',
+            name='list_account',
+            full_name='forge_abi.StatsRpc.list_account',
             index=4,
             containing_service=None,
-            input_type=rpc__pb2._REQUESTGETTOPACCOUNTS,
-            output_type=rpc__pb2._RESPONSEGETTOPACCOUNTS,
+            input_type=rpc__pb2._REQUESTLISTACCOUNT,
+            output_type=rpc__pb2._RESPONSELISTACCOUNT,
+            serialized_options=None,
+        ),
+        _descriptor.MethodDescriptor(
+            name='list_top_accounts',
+            full_name='forge_abi.StatsRpc.list_top_accounts',
+            index=5,
+            containing_service=None,
+            input_type=rpc__pb2._REQUESTLISTTOPACCOUNTS,
+            output_type=rpc__pb2._RESPONSELISTTOPACCOUNTS,
             serialized_options=None,
         ),
         _descriptor.MethodDescriptor(
             name='list_asset_transactions',
-            full_name='forge_abi.StatisticRpc.list_asset_transactions',
-            index=5,
+            full_name='forge_abi.StatsRpc.list_asset_transactions',
+            index=6,
             containing_service=None,
             input_type=rpc__pb2._REQUESTLISTASSETTRANSACTIONS,
             output_type=rpc__pb2._RESPONSELISTASSETTRANSACTIONS,
@@ -437,25 +446,16 @@ _STATISTICRPC = _descriptor.ServiceDescriptor(
         ),
         _descriptor.MethodDescriptor(
             name='list_blocks',
-            full_name='forge_abi.StatisticRpc.list_blocks',
-            index=6,
+            full_name='forge_abi.StatsRpc.list_blocks',
+            index=7,
             containing_service=None,
             input_type=rpc__pb2._REQUESTLISTBLOCKS,
             output_type=rpc__pb2._RESPONSELISTBLOCKS,
             serialized_options=None,
         ),
         _descriptor.MethodDescriptor(
-            name='list_assets',
-            full_name='forge_abi.StatisticRpc.list_assets',
-            index=7,
-            containing_service=None,
-            input_type=rpc__pb2._REQUESTLISTASSETS,
-            output_type=rpc__pb2._RESPONSELISTASSETS,
-            serialized_options=None,
-        ),
-        _descriptor.MethodDescriptor(
             name='get_health_status',
-            full_name='forge_abi.StatisticRpc.get_health_status',
+            full_name='forge_abi.StatsRpc.get_health_status',
             index=8,
             containing_service=None,
             input_type=rpc__pb2._REQUESTGETHEALTHSTATUS,
@@ -463,8 +463,8 @@ _STATISTICRPC = _descriptor.ServiceDescriptor(
             serialized_options=None,
         ),
     ])
-_sym_db.RegisterServiceDescriptor(_STATISTICRPC)
+_sym_db.RegisterServiceDescriptor(_STATSRPC)
 
-DESCRIPTOR.services_by_name['StatisticRpc'] = _STATISTICRPC
+DESCRIPTOR.services_by_name['StatsRpc'] = _STATSRPC
 
 # @@protoc_insertion_point(module_scope)

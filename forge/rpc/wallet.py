@@ -86,7 +86,7 @@ def recover_wallet(
 
     """
 
-    if req is not None:
+    if req:
         return stub.recover_wallet(req)
     else:
         req_kwargs = {

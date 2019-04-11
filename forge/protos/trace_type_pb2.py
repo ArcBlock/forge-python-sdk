@@ -14,6 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 from . import type_pb2 as type__pb2
+from . import enum_pb2 as enum__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -21,9 +22,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='forge_abi',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x10trace_type.proto\x12\tforge_abi\x1a\ntype.proto\"(\n\tPageOrder\x12\r\n\x05\x66ield\x18\x01 \x01(\t\x12\x0c\n\x04type\x18\x02 \x01(\t\"N\n\tPageInput\x12\x0e\n\x06\x63ursor\x18\x01 \x01(\t\x12\x0c\n\x04size\x18\x02 \x01(\r\x12#\n\x05order\x18\x03 \x03(\x0b\x32\x14.forge_abi.PageOrder\"\x1b\n\nTypeFilter\x12\r\n\x05types\x18\x01 \x03(\t\"<\n\nTimeFilter\x12\x17\n\x0fstart_date_time\x18\x01 \x01(\t\x12\x15\n\rend_date_time\x18\x02 \x01(\t\"Z\n\rAddressFilter\x12\x0e\n\x06sender\x18\x01 \x01(\t\x12\x10\n\x08receiver\x18\x02 \x01(\t\x12\'\n\tdirection\x18\x03 \x01(\x0e\x32\x14.forge_abi.Direction\"7\n\x08PageInfo\x12\x0e\n\x06\x63ursor\x18\x01 \x01(\t\x12\x0c\n\x04next\x18\x02 \x01(\x08\x12\r\n\x05total\x18\x03 \x01(\r\"\x94\x03\n\x12IndexedTransaction\x12\x0c\n\x04hash\x18\x01 \x01(\t\x12\x0e\n\x06sender\x18\x02 \x01(\t\x12\x10\n\x08receiver\x18\x03 \x01(\t\x12\x0c\n\x04time\x18\x04 \x01(\t\x12\x0c\n\x04type\x18\x05 \x01(\t\x12\"\n\x02tx\x18\x06 \x01(\x0b\x32\x16.forge_abi.Transaction\x12\x37\n\rconsume_asset\x18\x07 \x01(\x0b\x32\x1e.forge_abi.IndexedConsumeAssetH\x00\x12\x35\n\x0c\x63reate_asset\x18\x08 \x01(\x0b\x32\x1d.forge_abi.IndexedCreateAssetH\x00\x12.\n\x08\x65xchange\x18\t \x01(\x0b\x32\x1a.forge_abi.IndexedExchangeH\x00\x12.\n\x08transfer\x18\n \x01(\x0b\x32\x1a.forge_abi.IndexedTransferH\x00\x12\x35\n\x0cupdate_asset\x18\x0b \x01(\x0b\x32\x1d.forge_abi.IndexedUpdateAssetH\x00\x42\x07\n\x05value\"\x8d\x03\n\x13IndexedAccountState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12#\n\x07\x62\x61lance\x18\x02 \x01(\x0b\x32\x12.forge_abi.BigUint\x12\x12\n\nnum_assets\x18\x03 \x01(\x04\x12\x0f\n\x07num_txs\x18\x04 \x01(\x04\x12\r\n\x05nonce\x18\x05 \x01(\x04\x12\x14\n\x0cgenesis_time\x18\x06 \x01(\t\x12\x18\n\x10renaissance_time\x18\x07 \x01(\t\x12\x0f\n\x07moniker\x18\x08 \x01(\t\x12\x15\n\rmigrated_from\x18\t \x01(\t\x12\x13\n\x0bmigrated_to\x18\n \x01(\t\x12\x31\n\x15total_received_stakes\x18\x0b \x01(\x0b\x32\x12.forge_abi.BigUint\x12(\n\x0ctotal_stakes\x18\x0c \x01(\x0b\x32\x12.forge_abi.BigUint\x12*\n\x0etotal_unstakes\x18\r \x01(\x0b\x32\x12.forge_abi.BigUint\x12\x16\n\x0erecent_num_txs\x18\x0e \x03(\x04\"\x86\x01\n\x11IndexedAssetState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\r\n\x05owner\x18\x02 \x01(\t\x12\x14\n\x0cgenesis_time\x18\x03 \x01(\t\x12\x18\n\x10renaissance_time\x18\x04 \x01(\t\x12\x0f\n\x07moniker\x18\x05 \x01(\t\x12\x10\n\x08readonly\x18\x06 \x01(\x08\"\xba\x01\n\x11IndexedStakeState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12#\n\x07\x62\x61lance\x18\x02 \x01(\x0b\x32\x12.forge_abi.BigUint\x12\x0e\n\x06sender\x18\x03 \x01(\t\x12\x10\n\x08receiver\x18\x04 \x01(\t\x12\x14\n\x0cgenesis_time\x18\x05 \x01(\t\x12\x18\n\x10renaissance_time\x18\x06 \x01(\t\x12\x0f\n\x07message\x18\x07 \x01(\t\x12\x0c\n\x04type\x18\x08 \x01(\r\"$\n\x13IndexedConsumeAsset\x12\r\n\x05\x61sset\x18\x01 \x01(\t\"#\n\x12IndexedCreateAsset\x12\r\n\x05\x61sset\x18\x01 \x01(\t\"A\n\x0fIndexedExchange\x12\x15\n\rsender_assets\x18\x01 \x03(\t\x12\x17\n\x0freceiver_assets\x18\x02 \x03(\t\"!\n\x0fIndexedTransfer\x12\x0e\n\x06\x61ssets\x18\x01 \x03(\t\"#\n\x12IndexedUpdateAsset\x12\r\n\x05\x61sset\x18\x01 \x01(\t\"6\n\x0cHeightFilter\x12\x13\n\x0b\x66rom_height\x18\x01 \x01(\x04\x12\x11\n\tto_height\x18\x02 \x01(\x04\"8\n\x0cNumTxsFilter\x12\x13\n\x0bmin_num_txs\x18\x01 \x01(\x04\x12\x13\n\x0bmax_num_txs\x18\x02 \x01(\x04\"O\n\x13NumInvalidTxsFilter\x12\x1b\n\x13min_num_invalid_txs\x18\x01 \x01(\x04\x12\x1b\n\x13max_num_invalid_txs\x18\x02 \x01(\x04\"h\n\x0cIndexedBlock\x12\x0e\n\x06height\x18\x01 \x01(\x04\x12\x0c\n\x04time\x18\x02 \x01(\t\x12\x10\n\x08proposer\x18\x03 \x01(\t\x12\x0f\n\x07num_txs\x18\x04 \x01(\x04\x12\x17\n\x0fnum_invalid_txs\x18\x05 \x01(\x04\"\xba\x01\n\x0cHealthStatus\x12-\n\tconsensus\x18\x01 \x01(\x0b\x32\x1a.forge_abi.ConsensusStatus\x12)\n\x07network\x18\x02 \x01(\x0b\x32\x18.forge_abi.NetworkStatus\x12)\n\x07storage\x18\x03 \x01(\x0b\x32\x18.forge_abi.StorageStatus\x12%\n\x05\x66orge\x18\x04 \x01(\x0b\x32\x16.forge_abi.ForgeStatus\"G\n\x0f\x43onsensusStatus\x12\x0e\n\x06health\x18\x01 \x01(\x08\x12\x0e\n\x06synced\x18\x02 \x01(\x08\x12\x14\n\x0c\x62lock_height\x18\x03 \x01(\x04\"2\n\rNetworkStatus\x12\x0e\n\x06health\x18\x01 \x01(\x08\x12\x11\n\tnum_peers\x18\x02 \x01(\r\"y\n\rStorageStatus\x12\x0e\n\x06health\x18\x01 \x01(\x08\x12\x16\n\x0eindexer_server\x18\x02 \x01(\t\x12\x10\n\x08state_db\x18\x03 \x01(\t\x12.\n\ndisk_space\x18\x04 \x01(\x0b\x32\x1a.forge_abi.DiskSpaceStatus\"5\n\x0f\x44iskSpaceStatus\x12\x13\n\x0b\x66orge_usage\x18\x01 \x01(\t\x12\r\n\x05total\x18\x02 \x01(\t\"v\n\x0b\x46orgeStatus\x12\x0e\n\x06health\x18\x01 \x01(\x08\x12\x12\n\nabi_server\x18\x02 \x01(\t\x12\x11\n\tforge_web\x18\x03 \x01(\t\x12\x30\n\x0b\x61\x62\x63i_server\x18\x04 \x01(\x0b\x32\x1b.forge_abi.AbciServerStatus\"=\n\x10\x41\x62\x63iServerStatus\x12\x16\n\x0e\x61\x62\x63i_consensus\x18\x01 \x01(\t\x12\x11\n\tabci_info\x18\x02 \x01(\t*/\n\tDirection\x12\n\n\x06mutual\x10\x00\x12\x0b\n\x07one_way\x10\x01\x12\t\n\x05union\x10\x02\x62\x06proto3')
+  serialized_pb=_b('\n\x10trace_type.proto\x12\tforge_abi\x1a\ntype.proto\x1a\nenum.proto\"(\n\tPageOrder\x12\r\n\x05\x66ield\x18\x01 \x01(\t\x12\x0c\n\x04type\x18\x02 \x01(\t\"N\n\tPageInput\x12\x0e\n\x06\x63ursor\x18\x01 \x01(\t\x12\x0c\n\x04size\x18\x02 \x01(\r\x12#\n\x05order\x18\x03 \x03(\x0b\x32\x14.forge_abi.PageOrder\"\x1b\n\nTypeFilter\x12\r\n\x05types\x18\x01 \x03(\t\"<\n\nTimeFilter\x12\x17\n\x0fstart_date_time\x18\x01 \x01(\t\x12\x15\n\rend_date_time\x18\x02 \x01(\t\"Z\n\rAddressFilter\x12\x0e\n\x06sender\x18\x01 \x01(\t\x12\x10\n\x08receiver\x18\x02 \x01(\t\x12\'\n\tdirection\x18\x03 \x01(\x0e\x32\x14.forge_abi.Direction\"7\n\x08PageInfo\x12\x0e\n\x06\x63ursor\x18\x01 \x01(\t\x12\x0c\n\x04next\x18\x02 \x01(\x08\x12\r\n\x05total\x18\x03 \x01(\r\"\xb8\x01\n\x12IndexedTransaction\x12\x0c\n\x04hash\x18\x01 \x01(\t\x12\x0e\n\x06sender\x18\x02 \x01(\t\x12\x10\n\x08receiver\x18\x03 \x01(\t\x12\x0c\n\x04time\x18\x04 \x01(\t\x12\x0c\n\x04type\x18\x05 \x01(\t\x12\"\n\x02tx\x18\x06 \x01(\x0b\x32\x16.forge_abi.Transaction\x12\r\n\x05valid\x18\x14 \x01(\x08\x12#\n\x04\x63ode\x18\x15 \x01(\x0e\x32\x15.forge_abi.StatusCode\"\x8d\x03\n\x13IndexedAccountState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12#\n\x07\x62\x61lance\x18\x02 \x01(\x0b\x32\x12.forge_abi.BigUint\x12\x12\n\nnum_assets\x18\x03 \x01(\x04\x12\x0f\n\x07num_txs\x18\x04 \x01(\x04\x12\r\n\x05nonce\x18\x05 \x01(\x04\x12\x14\n\x0cgenesis_time\x18\x06 \x01(\t\x12\x18\n\x10renaissance_time\x18\x07 \x01(\t\x12\x0f\n\x07moniker\x18\x08 \x01(\t\x12\x15\n\rmigrated_from\x18\t \x01(\t\x12\x13\n\x0bmigrated_to\x18\n \x01(\t\x12\x31\n\x15total_received_stakes\x18\x0b \x01(\x0b\x32\x12.forge_abi.BigUint\x12(\n\x0ctotal_stakes\x18\x0c \x01(\x0b\x32\x12.forge_abi.BigUint\x12*\n\x0etotal_unstakes\x18\r \x01(\x0b\x32\x12.forge_abi.BigUint\x12\x16\n\x0erecent_num_txs\x18\x0e \x03(\x04\"\x86\x01\n\x11IndexedAssetState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\r\n\x05owner\x18\x02 \x01(\t\x12\x14\n\x0cgenesis_time\x18\x03 \x01(\t\x12\x18\n\x10renaissance_time\x18\x04 \x01(\t\x12\x0f\n\x07moniker\x18\x05 \x01(\t\x12\x10\n\x08readonly\x18\x06 \x01(\x08\"\xba\x01\n\x11IndexedStakeState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12#\n\x07\x62\x61lance\x18\x02 \x01(\x0b\x32\x12.forge_abi.BigUint\x12\x0e\n\x06sender\x18\x03 \x01(\t\x12\x10\n\x08receiver\x18\x04 \x01(\t\x12\x14\n\x0cgenesis_time\x18\x05 \x01(\t\x12\x18\n\x10renaissance_time\x18\x06 \x01(\t\x12\x0f\n\x07message\x18\x07 \x01(\t\x12\x0c\n\x04type\x18\x08 \x01(\r\"h\n\x0cIndexedBlock\x12\x0e\n\x06height\x18\x01 \x01(\x04\x12\x0c\n\x04time\x18\x02 \x01(\t\x12\x10\n\x08proposer\x18\x03 \x01(\t\x12\x0f\n\x07num_txs\x18\x04 \x01(\x04\x12\x17\n\x0fnum_invalid_txs\x18\x05 \x01(\x04\"\xba\x01\n\x0cHealthStatus\x12-\n\tconsensus\x18\x01 \x01(\x0b\x32\x1a.forge_abi.ConsensusStatus\x12)\n\x07network\x18\x02 \x01(\x0b\x32\x18.forge_abi.NetworkStatus\x12)\n\x07storage\x18\x03 \x01(\x0b\x32\x18.forge_abi.StorageStatus\x12%\n\x05\x66orge\x18\x04 \x01(\x0b\x32\x16.forge_abi.ForgeStatus\"G\n\x0f\x43onsensusStatus\x12\x0e\n\x06health\x18\x01 \x01(\x08\x12\x0e\n\x06synced\x18\x02 \x01(\x08\x12\x14\n\x0c\x62lock_height\x18\x03 \x01(\x04\"2\n\rNetworkStatus\x12\x0e\n\x06health\x18\x01 \x01(\x08\x12\x11\n\tnum_peers\x18\x02 \x01(\r\"y\n\rStorageStatus\x12\x0e\n\x06health\x18\x01 \x01(\x08\x12\x16\n\x0eindexer_server\x18\x02 \x01(\t\x12\x10\n\x08state_db\x18\x03 \x01(\t\x12.\n\ndisk_space\x18\x04 \x01(\x0b\x32\x1a.forge_abi.DiskSpaceStatus\"5\n\x0f\x44iskSpaceStatus\x12\x13\n\x0b\x66orge_usage\x18\x01 \x01(\t\x12\r\n\x05total\x18\x02 \x01(\t\"v\n\x0b\x46orgeStatus\x12\x0e\n\x06health\x18\x01 \x01(\x08\x12\x12\n\nabi_server\x18\x02 \x01(\t\x12\x11\n\tforge_web\x18\x03 \x01(\t\x12\x30\n\x0b\x61\x62\x63i_server\x18\x04 \x01(\x0b\x32\x1b.forge_abi.AbciServerStatus\"=\n\x10\x41\x62\x63iServerStatus\x12\x16\n\x0e\x61\x62\x63i_consensus\x18\x01 \x01(\t\x12\x11\n\tabci_info\x18\x02 \x01(\t\"7\n\x0eValidityFilter\x12%\n\x08validity\x18\x01 \x01(\x0e\x32\x13.forge_abi.Validity\"\'\n\x0bRangeFilter\x12\x0c\n\x04\x66rom\x18\x01 \x01(\x04\x12\n\n\x02to\x18\x02 \x01(\x04*/\n\tDirection\x12\n\n\x06mutual\x10\x00\x12\x0b\n\x07one_way\x10\x01\x12\t\n\x05union\x10\x02*,\n\x08Validity\x12\x08\n\x04\x62oth\x10\x00\x12\t\n\x05valid\x10\x01\x12\x0b\n\x07invalid\x10\x02\x62\x06proto3')
   ,
-  dependencies=[type__pb2.DESCRIPTOR,])
+  dependencies=[type__pb2.DESCRIPTOR,enum__pb2.DESCRIPTOR,])
 
 _DIRECTION = _descriptor.EnumDescriptor(
   name='Direction',
@@ -46,15 +47,45 @@ _DIRECTION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2728,
-  serialized_end=2775,
+  serialized_start=2209,
+  serialized_end=2256,
 )
 _sym_db.RegisterEnumDescriptor(_DIRECTION)
 
 Direction = enum_type_wrapper.EnumTypeWrapper(_DIRECTION)
+_VALIDITY = _descriptor.EnumDescriptor(
+  name='Validity',
+  full_name='forge_abi.Validity',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='both', index=0, number=0,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='valid', index=1, number=1,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='invalid', index=2, number=2,
+      serialized_options=None,
+      type=None),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=2258,
+  serialized_end=2302,
+)
+_sym_db.RegisterEnumDescriptor(_VALIDITY)
+
+Validity = enum_type_wrapper.EnumTypeWrapper(_VALIDITY)
 mutual = 0
 one_way = 1
 union = 2
+both = 0
+valid = 1
+invalid = 2
 
 
 
@@ -91,8 +122,8 @@ _PAGEORDER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=43,
-  serialized_end=83,
+  serialized_start=55,
+  serialized_end=95,
 )
 
 
@@ -136,8 +167,8 @@ _PAGEINPUT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=85,
-  serialized_end=163,
+  serialized_start=97,
+  serialized_end=175,
 )
 
 
@@ -167,8 +198,8 @@ _TYPEFILTER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=165,
-  serialized_end=192,
+  serialized_start=177,
+  serialized_end=204,
 )
 
 
@@ -205,8 +236,8 @@ _TIMEFILTER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=194,
-  serialized_end=254,
+  serialized_start=206,
+  serialized_end=266,
 )
 
 
@@ -250,8 +281,8 @@ _ADDRESSFILTER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=256,
-  serialized_end=346,
+  serialized_start=268,
+  serialized_end=358,
 )
 
 
@@ -295,8 +326,8 @@ _PAGEINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=348,
-  serialized_end=403,
+  serialized_start=360,
+  serialized_end=415,
 )
 
 
@@ -350,37 +381,16 @@ _INDEXEDTRANSACTION = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='consume_asset', full_name='forge_abi.IndexedTransaction.consume_asset', index=6,
-      number=7, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
+      name='valid', full_name='forge_abi.IndexedTransaction.valid', index=6,
+      number=20, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='create_asset', full_name='forge_abi.IndexedTransaction.create_asset', index=7,
-      number=8, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='exchange', full_name='forge_abi.IndexedTransaction.exchange', index=8,
-      number=9, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='transfer', full_name='forge_abi.IndexedTransaction.transfer', index=9,
-      number=10, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='update_asset', full_name='forge_abi.IndexedTransaction.update_asset', index=10,
-      number=11, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
+      name='code', full_name='forge_abi.IndexedTransaction.code', index=7,
+      number=21, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -395,12 +405,9 @@ _INDEXEDTRANSACTION = _descriptor.Descriptor(
   syntax='proto3',
   extension_ranges=[],
   oneofs=[
-    _descriptor.OneofDescriptor(
-      name='value', full_name='forge_abi.IndexedTransaction.value',
-      index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=406,
-  serialized_end=810,
+  serialized_start=418,
+  serialized_end=602,
 )
 
 
@@ -521,8 +528,8 @@ _INDEXEDACCOUNTSTATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=813,
-  serialized_end=1210,
+  serialized_start=605,
+  serialized_end=1002,
 )
 
 
@@ -587,8 +594,8 @@ _INDEXEDASSETSTATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1213,
-  serialized_end=1347,
+  serialized_start=1005,
+  serialized_end=1139,
 )
 
 
@@ -667,284 +674,8 @@ _INDEXEDSTAKESTATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1350,
-  serialized_end=1536,
-)
-
-
-_INDEXEDCONSUMEASSET = _descriptor.Descriptor(
-  name='IndexedConsumeAsset',
-  full_name='forge_abi.IndexedConsumeAsset',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='asset', full_name='forge_abi.IndexedConsumeAsset.asset', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1538,
-  serialized_end=1574,
-)
-
-
-_INDEXEDCREATEASSET = _descriptor.Descriptor(
-  name='IndexedCreateAsset',
-  full_name='forge_abi.IndexedCreateAsset',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='asset', full_name='forge_abi.IndexedCreateAsset.asset', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1576,
-  serialized_end=1611,
-)
-
-
-_INDEXEDEXCHANGE = _descriptor.Descriptor(
-  name='IndexedExchange',
-  full_name='forge_abi.IndexedExchange',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='sender_assets', full_name='forge_abi.IndexedExchange.sender_assets', index=0,
-      number=1, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='receiver_assets', full_name='forge_abi.IndexedExchange.receiver_assets', index=1,
-      number=2, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1613,
-  serialized_end=1678,
-)
-
-
-_INDEXEDTRANSFER = _descriptor.Descriptor(
-  name='IndexedTransfer',
-  full_name='forge_abi.IndexedTransfer',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='assets', full_name='forge_abi.IndexedTransfer.assets', index=0,
-      number=1, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1680,
-  serialized_end=1713,
-)
-
-
-_INDEXEDUPDATEASSET = _descriptor.Descriptor(
-  name='IndexedUpdateAsset',
-  full_name='forge_abi.IndexedUpdateAsset',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='asset', full_name='forge_abi.IndexedUpdateAsset.asset', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1715,
-  serialized_end=1750,
-)
-
-
-_HEIGHTFILTER = _descriptor.Descriptor(
-  name='HeightFilter',
-  full_name='forge_abi.HeightFilter',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='from_height', full_name='forge_abi.HeightFilter.from_height', index=0,
-      number=1, type=4, cpp_type=4, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='to_height', full_name='forge_abi.HeightFilter.to_height', index=1,
-      number=2, type=4, cpp_type=4, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1752,
-  serialized_end=1806,
-)
-
-
-_NUMTXSFILTER = _descriptor.Descriptor(
-  name='NumTxsFilter',
-  full_name='forge_abi.NumTxsFilter',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='min_num_txs', full_name='forge_abi.NumTxsFilter.min_num_txs', index=0,
-      number=1, type=4, cpp_type=4, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='max_num_txs', full_name='forge_abi.NumTxsFilter.max_num_txs', index=1,
-      number=2, type=4, cpp_type=4, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1808,
-  serialized_end=1864,
-)
-
-
-_NUMINVALIDTXSFILTER = _descriptor.Descriptor(
-  name='NumInvalidTxsFilter',
-  full_name='forge_abi.NumInvalidTxsFilter',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='min_num_invalid_txs', full_name='forge_abi.NumInvalidTxsFilter.min_num_invalid_txs', index=0,
-      number=1, type=4, cpp_type=4, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='max_num_invalid_txs', full_name='forge_abi.NumInvalidTxsFilter.max_num_invalid_txs', index=1,
-      number=2, type=4, cpp_type=4, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1866,
-  serialized_end=1945,
+  serialized_start=1142,
+  serialized_end=1328,
 )
 
 
@@ -1002,8 +733,8 @@ _INDEXEDBLOCK = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1947,
-  serialized_end=2051,
+  serialized_start=1330,
+  serialized_end=1434,
 )
 
 
@@ -1054,8 +785,8 @@ _HEALTHSTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2054,
-  serialized_end=2240,
+  serialized_start=1437,
+  serialized_end=1623,
 )
 
 
@@ -1099,8 +830,8 @@ _CONSENSUSSTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2242,
-  serialized_end=2313,
+  serialized_start=1625,
+  serialized_end=1696,
 )
 
 
@@ -1137,8 +868,8 @@ _NETWORKSTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2315,
-  serialized_end=2365,
+  serialized_start=1698,
+  serialized_end=1748,
 )
 
 
@@ -1189,8 +920,8 @@ _STORAGESTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2367,
-  serialized_end=2488,
+  serialized_start=1750,
+  serialized_end=1871,
 )
 
 
@@ -1227,8 +958,8 @@ _DISKSPACESTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2490,
-  serialized_end=2543,
+  serialized_start=1873,
+  serialized_end=1926,
 )
 
 
@@ -1279,8 +1010,8 @@ _FORGESTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2545,
-  serialized_end=2663,
+  serialized_start=1928,
+  serialized_end=2046,
 )
 
 
@@ -1317,33 +1048,83 @@ _ABCISERVERSTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2665,
-  serialized_end=2726,
+  serialized_start=2048,
+  serialized_end=2109,
+)
+
+
+_VALIDITYFILTER = _descriptor.Descriptor(
+  name='ValidityFilter',
+  full_name='forge_abi.ValidityFilter',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='validity', full_name='forge_abi.ValidityFilter.validity', index=0,
+      number=1, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2111,
+  serialized_end=2166,
+)
+
+
+_RANGEFILTER = _descriptor.Descriptor(
+  name='RangeFilter',
+  full_name='forge_abi.RangeFilter',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='from', full_name='forge_abi.RangeFilter.from', index=0,
+      number=1, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='to', full_name='forge_abi.RangeFilter.to', index=1,
+      number=2, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2168,
+  serialized_end=2207,
 )
 
 _PAGEINPUT.fields_by_name['order'].message_type = _PAGEORDER
 _ADDRESSFILTER.fields_by_name['direction'].enum_type = _DIRECTION
 _INDEXEDTRANSACTION.fields_by_name['tx'].message_type = type__pb2._TRANSACTION
-_INDEXEDTRANSACTION.fields_by_name['consume_asset'].message_type = _INDEXEDCONSUMEASSET
-_INDEXEDTRANSACTION.fields_by_name['create_asset'].message_type = _INDEXEDCREATEASSET
-_INDEXEDTRANSACTION.fields_by_name['exchange'].message_type = _INDEXEDEXCHANGE
-_INDEXEDTRANSACTION.fields_by_name['transfer'].message_type = _INDEXEDTRANSFER
-_INDEXEDTRANSACTION.fields_by_name['update_asset'].message_type = _INDEXEDUPDATEASSET
-_INDEXEDTRANSACTION.oneofs_by_name['value'].fields.append(
-  _INDEXEDTRANSACTION.fields_by_name['consume_asset'])
-_INDEXEDTRANSACTION.fields_by_name['consume_asset'].containing_oneof = _INDEXEDTRANSACTION.oneofs_by_name['value']
-_INDEXEDTRANSACTION.oneofs_by_name['value'].fields.append(
-  _INDEXEDTRANSACTION.fields_by_name['create_asset'])
-_INDEXEDTRANSACTION.fields_by_name['create_asset'].containing_oneof = _INDEXEDTRANSACTION.oneofs_by_name['value']
-_INDEXEDTRANSACTION.oneofs_by_name['value'].fields.append(
-  _INDEXEDTRANSACTION.fields_by_name['exchange'])
-_INDEXEDTRANSACTION.fields_by_name['exchange'].containing_oneof = _INDEXEDTRANSACTION.oneofs_by_name['value']
-_INDEXEDTRANSACTION.oneofs_by_name['value'].fields.append(
-  _INDEXEDTRANSACTION.fields_by_name['transfer'])
-_INDEXEDTRANSACTION.fields_by_name['transfer'].containing_oneof = _INDEXEDTRANSACTION.oneofs_by_name['value']
-_INDEXEDTRANSACTION.oneofs_by_name['value'].fields.append(
-  _INDEXEDTRANSACTION.fields_by_name['update_asset'])
-_INDEXEDTRANSACTION.fields_by_name['update_asset'].containing_oneof = _INDEXEDTRANSACTION.oneofs_by_name['value']
+_INDEXEDTRANSACTION.fields_by_name['code'].enum_type = enum__pb2._STATUSCODE
 _INDEXEDACCOUNTSTATE.fields_by_name['balance'].message_type = type__pb2._BIGUINT
 _INDEXEDACCOUNTSTATE.fields_by_name['total_received_stakes'].message_type = type__pb2._BIGUINT
 _INDEXEDACCOUNTSTATE.fields_by_name['total_stakes'].message_type = type__pb2._BIGUINT
@@ -1355,6 +1136,7 @@ _HEALTHSTATUS.fields_by_name['storage'].message_type = _STORAGESTATUS
 _HEALTHSTATUS.fields_by_name['forge'].message_type = _FORGESTATUS
 _STORAGESTATUS.fields_by_name['disk_space'].message_type = _DISKSPACESTATUS
 _FORGESTATUS.fields_by_name['abci_server'].message_type = _ABCISERVERSTATUS
+_VALIDITYFILTER.fields_by_name['validity'].enum_type = _VALIDITY
 DESCRIPTOR.message_types_by_name['PageOrder'] = _PAGEORDER
 DESCRIPTOR.message_types_by_name['PageInput'] = _PAGEINPUT
 DESCRIPTOR.message_types_by_name['TypeFilter'] = _TYPEFILTER
@@ -1365,14 +1147,6 @@ DESCRIPTOR.message_types_by_name['IndexedTransaction'] = _INDEXEDTRANSACTION
 DESCRIPTOR.message_types_by_name['IndexedAccountState'] = _INDEXEDACCOUNTSTATE
 DESCRIPTOR.message_types_by_name['IndexedAssetState'] = _INDEXEDASSETSTATE
 DESCRIPTOR.message_types_by_name['IndexedStakeState'] = _INDEXEDSTAKESTATE
-DESCRIPTOR.message_types_by_name['IndexedConsumeAsset'] = _INDEXEDCONSUMEASSET
-DESCRIPTOR.message_types_by_name['IndexedCreateAsset'] = _INDEXEDCREATEASSET
-DESCRIPTOR.message_types_by_name['IndexedExchange'] = _INDEXEDEXCHANGE
-DESCRIPTOR.message_types_by_name['IndexedTransfer'] = _INDEXEDTRANSFER
-DESCRIPTOR.message_types_by_name['IndexedUpdateAsset'] = _INDEXEDUPDATEASSET
-DESCRIPTOR.message_types_by_name['HeightFilter'] = _HEIGHTFILTER
-DESCRIPTOR.message_types_by_name['NumTxsFilter'] = _NUMTXSFILTER
-DESCRIPTOR.message_types_by_name['NumInvalidTxsFilter'] = _NUMINVALIDTXSFILTER
 DESCRIPTOR.message_types_by_name['IndexedBlock'] = _INDEXEDBLOCK
 DESCRIPTOR.message_types_by_name['HealthStatus'] = _HEALTHSTATUS
 DESCRIPTOR.message_types_by_name['ConsensusStatus'] = _CONSENSUSSTATUS
@@ -1381,7 +1155,10 @@ DESCRIPTOR.message_types_by_name['StorageStatus'] = _STORAGESTATUS
 DESCRIPTOR.message_types_by_name['DiskSpaceStatus'] = _DISKSPACESTATUS
 DESCRIPTOR.message_types_by_name['ForgeStatus'] = _FORGESTATUS
 DESCRIPTOR.message_types_by_name['AbciServerStatus'] = _ABCISERVERSTATUS
+DESCRIPTOR.message_types_by_name['ValidityFilter'] = _VALIDITYFILTER
+DESCRIPTOR.message_types_by_name['RangeFilter'] = _RANGEFILTER
 DESCRIPTOR.enum_types_by_name['Direction'] = _DIRECTION
+DESCRIPTOR.enum_types_by_name['Validity'] = _VALIDITY
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 PageOrder = _reflection.GeneratedProtocolMessageType('PageOrder', (_message.Message,), dict(
@@ -1454,62 +1231,6 @@ IndexedStakeState = _reflection.GeneratedProtocolMessageType('IndexedStakeState'
   ))
 _sym_db.RegisterMessage(IndexedStakeState)
 
-IndexedConsumeAsset = _reflection.GeneratedProtocolMessageType('IndexedConsumeAsset', (_message.Message,), dict(
-  DESCRIPTOR = _INDEXEDCONSUMEASSET,
-  __module__ = 'trace_type_pb2'
-  # @@protoc_insertion_point(class_scope:forge_abi.IndexedConsumeAsset)
-  ))
-_sym_db.RegisterMessage(IndexedConsumeAsset)
-
-IndexedCreateAsset = _reflection.GeneratedProtocolMessageType('IndexedCreateAsset', (_message.Message,), dict(
-  DESCRIPTOR = _INDEXEDCREATEASSET,
-  __module__ = 'trace_type_pb2'
-  # @@protoc_insertion_point(class_scope:forge_abi.IndexedCreateAsset)
-  ))
-_sym_db.RegisterMessage(IndexedCreateAsset)
-
-IndexedExchange = _reflection.GeneratedProtocolMessageType('IndexedExchange', (_message.Message,), dict(
-  DESCRIPTOR = _INDEXEDEXCHANGE,
-  __module__ = 'trace_type_pb2'
-  # @@protoc_insertion_point(class_scope:forge_abi.IndexedExchange)
-  ))
-_sym_db.RegisterMessage(IndexedExchange)
-
-IndexedTransfer = _reflection.GeneratedProtocolMessageType('IndexedTransfer', (_message.Message,), dict(
-  DESCRIPTOR = _INDEXEDTRANSFER,
-  __module__ = 'trace_type_pb2'
-  # @@protoc_insertion_point(class_scope:forge_abi.IndexedTransfer)
-  ))
-_sym_db.RegisterMessage(IndexedTransfer)
-
-IndexedUpdateAsset = _reflection.GeneratedProtocolMessageType('IndexedUpdateAsset', (_message.Message,), dict(
-  DESCRIPTOR = _INDEXEDUPDATEASSET,
-  __module__ = 'trace_type_pb2'
-  # @@protoc_insertion_point(class_scope:forge_abi.IndexedUpdateAsset)
-  ))
-_sym_db.RegisterMessage(IndexedUpdateAsset)
-
-HeightFilter = _reflection.GeneratedProtocolMessageType('HeightFilter', (_message.Message,), dict(
-  DESCRIPTOR = _HEIGHTFILTER,
-  __module__ = 'trace_type_pb2'
-  # @@protoc_insertion_point(class_scope:forge_abi.HeightFilter)
-  ))
-_sym_db.RegisterMessage(HeightFilter)
-
-NumTxsFilter = _reflection.GeneratedProtocolMessageType('NumTxsFilter', (_message.Message,), dict(
-  DESCRIPTOR = _NUMTXSFILTER,
-  __module__ = 'trace_type_pb2'
-  # @@protoc_insertion_point(class_scope:forge_abi.NumTxsFilter)
-  ))
-_sym_db.RegisterMessage(NumTxsFilter)
-
-NumInvalidTxsFilter = _reflection.GeneratedProtocolMessageType('NumInvalidTxsFilter', (_message.Message,), dict(
-  DESCRIPTOR = _NUMINVALIDTXSFILTER,
-  __module__ = 'trace_type_pb2'
-  # @@protoc_insertion_point(class_scope:forge_abi.NumInvalidTxsFilter)
-  ))
-_sym_db.RegisterMessage(NumInvalidTxsFilter)
-
 IndexedBlock = _reflection.GeneratedProtocolMessageType('IndexedBlock', (_message.Message,), dict(
   DESCRIPTOR = _INDEXEDBLOCK,
   __module__ = 'trace_type_pb2'
@@ -1565,6 +1286,20 @@ AbciServerStatus = _reflection.GeneratedProtocolMessageType('AbciServerStatus', 
   # @@protoc_insertion_point(class_scope:forge_abi.AbciServerStatus)
   ))
 _sym_db.RegisterMessage(AbciServerStatus)
+
+ValidityFilter = _reflection.GeneratedProtocolMessageType('ValidityFilter', (_message.Message,), dict(
+  DESCRIPTOR = _VALIDITYFILTER,
+  __module__ = 'trace_type_pb2'
+  # @@protoc_insertion_point(class_scope:forge_abi.ValidityFilter)
+  ))
+_sym_db.RegisterMessage(ValidityFilter)
+
+RangeFilter = _reflection.GeneratedProtocolMessageType('RangeFilter', (_message.Message,), dict(
+  DESCRIPTOR = _RANGEFILTER,
+  __module__ = 'trace_type_pb2'
+  # @@protoc_insertion_point(class_scope:forge_abi.RangeFilter)
+  ))
+_sym_db.RegisterMessage(RangeFilter)
 
 
 # @@protoc_insertion_point(module_scope)
