@@ -1,0 +1,112 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+  <session class="hero">
+    <br>
+    <br>
+    <section class="hero is-white">
+      <div class="hero-body">
+        <div class="container has-text-centered">
+          <img src="{{ url_for('static', filename='images/eventchain_h_2.png') }}"
+               style="height: 120px; width: 240px;">
+          <h1 class="title is-3 separate">Let's get started</h1>
+          {#          <h2 class="subtitle">Login or create a passphrase protected wallet</h2>#}
+        </div>
+      </div>
+    </section>
+    <br>
+    <br>
+  </session>
+  <div class="container">
+    <main role="main" class="container">
+      {% for message in get_flashed_messages() %}
+        <article class="message is-warning">
+          <div class="message-header">
+            <p>Warning</p>
+            <button class="delete"></button>
+          </div>
+          <div class="message-body">{{ message }}
+          </div>
+        </article>
+      {% endfor %}
+    </main>
+  </div>
+  <br>
+
+  <section class="container">
+    <div class="columns features">
+      <div class="column is-4 is-offset-1 has-text-left">
+        <h2 class="title">New User</h2>
+        <hr>
+        <p>Create a passphrase protected wallet</p>
+        {#                <div class="box">#}
+        {#                    <figure class="avatar">#}
+        {#                        <img src="/static/images/digit.jpg" style="width: 128px;height: 128px">#}
+        {#                    </figure>#}
+        <form class="login-form" action={{ url_for('admin.register') }} method="POST">
+          <br>
+          <div class="field">
+            <div class="control">
+              <input class="input is-medium" type="text" name="name" placeholder=" Username"
+                     autofocus="">
+            </div>
+          </div>
+          <div class="field">
+            <div class="control">
+              <input class="input is-medium " name="passphrase" type="password"
+                     placeholder=" Password">
+            </div>
+          </div>
+          <p class="help is-danger error-text">
+          </p>
+          <br>
+          <br>
+          <input value='Register' type='submit' class="button is-medium is-link is-fullwidth">
+
+          <p class="help is-success success-text">
+          </p>
+          {{ form.hidden_tag() }}
+        </form>
+        {#                </div>#}
+      </div>
+      <div class="column is-4 is-offset-2 has-text-left">
+        <h3 class="title">Existing User</h3>
+        <hr>
+        <p>Load the existing wallet</p>
+        <br>
+        {#                <div class="box">#}
+        <form action={{ url_for('admin.login') }} class="login-form" method="POST">
+          <div class="field">
+            <div class="control">
+              <input class="input is-medium" name="address" type="text"
+                     placeholder=" Wallet Address">
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="control">
+              <input class="input is-medium" name="name" type="text" placeholder=" Username">
+            </div>
+          </div>
+          <div class="field">
+            <div class="control">
+              <input class="input is-medium" name="passphrase" type="password"
+                     placeholder=" Passwpord">
+            </div>
+          </div>
+          <br>
+          <br>
+          {{ form.hidden_tag() }}
+          <div class="field">
+            <div class="control">
+              <input type="submit" class="button  is-link is-medium is-fullwidth" value="Log In"/>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+
+{% endblock %}

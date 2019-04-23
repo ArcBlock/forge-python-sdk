@@ -1,7 +1,7 @@
 import logging
 
 from event_chain import protos
-from event_chain.application import models
+from event_chain.app import models
 
 from forge import helper as forge_helper
 from forge import utils as forge_utils

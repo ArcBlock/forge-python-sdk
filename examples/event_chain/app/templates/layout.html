@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/images/fav_icon.png" type="image/x-icon">
+    <title>Event Chain</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}"/>
+    <style>
+        .columns:nth-child(2) {
+            margin-top: -10rem;
+        }
+    </style>
+</head>
+
+<body>
+<section class="section" style="padding:0rem 1.5rem;">
+    <section class="container">
+        <nav class="navbar is-white">
+            <div class="navbar-brand">
+                <a href="/"><img src="{{ url_for('static', filename='images/eventchain_h_2.png') }}"
+                                 style="height: 70px; width: 140px; margin-right: 40px;object-fit:cover;"></a>
+                <a class="navbar-item is-hidden-desktop" href={{ url_for('tickets.all') }}>
+                    My Account
+                </a>
+            </div>
+            <div id="basicNav" class="navbar-menu">
+                <div class="navbar-start">
+                    <a class="navbar-item" href="/">
+                        Event List
+                    </a>
+                    <a class="navbar-item" href={{ url_for('events.create')}}>
+                        Create an Event
+                    </a>
+                    <a class="navbar-item" href={{ url_for('tickets.all') }}>
+                        My Account
+                    </a>
+
+                </div>
+                <div class="navbar-end">
+
+                    <span class="navbar-item" style="text-align: right;">
+                        <a class="button is-link is-bold"
+                           onclick="$('#pokeTx').toggleClass('is-active')"
+                           style="color:#ffffff; margin-right: 15px; ">Feeling Lucky !</a>
+                        {% if not session.user %}
+                            <a class="button is-link is-bold" href={{ url_for('admin.login') }}>
+                          <span>Log In</span>
+                        </a>
+                        {% else %}
+                            <a class="button is-link is-bold" href={{ url_for('admin.logout') }}>
+                          <span>Log Out</span>
+                        </a>
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+        </nav>
+    </section>
+</section>
+<div class="content">
+    <div class="modal" id="pokeTx">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <article class="message is-light">
+                <div class="message-header">
+                    <h4 class="subtitle" style="margin-bottom:-6px;">Is Today Your Lucky Day ?</h4>
+                    <button class="delete"
+                            onclick="$('#pokeTx').toggleClass('is-active')"></button>
+                </div>
+                <div class="message-body" style="padding-bottom: 60px;">
+                    <div class="contents">
+                        <br>
+                        <p class="subtitle">🏖️ Scan to find out if you are <i>lucky</i> to get 25 TBA reward! </p>
+                        <figure class="image"
+                                style="display: block; margin-left: auto; margin-right: auto; width: 50%;">
+                            <img src="{{ qrcode(poke_url, border=2) }}"
+                                 alt="Image">
+                        </figure>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
+</div>
+
+{% block content %}{% endblock %}
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+</body>
+</html>

@@ -4,12 +4,12 @@ from inspect import isfunction
 
 from forge import protos
 from forge import utils
-from forge.rpc import chain
-from forge.rpc import event
-from forge.rpc import file
-from forge.rpc import state
-from forge.rpc import statistic
-from forge.rpc import wallet
+from forge.rpc import chain as chain_rpc
+from forge.rpc import event as event_rpc
+from forge.rpc import file as file_rpc
+from forge.rpc import state as state_rpc
+from forge.rpc import statistic as stats_rpc
+from forge.rpc import wallet as wallet_rpc
 
 logger = logging.getLogger('forge-rpc')
 
@@ -19,16 +19,15 @@ def __get_module_functions(module):
             getmembers(module, isfunction)}
 
 
-__all_services = {**__get_module_functions(chain),
-                  **__get_module_functions(state),
-                  **__get_module_functions(event),
-                  **__get_module_functions(file),
-                  **__get_module_functions(wallet),
-                  **__get_module_functions(statistic)}
+__all_services = {**__get_module_functions(chain_rpc),
+                  **__get_module_functions(state_rpc),
+                  **__get_module_functions(event_rpc),
+                  **__get_module_functions(file_rpc),
+                  **__get_module_functions(wallet_rpc),
+                  **__get_module_functions(stats_rpc)}
 
 for name, func in __all_services.items():
     vars()[name] = func
-
 
 __wallet_type = protos.WalletType(pk=0, hash=1, address=1)
 
@@ -49,8 +48,11 @@ def send_itx(type_url, itx, wallet, token, nonce=1):
     """
     encoded_itx = utils.encode_to_any(type_url, itx)
     tx = create_tx(
-        itx=encoded_itx, from_address=wallet.address,
-        wallet=wallet, token=token, nonce=nonce
+        itx=encoded_itx,
+        from_address=wallet.address,
+        wallet=wallet,
+        token=token,
+        nonce=nonce
     )
     return send_tx(tx.tx)
 

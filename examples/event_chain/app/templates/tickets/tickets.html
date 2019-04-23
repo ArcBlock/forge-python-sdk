@@ -1,0 +1,143 @@
+{% extends "layout.html" %}
+{% block content %}
+
+    <section class="hero">
+        <main role="main" class="container">
+            {% for message in get_flashed_messages() %}
+                <div class="notification is-link" id="layout_msg">
+                    🎉 {{ message }} 🎉 </div>
+            {% endfor %}
+        </main>
+        <br>
+        <br>
+        <section class="hero is-white">
+            <div class="hero-body">
+                <div class="container has-text-centered">
+                    <br>
+                    <br>
+                    <h1 class="title is-2 separate">Good morning, {{ user.moniker }}!</h1>
+                    <h2 class="subtitle">Check your tickets and events here</h2>
+                </div>
+            </div>
+        </section>
+        <br>
+        <br>
+        <section class="section">
+            <section class="container">
+                    <div class="columns" style="padding-top:30px">
+                        <div class="column is-two-thirds">
+                            <div class="media">
+                                <div class="media-left">
+                                    <figure class="image" style="height: 80px; width: 80px;"><img
+                                            src="https://source.unsplash.com/random/96x96" alt="Image"></figure>
+                                </div>
+                                <div class="media-content">
+                                    <p class="title is-3">{{ user.moniker }}</p>
+                                    <p class='text-left'><b>Address:</b> {{ user.address }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="column is-one-third">
+                            <nav class="level">
+                                <div class="level-item has-text-centered">
+                                    <div>
+                                        <p class="heading">Balance</p>
+                                        <p class="title">{{ user.display_balance }} ABT</p>
+                                    </div>
+                                </div>
+                                <div class="level-item has-text-centered">
+                                    <div>
+                                        <p class="heading">Tickets</p>
+                                        <p class="title">{{ num_tickets }}</p>
+                                    </div>
+                                </div>
+                            </nav>
+                        </div>
+                    </div>
+
+            </section>
+        </section>
+        <section class="section">
+            <section class="container">
+                <h2 class="title">My Tickets
+                    <hr>
+                </h2>
+                {% if ticket_lists %}
+                    {% for tickets in ticket_lists %}
+                        <section class="container">
+                            <div class="columns is-multiline features">
+                                {% for ticket in tickets %}
+                                    <div class="column is-4">
+                                        <div class="card is-shady">
+                                            <header class="card-header">
+                                                <p class="card-header-title"> {{ events.get(ticket.address).event_info.title }} </p>
+                                            </header>
+                                            <div class="card-content">
+                                                <div class="content">
+                                                    <div class="content">
+                                                        <p><span class="icon is-small is-left">
+                          <i class="fa fa-map-marker" style="margin-right:3px;"></i>
+                        </span> {{ events.get(ticket.address).event_info.location }}</p>
+                                                        <p><span class="icon is-small is-left">
+                          <i class="fa fa-calendar" style="margin-right:3px;"></i>
+                        </span> {{ events.get(ticket.address).display_start_time }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <footer class="card-footer">
+                                                {% if ticket.transferrable==True %}
+                                                    <a class="card-footer-item" style=" color:#5c4899; text-align: center;"
+                                                       onclick="$('#consumeTicket').toggleClass('is-active')">
+                                                        <b>Use Ticket</b></a>
+                                                    <div class="modal" id="consumeTicket">
+                                                        <div class="modal-background"></div>
+                                                        <div class="modal-card">
+                                                            <article class="message is-light">
+                                                                <div class="message-header">
+                                                                    <h4 class="subtitle" style="margin-bottom:-6px;">Confirm To Use Your
+                                                                        Ticket</h4>
+                                                                    <button class="delete"
+                                                                            onclick="$('#consumeTicket').toggleClass('is-active')"></button>
+                                                                </div>
+                                                                <div class="message-body">
+                                                                    <div class="contents">
+                                                                        <br>
+                                                                        <p>Are you sure you want to use this ticket to
+                                                                            join
+                                                                            <b>{{ events.get(ticket.address).event_info.title }}</b>?
+                                                                        </p>
+                                                                        <br>
+
+                                                                    </div>
+                                                                </div>
+                                                                <footer class="modal-card-foot">
+                                                                    <div>
+                                                                        <a class="button is-link"
+                                                                           onclick="$('#consumeTicket').toggleClass('is-active');$('#confirmUseTicket').toggleClass('is-active');"
+                                                                           href={{ url_for('api_ticket.use',address=ticket.address) }}
+                                                                        >Use Ticket</a>
+                                                                        <a class="button"
+                                                                           onclick="$('#consumeTicket').toggleClass('is-active')">Cancel</a>
+                                                                    </div>
+                                                                </footer>
+                                                            </article>
+                                                        </div>
+                                                    </div>
+                                                {% else %}
+                                                    <p class="card-footer-item">Used</p>
+                                                {% endif %}
+                                            </footer>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </section>
+                    {% endfor %}
+                {% else %} <h1>There's no tickets created yet!</h1>
+                {% endif %}
+            </section>
+        </section>
+    </section>
+
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends "layout.html" %}
+{% block content %}
+
+  <section class="hero is-dark has-background-image">
+    <div class="hero-body" style="margin-top: 120px; text-shadow: 0px 0px 10px #7f7f7f;">
+      <div class="container has-text-centered">
+        <h1 class="title" style="font-size: 8vw;"><b>LIFE IS SHORT! LET'S HAVE FUN!</b></h1>
+{#        <h2 class="subtitle is-4">Create and join events to start enjoying your day</h2>#}
+      </div>
+    </div>
+  </section>
+  <section class="section">
+  <section class="container">
+    {% if event_lists %}
+      {% for events in event_lists %}
+        <section class="section">
+        <div class="columns is-multiline features">
+          {% for event in events %}
+            <div class="column is-4">
+              <div class="card is-shady">
+                <div class="card-image">
+                  <figure class="image is-16by9">
+                    <a href={{ url_for('events.detail',address=event.address) }}>
+                      <img src={{ event.event_info.img_url }}
+                           alt="{{ event.event_info.title }}"/>
+                    </a>
+                  </figure>
+                </div>
+                <div class="card-content">
+                  <div class="content">
+                    <h2 class="subtitle strong">
+                      <a style="color:#404040;"
+                         href={{ url_for('events.detail',address=event.address) }}>{{ event.event_info.title }}</a>
+                    </h2>
+                    <p>
+                        <span class="icon is-small is-left">
+                          <i class="fa fa-map-marker" style="margin-right:3px;"></i>
+                        </span> {{ event.event_info.location }}</p>
+                    <p>
+                        <span class="icon is-small is-left">
+                          <i class="fa fa-calendar" style="margin-right:3px;"></i>
+                        </span> {{ event.display_start_time }}</p>
+                    <hr>
+                    <nav class="level">
+                      <div class="level-item has-text-centered">
+                        <div>
+                          <p class="heading">Tickets</p>
+                          <p class="title">{{ event.event_info.remaining }}/{{ event.event_info.total }}</p>
+                        </div>
+                      </div>
+                      <div class="level-item has-text-centered">
+                        <div>
+                          <p class="heading">Price</p>
+                          <p class="title">{{ event.display_price }} TBA</p>
+                        </div>
+                      </div>
+                    </nav>
+                  </div>
+                </div>
+                <footer class="card-footer">
+                  <a class="card-footer-item"
+                     href={{ url_for('events.detail',address=event.address) }}>Event
+                    Details</a>
+                </footer>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+    {% else %} <h1>Sorry, no event yet</h1>
+    {% endif %}
+    </section>
+  </section>
+  </section>
+
+{% endblock %}

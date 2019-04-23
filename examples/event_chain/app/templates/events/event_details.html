@@ -1,0 +1,255 @@
+{% extends "layout.html" %}
+{% block content %}
+    <section class="hero">
+        <section class="section">
+            <section class="container">
+                <section class="session" style="margin-top: 40px;">
+                    <div class="card is-transparent">
+                        <div class="card-image">
+                            <figure class="image is-3by1"><img src={{ event.event_info.img_url }}
+                                                                       alt="Image" style="object-fit:cover;">>
+                            </figure>
+                        </div>
+                        <div class="card-content" style="padding-top: 60px;">
+                            <div class="content">
+                                <div class="columns is-two-thirds">
+                                    <div class="column">
+                                        <p class="title is-2">{{ event.event_info.title }}</p>
+                                        <p class="subtitle is-6">Created by <a>{{ host.moniker }} (
+                                            Account: {{ host.address }} )</a></p>
+                                        <br>
+                                        <div class="content">
+                                            <p>At this event your enthusiasm for secure, decentralized transactions will
+                                                be put into
+                                                meaningful context thanks to brand leaders willing to share their case
+                                                studies and
+                                                collaborative problem-solving workshops. Join us and harness the
+                                                passion of Blockchain to build a more sustainably streamlined
+                                                future.</p>
+                                            <br>
+                                            <p>{{ event.event_info.description }}</p>
+                                            <br>
+                                            <p><b>In this event you can :</b></p>
+                                            <ul>
+                                                <li>Meet and network with over 200 cross-industry Blockchain leaders and
+                                                    innovators
+                                                </li>
+                                                <li>Exchange ideas, share insights, and strengthen the business
+                                                    relationships to your success
+                                                </li>
+                                                <li>Look at how early adopters of the technology are applying blockchain
+                                                    to their business operations.
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="column is-one-third">
+                                        <nav class="level">
+                                            <div class="level-item has-text-centered">
+                                                <div>
+                                                    <p class="heading">Tickets</p>
+                                                    <p class="title">{{ event.event_info.remaining }}/{{ event.event_info.total }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="level-item has-text-centered">
+                                                <div>
+                                                    <p class="heading">Price</p>
+                                                    <p class="title">{{ event.display_price }} TBA</p>
+                                                </div>
+                                            </div>
+                                        </nav>
+
+                                        <hr>
+                                        <p><span class="icon is-small is-left" style="margin-right:4px;">
+                          <i class="fa fa-map-marker" style="margin-right:2px;"></i>
+                        </span> {{ event.event_info.location }}</p>
+                                        <p><span class="icon is-small is-left" style="margin-right:4px;">
+                          <i class="fa fa-calendar"></i>
+                        </span> {{ event.display_start_time }}</p>
+                                        <p><span class="icon is-small is-left" style="margin-right:4px;">
+                          <i class="fa fa-hourglass-start"></i>
+                        </span> {{ event.display_end_time }}</p>
+
+                                        <div class="content" style="padding: 6px 0px;" id="modal">
+                                            <a class="button fullwidth is-link is-bold"
+                                               onclick="$('#buyTicket').toggleClass('is-active')"
+                                               style="color:#ffffff;">Buy Ticket</a>
+                                            <div class="modal" id="buyTicket">
+                                                <div class="modal-background"></div>
+                                                <div class="modal-card">
+                                                    <article class="message is-light">
+                                                        <div class="message-header">
+                                                            <h4 class="subtitle" style="margin-bottom:-6px;">Buy
+                                                                Ticket</h4>
+                                                            <button class="delete"
+                                                                    onclick="$('#buyTicket').toggleClass('is-active')"></button>
+                                                        </div>
+                                                        <div class="message-body">
+                                                            <form method="POST" action={{ url_for('api_ticket.buy') }}>
+                                                                {{ form.hidden_tag() }}
+                                                                <input type="hidden" name="address"
+                                                                       value="{{ event.address }}"/>
+
+                                                                {% if event.event_info.remaining == 0 %}
+                                                                    <p class=""><input type=submit value='Buy'
+                                                                                       class="button is-info"
+                                                                                       disabled/>
+                                                                    </p>
+
+                                                                {% else %}
+                                                                    <div class="contents">
+                                                                        <p>Please confirm you are going to buy the
+                                                                            ticket for
+                                                                            this event: </p>
+                                                                        <p class="title is-3">{{ event.event_info.title }}</p>
+                                                                        <p>by paying <b>{{ event.display_price }}
+                                                                            TBA</b></p>
+                                                                        <table class="table is-no-bordered"
+                                                                               width="100%">
+                                                                            <tbody>
+                                                                            <tr>
+                                                                                <td style="padding: 0px;"
+                                                                                    width="66.6666%">
+                                                                                    <br>
+                                                                                    <div class="field">
+                                                                                        <p class="control">
+                                                                                            <label class="checkbox">
+                                                                                                <input type="checkbox"
+                                                                                                       onclick="$('#buyTicketButton').prop('disabled', !$('#buyTicketButton').prop('disabled'))">
+                                                                                                By click the button
+                                                                                                below, I agree with
+                                                                                                the payment
+                                                                                                information and
+                                                                                                confirm to buy the
+                                                                                                ticket.
+                                                                                            </label>
+                                                                                        </p>
+                                                                                    </div>
+                                                                                    <br>
+                                                                                    <input type=submit
+                                                                                           id='buyTicketButton'
+                                                                                           value='Buy Ticket'
+                                                                                           class="button is-link"
+                                                                                           disabled/>
+                                                                                </td>
+                                                                                <td style="padding: 0px;">
+                                                                                    <figure class="image"
+                                                                                            style="display: block; margin-left: auto; margin-right: 0px; width: 80%;">
+                                                                                        <img src="{{ qrcode(url, border=5) }}"
+                                                                                             alt="Image">
+                                                                                    </figure>
+                                                                                </td>
+                                                                            </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                {% endif %}
+                                                            </form>
+                                                        </div>
+                                                    </article>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="content" style="padding: 6px 0px;" id="modal">
+                                            <a class="button fullwidth is-link is-bold"
+                                               onclick="$('#useTicket').toggleClass('is-active')"
+                                               style="color:#ffffff;">Join Event</a>
+                                            <div class="modal" id="useTicket">
+                                                <div class="modal-background"></div>
+                                                <div class="modal-card">
+                                                    <article class="message is-light">
+                                                        <div class="message-header">
+                                                            <h4 class="subtitle" style="margin-bottom:-6px;">Join
+                                                                Event</h4>
+                                                            <button class="delete"
+                                                                    onclick="$('#useTicket').toggleClass('is-active')"></button>
+                                                        </div>
+                                                        <div class="message-body" style="padding-bottom: 60px;">
+                                                            <div class="contents">
+                                                                <p>Join us in</p>
+                                                                <p class="title is-3">{{ event.event_info.title }}</p>
+                                                                <p>by scanning the QR code below</p>
+                                                                <figure class="image"
+                                                                        style="display: block; margin-left: auto; margin-right: auto; width: 30%;">
+                                                                    <img src="{{ qrcode(consume_url) }}"
+                                                                         alt="Image">
+                                                                </figure>
+                                                            </div>
+                                                        </div>
+                                                    </article>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="content" style="width:100%">
+                                            <div>
+                                                <div>
+                                                    {{ googlemap("simple-map", 47.6101, -122.2015, markers=[(47.6101, -122.2015)]) }}
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <section class="section">
+                            <h1 class="title is-3"> How Many People Have Tried? </h1>
+                            <hr>
+                            {% if num_txs > 0 %}
+                                <div class="content">
+                                    <p class="subtitle">Not all attempts are created equal.
+                                Click to see if that purchase succeeded.</p>
+                                    <table class="table" style="width: 100%;">
+                                        <thead>
+                                        <tr>
+                                            <th style="text-align: center;">Hash</th>
+                                            <th style="text-align: center;">Time</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for tx_list in tx_lists %}
+                                            {% for tx in tx_list %}
+                                                <tr class="full-text">
+                                                    <td style="text-align: left;">
+                                                        <a href="{{ forge_web }}{{ tx.hash }}"
+                                                           target="_blank">{{ tx.hash }}</a>
+                                                    </td>
+                                                    <td style=text-align:center;">
+                                                        {{ to_display_time(tx.time) }}
+                                                    </td>
+                                                </tr>
+                                                <tr class="short-text">
+                                                    <td style="word-break: keep-all;text-align: center">
+                                                        <a href="{{ forge_web }}{{ tx.hash }}"
+                                                           target="_blank">{{ shorten_hash(tx.hash) }}</a>
+                                                    </td>
+                                                    <td style="word-break: keep-all;text-align: center">
+                                                        {{ to_short_time(tx.time) }}
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <br>
+                                <p class="subtitle" style="text-align: center;"><i>No one has got the ticket yet. Be the
+                                    first one on the list ! </i></p>
+                            {% endif %}
+                        </section>
+                    </div>
+                </section>
+            </section>
+        </section>
+    </section>
+
+    <script>
+        function adjustGoogleMapSize() {
+            document.getElementById("simple-map").style.width = "100%";
+        }
+
+        window.onload = adjustGoogleMapSize;
+    </script>
+{% endblock %}

@@ -12,7 +12,6 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-from google.protobuf import any_pb2 as google_dot_protobuf_dot_any__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -20,9 +19,8 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='forge_abi',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x0esdk_test.proto\x12\tforge_abi\x1a\x19google/protobuf/any.proto\"(\n\x0bpythonSDKTx\x12\n\n\x02to\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\rb\x06proto3')
-  ,
-  dependencies=[google_dot_protobuf_dot_any__pb2.DESCRIPTOR,])
+  serialized_pb=_b('\n\x0esdk_test.proto\x12\tforge_abi\"(\n\x0bpythonSDKTx\x12\n\n\x02to\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\rb\x06proto3')
+)
 
 
 
@@ -60,8 +58,8 @@ _PYTHONSDKTX = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=56,
-  serialized_end=96,
+  serialized_start=29,
+  serialized_end=69,
 )
 
 DESCRIPTOR.message_types_by_name['pythonSDKTx'] = _PYTHONSDKTX

@@ -149,9 +149,9 @@ class AbtDid:
                                    'exp': now + AbtDid.MIN_30,
                                    **extra,
                                    })
-        body = utils.to_json_b64urlsafe(middle)
+        body = utils.b64decode_to_json(middle)
         data = self.__header() + '.' + body
-        signature = utils.b64encode_no_padding(
+        signature = utils.multibase_b64encode(
             self.signer.sign(data.encode(), sk))
         return data + '.' + signature
 
@@ -161,7 +161,7 @@ class AbtDid:
         elif self.key_type == 'secp256k1':
             alg = 'ES256K'
 
-        return utils.to_json_b64urlsafe({
+        return utils.b64decode_to_json({
             'alg': alg,
             'typ': 'JWT'
         })
@@ -170,16 +170,16 @@ class AbtDid:
     def verify(token, pk):
         try:
             header, body, signature = token.split('.')
-            alg = utils.b64encoded_to_dict(header).get('alg').lower()
+            alg = utils.b64decode_to_dict(header).get('alg').lower()
             if alg == 'secp256k1' or alg == 'es256k':
                 signer = Signer('secp256k1')
             elif alg == 'ed25519':
                 signer = Signer('ed25519')
 
-            sig = utils.b64decode_padding_safe(signature)
+            sig = utils.multibase_b64decode(signature)
             is_sig_valid = signer.verify((header + '.' + body).encode(),
                                          sig, pk)
-            did = utils.b64encoded_to_dict(body).get('iss')
+            did = utils.b64decode_to_dict(body).get('iss')
             if is_sig_valid and AbtDid.is_match_pk(did, pk):
                 return True
             return False

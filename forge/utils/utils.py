@@ -128,27 +128,27 @@ def multibase_b58decode(data):
                      ' base58.'.format(str(data)))
 
 
-def to_json_b64urlsafe(dictionary):
-    json_data = json.dumps(dictionary)
-    return b64encode_no_padding(json_data)
-
-
-def b64encode_no_padding(data):
+def multibase_b64encode(data):
     if isinstance(data, str):
         data = data.encode()
     return base64.urlsafe_b64encode(data).decode().rstrip('=')
 
 
-def b64decode_padding_safe(data):
+def multibase_b64decode(data):
     if isinstance(data, str):
         data = data.encode()
     return base64.urlsafe_b64decode(
         (data + b'=' * (-len(data) % 4)))
 
 
-def b64encoded_to_dict(data):
+def b64decode_to_json(dictionary):
+    json_data = json.dumps(dictionary)
+    return multibase_b64encode(json_data)
+
+
+def b64decode_to_dict(data):
     try:
-        dict_string = b64decode_padding_safe(data).decode()
+        dict_string = multibase_b64decode(data).decode()
         return ast.literal_eval(dict_string)
     except Exception as e:
         logger.error('Error in decoding b64urlsafe '
@@ -157,7 +157,6 @@ def b64encoded_to_dict(data):
         return {}
 
 
-# TODO: utc timestamp
 def current_utc_timestamp():
     return round(datetime.utcnow().timestamp())
 

@@ -6,7 +6,7 @@ stub = protos.ChainRpcStub(config.get_grpc_channel())
 
 
 def create_tx(itx, from_address,
-              wallet=None, token=None, req=None, nonce=1,
+              wallet=None, token=None, nonce=1,
               ):
     """ GRPC call to build a complete transaction, including sender's pk and
     sender's signature
@@ -25,7 +25,6 @@ def create_tx(itx, from_address,
         wallet (:obj:`WalletInfo`) : user wallet
         token (string): token provided by forge for using wallets stored on
             forge
-        req (:obj:`RequestCreateTx`): complete request
         nonce (int): optional, number of tx this account has sent
 
     Returns:
@@ -33,21 +32,19 @@ def create_tx(itx, from_address,
 
     """
 
-    if req is not None:
-        return stub.create_tx(req)
-    else:
-        req_kwargs = {
-            'itx': itx,
-            'from': from_address,
-            'nonce': nonce,
-            'wallet': wallet,
-            'token': token,
-        }
-        return stub.create_tx(protos.RequestCreateTx(**req_kwargs))
+    req_kwargs = {
+        'itx': itx,
+        'from': from_address,
+        'nonce': nonce,
+        'wallet': wallet,
+        'token': token,
+    }
+    request = protos.RequestCreateTx(**req_kwargs)
+    return stub.create_tx(request)
 
 
 def send_tx(
-        tx, wallet=None, token=None, commit=False, req=None,
+        tx, wallet=None, token=None, commit=False,
 ):
     """GRPC call to send the included transaction
 
@@ -57,31 +54,26 @@ def send_tx(
         token (string): token provided by forge for using wallets stored on
             forge
         commit(bool): option to wait until transaction was included in a block
-        req(:obj: `RequestSendTx`): complete request
 
     Returns:
             ResponseSendTx
 
     """
-    if req is not None:
-        return stub.send_tx(req)
-    else:
-        req_kwargs = {
-            'tx': tx,
-            'wallet': wallet,
-            'token': token,
-            'commit': commit,
-        }
-        req = protos.RequestSendTx(**req_kwargs)
-        return stub.send_tx(req)
+    req_kwargs = {
+        'tx': tx,
+        'wallet': wallet,
+        'token': token,
+        'commit': commit,
+    }
+    request = protos.RequestSendTx(**req_kwargs)
+    return stub.send_tx(request)
 
 
-def get_tx(tx_hash, reqs=None):
+def get_tx(tx_hash):
     """ GRPC call to get detailed information of a transaction
 
     Args:
         tx_hash(string or list[string]): hash of the transaction
-        reqs (RequestGetTx): list of request
 
     Returns:
          ResponseGetTx(stream)
@@ -89,23 +81,17 @@ def get_tx(tx_hash, reqs=None):
     """
 
     def to_req(item):
-        if isinstance(item, protos.RequestGetTx):
-            return item
-        else:
-            return protos.RequestGetTx(hash=item)
+        return protos.RequestGetTx(hash=item)
 
-    if reqs is not None:
-        return stub.get_tx(utils.to_iter(to_req, reqs))
-    else:
-        return stub.get_tx(utils.to_iter(to_req, tx_hash))
+    requests = utils.to_iter(to_req, tx_hash)
+    return stub.get_tx(requests)
 
 
-def get_block(height, req=None):
+def get_block(height):
     """ GRPC call to get blocks information
 
     Args:
         height(int or list[int]): height of the block
-        req(:obj: `RequestGetBlock`): sream of requests
 
     Returns:
         ResponseGetBlock(stream)
@@ -113,128 +99,87 @@ def get_block(height, req=None):
     """
 
     def to_req(item):
-        if isinstance(item, protos.RequestGetBlock):
-            return item
-        else:
-            return protos.RequestGetBlock(height=item)
+        return protos.RequestGetBlock(height=item)
 
-    if req is not None:
-        return stub.get_block(utils.to_iter(to_req, req))
-    else:
-        return stub.get_block(utils.to_iter(to_req, height))
+    requests = utils.to_iter(to_req, height)
+    return stub.get_block(requests)
 
 
-def search(key, value, req=None):
+def search(key, value):
     """GRPC call to search for specific key-value pair
 
     Args:
         key(string): key
         value(string): value
-        req(:obj:`RequestSearch`): request
 
     Returns:
         ResponseSearch(stream)
 
     """
-    if req is not None:
-        return stub.search(req)
-    else:
-        req_kwargs = {
-            'key': key,
-            'value': value,
-        }
-        return stub.search(protos.RequestSearch(**req_kwargs))
+    request = protos.RequestSearch(key=key,
+                                   value=value)
+    return stub.search(request)
 
 
-def get_unconfirmed_tx(paging=None, req=None):
+def get_unconfirmed_tx(paging=None):
     """GRPC call to get currently unconfirmed transactions
 
     Args:
         paging(:obj:`PageInput`): paging preference
-        req(:obj:`RequestGetUnconfirmedTx`): request
 
     Returns:
         ResponseGetUnconfirmedTxs
 
     """
-    if req is not None:
-        return stub.get_unconfirmed_txs(req)
-    else:
-        return stub.get_unconfirmed_txs(
-            protos.RequestGetUnconfirmedTxs(paging=paging),
-        )
+    request = protos.RequestGetUnconfirmedTxs(paging=paging)
+    return stub.get_unconfirmed_txs(request)
 
 
-def get_chain_info(req=None):
+def get_chain_info():
     """ RPC call to get information about current chain
-
-    Args:
-        req(:obj:`RequestGetChainInfo`): request
 
     Returns:
         ResponseGetChainInfo
 
     """
-    if req is not None:
-        return stub.get_chain_info(req)
-    else:
-        return stub.get_chain_info(protos.RequestGetChainInfo())
+    request = protos.RequestGetChainInfo()
+    return stub.get_chain_info(request)
 
 
-def get_net_info(req=None):
+def get_net_info():
     """RPC call to get information of the net
-
-    Args:
-        req(:obj:`RequestGetNetInfo`): Request
 
     Returns:
         ResponseGetNetInfo
     """
-    if req is not None:
-        return stub.get_net_info(req)
-    else:
-        return stub.get_net_info(protos.RequestGetNetInfo())
+    request = protos.RequestGetNetInfo()
+    return stub.get_net_info(request)
 
 
-def get_validators_info(req=None):
+def get_validators_info():
     """GRPC call to get informations about al current validators
-
-    Args:
-        req(:obj:`RequestGetValidatorsInfo`: completed request
 
     Returns:
         ResponseGetValidatorsInfo
 
     """
-
-    if req is not None:
-        return stub.get_validators_info(req)
-    else:
-        return stub.get_validators_info(
-            protos.RequestGetValidatorsInfo(),
-        )
+    request = protos.RequestGetValidatorsInfo()
+    return stub.get_validators_info(request)
 
 
-def get_config(req=None):
+def get_config():
     """ RPC call to get detailed configuration current chain is using
-
-    Args:
-        req(:obj:`RequestGetConfig`): completed Request
 
     Returns:
         ResponseGetConfig
 
     """
 
-    if req is not None:
-        return stub.get_config(req)
-    else:
-        return stub.get_config(
-            protos.RequestGetConfig(),
-        )
+    request = protos.RequestGetConfig()
+    return stub.get_config(request)
 
 
-def multisig(tx, wallet=None, token=None, data=None, req=None):
+def multisig(tx, wallet=None, token=None, data=None):
     """GRPC call to get multi-signature of a transaction. When executing this
     transactions, Forge will insert the address to `signatures` field as
     `Multisig.signer`, then create a signature of the entire transaction
@@ -245,25 +190,20 @@ def multisig(tx, wallet=None, token=None, data=None, req=None):
         token (string): token provided by forge for using wallets stored on
             forge
         data(:obj:`google.protobuf.Any`): extra data to be included in multisig
-        req(:obj:`RequestMultisig`): completed request
 
     Returns:
         ResponseMultisig
 
     """
-    if req is not None:
-        return stub.multisig(req)
-    else:
-        req = protos.RequestMultisig(
-            tx=tx, wallet=wallet, token=token,
-            data=data,
-        )
-        return stub.multisig(req)
+    request = protos.RequestMultisig(
+        tx=tx, wallet=wallet, token=token,
+        data=data,
+    )
+    return stub.multisig(request)
 
 
 def get_asset_address(
-        sender_address, itx,
-        wallet_type=None, req=None,
+        sender_address, itx
 ):
     """RPC call to get asset address calculated from createAssetTx and
     sender address
@@ -271,85 +211,44 @@ def get_asset_address(
     Args:
         sender_address(string): address of the creator of this asset
         itx(:obj:`CreateAssetTx`): the inner transaction to create asset
-        wallet_type(:obj:`WalletType`): deprecated
-        req(:obj:`RequestGetAssetAddress`): completed request
 
     Returns:
         ResponseGetAssetAddress
 
     """
-    if req is not None:
-        return stub.get_asset_address(req)
-    else:
-        return stub.get_asset_address(
-            protos.RequestGetAssetAddress(
-                sender_address=sender_address, itx=itx,
-                wallet_type=wallet_type,
-            ),
-        )
+    request = protos.RequestGetAssetAddress(
+        sender_address=sender_address, itx=itx
+    )
+    return stub.get_asset_address(request)
 
 
 def get_blocks(height_filter,
                empty_excluded=False,
-               paging=None,
-               req=None):
+               paging=None):
     """GRPC call to get information of blocks
 
     Args:
         height_filter(:obj:`RangeFilter`): range filter for blocks
         empty_excluded(bool): whether to include empty blocks or not
         paging(:obj:`PageInput`): optional, paging preference
-        req(:obj:`RequestGetBlocks`): completed request
 
     Returns:
         ResponseGetBlocks
 
     """
-    if req:
-        return stub.get_blocks(req)
-    else:
-        return stub.get_blocks(
-            protos.RequestGetBlocks(
-                height_filter=height_filter,
-                paging=paging,
-                empty_excluded=empty_excluded
-            )
-        )
+    request = protos.RequestGetBlocks(
+        height_filter=height_filter,
+        paging=paging,
+        empty_excluded=empty_excluded
+    )
+    return stub.get_blocks(request)
 
 
-def get_node_info(req=None):
+def get_node_info():
     """GRPC call to get information of current node
-
-    Args:
-        req(:obj:`RequestGetNodeInfo`): completed request
 
     Returns:
         ResponseGetNodeInfo
-
     """
-    if req:
-        return stub.get_node_info(req)
-    else:
-        return stub.get_node_info(protos.RequestGetNodeInfo())
-
-
-def sign_data(data, wallet, token, req=None):
-    """ GRPC call to get signature for specific data
-
-    Args:
-        data(bytes): data needs to be signed
-        wallet (:obj:`WalletInfo`) : user wallet
-        token (string): token provided by forge for using wallets stored on
-            forge
-        req(:obj:`RequestSignData`): completed request
-
-    Returns:
-        ResponseSignData
-
-    """
-    if req:
-        return stub.sign_data(req)
-    else:
-        return stub.sign_data(protos.RequestSignData(
-            data=data, wallet=wallet, token=token
-        ))
+    request = protos.RequestGetNodeInfo()
+    return stub.get_node_info(request)

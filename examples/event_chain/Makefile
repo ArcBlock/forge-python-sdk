@@ -55,30 +55,22 @@ run:
 	@echo "Running the software..."
 
 prepare-all-proto:
-	@mkdir -p ./raw_protos
 	@mkdir -p ./protos
+	@mkdir -p ./protos/raw_protos
+	@mkdir -p ./protos/protos
 	@echo "Preparing all protobuf..."
-	@$(foreach proto, $(PROTOS), curl --silent https://$(GITHUB_TOKEN)@raw.githubusercontent.com/ArcBlock/forge-abi/master/lib/protobuf/$(proto).proto > ./raw_protos/$(proto).proto;)
-	@curl --silent https://raw.githubusercontent.com/ArcBlock/ex-abci-proto/master/lib/protos/vendor.proto > ./raw_protos/vendor.proto
+	@$(foreach proto, $(PROTOS), curl --silent https://$(GITHUB_TOKEN)@raw.githubusercontent.com/ArcBlock/forge-abi/master/lib/protobuf/$(proto).proto > ./protos/raw_protos/$(proto).proto;)
+	@curl --silent https://raw.githubusercontent.com/ArcBlock/ex-abci-proto/master/lib/protos/vendor.proto > ./protos/raw_protos/vendor.proto
 	@echo "All protobuf files are fetched!"
 
 rebuild-proto: prepare-all-proto
 	@echo "Buiding all protobuf files..."
-	@python -m grpc_tools.protoc -I ./raw_protos --python_out=./protos --grpc_python_out=./protos ./raw_protos/*.proto
-	@sed -i -E 's/^import.*_pb2/from . \0/' ./protos/*.py
+	@python -m grpc_tools.protoc -I ./protos/raw_protos --python_out=./protos/protos --grpc_python_out=./protos/protos ./protos/raw_protos/*.proto
+	@sed -i -E 's/^import.*_pb2/from . \0/' ./protos/protos/*.py
 	@echo "All protobuf files are built and ready to use!.."
 
 rebuild-ec-proto:
 	@echo "Buiding all protobuf files..."
-	@python -m grpc_tools.protoc -I ./raw_protos --python_out=./protos  ./raw_protos/event-chain.proto
-	@sed -i -E 's/^import.*_pb2/from . \0/' ./protos/*.py
+	@python -m grpc_tools.protoc -I ./protos/raw_protos --python_out=./protos/protos  ./protos/raw_protos/event-chain.proto
+	@sed -i -E 's/^import.*_pb2/from . \0/' ./protos/protos/*.py
 	@echo "All protobuf files are built and ready to use!.."
-
-pack-ec:
-	@rm -rf ./build
-	@rm -rf ./dist
-	@python ./setup.py sdist bdist_wheel
-	@twine upload -r pypi ./dist/*
-	@rm -rf ./build
-	@rm -rf ./dist
-	@echo "Event chain has been uploaded to pypi."

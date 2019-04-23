@@ -92,20 +92,6 @@ rebuild-proto: prepare-all-proto
 	@sed -i -E 's/^import.*_pb2/from . \0/' ./forge/protos/*.py
 	@echo "All protobuf files are built and ready to use!.."
 
-# Event Chain related commands
-event-chain-test:
-	@echo "Running flow test for event-chain..."
-	@python -m examples.event_chain.test
-
-event-chain-server:
-	@echo "Starting server for Event-Chain"
-	@python -m examples.event_chain.server
-
-init-event-chain:
-	@echo "Initializing db for Event-Chain..."
-	@mkdir -p ~/.forge/event_chain
-	@python -m examples.event_chain.db_helper
-	@echo "DB for Event-Chain has been initialized!"
 
 clean-build:
 	@rm -rf build

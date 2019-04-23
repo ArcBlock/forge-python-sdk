@@ -2,7 +2,7 @@ import ast
 import unittest
 
 from event_chain import protos
-from event_chain.application import did_auth
+from event_chain.app.controllers import did_auth
 
 from forge.utils import utils as forge_utils
 
@@ -30,7 +30,7 @@ class AuthRequestTest(unittest.TestCase):
 
         response = did_auth.response_require_multisig(**args)
 
-        body = forge_utils.b64encoded_to_dict(
+        body = forge_utils.b64decode_to_dict(
             ast.literal_eval(response).get('authInfo').split('.')[1])
 
         assert (body.get('url') == 'http: // sample_url')

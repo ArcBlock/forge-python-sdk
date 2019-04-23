@@ -3,8 +3,10 @@ import logging
 import os
 import time
 
-import event_chain.application.app as app
-from event_chain import db
+from event_chain.app import controllers
+from event_chain.app import create_app
+from event_chain.app import db
+from event_chain.app.models import EventModel
 
 logger = logging.getLogger('ec-simulator')
 
@@ -13,14 +15,17 @@ DATA_PATH = os.path.join(os.path.dirname(__file__), "sample_data.json")
 with open(DATA_PATH, "r") as read_file:
     data = json.load(read_file)
 
-
-def set_up_db():
-    db.init.initialized_app_folder()
-    conn = db.init.reset_db()
-    return conn
+application = create_app()
 
 
-def simulate(conn):
+def reset():
+    with application.app_context():
+        db.reflect()
+        db.drop_all()
+        db.create_all(app=application)
+
+
+def simulate():
     users = data.get('users')
     events = data.get('events')
 
@@ -28,25 +33,27 @@ def simulate(conn):
 
     logger.info("Creating Users...")
     for user in users:
-        test_user = app.register_user(
+        test_user = controllers.register_user(
             user.get('moniker'),
-            user.get('passphrase'), conn,
+            user.get('passphrase')
         )
 
-    time.sleep(5)
     logger.info("Users are created.")
 
     logger.info("Creating Events...")
     for event in events:
-        app.create_event(test_user, conn, **event)
+        e = controllers.create_event(test_user, **event)
+        if e.finished:
+            with application.app_context():
+                event_model = EventModel(address=e.address,
+                                         owner=test_user.address)
+                db.session.add(event_model)
+                db.session.commit()
     logger.info("Events are created.")
-
-    time.sleep(5)
 
 
 if __name__ == '__main__':
-    conn = set_up_db()
+    reset()
     logger.info("DB has been initialized.")
-
-    simulate(conn)
+    simulate()
     logger.info("Data has been simulated.")
