@@ -9,6 +9,7 @@ ROLE_MAP = {
     'stake': 7,
     'validator': 8,
     'group': 9,
+    'tx': 10,
     'any': 63,
 }
 
@@ -24,6 +25,7 @@ HASH_MAP = {
     'sha3_384': 3,
     'keccak_512': 4,
     'sha3_512': 5,
+    'sha2': 6,
 }
 
 
