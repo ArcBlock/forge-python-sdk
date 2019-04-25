@@ -12,7 +12,7 @@ from flask import request
 from flask import Response
 from flask import url_for
 
-from forge.utils import utils as forge_utils
+from forge_sdk.utils import utils as forge_utils
 
 logger = logging.getLogger('api-mobile')
 

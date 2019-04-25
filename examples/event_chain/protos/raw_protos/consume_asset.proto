@@ -1,0 +1,31 @@
+syntax = "proto3";
+package forge_abi;
+
+import "google/protobuf/any.proto";
+
+message ConsumeAssetTx {
+  // `issuer` could be the same as `from`, or different, depending on use case.
+  // when this tx is being mutisigned by the asset holder, the wallet could
+  // check if the issuer is the issuer of the ticket, otherwise wallet shall
+  // refuse signing it. when it goes into the chain, at verify state stage, we
+  // shall check `from` of this tx:
+  //  a. the same as the issuer
+  //  b. `from.issuer == issuer`
+  // For example, a museum issued a ticket and Alice bought it. At the
+  // door (doorman) of the meseum, Alice need to consume the asset, which she
+  // scan a QR code with a prepolulated ConsumeAssetTx. Most of the time, this
+  // prepopulated tx shall be signed by the account of the door (doorman) so
+  // that we can trace where and how Alice consumed this asset, however we don't
+  // want anyone to be able to create this tx to allure Alice to consume the
+  // asset, thus the door (doorman) shall be an account that issued by the
+  // museum. The chain will make sure only accounts that has this issuer would
+  // be able to successfully sign this tx.
+  string issuer = 1;
+  // an asset might belong to another asset, for example a ticket belongs to a
+  // specific concert or movie asset. If this is provided, besides issuer we
+  // will verify if the parent address of the asset equals to this address.
+  string address = 2;
+
+  // forge won't update data into state if app is interested in this tx.
+  google.protobuf.Any data = 15;
+}

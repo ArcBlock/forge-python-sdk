@@ -1,8 +1,0 @@
-syntax = "proto3";
-package forge_abi;
-
-
-message pythonSDKTx {
-    string to = 1;
-    uint32 value = 2;
-}

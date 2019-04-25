@@ -6,7 +6,6 @@ import "vendor.proto";
 import "enum.proto";
 import "type.proto";
 import "state.proto";
-import "tx.proto";
 import "trace_type.proto";
 
 // Request / Response message definition
@@ -27,12 +26,11 @@ message ResponseCreateTx {
 
 // multisig(tx, wallet, token)
 message RequestMultisig {
-	Transaction tx = 1;
-	// extra data for multisig
-	google.protobuf.Any data = 2;
+  Transaction tx = 1;
+  // extra data for multisig
+  google.protobuf.Any data = 2;
   WalletInfo wallet = 3;
-	string token = 4;
-
+  string token = 4;
 }
 
 message ResponseMultisig {
@@ -167,6 +165,17 @@ message ResponseGetAssetState {
   AssetState state = 2;
 }
 
+message RequestGetProtocolState {
+  string address = 1;
+  repeated string keys = 2;
+  uint64 height = 3;
+}
+
+message ResponseGetProtocolState {
+  StatusCode code = 1;
+  ProtocolState state = 2;
+}
+
 message RequestGetStakeState {
   string address = 1;
   repeated string keys = 2;
@@ -238,9 +247,7 @@ message ResponseSearch {
   repeated TransactionInfo txs = 2;
 }
 
-message RequestGetUnconfirmedTxs {
-  PageInput paging = 1;
-}
+message RequestGetUnconfirmedTxs { PageInput paging = 1; }
 
 message ResponseGetUnconfirmedTxs {
   StatusCode code = 1;
@@ -267,7 +274,7 @@ message ResponseGetValidatorsInfo {
 // filter could be: value.header.height > 10086 and value.byzantine_validators
 // != []
 message RequestSubscribe {
-  TopicType type = 1;
+  string topic = 1;
   string filter = 2;
 }
 
@@ -292,10 +299,11 @@ message ResponseSubscribe {
     Transaction sys_upgrade = 23;
     Transaction stake = 24;
 
-    Transaction account_state = 129;
-    Transaction asset_state = 130;
-    Transaction forge_state = 131;
-    Transaction stake_state = 132;
+    AccountState account_state = 129;
+    AssetState asset_state = 130;
+    ForgeState forge_state = 131;
+    StakeState stake_state = 132;
+    ProtocolState protocol_state = 133;
   }
 }
 
@@ -315,10 +323,7 @@ message ByDay {
   string end_date = 2;
 }
 
-message ByHour {
-  string date = 1;
-}
-
+message ByHour { string date = 1; }
 
 message RequestGetForgeStats {
   oneof value {
@@ -346,28 +351,6 @@ message ResponseListTransactions {
   repeated IndexedTransaction transactions = 3;
 }
 
-message RequestGetAssetAddress {
-  string sender_address = 1;
-  CreateAssetTx itx = 2;
-  WalletType wallet_type = 3;
-}
-
-message ResponseGetAssetAddress {
-  StatusCode code = 1;
-  string asset_address = 2;
-}
-
-message RequestSignData {
-  bytes data = 1;
-  WalletInfo wallet = 2;
-  string token = 3;
-}
-
-message ResponseSignData {
-  StatusCode code = 1;
-  bytes signature = 2;
-}
-
 message RequestListAssets {
   PageInput paging = 1;
   string owner_address = 2;
@@ -390,18 +373,14 @@ message ResponseListStakes {
   repeated IndexedStakeState stakes = 3;
 }
 
-message RequestListAccount {
-  string owner_address = 1;
-}
+message RequestListAccount { string owner_address = 1; }
 
 message ResponseListAccount {
   StatusCode code = 1;
   IndexedAccountState account = 2;
 }
 
-message RequestListTopAccounts {
-  PageInput paging = 1;
-}
+message RequestListTopAccounts { PageInput paging = 1; }
 
 message ResponseListTopAccounts {
   StatusCode code = 1;

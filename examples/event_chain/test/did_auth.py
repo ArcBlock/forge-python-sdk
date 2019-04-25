@@ -4,7 +4,7 @@ import unittest
 from event_chain import protos
 from event_chain.app.controllers import did_auth
 
-from forge.utils import utils as forge_utils
+from forge_sdk.utils import utils as forge_utils
 
 
 class AuthRequestTest(unittest.TestCase):

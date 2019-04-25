@@ -1,0 +1,12 @@
+syntax = "proto3";
+package forge_abi;
+
+import "google/protobuf/any.proto";
+
+message UpdateAssetTx {
+  string address = 1;
+  string moniker = 2;
+
+  // forge won't update data into state if app is interested in this tx.
+  google.protobuf.Any data = 15;
+}

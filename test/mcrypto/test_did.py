@@ -1,8 +1,8 @@
 import base64
 import unittest
 
-from forge.did import AbtDid
-from forge.mcrypto import Signer
+from forge_sdk.did import AbtDid
+from forge_sdk.mcrypto import Signer
 
 
 class DidTest(unittest.TestCase):

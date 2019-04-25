@@ -3,9 +3,9 @@ import logging
 from event_chain import protos
 from event_chain.app import models
 
-from forge import helper as forge_helper
-from forge import utils as forge_utils
-from forge.sdk import sdk
+from forge_sdk import helper as forge_helper
+from forge_sdk import utils as forge_utils
+from forge_sdk.sdk import sdk
 
 logger = logging.getLogger('ec-server')
 

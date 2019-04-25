@@ -5,8 +5,9 @@ from time import sleep
 
 from google.protobuf.any_pb2 import Any
 
-from forge import protos
-from forge.rpc import rpc
+from forge_sdk import did
+from forge_sdk import rpc
+from forge_sdk.protos import protos
 
 
 def verify(res):
@@ -21,9 +22,9 @@ class StatisticsTest(unittest.TestCase):
                                               passphrase='abc123')
         create_asset = protos.CreateAssetTx(data=Any(type_url='test',
                                                      value=b'test'))
-        self.asset_address = rpc.get_asset_address(
+        self.asset_address = did.get_asset_address(
             self.test_account.wallet.address,
-            create_asset).asset_address
+            create_asset)
         assert (self.asset_address.startswith('z'))
 
         res = rpc.create_asset('test', 'test',

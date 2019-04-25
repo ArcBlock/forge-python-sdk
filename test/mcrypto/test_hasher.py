@@ -1,7 +1,7 @@
 import base64
 import unittest
 
-from forge.mcrypto import Hasher
+from forge_sdk.mcrypto import Hasher
 
 
 class HasherTest(unittest.TestCase):

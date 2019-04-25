@@ -4,7 +4,7 @@ from datetime import datetime
 import event_chain.protos as protos
 from event_chain.app.models.states.account import ParticipantAccountState
 
-from forge.rpc import rpc as forge_rpc
+from forge_sdk import rpc as forge_rpc
 
 logger = logging.getLogger('model-admin')
 

@@ -2,7 +2,7 @@ import logging
 
 from event_chain.app.models.states.asset import TicketAssetState
 
-from forge.rpc import rpc as forge_rpc
+from forge_sdk import rpc as forge_rpc
 
 logger = logging.getLogger('model-ticket')
 

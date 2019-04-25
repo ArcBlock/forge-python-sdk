@@ -84,6 +84,7 @@ enum TopicType {
   asset_state = 130;
   forge_state = 131;
   stake_state = 132;
+  protocol_state = 133;
 
   // user defined event type shall start from 256.
 }
@@ -124,6 +125,7 @@ enum RoleType {
   role_asset = 6;
   role_stake = 7;
   role_validator = 8;
+  role_tx = 9;
 }
 
 enum UpgradeType {
@@ -178,4 +180,10 @@ enum StakeType {
   stake_user = 1;
   stake_asset = 2;
   stake_chain = 3;
+}
+
+enum ProtocolStatus {
+  running = 0;
+  paused = 1;
+  terminated = 2;
 }

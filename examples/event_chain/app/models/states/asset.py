@@ -6,8 +6,8 @@ from event_chain.app import models
 from event_chain.app import utils
 from google.protobuf.any_pb2 import Any
 
-from forge.rpc import rpc as forge_rpc
-from forge.utils import utils as forge_utils
+from forge_sdk import rpc as forge_rpc
+from forge_sdk.utils import utils as forge_utils
 
 logger = logging.getLogger('model-state-asset')
 

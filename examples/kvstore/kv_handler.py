@@ -1,8 +1,8 @@
 import kv_protos
 
-from forge import helper
-from forge import protos
-from forge import utils
+from forge_sdk import helper
+from forge_sdk import utils
+from forge_sdk.protos import protos
 
 
 def verify_tx(request):

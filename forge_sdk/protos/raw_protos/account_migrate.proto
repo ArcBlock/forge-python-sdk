@@ -1,0 +1,14 @@
+syntax = "proto3";
+package forge_abi;
+
+import "google/protobuf/any.proto";
+import "type.proto";
+
+message AccountMigrateTx {
+  bytes pk = 1;        // new public key
+  WalletType type = 2; // new wallet type
+  string address = 3;  // new wallet address
+
+  // forge won't touch this field. Only forge app shall handle it.
+  google.protobuf.Any data = 15;
+}

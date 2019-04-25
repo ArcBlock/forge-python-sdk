@@ -1,7 +1,7 @@
 import event_chain.protos as protos
 from event_chain.app import utils
 
-from forge.utils import utils as forge_utils
+from forge_sdk.utils import utils as forge_utils
 
 
 class ParticipantAccountState:

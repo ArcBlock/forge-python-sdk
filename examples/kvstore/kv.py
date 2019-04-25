@@ -2,7 +2,7 @@ import logging
 
 import kv_handler as kv
 
-from forge import ForgeSdk
+from forge_sdk import ForgeSdk
 
 logger = logging.getLogger(__name__)
 

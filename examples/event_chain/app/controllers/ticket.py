@@ -7,8 +7,8 @@ from event_chain.app import models
 from event_chain.app import utils
 from event_chain.config import config
 
-from forge.rpc import rpc as forge_rpc
-from forge.utils import utils as forge_utils
+from forge_sdk import rpc as forge_rpc
+from forge_sdk.utils import utils as forge_utils
 
 logger = logging.getLogger('controller-ticket')
 

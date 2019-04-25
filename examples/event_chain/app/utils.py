@@ -16,7 +16,7 @@ from flask import session
 from google.protobuf.any_pb2 import Any
 from google.protobuf.timestamp_pb2 import Timestamp
 
-from forge.utils import utils as forge_utils
+from forge_sdk.utils import utils as forge_utils
 
 logger = logging.getLogger('ec-utils')
 

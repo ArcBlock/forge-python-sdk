@@ -20,7 +20,7 @@ service ChainRpc {
   rpc get_blocks(RequestGetBlocks) returns (ResponseGetBlocks);
   rpc get_unconfirmed_txs(RequestGetUnconfirmedTxs)
       returns (ResponseGetUnconfirmedTxs);
-   // utility
+  // utility
   rpc get_chain_info(RequestGetChainInfo) returns (ResponseGetChainInfo);
   rpc get_node_info(RequestGetNodeInfo) returns (ResponseGetNodeInfo);
   rpc search(RequestSearch) returns (ResponseSearch);
@@ -28,9 +28,6 @@ service ChainRpc {
   rpc get_validators_info(RequestGetValidatorsInfo)
       returns (ResponseGetValidatorsInfo);
   rpc get_config(RequestGetConfig) returns (ResponseGetConfig);
-  rpc get_asset_address(RequestGetAssetAddress)
-      returns (ResponseGetAssetAddress);
-  rpc sign_data(RequestSignData) returns (ResponseSignData);
 }
 
 service EventRpc {
@@ -51,9 +48,11 @@ service StateRpc {
       returns (stream ResponseGetAccountState);
   rpc get_asset_state(stream RequestGetAssetState)
       returns (stream ResponseGetAssetState);
+  rpc get_forge_state(RequestGetForgeState) returns (ResponseGetForgeState);
+  rpc get_protocol_state(stream RequestGetProtocolState)
+      returns (stream ResponseGetProtocolState);
   rpc get_stake_state(stream RequestGetStakeState)
       returns (stream ResponseGetStakeState);
-  rpc get_forge_state(RequestGetForgeState) returns (ResponseGetForgeState);
 }
 
 service WalletRpc {
@@ -68,12 +67,16 @@ service WalletRpc {
 
 service StatsRpc {
   rpc get_forge_stats(RequestGetForgeStats) returns (ResponseGetForgeStats);
-  rpc list_transactions(RequestListTransactions) returns (ResponseListTransactions);
+  rpc list_transactions(RequestListTransactions)
+      returns (ResponseListTransactions);
   rpc list_assets(RequestListAssets) returns (ResponseListAssets);
   rpc list_stakes(RequestListStakes) returns (ResponseListStakes);
   rpc list_account(RequestListAccount) returns (ResponseListAccount);
-  rpc list_top_accounts(RequestListTopAccounts) returns (ResponseListTopAccounts);
-  rpc list_asset_transactions(RequestListAssetTransactions) returns (ResponseListAssetTransactions);
+  rpc list_top_accounts(RequestListTopAccounts)
+      returns (ResponseListTopAccounts);
+  rpc list_asset_transactions(RequestListAssetTransactions)
+      returns (ResponseListAssetTransactions);
   rpc list_blocks(RequestListBlocks) returns (ResponseListBlocks);
-  rpc get_health_status(RequestGetHealthStatus) returns (ResponseGetHealthStatus);
+  rpc get_health_status(RequestGetHealthStatus)
+      returns (ResponseGetHealthStatus);
 }

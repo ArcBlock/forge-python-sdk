@@ -1,0 +1,17 @@
+syntax = "proto3";
+package forge_abi;
+
+import "google/protobuf/any.proto";
+
+message CreateAssetTx {
+  string moniker = 1;
+  // forge won't update data into state if app is interested in this tx.
+  google.protobuf.Any data = 2;
+  bool readonly = 3;
+  bool transferrable = 4;
+  // ttl for the asset after first consumption. 0 means unlimited.
+  uint32 ttl = 5;
+  string parent = 6;
+  // asset address
+  string address = 7;
+}

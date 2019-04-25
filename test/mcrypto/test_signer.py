@@ -1,7 +1,7 @@
 import base64
 import unittest
 
-from forge.mcrypto import Signer
+from forge_sdk.mcrypto import Signer
 
 
 class ED25519SignerTest(unittest.TestCase):

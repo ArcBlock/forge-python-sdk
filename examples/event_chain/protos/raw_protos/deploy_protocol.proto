@@ -1,0 +1,47 @@
+
+syntax = "proto3";
+package forge_abi;
+
+import "google/protobuf/any.proto";
+
+message CodeInfo {
+  // checksum of the module
+  bytes checksum = 1;
+  // gzipped binary
+  bytes binary = 2;
+}
+
+message TypeUrls {
+  string url = 1;
+  string module = 2;
+}
+
+message DeployProtocolTx {
+  // address of the tx protocol
+  string address = 1;
+  // human readable name of the transaction, shall only contains alphabat and
+  // underscore. For CoreTx, it shall be compatible with existing definition in
+  // type_url.ex..
+  string name = 2;
+  // version of the tx protocol. If version is 0, this is a genesis
+  // installation.
+  uint32 version = 3;
+  // namespace of the tx protocol. If namespace is CoreTx, it will use
+  // "fg:t:#{name}" as type_url, this is for backward compatibility.
+  string namespace = 4;
+  // human readable description on what the tx is about, limited to 256 chars.
+  string description = 5;
+  // new type urls used by this tx protocol. Will be registered in ForgeAbi
+  repeated TypeUrls type_urls = 6;
+  // the protobuf definition for the tx protocol.
+  string proto = 7;
+  // the pipeline of the tx protocol, in yaml format.
+  string pipeline = 8;
+  // the source code for the tx protocol, in elixir.
+  repeated string sources = 9;
+  // the compressed code of the protocol
+  repeated CodeInfo code = 10;
+
+  // forge won't update data into state if app is interested in this tx.
+  google.protobuf.Any data = 15;
+}

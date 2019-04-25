@@ -3,9 +3,9 @@ import json
 from event_chain.app import utils
 from event_chain.config import config
 
-from forge import AbtDid
-from forge.rpc import rpc as forge_rpc
-from forge.utils import utils as forge_utils
+from forge_sdk import AbtDid
+from forge_sdk import rpc as forge_rpc
+from forge_sdk.utils import utils as forge_utils
 
 APP_SK = b'0\243\016\303\017\r\305\026#~\301\227\033;\274\303pl\243 \004,' \
          b'\224c\003\261\2629&G\345\020\317w\007P\234\211g\246Q\264P\325\346' \

@@ -1,0 +1,12 @@
+syntax = "proto3";
+package forge_abi;
+
+message UpgradeNodeTx {
+  // the height node will be stopped at.
+  uint64 height = 1;
+  // the version next release is expected
+  string version = 2;
+  // override the existing upgrade settings if there's already one. Use it with
+  // cautious.
+  bool override = 3;
+}

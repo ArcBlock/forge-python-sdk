@@ -6,8 +6,9 @@ from event_chain.app import utils
 from event_chain.app.models.states.asset import EventAssetState
 from google.protobuf.any_pb2 import Any
 
-from forge.rpc import rpc as forge_rpc
-from forge.utils import utils as forge_utils
+from forge_sdk import did
+from forge_sdk import rpc as forge_rpc
+from forge_sdk.utils import utils as forge_utils
 
 logger = logging.getLogger('model-event')
 
@@ -120,11 +121,9 @@ class EventInfo:
         create_asset_itx = protos.CreateAssetTx(
             data=forge_utils.encode_to_any(self.type_url, event_info),
         )
-        event_address = forge_rpc.get_asset_address(
-            sender_address=self.wallet.address,
-            itx=create_asset_itx,
-            wallet_type=self.wallet.type,
-        ).asset_address
+        event_address = did.get_asset_address(
+            did_address=self.wallet.address,
+            itx=create_asset_itx)
         logger.debug(
             u"Event address has been calculated: {}".format(event_address),
         )
@@ -162,11 +161,10 @@ class EventInfo:
             self.address,
         )
 
-        ticket__address = forge_rpc.get_asset_address(
-            sender_address=self.wallet.address,
+        ticket__address = did.get_asset_address(
+            did_address=self.wallet.address,
             itx=create_asset_ticket,
-            wallet_type=self.wallet.type,
-        ).asset_address
+        )
         ticket_create_tx = forge_rpc.create_tx(
             itx=forge_utils.encode_to_any(
                 type_url='fg:t:create_asset',

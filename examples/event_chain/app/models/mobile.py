@@ -5,7 +5,7 @@ import logging
 import base58
 import event_chain.protos as protos
 
-from forge.utils import utils as forge_utils
+from forge_sdk.utils import utils as forge_utils
 
 logger = logging.getLogger('model-mobile')
 

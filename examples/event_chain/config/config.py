@@ -2,8 +2,8 @@ import logging
 import os
 import os.path as path
 
-from forge.config import config as forge_config
-from forge.rpc import rpc
+from forge_sdk import rpc
+from forge_sdk.config import config as forge_config
 
 
 logger = logging.getLogger('ec-config')
