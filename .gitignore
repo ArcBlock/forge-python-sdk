@@ -19,3 +19,4 @@ examples/build
 examples/dist
 examples/forge_event_chain.egg-info/
 .coverage
+.pytest_cache
