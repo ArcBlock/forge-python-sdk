@@ -2,13 +2,13 @@ import logging
 from inspect import getmembers
 from inspect import isfunction
 
-from forge_sdk.rpc import chain as chain_rpc
-from forge_sdk.rpc import event as event_rpc
-from forge_sdk.rpc import file as file_rpc
 from forge_sdk.rpc import helper
-from forge_sdk.rpc import state as state_rpc
-from forge_sdk.rpc import statistic as stats_rpc
-from forge_sdk.rpc import wallet as wallet_rpc
+from forge_sdk.rpc.forge_rpc import chain as chain_rpc
+from forge_sdk.rpc.forge_rpc import event as event_rpc
+from forge_sdk.rpc.forge_rpc import file as file_rpc
+from forge_sdk.rpc.forge_rpc import state as state_rpc
+from forge_sdk.rpc.forge_rpc import statistic as stats_rpc
+from forge_sdk.rpc.forge_rpc import wallet as wallet_rpc
 
 logger = logging.getLogger('forge-rpc')
 

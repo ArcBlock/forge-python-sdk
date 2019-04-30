@@ -1,6 +1,6 @@
 from forge_sdk.config import config
 from forge_sdk.protos import protos
-from forge_sdk.utils import utils
+from forge_sdk.rpc import lib
 
 stub = protos.FileRpcStub(config.get_grpc_channel())
 
@@ -19,7 +19,7 @@ def store_file(chunk):
     def to_req(item):
         return protos.RequestStoreFile(chunk=item)
 
-    requests = utils.to_iter(to_req, chunk)
+    requests = lib.to_iter(to_req, chunk)
     return stub.store_file(requests)
 
 

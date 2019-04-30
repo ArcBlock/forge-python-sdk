@@ -25,6 +25,40 @@ def use_config(user_config=None):
         __merge_config(user_config)
 
 
+def get_app_path():
+    return expanduser(config['app']['path'])
+
+
+def get_app_host():
+    return config['app']['host']
+
+
+def get_forge_path():
+    return expanduser(config['forge']['path'])
+
+
+def get_grpc_socket():
+    return __parse_socket_grpc(
+        get_forge_path(),
+        config['forge']['sock_grpc'],
+    )
+
+
+def get_tcp_socket():
+    return __parse_socket(
+        get_app_path(),
+        config['app']['sock_tcp'],
+    )
+
+
+def get_forge_port():
+    return config['app']['forge_port']
+
+
+def get_grpc_channel():
+    return grpc.insecure_channel(get_grpc_socket())
+
+
 def __merge_config(config_path):
     if path.exists(config_path):
         logger.info("Using config in {}".format(config_path))
@@ -72,37 +106,3 @@ def __parse_socket_grpc(forge_path, forge_socket):
         return socket_addr
     elif socket_type == 'tcp':
         return socket_addr.split('://')[1]
-
-
-def get_app_path():
-    return expanduser(config['app']['path'])
-
-
-def get_app_host():
-    return config['app']['host']
-
-
-def get_forge_path():
-    return expanduser(config['forge']['path'])
-
-
-def get_grpc_socket():
-    return __parse_socket_grpc(
-        get_forge_path(),
-        config['forge']['sock_grpc'],
-    )
-
-
-def get_tcp_socket():
-    return __parse_socket(
-        get_app_path(),
-        config['app']['sock_tcp'],
-    )
-
-
-def get_forge_port():
-    return config['app']['forge_port']
-
-
-def get_grpc_channel():
-    return grpc.insecure_channel(get_grpc_socket())

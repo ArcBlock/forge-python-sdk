@@ -1,6 +1,6 @@
 from forge_sdk.config import config
 from forge_sdk.protos import protos
-from forge_sdk.utils import utils
+from forge_sdk.rpc import lib
 
 stub = protos.StateRpcStub(config.get_grpc_channel())
 
@@ -23,7 +23,7 @@ def get_account_state(queries):
         }
         return protos.RequestGetAccountState(**kwargs)
 
-    requests = utils.to_iter(to_req, queries)
+    requests = lib.to_iter(to_req, queries)
 
     return stub.get_account_state(requests)
 
@@ -46,7 +46,7 @@ def get_asset_state(queries):
         req = protos.RequestGetAssetState(**kwargs)
         return req
 
-    requests = utils.to_iter(to_req, queries)
+    requests = lib.to_iter(to_req, queries)
 
     return stub.get_asset_state(requests)
 
@@ -69,7 +69,7 @@ def get_stake_state(queries):
         }
         return protos.RequestGetStakeState(**kwargs)
 
-    requests = utils.to_iter(to_req, queries)
+    requests = lib.to_iter(to_req, queries)
     return stub.get_stake_state(requests)
 
 

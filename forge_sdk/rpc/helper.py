@@ -3,8 +3,8 @@ import logging
 from forge_sdk import did
 from forge_sdk import utils
 from forge_sdk.protos import protos
-from forge_sdk.rpc import chain as chain_rpc
-from forge_sdk.rpc import state as state_rpc
+from forge_sdk.rpc.forge_rpc import chain as chain_rpc
+from forge_sdk.rpc.forge_rpc import state as state_rpc
 
 logger = logging.getLogger('rpc-helper')
 

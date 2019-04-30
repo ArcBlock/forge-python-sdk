@@ -1,12 +1,15 @@
+import ast
+import json
 import logging
+from datetime import datetime
 
-from forge_sdk.did import helper
-from forge_sdk.did.helper import HASH_MAP
-from forge_sdk.did.helper import KEY_MAP
-from forge_sdk.did.helper import ROLE_MAP
+from forge_sdk.did import lib
+from forge_sdk.did.lib import HASH_MAP
+from forge_sdk.did.lib import KEY_MAP
+from forge_sdk.did.lib import ROLE_MAP
 from forge_sdk.mcrypto.hasher import Hasher
 from forge_sdk.mcrypto.signer import Signer
-from forge_sdk.utils import utils
+from forge_sdk.utils import encrypt
 
 logger = logging.getLogger('abt-did')
 
@@ -36,7 +39,7 @@ class AbtDid:
     def parse_type_from_did(did):
         try:
             did = did.lstrip(AbtDid.PREFIX)
-            decoded = utils.multibase_b58decode(did)
+            decoded = encrypt.multibase_b58decode(did)
             type_bytes = decoded[0:2]
             return AbtDid.bytes_to_type(type_bytes)
         except Exception as e:
@@ -53,7 +56,7 @@ class AbtDid:
         extended_hash = type_bytes + pk_hash[0:20]
 
         did_bytes = extended_hash + self.hasher.hash(extended_hash)[0:4]
-        encoded_did = utils.multibase_b58encode(did_bytes)
+        encoded_did = encrypt.multibase_b58encode(did_bytes)
 
         if not self.encode:
             return did_bytes
@@ -67,7 +70,7 @@ class AbtDid:
         if did.startswith(AbtDid.PREFIX):
             did = did.lstrip(AbtDid.PREFIX)
         try:
-            decoded = utils.multibase_b58decode(did)
+            decoded = encrypt.multibase_b58decode(did)
             type_bytes = decoded[0:2]
             did_type = AbtDid.bytes_to_type(type_bytes)
             if did == did_type.pk_to_did(pk).lstrip(AbtDid.PREFIX):
@@ -82,7 +85,7 @@ class AbtDid:
     def is_valid(did):
         did = did.lstrip('did:abt:')
         try:
-            decoded = utils.multibase_b58decode(did)
+            decoded = encrypt.multibase_b58decode(did)
             type_bytes = decoded[0:2]
             pk_hash = decoded[2:22]
             actual_check_sum = decoded[22:26]
@@ -99,9 +102,9 @@ class AbtDid:
             return False
 
     def type_to_bytes(self):
-        role_bits = helper.to_six_bits(ROLE_MAP.get(self.role_type))
-        key_bits = helper.to_five_bits(KEY_MAP.get(self.key_type))
-        hash_bits = helper.to_five_bits(HASH_MAP.get(self.hash_type))
+        role_bits = lib.to_six_bits(ROLE_MAP.get(self.role_type))
+        key_bits = lib.to_five_bits(KEY_MAP.get(self.key_type))
+        hash_bits = lib.to_five_bits(HASH_MAP.get(self.hash_type))
 
         first_byte = bytes([int((role_bits + key_bits[0:2]), 2)])
         second_byte = bytes([int((key_bits[2:] + hash_bits), 2)])
@@ -109,26 +112,26 @@ class AbtDid:
 
     @staticmethod
     def bytes_to_type(input_bytes):
-        bits = bin(utils.bytes_to_int(input_bytes) | 65536)[3:]
-        role_type = helper.get_did_type_key(ROLE_MAP, bits[0:6])
-        key_type = helper.get_did_type_key(KEY_MAP, bits[6:11])
-        hash_type = helper.get_did_type_key(HASH_MAP, bits[11:16])
+        bits = bin(encrypt.bytes_to_int(input_bytes) | 65536)[3:]
+        role_type = lib.get_did_type_key(ROLE_MAP, bits[0:6])
+        key_type = lib.get_did_type_key(KEY_MAP, bits[6:11])
+        hash_type = lib.get_did_type_key(HASH_MAP, bits[11:16])
 
         return AbtDid(role_type=role_type,
                       key_type=key_type,
                       hash_type=hash_type)
 
     def gen_and_sign(self, sk, extra):
-        now = utils.current_utc_timestamp()
-        middle = utils.clean_dict({'iss': self.sk_to_did(sk),
-                                   'iat': now,
-                                   'nbf': now,
-                                   'exp': now + AbtDid.MIN_30,
-                                   **extra,
-                                   })
-        body = utils.b64decode_to_json(middle)
+        now = round(datetime.utcnow().timestamp())
+        middle = encrypt.clean_dict({'iss': self.sk_to_did(sk),
+                                     'iat': now,
+                                     'nbf': now,
+                                     'exp': now + AbtDid.MIN_30,
+                                     **extra,
+                                     })
+        body = encrypt.multibase_b64encode(json.dumps(middle))
         data = self.__header() + '.' + body
-        signature = utils.multibase_b64encode(
+        signature = encrypt.multibase_b64encode(
             self.signer.sign(data.encode(), sk))
         return data + '.' + signature
 
@@ -138,25 +141,25 @@ class AbtDid:
         elif self.key_type == 'secp256k1':
             alg = 'ES256K'
 
-        return utils.b64decode_to_json({
+        return encrypt.multibase_b64encode(json.dumps({
             'alg': alg,
             'typ': 'JWT'
-        })
+        }))
 
     @staticmethod
     def verify(token, pk):
         try:
             header, body, signature = token.split('.')
-            alg = utils.b64decode_to_dict(header).get('alg').lower()
+            alg = b64decode_to_dict(header).get('alg').lower()
             if alg == 'secp256k1' or alg == 'es256k':
                 signer = Signer('secp256k1')
             elif alg == 'ed25519':
                 signer = Signer('ed25519')
 
-            sig = utils.multibase_b64decode(signature)
+            sig = encrypt.multibase_b64decode(signature)
             is_sig_valid = signer.verify((header + '.' + body).encode(),
                                          sig, pk)
-            did = utils.b64decode_to_dict(body).get('iss')
+            did = b64decode_to_dict(body).get('iss')
             if is_sig_valid and AbtDid.is_match_pk(did, pk):
                 return True
             return False
@@ -165,3 +168,18 @@ class AbtDid:
             logger.error("Fail to verify token {0} and pk {1}"
                          .format(token, pk))
             return False
+
+
+def b64decode_to_dict(data):
+    try:
+        dict_string = encrypt.multibase_b64decode(data).decode()
+        return ast.literal_eval(dict_string)
+    except Exception as e:
+        logger.error('Error in decoding b64urlsafe '
+                     'encoded data to dictionary.')
+        logger.error(e, exc_info=True)
+        return {}
+
+
+def clean_dict(d):
+    return {k: v for k, v in d.items() if v and v != ''}

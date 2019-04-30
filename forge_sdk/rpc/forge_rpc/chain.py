@@ -1,6 +1,7 @@
 from forge_sdk.config import config
 from forge_sdk.protos import protos
-from forge_sdk.utils import utils
+from forge_sdk.rpc import lib
+from forge_sdk.utils import encrypt
 
 stub = protos.ChainRpcStub(config.get_grpc_channel())
 
@@ -83,7 +84,7 @@ def get_tx(tx_hash):
     def to_req(item):
         return protos.RequestGetTx(hash=item)
 
-    requests = utils.to_iter(to_req, tx_hash)
+    requests = lib.to_iter(to_req, tx_hash)
     return stub.get_tx(requests)
 
 
@@ -101,7 +102,7 @@ def get_block(height):
     def to_req(item):
         return protos.RequestGetBlock(height=item)
 
-    requests = utils.to_iter(to_req, height)
+    requests = lib.to_iter(to_req, height)
     return stub.get_block(requests)
 
 

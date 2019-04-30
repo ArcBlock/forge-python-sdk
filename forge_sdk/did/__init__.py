@@ -1,5 +1,5 @@
 from forge_sdk.did.abt_did import AbtDid
-from forge_sdk.did.helper import *
+from forge_sdk.did.lib import *
 from forge_sdk.mcrypto import Hasher
 
 
