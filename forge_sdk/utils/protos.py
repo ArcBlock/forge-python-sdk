@@ -14,6 +14,8 @@ def encode_to_any(type_url, data):
         value = data.encode()
     elif isinstance(data, int):
         value = conversion.int_to_bytes(data)
+    elif isinstance(data, bytes):
+        value = data
     else:
         value = data.SerializeToString()
 

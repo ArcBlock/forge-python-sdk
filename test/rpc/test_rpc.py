@@ -169,7 +169,7 @@ class RpcTest(unittest.TestCase):
         )
         res = rpc.send_itx(
             type_url='fg:t:poke',
-            itx=pokeTx,
+            tx=pokeTx,
             wallet=self.wallet1.wallet,
             token=self.wallet1.token,
             nonce=0
@@ -177,19 +177,8 @@ class RpcTest(unittest.TestCase):
         assert (res.code == 0)
 
     def test_consume_asset(self):
-        asset_create_itx = protos.CreateAssetTx(
-            moniker='TestAsset',
-            data=Any(
-                type_url='test',
-                value=b'hello',
-            ),
-        )
-        asset_address = did.get_asset_address(
-            self.wallet1.wallet.address,
-            asset_create_itx)
-
-        res = rpc.send_itx(
-            'fg:t:create_asset', asset_create_itx,
+        res, asset_address = rpc.create_asset(
+            'fg:t:create_asset', b'hello',
             self.wallet1.wallet,
             self.wallet1.token,
         )
@@ -264,7 +253,3 @@ class RpcTest(unittest.TestCase):
         asset = rpc.get_single_asset_state(asset_address)
         assert (not asset.transferrable)
         assert (asset.readonly)
-
-
-if __name__ == '__main__':
-    unittest.main()

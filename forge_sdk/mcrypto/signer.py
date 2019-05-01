@@ -115,10 +115,10 @@ class Secp256k1Signer:
             sk(bytes): secret key
 
         Returns: bytes
+        """
         sk = secp256k1.PrivateKey(sk)
         signature = sk.ecdsa_sign(data)
         return signature
-        """
 
     @staticmethod
     def verify(data, signature, pk):

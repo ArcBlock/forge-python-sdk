@@ -36,9 +36,9 @@ Wallet
 .. automodule:: forge_sdk.rpc.forge_rpc.wallet
     :members:
 
-******************
+
 Helper RPC Calls
-******************
+-----------------
 
 
 .. automodule:: forge_sdk.rpc.helper

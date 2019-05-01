@@ -20,16 +20,10 @@ class StatisticsTest(unittest.TestCase):
         self.yesterday = str((dt.now() - timedelta(2)).date())
         self.test_account = rpc.create_wallet(moniker='alice',
                                               passphrase='abc123')
-        create_asset = protos.CreateAssetTx(data=Any(type_url='test',
-                                                     value=b'test'))
-        self.asset_address = did.get_asset_address(
-            self.test_account.wallet.address,
-            create_asset)
-        assert (self.asset_address.startswith('z'))
 
-        res = rpc.create_asset('test', 'test',
-                               self.test_account.wallet,
-                               self.test_account.token)
+        res, self.asset_address = rpc.create_asset('test', 'test',
+                                                   self.test_account.wallet,
+                                                   self.test_account.token)
         verify(res)
 
     def test_get_forge_stats(self):

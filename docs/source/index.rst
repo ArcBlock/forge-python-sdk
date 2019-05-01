@@ -1,3 +1,6 @@
+******************
+Forge Python SDK
+******************
 
 .. toctree::
     :maxdepth: 3
@@ -14,7 +17,6 @@
 .. toctree::
     :maxdepth: 3
     :caption: Mcrypto
-
 
     modules/mcrypto
 

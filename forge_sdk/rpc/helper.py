@@ -9,33 +9,36 @@ from forge_sdk.rpc.forge_rpc import state as state_rpc
 logger = logging.getLogger('rpc-helper')
 
 
-def send_itx(type_url, itx, wallet, token, nonce=1):
-    """GRPC call to send inner transaction
+def send_itx(type_url, tx, wallet, token, nonce=1):
+    """
+    GRPC call to send inner transaction
 
     Args:
         type_url(string): type_url for this itx
-        itx(:obj:`protos.object`): inner transactions defined in protos
+        tx(:obj:`protos.object`): transactions defined in protos
         wallet(:obj:`WalletInfo`): sender's wallet
         token(string): sender's token
         nonce(int): need to be set to 0 if itx is pokeTx
 
     Returns:
-        ResponseSendTx
+        :obj:`ResponseSendTx`
 
     """
-    encoded_itx = utils.encode_to_any(type_url, itx)
-    tx = chain_rpc.create_tx(
+    encoded_itx = utils.encode_to_any(type_url, tx)
+    tx = build_tx(
         itx=encoded_itx,
-        from_address=wallet.address,
         wallet=wallet,
         token=token,
         nonce=nonce
     )
-    return chain_rpc.send_tx(tx.tx)
+    return chain_rpc.send_tx(tx)
 
 
-def create_asset(type_url, asset, wallet, token):
-    """GRPC call to create asset
+def create_asset(type_url, asset, wallet, token=None, **kwargs):
+    """
+    GRPC call to create asset
+    Create asset on the chain. If asset address is not provided in kwargs,
+    sdk will calculate and fill the asset address.
 
     Args:
         type_url(string): type_url for this itx
@@ -45,22 +48,38 @@ def create_asset(type_url, asset, wallet, token):
         token(string): sender's token
 
     Returns:
-        ResponseSendTx
+        :obj:`ResponseSendTx`, string
 
     """
+
     encoded_asset = utils.encode_to_any(type_url, asset)
-    create_asset_itx = utils.encode_to_any(
-        type_url='fg:t:create_asset',
-        data=protos.CreateAssetTx(data=encoded_asset),
+    params = {
+        'moniker': kwargs.get('moniker'),
+        'readonly': kwargs.get('readonly'),
+        'transferrable': kwargs.get('transferrable'),
+        'ttl': kwargs.get('ttl'),
+        'parent': kwargs.get('parent'),
+        'data': encoded_asset,
+    }
+    if not kwargs.get('address'):
+        itx_no_address = protos.CreateAssetTx(**params)
+        asset_address = did.get_asset_address(wallet.address,
+                                              itx_no_address)
+        params['address'] = asset_address
+    else:
+        params['address'] = kwargs.get('address')
+    itx = protos.CreateAssetTx(**params)
+
+    tx = build_tx(
+        utils.encode_to_any('fg:t:create_asset', itx), wallet, token,
     )
-    tx = chain_rpc.create_tx(
-        create_asset_itx, wallet.address, wallet, token,
-    )
-    return chain_rpc.send_tx(tx.tx)
+    res = chain_rpc.send_tx(tx)
+    return res, itx.address
 
 
 def update_asset(type_url, address, asset, wallet, token):
-    """GRPC call to create asset
+    """
+    GRPC call to create asset
 
     Args:
         type_url(string): type_url for this itx
@@ -71,8 +90,7 @@ def update_asset(type_url, address, asset, wallet, token):
         token(string): sender's token
 
     Returns:
-        ResponseSendTx
-
+        :obj:`ResponseSendTx`
         """
 
     encoded_asset = utils.encode_to_any(type_url, asset)
@@ -90,13 +108,14 @@ def update_asset(type_url, address, asset, wallet, token):
 
 
 def get_single_account_state(address):
-    """GRPC call to get account state of a single address
+    """
+    GRPC call to get account state of a single address
 
     Args:
         address(string): address of the account
 
     Returns:
-        AccountState
+        :obj:`AccountState`
 
     """
     if address:
@@ -109,13 +128,14 @@ def get_single_account_state(address):
 
 
 def get_single_tx_info(hash):
-    """GRPC call to get transaction state of a single hash
+    """
+    GRPC call to get transaction state of a single hash
 
     Args:
         hash(string): hash of the transaction
 
     Returns:
-        TransactionInfo
+        :obj:`TransactionInfo`
 
     """
     if hash:
@@ -128,13 +148,14 @@ def get_single_tx_info(hash):
 
 
 def get_single_asset_state(address):
-    """GRPC call to get asset state of a single address
+    """
+    GRPC call to get asset state of a single address
 
     Args:
         address(string): address of the asset
 
     Returns:
-        AssetState
+        :obj:`AssetState`
 
     """
     if address:
@@ -144,14 +165,25 @@ def get_single_asset_state(address):
             return asset.state
 
 
-def send_deploy_protocol_tx(wallet, token, **kwargs):
-    itx = protos.DeployProtocolTx(**kwargs)
-    return send_itx("fg:t:deploy_protocol", itx, wallet, token)
-
-
 def build_tx(itx, wallet, token=None, nonce=1):
+    """
+    Build a transaction for user. If wallet has secret key, use the provided
+    secret key to sign transaction; otherwise, it's assumed that this wallet
+    is created and kept on forge, and sdk will ask forge to sign the
+    transaction with provided token.
+
+    Args:
+        itx(:obj:`google.protobuf.any`): encoded itx with type_url
+        wallet(:obj:`WalletInfo`): wallet to build the tx
+        token(string): only required if wallet doesn't include secret key
+        nonce(int): required to be 0 if building a PokeTx
+
+    Returns:
+        :obj:`Transaction`
+
+    """
     if __is_sk_included(wallet):
-        return __build_tx(itx, wallet.address, wallet, nonce)
+        return __build_tx(itx, wallet, nonce)
     else:
         tx_response = chain_rpc.create_tx(itx, wallet.address, wallet, token,
                                           nonce)
@@ -162,6 +194,22 @@ def build_tx(itx, wallet, token=None, nonce=1):
 
 
 def build_multisig(tx, wallet, token=None, data=None):
+    """
+    Build a multisig for transaction. If wallet has secret key, use the provided
+    secret key to sign transaction; otherwise, it's assumed that this wallet
+    is created and kept on forge, and sdk will ask forge to sign the
+    transaction with provided token.
+
+    Args:
+        tx(:obj:`Transaction`): transaction that needs multi-signed
+        wallet(:obj:`WalletInfo`): wallet to build the tx
+        token(string): only required if wallet doesn't include secret key
+        data(bytes): extra data to be included in the multisig
+
+    Returns:
+        :obj:`Transaction`
+
+    """
     if __is_sk_included(wallet):
         return __build_multisig(tx, wallet, data)
     else:

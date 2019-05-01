@@ -28,8 +28,8 @@ class ED25519SignerTest(unittest.TestCase):
         sig = self.signer.sign(data, self.sk)
         invalid = self.signer.verify(bad_data, sig, self.pk)
         valid = self.signer.verify(data, sig, self.signer.sk_to_pk(self.sk))
-        assert (not invalid)
-        assert (valid)
+        assert not invalid
+        assert valid
 
 
 class Secp256K1SignerTest(unittest.TestCase):
@@ -48,5 +48,5 @@ class Secp256K1SignerTest(unittest.TestCase):
         sig = self.signer.sign(data, self.sk)
         invalid = self.signer.verify(bad_data, sig, self.pk)
         valid = self.signer.verify(data, sig, self.pk)
-        assert (invalid == False)
-        assert (valid == True)
+        assert not invalid
+        assert valid

@@ -12,30 +12,30 @@ class DidTest(unittest.TestCase):
         self.did = AbtDid()
 
     # Test did to bytes
-    def test_did_to_bytes(self):
-        res = self.did.type_to_bytes()
-        print(res)
-        assert (res == bytes([0, 1]))
-
-    def test_did_to_bytes_1(self):
-        did = AbtDid(hash_type='sha3_512')
-        res = did.type_to_bytes()
-        print(res)
-        assert (res == bytes([0, 5]))
-
-    def test_did_to_bytes_2(self):
-        did = AbtDid(role_type='application', key_type='secp256k1',
-                     hash_type='sha3_512')
-        res = did.type_to_bytes()
-        print(res)
-        assert (base64.b16encode(res) == b'0C25')
+    # ef test_did_to_bytes(self):
+    #     res = self.did.type_to_bytes()
+    #     print(res)
+    #     assert (res == bytes([0, 1]))
+    #
+    # def test_did_to_bytes_1(self):
+    #     did = AbtDid(hash_type='sha3_512')
+    #     res = did.type_to_bytes()
+    #     print(res)
+    #     assert (res == bytes([0, 5]))
+    #
+    # def test_did_to_bytes_2(self):
+    #     did = AbtDid(role_type='application', key_type='secp256k1',
+    #                  hash_type='sha3_512')
+    #     res = did.type_to_bytes()
+    #     print(res)
+    #     assert (base64.b16encode(res) == b'0C25')
 
     # Test bytes to did
-    def test_bytes_to_did(self):
-        did = AbtDid.__bytes_to_type(bytes([0, 1]))
-        assert (did.role_type == self.did.role_type)
-        assert (did.key_type == self.did.key_type)
-        assert (did.hash_type == self.did.hash_type)
+    # def test_bytes_to_did(self):
+    #     did = AbtDid.__bytes_to_type(bytes([0, 1]))
+    #     assert (did.role_type == self.did.role_type)
+    #     assert (did.key_type == self.did.key_type)
+    #     assert (did.hash_type == self.did.hash_type)
 
     # Test did general actions
 
