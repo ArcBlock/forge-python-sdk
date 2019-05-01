@@ -52,6 +52,15 @@ class Hasher:
         return res()
 
     def hash(self, data_bytes):
+        """
+        Create hash of provided data
+
+        Args:
+            data_bytes(bytes): data needs to be hashed
+
+        Returns: string
+
+        """
         res = data_bytes
         for i in range(0, self.round):
             hash_helper = self.init_hasher(self.name)

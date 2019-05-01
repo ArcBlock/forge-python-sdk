@@ -1,3 +1,10 @@
+import ast
+import logging
+
+from forge_sdk import utils
+
+logger = logging.getLogger('forge_sdk-did')
+
 ROLE_MAP = {
     'account': 0,
     'node': 1,
@@ -42,3 +49,18 @@ def to_six_bits(num):
 
 def to_five_bits(num):
     return bin(num | 32)[3:]
+
+
+def b64decode_to_dict(data):
+    try:
+        dict_string = utils.multibase_b64decode(data).decode()
+        return ast.literal_eval(dict_string)
+    except Exception as e:
+        logger.error('Error in decoding b64urlsafe '
+                     'encoded data to dictionary.')
+        logger.error(e, exc_info=True)
+        return {}
+
+
+def clean_dict(d):
+    return {k: v for k, v in d.items() if v and v != ''}

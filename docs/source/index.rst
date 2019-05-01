@@ -1,22 +1,31 @@
 
-
 .. toctree::
-    :maxdepth: 2
-    :caption: SDK Documentation
+    :maxdepth: 3
+    :caption: GRPC
 
-    sdk
-
+    modules/rpc
 
 .. toctree::
     :maxdepth: 3
-    :caption: RPC Documentation
+    :caption: Config
 
-    rpc
+    modules/config
+
+.. toctree::
+    :maxdepth: 3
+    :caption: Mcrypto
 
 
-Indices and tables
-==================
+    modules/mcrypto
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+.. toctree::
+    :maxdepth: 3
+    :caption: DID
+
+    modules/did
+
+.. toctree::
+    :maxdepth: 3
+    :caption: Utils
+
+    modules/utils

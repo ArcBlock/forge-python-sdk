@@ -61,18 +61,20 @@ def create_asset(type_url, asset, wallet, token):
 
 def update_asset(type_url, address, asset, wallet, token):
     """GRPC call to create asset
-        Args:
-            type_url(string): type_url for this itx
-            address(string): address of asset to update
-            asset(object): asset to be updated in itx, can be string, bytes,
-                or protobuf objects
-            wallet(:obj:`WalletInfo`): sender's wallet
-            token(string): sender's token
 
-        Returns:
-            ResponseSendTx
+    Args:
+        type_url(string): type_url for this itx
+        address(string): address of asset to update
+        asset(object): asset to be updated in itx, can be string, bytes,
+            or protobuf objects
+        wallet(:obj:`WalletInfo`): sender's wallet
+        token(string): sender's token
+
+    Returns:
+        ResponseSendTx
 
         """
+
     encoded_asset = utils.encode_to_any(type_url, asset)
     update_asset_itx = utils.encode_to_any(
         type_url='fg:t:update_asset',
@@ -166,15 +168,13 @@ def build_multisig(tx, wallet, token=None, data=None):
         return chain_rpc.multisig(tx, wallet, token, data)
 
 
-__chain_id = chain_rpc.get_chain_info().info.network
-
-
 def __is_sk_included(wallet):
     assert (type(wallet) == protos.WalletInfo)
     return wallet.sk and wallet.sk == b''
 
 
 def __build_tx(itx, wallet, nonce):
+    __chain_id = chain_rpc.get_chain_info().info.network
     params = {
         'from': wallet.address,
         'nonce': nonce,

@@ -15,7 +15,16 @@ config = toml.load(default_forge_toml)
 
 
 def use_config(user_config=None):
-    # Use Environment FORGE_CONFIG if exists
+    """
+    Specify the configuration that forte uses. Uses environment variable
+    `FORGE_CONFIG` if exists; otherwise, use user provided config; if user
+    doesn't provide, use default.
+
+    Args:
+        user_config(string): path of user-specify config if env `FORGE-CONFIG`
+            doesn't exist
+
+    """
     env_config = os.environ.get('FORGE_CONFIG')
     if env_config:
         logger.info("Reading config from environment...")
@@ -26,36 +35,65 @@ def use_config(user_config=None):
 
 
 def get_app_path():
+    """
+    Get app path defined in config
+
+    Returns:string
+
+    """
     return expanduser(config['app']['path'])
 
 
 def get_app_host():
+    """
+    Get app host address defined in config
+
+    Returns:string
+
+    """
     return config['app']['host']
 
 
 def get_forge_path():
+    """
+    Get forge path defined in config
+
+    Returns:string
+
+    """
     return expanduser(config['forge']['path'])
 
 
 def get_grpc_socket():
+    """
+    Get grpc socket address
+
+    Returns: string
+
+    """
     return __parse_socket_grpc(
         get_forge_path(),
         config['forge']['sock_grpc'],
     )
 
 
-def get_tcp_socket():
-    return __parse_socket(
-        get_app_path(),
-        config['app']['sock_tcp'],
-    )
-
-
 def get_forge_port():
+    """
+    Get the port number forge web uses
+
+    Returns: string
+
+    """
     return config['app']['forge_port']
 
 
 def get_grpc_channel():
+    """
+    Create a new gRPC Chanel
+
+    Returns: :obj:`grpc.channel`
+
+    """
     return grpc.insecure_channel(get_grpc_socket())
 
 

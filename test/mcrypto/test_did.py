@@ -32,7 +32,7 @@ class DidTest(unittest.TestCase):
 
     # Test bytes to did
     def test_bytes_to_did(self):
-        did = AbtDid.bytes_to_type(bytes([0, 1]))
+        did = AbtDid.__bytes_to_type(bytes([0, 1]))
         assert (did.role_type == self.did.role_type)
         assert (did.key_type == self.did.key_type)
         assert (did.hash_type == self.did.hash_type)
