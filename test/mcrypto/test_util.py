@@ -6,7 +6,7 @@ from forge_sdk import did
 from forge_sdk import protos
 
 
-class McryptoUtilTest(unittest.TestCase):
+class DIDUtilTest(unittest.TestCase):
 
     def test_get_asset_address(self):
         account = "z1cYzB4LHUKs7i6ZYt7BHRVm4eofnHeutoL"

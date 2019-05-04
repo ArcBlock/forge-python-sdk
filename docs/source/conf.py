@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.abspath('../../'))
 # -- Project information -----------------------------------------------------
 
 project = 'forge-python-sdk'
-copyright = '2019, Riley Shu'
+copyright = '2019, ArcBlock, lnc'
 author = 'Riley Shu'
 
 # The full version, including alpha/beta/rc tags
@@ -29,7 +29,8 @@ release = '0.17.0'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.autodoc', 'sphinxcontrib.napoleon']
+extensions = ['sphinx.ext.autodoc', 'sphinxcontrib.napoleon',
+              'sphinx.ext.viewcode']
 
 # Napoleon settings
 add_module_names = False

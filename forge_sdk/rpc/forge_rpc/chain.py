@@ -1,7 +1,6 @@
 from forge_sdk.config import config
 from forge_sdk.protos import protos
 from forge_sdk.rpc import lib
-from forge_sdk.utils import encrypt
 
 stub = protos.ChainRpcStub(config.get_grpc_channel())
 
@@ -29,8 +28,13 @@ def create_tx(itx, from_address,
         nonce (int): optional, number of tx this account has sent
 
     Returns:
-        ResponseCreateTx
+        :obj:`ResponseCreateTx`
 
+    Examples:
+        >>> from forge_sdk import rpc, protos, utils
+        >>> user = rpc.create_wallet(moniker='alice', passphrase='abc123')
+        >>> itx = utils.encode_to_any('fg:t:transfer', protos.TransferTx(to='zysnfkW9LH5jVUubpwcrGaopnN2oDBPTLmuP',value=protos.BigUint(value=b'\x01')))
+        >>> create_tx(itx, user.wallet.address, user.wallet, user.token)
     """
 
     req_kwargs = {

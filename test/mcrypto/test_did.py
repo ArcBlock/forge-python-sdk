@@ -11,33 +11,9 @@ class DidTest(unittest.TestCase):
         self.sk, self.pk = Signer().keypair()
         self.did = AbtDid()
 
-    # Test did to bytes
-    # ef test_did_to_bytes(self):
-    #     res = self.did.type_to_bytes()
-    #     print(res)
-    #     assert (res == bytes([0, 1]))
-    #
-    # def test_did_to_bytes_1(self):
-    #     did = AbtDid(hash_type='sha3_512')
-    #     res = did.type_to_bytes()
-    #     print(res)
-    #     assert (res == bytes([0, 5]))
-    #
-    # def test_did_to_bytes_2(self):
-    #     did = AbtDid(role_type='application', key_type='secp256k1',
-    #                  hash_type='sha3_512')
-    #     res = did.type_to_bytes()
-    #     print(res)
-    #     assert (base64.b16encode(res) == b'0C25')
+        self.did_address = self.did.pk_to_did(self.pk)
+        print(self.sk, self.pk, self.did_address)
 
-    # Test bytes to did
-    # def test_bytes_to_did(self):
-    #     did = AbtDid.__bytes_to_type(bytes([0, 1]))
-    #     assert (did.role_type == self.did.role_type)
-    #     assert (did.key_type == self.did.key_type)
-    #     assert (did.hash_type == self.did.hash_type)
-
-    # Test did general actions
 
     def test_sk_to_did(self):
         sk = base64.b16decode(
@@ -45,7 +21,6 @@ class DidTest(unittest.TestCase):
             '2D31CEE2277380B83FF47B3022FA503EAA1E9FA4B20FA8B'
             '16694EA56096F3A2E9109714062B3486D9')
         did = self.did.sk_to_did(sk)
-        print(did)
         assert (did == "did:abt:z1ioGHFYiEemfLa3hQjk4JTwWTQPu1g2YxP")
 
     def test_match_pk(self):
@@ -63,6 +38,7 @@ class DidTest(unittest.TestCase):
 
     def test_gen_and_sign(self):
         token = self.did.gen_and_sign(self.sk, {'origin': 'testdata'})
+        print(token)
 
         assert (AbtDid.verify(token, self.pk))
 
@@ -74,3 +50,9 @@ class DidTest(unittest.TestCase):
         pk = Signer().sk_to_pk(sk)
         token = self.did.gen_and_sign(sk, {'origin': 'testdata'})
         assert (AbtDid.verify(token, pk))
+
+    def test_parse_from_did(self):
+        did_type = self.did.parse_type_from_did(self.did_address)
+        assert did_type.hash_type == self.did.hash_type
+        assert did_type.role_type == self.did.role_type
+        assert did_type.key_type == self.did.key_type

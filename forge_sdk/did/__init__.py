@@ -5,7 +5,7 @@ from forge_sdk.mcrypto import Hasher
 
 def get_asset_address(did_address, itx):
     """
-    Calculate asset address for specific asset
+    Calculate asset address for provided CreateAssetTx
 
     Args:
         did_address(string): user's did address to create this asset
@@ -13,6 +13,13 @@ def get_asset_address(did_address, itx):
 
     Returns:
         asset_address(string)
+
+    Examples:
+        >>> from forge_sdk import protos, utils
+        >>> account = "z1cYzB4LHUKs7i6ZYt7BHRVm4eofnHeutoL"
+        >>> itx = protos.CreateAssetTx(data=utils.encode_to_any(None,b'123'))
+        >>> get_asset_address(account, itx)
+        'zjdjoBZ8TCyQhbY2q3GZfJFAcWWBbF8ZXrts'
 
     """
     data = did_address.encode() + Hasher('sha3').hash(itx.SerializeToString())

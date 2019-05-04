@@ -1,6 +1,6 @@
 # Minimal makefile for Sphinx documentation
 #
-
+VERSION=$(strip $(shell cat ../version))
 # You can set these variables from the command line.
 SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
@@ -10,6 +10,11 @@ BUILDDIR      = build
 # Put it first so that "make" without argument is like "make help".
 help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+
+all:
+	@aws s3 sync ./build/html s3://docs.arcblock.io/forge-sdk/python/latest --region us-west-2 --profile prod
+	@aws s3 sync ./build/html s3://docs.arcblock.io/forge-sdk/python/$(basename $(VERSION)) --region us-west-2 --profile prod
+
 
 .PHONY: help Makefile
 

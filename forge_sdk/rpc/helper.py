@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 
 from forge_sdk import did
 from forge_sdk import utils
@@ -42,7 +43,8 @@ def create_asset(type_url, asset, wallet, token=None, **kwargs):
 
     Args:
         type_url(string): type_url for this itx
-        asset(object): asset to be included in itx, can be string, bytes,
+        asset(:obj:`CreateAssetTx`): asset to be included in itx, can be
+        string, bytes,
             or protobuf objects
         wallet(:obj:`WalletInfo`): sender's wallet
         token(string): sender's token
@@ -50,6 +52,11 @@ def create_asset(type_url, asset, wallet, token=None, **kwargs):
     Returns:
         :obj:`ResponseSendTx`, string
 
+    Examples:
+        >>> from forge_sdk import rpc
+        >>> user = rpc.create_wallet(moniker='user_alice', passphrase='abc123')
+        >>> response, asset_address = create_asset('fg:t:create_asset',
+        b'sample_asset', user.wallet, user.token)
     """
 
     encoded_asset = utils.encode_to_any(type_url, asset)
@@ -214,6 +221,100 @@ def build_multisig(tx, wallet, token=None, data=None):
         return __build_multisig(tx, wallet, data)
     else:
         return chain_rpc.multisig(tx, wallet, token, data)
+
+
+def send_poke_tx(wallet, token=None):
+    """
+    Send a Poke Transaction.
+
+    Args:
+        token(string): required if the wallet does not have a secret key.
+
+    Returns:
+        :obj:`ResponseSendTx`
+
+    """
+    type_url = 'fg:t:poke'
+    poke_tx = protos.PokeTx(date=str(datetime.now().date()),
+                            address='zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz', )
+    return send_itx(type_url, poke_tx, wallet, token, 0)
+
+
+def send_transfer_tx(transfer_tx, wallet, token=None):
+    """
+    Send a Transfer transaction.
+
+    Args:
+        transfer_tx(:obj:`TransferTx`): transfer inner transaction
+        wallet(:obj:`WalletInfo`): wallet of the sender
+        token(string): required if the wallet does not have a secret key.
+
+    Returns:
+        :obj:`ResponseSendTx`
+
+    """
+    type_url = 'fg:t:transfer'
+    return send_itx(type_url, transfer_tx, wallet, token)
+
+
+def get_account_balance(address):
+    """
+    Retrieve the balance of account.
+
+    Args:
+        address(string): address of an account on Forge chain
+
+    Returns:
+        int
+
+    """
+    account_state = get_single_account_state(address)
+    if account_state:
+        return utils.bytes_to_int(account_state.balance.value)
+
+
+def is_tx_ok(tx_hash):
+    """
+    Check if a transaction executed successfully
+
+    Args:
+        tx_hash(string): hash of the transaction
+
+    Returns:
+        bool
+
+    """
+    tx_state = get_single_tx_info(tx_hash)
+    if tx_state.code == 0:
+        return True
+    else:
+        logger.error(f'tx: {tx_hash} failed with code {tx_state.code}')
+        return False
+
+
+def send_itx(type_url, tx, wallet, token, nonce=1):
+    """
+    GRPC call to send inner transaction
+
+    Args:
+        type_url(string): type_url for this itx
+        tx(:obj:`protos.object`): transactions defined in protos
+        wallet(:obj:`WalletInfo`): sender's wallet
+        token(string): sender's token
+        nonce(int): need to be set to 0 if itx is pokeTx
+
+    Returns:
+        :obj:`ResponseSendTx`
+
+    """
+    encoded_itx = utils.encode_to_any(type_url, tx)
+    tx = build_tx(
+        itx=encoded_itx,
+        wallet=wallet,
+        token=token,
+        nonce=nonce
+    )
+    return chain_rpc.send_tx(tx)
 
 
 def __is_sk_included(wallet):

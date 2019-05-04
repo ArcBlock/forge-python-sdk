@@ -21,6 +21,21 @@ class AbtDid:
     def __init__(self, role_type='account',
                  key_type='ed25519',
                  hash_type='sha3', **kwargs):
+        """
+        Initialize an AbtDid Instance.
+
+        Args:
+            role_type(string): role type of this did instance, default is 'account'
+            key_type(string): key type of this did instance, default is 'ed25519'
+            hash_type: hash type of this did instance, defualt is 'sha3'
+
+        Kwargs:
+            encode(bool): if the calculated did address should be encoded.
+                Defaults to True.
+            form(stirng): can be either 'short' or 'long'. Decides if the did
+                address should include the prefix or not. Defaults to be 'long'.
+
+        """
         self.role_type = role_type
         assert (role_type in ROLE_MAP.keys())
 
@@ -42,7 +57,16 @@ class AbtDid:
         Args:
             did(string): did address
 
-        Returns: did_type(:obj:`AbtDid`)
+        Returns:
+            :obj:`AbtDid`
+        Examples:
+            >>> did_type = AbtDid.parse_type_from_did('did:abt:z1jqq6DaT76Q9aTRZ4ndNjh9AthotPBvyEP')
+            >>> did_type.hash_type
+            'sha3'
+            >>> did_type.role_type
+            'account'
+            >>> did_type.key_type
+            'ed25519'
 
         """
         try:
@@ -60,7 +84,14 @@ class AbtDid:
         Args:
             sk(bytes): secret key
 
-        Returns: did(string)
+        Returns:
+            string
+
+        Examples:
+            >>> import base64
+            >>> sk = base64.b16decode('3E0F9A313300226D51E33D5D98A126E86396956122E97E32D31CEE2277380B83FF47B3022FA503EAA1E9FA4B20FA8B16694EA56096F3A2E9109714062B3486D9')
+            >>> AbtDid().sk_to_did(sk)
+            'did:abt:z1ioGHFYiEemfLa3hQjk4JTwWTQPu1g2YxP'
 
         """
         pk = self.signer.sk_to_pk(sk)
@@ -72,7 +103,14 @@ class AbtDid:
         Args:
             pk(bytes): public key
 
-        Returns: string
+        Returns:
+            string
+
+        Examples:
+            >>> import base64
+            >>> pk = base64.b16decode('A5AB55816BB81D2526D5CAE3CE3082F4F2FAF9D658D8938EC085E8BADAFF5B9F')
+            >>> AbtDid().pk_to_did(pk)
+            'did:abt:z1XEw92uJKkTqyTuMnFFQ1BrgkGinfz72dF'
 
         """
         type_bytes = self.__type_to_bytes()
@@ -93,11 +131,20 @@ class AbtDid:
     def is_match_pk(did, pk):
         """
         check if the provided did is calculated from provided public key
+
         Args:
             did(string): did address
             pk(bytes): public key
 
-        Returns: boolean
+        Returns:
+            bool
+
+        Examples:
+            >>> import base64
+            >>> pk = base64.b16decode('A5AB55816BB81D2526D5CAE3CE3082F4F2FAF9D658D8938EC085E8BADAFF5B9F')
+            >>> did_address ='did:abt:z1XEw92uJKkTqyTuMnFFQ1BrgkGinfz72dF'
+            >>> AbtDid.is_match_pk(did_address, pk)
+            True
 
         """
         if did.startswith(AbtDid.PREFIX):
@@ -122,7 +169,14 @@ class AbtDid:
         Args:
             did(string): DID address
 
-        Returns: boolean
+        Returns:
+            bool
+
+        Examples:
+            >>> AbtDid.is_valid('did:abt:z1XEw92uJKkTqyTuMnFFQ1BrgkGinfz72dF')
+            True
+            >>> AbtDid.is_valid('did:abt:z1XEw92uJKkTqyTuMnFFQ1Brgk72dF')
+            False
 
         """
         did = did.lstrip('did:abt:')
@@ -171,7 +225,15 @@ class AbtDid:
             sk(bytes): secret key
             extra(dict): additional data to be included in the token
 
-        Returns: string
+        Returns:
+            string
+
+        Examples:
+            >>> import base64
+            >>> sk = base64.b16decode('5C57BE8571841383774398891CA42917924B244513FB923E201D60D8795F682EF04A5204D6C529FBB3C435F62E042DB4E6D2BBF839A723A83A8B30740F0AD524')
+            >>> res = AbtDid().gen_and_sign(sk, {'origin': 'testdata'})
+            >>> res.split(".")[0]
+            'eyJhbGciOiAiRWQyNTUxOSIsICJ0eXAiOiAiSldUIn0'
 
         """
         now = round(datetime.utcnow().timestamp())
@@ -207,8 +269,15 @@ class AbtDid:
             token(string): JWT token
             pk(bytes): public key
 
-        Returns: boolean
+        Returns:
+            bool
 
+        Examples:
+            >>> import base64
+            >>> token='eyJhbGciOiAiRWQyNTUxOSIsICJ0eXAiOiAiSldUIn0.eyJpc3MiOiAiZGlkOmFidDp6MWYyaFB1ZEZnanRhOGNkRVYyeFRZaGRhcjNEb2ZxSGhkNiIsICJpYXQiOiAxNTU2NzcyNDE1LCAibmJmIjogMTU1Njc3MjQxNSwgImV4cCI6IDE1NTY3NzQyMTUsICJvcmlnaW4iOiAidGVzdGRhdGEifQ.sdbRA4_-gtMhlTRqhNzxnqYG-sFl3EGFOpVcsX6sSZ0E_33k6ga8jPTmNMkRz3DdFwnW_M62oK_-nFSw9wJQBw'
+            >>> pk =base64.b16decode('F04A5204D6C529FBB3C435F62E042DB4E6D2BBF839A723A83A8B30740F0AD524')
+            >>> AbtDid.verify(token, pk)
+            True
         """
         try:
             header, body, signature = token.split('.')

@@ -2,6 +2,8 @@ import codecs
 import math
 from functools import reduce
 
+from forge_sdk import protos
+
 
 def int_to_bytes(n):
     """
@@ -31,3 +33,16 @@ def bytes_to_int(bytes):
 
     """
     return reduce(lambda s, x: (s << 8) + x, bytearray(bytes))
+
+
+def int_to_biguint(n):
+    """
+    Convert integer to :obj:`protos.BigUint`
+    Args:
+        n(int): number to be converted
+
+    Returns:
+        :obj:`BigUint`
+
+    """
+    return protos.BigUint(value=int_to_bytes(n))
