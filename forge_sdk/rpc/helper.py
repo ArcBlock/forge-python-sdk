@@ -10,31 +10,6 @@ from forge_sdk.rpc.forge_rpc import state as state_rpc
 logger = logging.getLogger('rpc-helper')
 
 
-def send_itx(type_url, tx, wallet, token, nonce=1):
-    """
-    GRPC call to send inner transaction
-
-    Args:
-        type_url(string): type_url for this itx
-        tx(:obj:`protos.object`): transactions defined in protos
-        wallet(:obj:`WalletInfo`): sender's wallet
-        token(string): sender's token
-        nonce(int): need to be set to 0 if itx is pokeTx
-
-    Returns:
-        :obj:`ResponseSendTx`
-
-    """
-    encoded_itx = utils.encode_to_any(type_url, tx)
-    tx = build_tx(
-        itx=encoded_itx,
-        wallet=wallet,
-        token=token,
-        nonce=nonce
-    )
-    return chain_rpc.send_tx(tx)
-
-
 def create_asset(type_url, asset, wallet, token=None, **kwargs):
     """
     GRPC call to create asset
@@ -55,7 +30,7 @@ def create_asset(type_url, asset, wallet, token=None, **kwargs):
     Examples:
         >>> from forge_sdk import rpc
         >>> user = rpc.create_wallet(moniker='user_alice', passphrase='abc123')
-        >>> response, asset_address = create_asset('fg:t:create_asset',
+        >>> response, asset_address = create_asset('test:test:asset',
         b'sample_asset', user.wallet, user.token)
     """
 
@@ -290,6 +265,24 @@ def is_tx_ok(tx_hash):
     else:
         logger.error(f'tx: {tx_hash} failed with code {tx_state.code}')
         return False
+
+
+
+def send_exchange_tx(exchange_tx, wallet, token=None):
+    """
+    Send exchange transaction
+
+    Args:
+        exchange_tx(:obj:`ExchangeTx`): ExchangeTx transaction
+        wallet(:obj:`WalletInfo`): wallet of the sender
+        token(string): required if the wallet does not have a secret key.
+
+    Returns:
+        :obj:`ResponseSendTx`
+
+    """
+    type_url = 'fg:t:exchange'
+    return send_itx(type_url, exchange_tx, wallet, token)
 
 
 def send_itx(type_url, tx, wallet, token, nonce=1):

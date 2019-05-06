@@ -10,9 +10,7 @@ class DidTest(unittest.TestCase):
     def setUp(self):
         self.sk, self.pk = Signer().keypair()
         self.did = AbtDid()
-
         self.did_address = self.did.pk_to_did(self.pk)
-        print(self.sk, self.pk, self.did_address)
 
 
     def test_sk_to_did(self):
