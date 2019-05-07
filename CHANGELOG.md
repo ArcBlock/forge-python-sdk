@@ -1,3 +1,7 @@
+## 0.25.4 (May 07, 2019)
+  - update package information
+  - update readme (#154)
+
 ## 0.25.3 (May 07, 2019)
 
 

@@ -16,7 +16,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/ArcBlock/forge-python-sdk",
-    packages=setuptools.find_packages(exclude=('examples',)),
+    packages=setuptools.find_packages(),
     include_package_data=True,
     classifiers=[
         "Programming Language :: Python :: 3",
@@ -31,5 +31,6 @@ setuptools.setup(
         'deepmerge',
         'pysha3',
         'ed25519',
+        'secp256k1',
     ],
 )
