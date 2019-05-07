@@ -7,6 +7,8 @@ from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
+
+from . import type_pb2 as type__pb2
 _b = sys.version_info[0] < 3 and (
     lambda x: x) or (lambda x: x.encode('latin1'))
 # @@protoc_insertion_point(imports)
@@ -19,8 +21,8 @@ DESCRIPTOR = _descriptor.FileDescriptor(
     package='forge_abi',
     syntax='proto3',
     serialized_options=None,
-    serialized_pb=_b('\n\x12\x63reate_asset.proto\x12\tforge_abi\x1a\x19google/protobuf/any.proto\"\x9b\x01\n\rCreateAssetTx\x12\x0f\n\x07moniker\x18\x01 \x01(\t\x12\"\n\x04\x64\x61ta\x18\x02 \x01(\x0b\x32\x14.google.protobuf.Any\x12\x10\n\x08readonly\x18\x03 \x01(\x08\x12\x15\n\rtransferrable\x18\x04 \x01(\x08\x12\x0b\n\x03ttl\x18\x05 \x01(\r\x12\x0e\n\x06parent\x18\x06 \x01(\t\x12\x0f\n\x07\x61\x64\x64ress\x18\x07 \x01(\tb\x06proto3'),
-    dependencies=[google_dot_protobuf_dot_any__pb2.DESCRIPTOR, ])
+    serialized_pb=_b('\n\x12\x63reate_asset.proto\x12\tforge_abi\x1a\x19google/protobuf/any.proto\x1a\ntype.proto\"\x9b\x01\n\rCreateAssetTx\x12\x0f\n\x07moniker\x18\x01 \x01(\t\x12\"\n\x04\x64\x61ta\x18\x02 \x01(\x0b\x32\x14.google.protobuf.Any\x12\x10\n\x08readonly\x18\x03 \x01(\x08\x12\x15\n\rtransferrable\x18\x04 \x01(\x08\x12\x0b\n\x03ttl\x18\x05 \x01(\r\x12\x0e\n\x06parent\x18\x06 \x01(\t\x12\x0f\n\x07\x61\x64\x64ress\x18\x07 \x01(\t\"5\n\x0f\x41ssetAttributes\x12\x15\n\rtransferrable\x18\x01 \x01(\x08\x12\x0b\n\x03ttl\x18\x02 \x01(\r\"\xc6\x01\n\x0c\x41ssetFactory\x12\x13\n\x0b\x64\x65scription\x18\x01 \x01(\t\x12\r\n\x05limit\x18\x02 \x01(\r\x12!\n\x05price\x18\x03 \x01(\x0b\x32\x12.forge_abi.BigUint\x12\x10\n\x08template\x18\x04 \x01(\t\x12\x19\n\x11\x61llowed_spec_args\x18\x05 \x03(\t\x12\x12\n\nasset_name\x18\x06 \x01(\t\x12.\n\nattributes\x18\x07 \x01(\x0b\x32\x1a.forge_abi.AssetAttributes\"\xe0\x01\n\x11\x41ssetFactoryState\x12\x13\n\x0b\x64\x65scription\x18\x01 \x01(\t\x12\r\n\x05limit\x18\x02 \x01(\r\x12!\n\x05price\x18\x03 \x01(\x0b\x32\x12.forge_abi.BigUint\x12\x10\n\x08template\x18\x04 \x01(\t\x12\x19\n\x11\x61llowed_spec_args\x18\x05 \x03(\t\x12\x12\n\nasset_name\x18\x06 \x01(\t\x12.\n\nattributes\x18\x07 \x01(\x0b\x32\x1a.forge_abi.AssetAttributes\x12\x13\n\x0bnum_created\x18\x08 \x01(\rb\x06proto3'),
+    dependencies=[google_dot_protobuf_dot_any__pb2.DESCRIPTOR, type__pb2.DESCRIPTOR, ])
 
 
 _CREATEASSETTX = _descriptor.Descriptor(
@@ -91,12 +93,210 @@ _CREATEASSETTX = _descriptor.Descriptor(
     extension_ranges=[],
     oneofs=[
     ],
-    serialized_start=61,
-    serialized_end=216,
+    serialized_start=73,
+    serialized_end=228,
+)
+
+
+_ASSETATTRIBUTES = _descriptor.Descriptor(
+    name='AssetAttributes',
+    full_name='forge_abi.AssetAttributes',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='transferrable', full_name='forge_abi.AssetAttributes.transferrable', index=0,
+            number=1, type=8, cpp_type=7, label=1,
+            has_default_value=False, default_value=False,
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='ttl', full_name='forge_abi.AssetAttributes.ttl', index=1,
+            number=2, type=13, cpp_type=3, label=1,
+            has_default_value=False, default_value=0,
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR),
+    ],
+    extensions=[
+    ],
+    nested_types=[],
+    enum_types=[
+    ],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto3',
+    extension_ranges=[],
+    oneofs=[
+    ],
+    serialized_start=230,
+    serialized_end=283,
+)
+
+
+_ASSETFACTORY = _descriptor.Descriptor(
+    name='AssetFactory',
+    full_name='forge_abi.AssetFactory',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='description', full_name='forge_abi.AssetFactory.description', index=0,
+            number=1, type=9, cpp_type=9, label=1,
+            has_default_value=False, default_value=_b("").decode('utf-8'),
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='limit', full_name='forge_abi.AssetFactory.limit', index=1,
+            number=2, type=13, cpp_type=3, label=1,
+            has_default_value=False, default_value=0,
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='price', full_name='forge_abi.AssetFactory.price', index=2,
+            number=3, type=11, cpp_type=10, label=1,
+            has_default_value=False, default_value=None,
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='template', full_name='forge_abi.AssetFactory.template', index=3,
+            number=4, type=9, cpp_type=9, label=1,
+            has_default_value=False, default_value=_b("").decode('utf-8'),
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='allowed_spec_args', full_name='forge_abi.AssetFactory.allowed_spec_args', index=4,
+            number=5, type=9, cpp_type=9, label=3,
+            has_default_value=False, default_value=[],
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='asset_name', full_name='forge_abi.AssetFactory.asset_name', index=5,
+            number=6, type=9, cpp_type=9, label=1,
+            has_default_value=False, default_value=_b("").decode('utf-8'),
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='attributes', full_name='forge_abi.AssetFactory.attributes', index=6,
+            number=7, type=11, cpp_type=10, label=1,
+            has_default_value=False, default_value=None,
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR),
+    ],
+    extensions=[
+    ],
+    nested_types=[],
+    enum_types=[
+    ],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto3',
+    extension_ranges=[],
+    oneofs=[
+    ],
+    serialized_start=286,
+    serialized_end=484,
+)
+
+
+_ASSETFACTORYSTATE = _descriptor.Descriptor(
+    name='AssetFactoryState',
+    full_name='forge_abi.AssetFactoryState',
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name='description', full_name='forge_abi.AssetFactoryState.description', index=0,
+            number=1, type=9, cpp_type=9, label=1,
+            has_default_value=False, default_value=_b("").decode('utf-8'),
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='limit', full_name='forge_abi.AssetFactoryState.limit', index=1,
+            number=2, type=13, cpp_type=3, label=1,
+            has_default_value=False, default_value=0,
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='price', full_name='forge_abi.AssetFactoryState.price', index=2,
+            number=3, type=11, cpp_type=10, label=1,
+            has_default_value=False, default_value=None,
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='template', full_name='forge_abi.AssetFactoryState.template', index=3,
+            number=4, type=9, cpp_type=9, label=1,
+            has_default_value=False, default_value=_b("").decode('utf-8'),
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='allowed_spec_args', full_name='forge_abi.AssetFactoryState.allowed_spec_args', index=4,
+            number=5, type=9, cpp_type=9, label=3,
+            has_default_value=False, default_value=[],
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='asset_name', full_name='forge_abi.AssetFactoryState.asset_name', index=5,
+            number=6, type=9, cpp_type=9, label=1,
+            has_default_value=False, default_value=_b("").decode('utf-8'),
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='attributes', full_name='forge_abi.AssetFactoryState.attributes', index=6,
+            number=7, type=11, cpp_type=10, label=1,
+            has_default_value=False, default_value=None,
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR),
+        _descriptor.FieldDescriptor(
+            name='num_created', full_name='forge_abi.AssetFactoryState.num_created', index=7,
+            number=8, type=13, cpp_type=3, label=1,
+            has_default_value=False, default_value=0,
+            message_type=None, enum_type=None, containing_type=None,
+            is_extension=False, extension_scope=None,
+            serialized_options=None, file=DESCRIPTOR),
+    ],
+    extensions=[
+    ],
+    nested_types=[],
+    enum_types=[
+    ],
+    serialized_options=None,
+    is_extendable=False,
+    syntax='proto3',
+    extension_ranges=[],
+    oneofs=[
+    ],
+    serialized_start=487,
+    serialized_end=711,
 )
 
 _CREATEASSETTX.fields_by_name['data'].message_type = google_dot_protobuf_dot_any__pb2._ANY
+_ASSETFACTORY.fields_by_name['price'].message_type = type__pb2._BIGUINT
+_ASSETFACTORY.fields_by_name['attributes'].message_type = _ASSETATTRIBUTES
+_ASSETFACTORYSTATE.fields_by_name['price'].message_type = type__pb2._BIGUINT
+_ASSETFACTORYSTATE.fields_by_name['attributes'].message_type = _ASSETATTRIBUTES
 DESCRIPTOR.message_types_by_name['CreateAssetTx'] = _CREATEASSETTX
+DESCRIPTOR.message_types_by_name['AssetAttributes'] = _ASSETATTRIBUTES
+DESCRIPTOR.message_types_by_name['AssetFactory'] = _ASSETFACTORY
+DESCRIPTOR.message_types_by_name['AssetFactoryState'] = _ASSETFACTORYSTATE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 CreateAssetTx = _reflection.GeneratedProtocolMessageType('CreateAssetTx', (_message.Message,), dict(
@@ -105,6 +305,27 @@ CreateAssetTx = _reflection.GeneratedProtocolMessageType('CreateAssetTx', (_mess
     # @@protoc_insertion_point(class_scope:forge_abi.CreateAssetTx)
 ))
 _sym_db.RegisterMessage(CreateAssetTx)
+
+AssetAttributes = _reflection.GeneratedProtocolMessageType('AssetAttributes', (_message.Message,), dict(
+    DESCRIPTOR=_ASSETATTRIBUTES,
+    __module__='create_asset_pb2'
+    # @@protoc_insertion_point(class_scope:forge_abi.AssetAttributes)
+))
+_sym_db.RegisterMessage(AssetAttributes)
+
+AssetFactory = _reflection.GeneratedProtocolMessageType('AssetFactory', (_message.Message,), dict(
+    DESCRIPTOR=_ASSETFACTORY,
+    __module__='create_asset_pb2'
+    # @@protoc_insertion_point(class_scope:forge_abi.AssetFactory)
+))
+_sym_db.RegisterMessage(AssetFactory)
+
+AssetFactoryState = _reflection.GeneratedProtocolMessageType('AssetFactoryState', (_message.Message,), dict(
+    DESCRIPTOR=_ASSETFACTORYSTATE,
+    __module__='create_asset_pb2'
+    # @@protoc_insertion_point(class_scope:forge_abi.AssetFactoryState)
+))
+_sym_db.RegisterMessage(AssetFactoryState)
 
 
 # @@protoc_insertion_point(module_scope)

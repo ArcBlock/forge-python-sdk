@@ -3,10 +3,10 @@ ENV=~/.envs
 README=$(TOP_DIR)/README.md
 
 VERSION=$(strip $(shell cat version))
-PROTOS=abi enum rpc state service type trace_type
-PYTHON_TARGET=forge/protos
+PROTOS=enum rpc state service type trace_type tx
+PYTHON_TARGET=forge_sdk/protos
 CONFIGS=forge forge_release forge_test forge_default
-TX_PROTOS=account/account_migrate asset/consume_asset asset/create_asset account/declare governance/deploy_protocol trade/exchange misc/poke stake/stake trade/transfer asset/update_asset governance/upgrade_node deprecated/declare_file
+TX_PROTOS=account/account_migrate asset/consume_asset asset/create_asset asset/acquire_asset account/declare governance/deploy_protocol trade/exchange misc/poke stake/stake trade/transfer asset/update_asset governance/upgrade_node deprecated/declare_file
 
 build:
 	@echo "Building the software..."
@@ -97,23 +97,29 @@ prepare-vendor-protos:
 	@curl --silent https://raw.githubusercontent.com/ArcBlock/ex-abci-proto/master/lib/protos/vendor.proto > ./$(PYTHON_TARGET)/raw_protos/vendor.proto
 	@echo "All protobuf files are fetched!"
 
-build-all-protos: #clean-proto prepare-vendor-protos prepare-tx-protos
+build-all-protos:
 	@mkdir -p $(PYTHON_TARGET)/protos;mkdir -p $(PYTHON_TARGET)/raw_protos
 	@echo "Buiding all protobuf files..."
 	@python -m grpc_tools.protoc -I ./$(PYTHON_TARGET)/raw_protos --python_out=./$(PYTHON_TARGET)/protos --grpc_python_out=./$(PYTHON_TARGET)/protos ./$(PYTHON_TARGET)/raw_protos/*.proto
 	@sed -i -E 's/^import.*_pb2/from . \0/' ./$(PYTHON_TARGET)/protos/*.py
 	@echo "All protobuf files are built and ready to use!.."
 	@for filename in ./$(PYTHON_TARGET)/protos/*.py; do \
-	 echo "from forge.protos.protos.$$(basename $$filename .py) import *" >>$(PYTHON_TARGET)/protos/__init__.py; \
+	 echo "from forge_sdk.protos.protos.$$(basename $$filename .py) import *" >>$(PYTHON_TARGET)/protos/__init__.py; \
 	 done
 
 
 clean-build:
 	@rm -rf build
 	@rm -rf dist
-	@ rm -rf ./examples/build
-	@rm -rf ./examples/dist
 	@echo "All build and dist folders are cleaned!"
+
+package-pypi: clean-build
+	@python setup.py sdist bdist_wheel
+	@echo "file packaged successfully!"
+
+upload-pypi: package-pypi
+	@twine upload -r pypi dist/*
+	@echo "file uploaded successfully!"
 
 test-cov:
 	@pytest --cov=forge/mcrypto --cov=forge/rpc --cov=forge/did test/

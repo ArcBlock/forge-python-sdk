@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
     package='forge_abi',
     syntax='proto3',
     serialized_options=None,
-    serialized_pb=_b('\n\x15\x61\x63\x63ount_migrate.proto\x12\tforge_abi\x1a\x19google/protobuf/any.proto\x1a\ntype.proto\"x\n\x10\x41\x63\x63ountMigrateTx\x12\n\n\x02pk\x18\x01 \x01(\x0c\x12#\n\x04type\x18\x02 \x01(\x0b\x32\x15.forge_abi.WalletType\x12\x0f\n\x07\x61\x64\x64ress\x18\x03 \x01(\t\x12\"\n\x04\x64\x61ta\x18\x0f \x01(\x0b\x32\x14.google.protobuf.Anyb\x06proto3'),
+    serialized_pb=_b('\n\x15\x61\x63\x63ount_migrate.proto\x12\tforge_abi\x1a\x19google/protobuf/any.proto\x1a\ntype.proto\"|\n\x10\x41\x63\x63ountMigrateTx\x12\n\n\x02pk\x18\x01 \x01(\x0c\x12\'\n\x04type\x18\x02 \x01(\x0b\x32\x15.forge_abi.WalletTypeB\x02\x18\x01\x12\x0f\n\x07\x61\x64\x64ress\x18\x03 \x01(\t\x12\"\n\x04\x64\x61ta\x18\x0f \x01(\x0b\x32\x14.google.protobuf.Anyb\x06proto3'),
     dependencies=[google_dot_protobuf_dot_any__pb2.DESCRIPTOR, type__pb2.DESCRIPTOR, ])
 
 
@@ -45,7 +45,7 @@ _ACCOUNTMIGRATETX = _descriptor.Descriptor(
             has_default_value=False, default_value=None,
             message_type=None, enum_type=None, containing_type=None,
             is_extension=False, extension_scope=None,
-            serialized_options=None, file=DESCRIPTOR),
+            serialized_options=_b('\030\001'), file=DESCRIPTOR),
         _descriptor.FieldDescriptor(
             name='address', full_name='forge_abi.AccountMigrateTx.address', index=2,
             number=3, type=9, cpp_type=9, label=1,
@@ -73,7 +73,7 @@ _ACCOUNTMIGRATETX = _descriptor.Descriptor(
     oneofs=[
     ],
     serialized_start=75,
-    serialized_end=195,
+    serialized_end=199,
 )
 
 _ACCOUNTMIGRATETX.fields_by_name['type'].message_type = type__pb2._WALLETTYPE
@@ -89,4 +89,5 @@ AccountMigrateTx = _reflection.GeneratedProtocolMessageType('AccountMigrateTx', 
 _sym_db.RegisterMessage(AccountMigrateTx)
 
 
+_ACCOUNTMIGRATETX.fields_by_name['type']._options = None
 # @@protoc_insertion_point(module_scope)

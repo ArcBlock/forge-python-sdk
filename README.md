@@ -17,7 +17,7 @@ Set `FORGE_CONFIG` as your environment variable, pointing to the config your for
 
 #### Get Chain Info
 ```python
-from forge import rpc
+from forge_sdk import rpc
 rpc.get_chain_info()
 
 info {

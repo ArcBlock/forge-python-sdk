@@ -1,4 +1,4 @@
-include forge/config/forge_default.toml
+include forge_sdk/config/forge_default.toml
 recursive-exclude examples *
 include Makefile
 include *.yaml

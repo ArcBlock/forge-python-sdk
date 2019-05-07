@@ -17,6 +17,8 @@ enum StatusCode {
   unsupported_tx = 9;
   expired_tx = 10;
   too_many_txs = 11;
+  invalid_lock_status = 12;
+  invalid_request = 13;
 
   // 16 - 2047 various errors
   invalid_moniker = 16;
@@ -44,6 +46,13 @@ enum StatusCode {
   untransferrable_asset = 40;
   readonly_asset = 41;
   consumed_asset = 42;
+  invalid_deposit_value = 43;
+  exceed_deposit_cap = 44;
+  invalid_deposit_target = 45;
+  invalid_depositor = 46;
+  invalid_withdrawer = 47;
+  duplicate_tether = 48;
+  invalid_expiry_date = 49;
 
   forbidden = 403;
   internal = 500;
@@ -125,7 +134,10 @@ enum RoleType {
   role_asset = 6;
   role_stake = 7;
   role_validator = 8;
-  role_tx = 9;
+  role_group = 9;
+  role_tx = 10;
+  role_tether = 11;
+  role_any = 63;
 }
 
 enum UpgradeType {

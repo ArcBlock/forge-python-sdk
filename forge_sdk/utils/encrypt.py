@@ -5,13 +5,17 @@ import base58
 
 def multibase_b58encode(data):
     """
-    Follow forge's base58 encode convention to encode bytes
+    Follow forge's base58 encode convention to encode bytes.
 
     Args:
         data(bytes): data to be encoded
 
-    Returns: string
+    Returns:
+        string
 
+    Examples:
+        >>> multibase_b58encode(b'hello')
+        'zCn8eVZg'
     """
     raw = base58.b58encode(data)
     return 'z' + raw.decode()
@@ -24,7 +28,12 @@ def multibase_b58decode(data):
     Args:
         data(string): encoded string
 
-    Returns: bytes
+    Returns:
+        bytes
+
+    Examples:
+        >>> multibase_b58decode('zCn8eVZg')
+        b'hello'
 
     """
     if data.startswith('z'):
@@ -40,8 +49,12 @@ def multibase_b64encode(data):
     Args:
         data(bytes): data to be encoded
 
-    Returns: string
+    Returns:
+        string
 
+    Examples:
+        >>> multibase_b64encode(b'hello')
+        'aGVsbG8'
     """
     if isinstance(data, str):
         data = data.encode()
@@ -56,6 +69,10 @@ def multibase_b64decode(data):
         data(string): encoded string
 
     Returns: bytes
+
+    Examples:
+        >>> multibase_b64decode('aGVsbG8')
+        b'hello'
     """
 
     if isinstance(data, str):

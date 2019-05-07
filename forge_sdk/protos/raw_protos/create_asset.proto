@@ -2,6 +2,7 @@ syntax = "proto3";
 package forge_abi;
 
 import "google/protobuf/any.proto";
+import "type.proto";
 
 message CreateAssetTx {
   string moniker = 1;
@@ -14,4 +15,48 @@ message CreateAssetTx {
   string parent = 6;
   // asset address
   string address = 7;
+}
+
+message AssetAttributes {
+  bool transferrable = 1;
+  uint32 ttl = 2;
+}
+
+message AssetFactory {
+  // description of the asset factory
+  string description = 1;
+  // total assets it can create
+  uint32 limit = 2;
+  // the price for the asset, in unit
+  BigUint price = 3;
+  // the template that asset factory will use to generate the asset, template is
+  // string that could be processed by EEx with the given args, and its output
+  // is json. Then the json will be parsed and converted against the asset_name.
+  // e.g. If your asset name is `Ticket`,e.g. the the generated json data will
+  // be converted with `ForgeAbi.Ticket.new(json)`.
+  string template = 4;
+  // allowed args for the template. In transfer tx, user can transfer tokens to
+  // this AssetFactory address with a json string containing necessary args,
+  // once the json is parsed, it will be checked against this, if any
+  // field not in the list, the transfer tx will fail.
+  repeated string allowed_spec_args = 5;
+  // the protobuf message name for the asset. Note that this shall be registered
+  // to forge.
+  string asset_name = 6;
+
+  // asset attributes will be copied to generated asset. Note assets generated
+  // from asset factory is read only.
+  AssetAttributes attributes = 7;
+}
+
+message AssetFactoryState {
+  string description = 1;
+  uint32 limit = 2;
+  BigUint price = 3;
+  string template = 4;
+  repeated string allowed_spec_args = 5;
+  string asset_name = 6;
+  AssetAttributes attributes = 7;
+
+  uint32 num_created = 8;
 }

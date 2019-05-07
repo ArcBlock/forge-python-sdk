@@ -432,6 +432,11 @@ class StateRpcStub(object):
             request_serializer=rpc__pb2.RequestGetStakeState.SerializeToString,
             response_deserializer=rpc__pb2.ResponseGetStakeState.FromString,
         )
+        self.get_tether_state = channel.stream_stream(
+            '/forge_abi.StateRpc/get_tether_state',
+            request_serializer=rpc__pb2.RequestGetTetherState.SerializeToString,
+            response_deserializer=rpc__pb2.ResponseGetTetherState.FromString,
+        )
 
 
 class StateRpcServicer(object):
@@ -473,6 +478,13 @@ class StateRpcServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def get_tether_state(self, request_iterator, context):
+        # missing associated documentation comment in .proto file
+        pass
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_StateRpcServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -500,6 +512,11 @@ def add_StateRpcServicer_to_server(servicer, server):
             servicer.get_stake_state,
             request_deserializer=rpc__pb2.RequestGetStakeState.FromString,
             response_serializer=rpc__pb2.ResponseGetStakeState.SerializeToString,
+        ),
+        'get_tether_state': grpc.stream_stream_rpc_method_handler(
+            servicer.get_tether_state,
+            request_deserializer=rpc__pb2.RequestGetTetherState.FromString,
+            response_serializer=rpc__pb2.ResponseGetTetherState.SerializeToString,
         ),
     }
     generic_handler = grpc.method_handlers_generic_handler(

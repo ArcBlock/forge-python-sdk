@@ -208,9 +208,9 @@ class RpcTest(unittest.TestCase):
             token=self.wallet2.token,
         )
 
-        assert (receiver_exchange_signed.tx is not None)
+        assert (receiver_exchange_signed is not None)
 
-        res = rpc.send_tx(receiver_exchange_signed.tx)
+        res = rpc.send_tx(receiver_exchange_signed)
 
         assert (verify_tx_response(res))
 
@@ -242,9 +242,7 @@ class RpcTest(unittest.TestCase):
                 value=asset_address.encode(),
             ),
         )
-        assert (res_both_sig.code == 0)
-
-        res = rpc.send_tx(res_both_sig.tx)
+        res = rpc.send_tx(res_both_sig)
         assert (verify_tx_response(res))
 
         sleep(5)

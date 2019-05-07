@@ -53,6 +53,8 @@ service StateRpc {
       returns (stream ResponseGetProtocolState);
   rpc get_stake_state(stream RequestGetStakeState)
       returns (stream ResponseGetStakeState);
+  rpc get_tether_state(stream RequestGetTetherState)
+      returns (stream ResponseGetTetherState);
 }
 
 service WalletRpc {

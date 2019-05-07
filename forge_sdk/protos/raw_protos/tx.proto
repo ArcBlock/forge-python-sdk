@@ -1,9 +1,10 @@
-
 syntax = "proto3";
 package forge_abi;
 
 import "google/protobuf/any.proto";
+import "type.proto";
 
+// Used on deploy_protocol
 message CodeInfo {
   // checksum of the module
   bytes checksum = 1;
@@ -41,7 +42,30 @@ message DeployProtocolTx {
   repeated string sources = 9;
   // the compressed code of the protocol
   repeated CodeInfo code = 10;
+  // categories or tags this protocol belongs to
+  repeated string tags = 11;
 
   // forge won't update data into state if app is interested in this tx.
+  google.protobuf.Any data = 15;
+}
+
+// not implemented yet
+
+message ConsensusUpgradeTx {
+  repeated Validator validators = 1;
+  uint64 max_bytes = 2;
+  sint64 max_gas = 3;
+  uint32 max_validators = 4;
+  uint32 max_candidates = 5;
+
+  // forge won't touch this field. Only forge app shall handle it.
+  google.protobuf.Any data = 15;
+}
+
+message SysUpgradeTx {
+  UpgradeTask task = 1;
+  uint64 grace_period = 2; // wait for how many blocks to take the operation
+
+  // forge won't touch this field. Only forge app shall handle it.
   google.protobuf.Any data = 15;
 }

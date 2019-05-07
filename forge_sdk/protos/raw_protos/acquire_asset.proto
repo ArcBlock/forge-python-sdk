@@ -1,0 +1,24 @@
+syntax = "proto3";
+package forge_abi;
+
+import "google/protobuf/any.proto";
+
+message AssetSpec {
+  // the address of the generated asset. The sender shall apply the spec to the
+  // template to generate a structure of the asset, and then generate the
+  // CreateAssetTx, and then calculate the address. SDK could help to alleviate
+  // the process.
+  string address = 1;
+  // json string that contains args for the asset factory template
+  string data = 2;
+}
+
+message AcquireAssetTx {
+  // the address of the asset factory
+  string to = 1;
+  // asset spec
+  repeated AssetSpec specs = 2;
+
+  // forge won't touch this field. Only forge app shall handle it.
+  google.protobuf.Any data = 15;
+}

@@ -22,7 +22,7 @@ message WalletType {
 }
 
 message WalletInfo {
-  WalletType type = 1;
+  WalletType type = 1 [ deprecated = true ];
   bytes sk = 2;
   bytes pk = 3;
   string address = 4;
@@ -152,17 +152,18 @@ message TransactionInfo {
   repeated abci_vendor.KVPair tags = 5;
   StatusCode code = 6;
   google.protobuf.Timestamp time = 7;
-  oneof extra_meta {
-    ExtraCreateAsset create_asset = 8;
-    ExtraAccountMigrate account_migrate = 9;
-  }
 }
 
+message DeclareConfig {
+  bool restricted = 1;
+  uint32 hierarchy = 2;
+}
 message TransactionConfig {
   uint32 max_asset_size = 1;
   uint32 max_list_size = 2;
   uint32 max_multisig = 3;
   uint64 minimum_stake = 4;
+  DeclareConfig declare = 5;
 }
 
 message BlockInfo {
@@ -372,10 +373,6 @@ message PokeConfig {
   uint64 balance = 3;
   uint64 amount = 4;
 }
-
-message ExtraCreateAsset { string asset = 1; }
-
-message ExtraAccountMigrate { string address = 1; }
 
 message UpgradeInfo {
   uint64 height = 1;

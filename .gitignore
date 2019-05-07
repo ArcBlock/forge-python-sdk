@@ -10,13 +10,8 @@ __pycache__
 src/test/_trial_temp
 src/_trial_temp/*
 _trial_temp/
-examples/event_chain/priv
 build/
 dist/
 forge_python_sdk.egg-info/
-flask_session
-examples/build
-examples/dist
-examples/forge_event_chain.egg-info/
 .coverage
 .pytest_cache

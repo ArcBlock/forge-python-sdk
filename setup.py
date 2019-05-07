@@ -3,10 +3,14 @@ import setuptools
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+with open("version", "r") as v:
+    content = v.read()
+    version = content.rstrip()
+
 setuptools.setup(
     name="forge-python-sdk",
-    version="0.18.17",
-    author="Riley Shu",
+    version=version,
+    author="ArcBlock lnc",
     author_email="riley@arcblock.io",
     description="A small example package",
     long_description=long_description,

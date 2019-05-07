@@ -204,7 +204,7 @@ def multisig(tx, wallet=None, token=None, data=None):
         tx=tx, wallet=wallet, token=token,
         data=data,
     )
-    return stub.multisig(request)
+    return stub.multisig(request).tx
 
 
 def get_blocks(height_filter,

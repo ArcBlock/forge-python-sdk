@@ -5,6 +5,7 @@ import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
 import "enum.proto";
 import "type.proto";
+import "tx.proto";
 
 // State definition
 
@@ -14,7 +15,7 @@ message AccountState {
   uint64 num_txs = 3;
   string address = 4;
   bytes pk = 5;
-  WalletType type = 6;
+  WalletType type = 6 [ deprecated = true ];
   string moniker = 7;
   StateContext context = 8;
   string issuer = 9;
@@ -31,6 +32,9 @@ message AccountState {
   StakeContext stake = 16;
   CircularQueue pinned_files = 17;
   PokeInfo poke = 18;
+  // The current deposit this account has received. It cannot exceed the deposit
+  // cap.
+  BigUint deposit_received = 19;
 
   google.protobuf.Any data = 50;
 }
@@ -69,7 +73,7 @@ message ForgeState {
   map<uint64, UpgradeTasks> tasks = 3;
   map<uint32, StakeSummary> stake_summary = 4;
   string version = 5;
-  //string data_version = 6; current data version deprecated
+  // string data_version = 6; current data version deprecated
 
   // app state returned by forge app
   bytes forge_app_hash = 7;
@@ -95,6 +99,7 @@ message RootState {
   bytes account = 2;
   bytes asset = 3;
   bytes receipt = 4;
+  bytes protocol = 5;
 }
 
 message StakeState {
@@ -123,17 +128,35 @@ message BlacklistState { repeated string address = 1; }
 
 message ProtocolState {
   string address = 1;
-  string name = 2;
-  uint32 version = 3;
-  string description = 4;
-  string tx_hash = 5;
+  DeployProtocolTx itx = 2;
   // root hash of the MPT of this tx protocol
-  bytes root_hash = 6;
-  ProtocolStatus status = 7;
+  bytes root_hash = 3;
+  ProtocolStatus status = 4;
 
   repeated string migrated_to = 12;
   repeated string migrated_from = 13;
 
   StateContext context = 14;
   google.protobuf.Any data = 15; // forge app can define their own app state
+}
+
+// This is just for displaying purpose.
+message TetherState {
+  string hash = 1;
+  bool available = 2;
+  string custodian = 3;
+  string depositor = 4;
+  string withdrawer = 5;
+  BigUint value = 6;
+  BigUint commission = 7;
+  BigUint charge = 8;
+  string target = 9;
+  google.protobuf.Timestamp locktime = 10;
+  string address = 11;
+}
+
+// This is the one stored in state DB.
+message TetherInfo {
+  bool available = 1;
+  string hash = 2;
 }
