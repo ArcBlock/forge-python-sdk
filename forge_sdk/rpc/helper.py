@@ -1,5 +1,8 @@
+import json
 import logging
 from datetime import datetime
+
+import pystache
 
 from forge_sdk import did
 from forge_sdk import utils
@@ -237,6 +240,15 @@ def create_asset(type_url, asset, wallet, token=None, **kwargs):
         >>> response, asset_address = create_asset('test:test:asset', b'sample_asset', user.wallet, user.token)
     """
 
+    itx = build_create_asset_tx(type_url, asset, wallet.address, **kwargs)
+
+    tx = build_tx(utils.encode_to_any('fg:t:create_asset', itx), wallet, token)
+    res = chain_rpc.send_tx(tx)
+
+    return res, itx.address
+
+
+def build_create_asset_tx(type_url, asset, address, **kwargs):
     encoded_asset = utils.encode_to_any(type_url, asset)
     params = {
         'moniker': kwargs.get('moniker'),
@@ -248,18 +260,13 @@ def create_asset(type_url, asset, wallet, token=None, **kwargs):
     }
     if not kwargs.get('address'):
         itx_no_address = protos.CreateAssetTx(**params)
-        asset_address = did.get_asset_address(wallet.address,
-                                              itx_no_address)
+        asset_address = did.get_asset_address(address, itx_no_address)
         params['address'] = asset_address
     else:
         params['address'] = kwargs.get('address')
     itx = protos.CreateAssetTx(**params)
 
-    tx = build_tx(
-        utils.encode_to_any('fg:t:create_asset', itx), wallet, token,
-    )
-    res = chain_rpc.send_tx(tx)
-    return res, itx.address
+    return itx
 
 
 def update_asset(address, type_url, asset, wallet, token=None):
@@ -441,11 +448,12 @@ def create_asset_factory(moniker, asset_factory, wallet, token=None):
                         moniker=moniker)
 
 
-def acquire_asset(acquire_asset_tx, wallet, token=None):
+def acquire_asset(to, spec_datas, type_url, wallet, data=None, token=None):
     """
     Send transaction to acquire asset
 
     Args:
+        to(string): address of the assetFactory
         acquire_asset_tx(:obj:`AcquireAssetTx`): AcquireAssetTx
         wallet(:obj:`WalletInfo`): wallet of the sender
         token(string): required if the wallet does not have a secret key.
@@ -454,7 +462,75 @@ def acquire_asset(acquire_asset_tx, wallet, token=None):
         :obj:`ResponseSendTx`
 
     """
-    return send_itx('fg:t:acquire_asset', acquire_asset_tx, wallet, token)
+    factory_state = get_asset_factory(to)
+    if not factory_state:
+        logger.error(f"AssetFactory with address {to} does not exist.")
+        return protos.ResponseSendTx(code=35)
+    else:
+        asset_spec_list = []
+        asset_address_list = []
+        for spec_data in spec_datas:
+            asset_spec = _build_asset_spec(factory_state,
+                                           type_url,
+                                           spec_data,
+                                           to)
+
+            asset_spec_list.append(asset_spec)
+            asset_address_list.append(asset_spec.address)
+
+        acquire_asset_tx = protos.AcquireAssetTx(to=to,
+                                                 specs=asset_spec_list,
+                                                 data=data)
+
+    return send_itx("fg:t:acquire_asset", acquire_asset_tx, wallet,
+                    token), asset_address_list
+
+
+def get_asset_factory(address):
+    state = get_single_asset_state(address)
+    if not state:
+        logger.error(f"AssetFactory with address {address} does not exist.")
+        return None
+    elif state.data.type_url != 'fg:s:asset_factory_state':
+        logger.error(f"{address} is not an address for asset factory.")
+        return None
+    else:
+        return utils.parse_to_proto(state.data.value, protos.AssetFactoryState)
+
+
+def _build_asset_spec(factory_state, type_url, spec_data, factory_address):
+    expected_args = factory_state.allowed_spec_args
+    for arg in expected_args:
+        if arg not in spec_data:
+            logger.error(f"{arg} is not found in {spec_data}.")
+            return None
+
+    # apply specs to create new params
+    try:
+        asset_params = json.loads(pystache.render(
+            factory_state.template, spec_data))
+        asset_proto = getattr(protos, factory_state.asset_name)
+        asset = asset_proto(**asset_params)
+    except Exception as e:
+        logger.error(f"Provided spec data can't be parsed into "
+                     f"{asset_proto} with factory template "
+                     f"{factory_state.template}")
+        return None
+
+    # apply params to createAssetTx and calculate address
+    tx_params = {
+        'readonly': True,
+        'parent': factory_address,
+    }
+    for attribute in factory_state.attributes.DESCRIPTOR.fields:
+        tx_params[attribute.name] = getattr(factory_state.attributes,
+                                            attribute.name)
+
+    create_asset_itx = build_create_asset_tx('fg:x:ticket', asset, '',
+                                             **tx_params)
+
+    return protos.AssetSpec(address=create_asset_itx.address,
+                            data=json.dumps(spec_data))
 
 
 def send_itx(type_url, tx, wallet, token, nonce=1):

@@ -22,9 +22,14 @@ def get_asset_address(did_address, itx):
         'zjdjoBZ8TCyQhbY2q3GZfJFAcWWBbF8ZXrts'
 
     """
-    data = did_address.encode() + Hasher('sha3').hash(itx.SerializeToString())
-    parsed_type = AbtDid.parse_type_from_did(did_address)
-    asset_did = AbtDid(role_type='asset', key_type=parsed_type.key_type,
-                       hash_type=parsed_type.hash_type)
-    asset_address = asset_did.pk_to_did(data).split(":")[-1]
+    if did_address:
+        data = did_address.encode() + Hasher('sha3').hash(itx.SerializeToString())
+        parsed_type = AbtDid.parse_type_from_did(did_address)
+        asset_did = AbtDid(role_type='asset', key_type=parsed_type.key_type,
+                           hash_type=parsed_type.hash_type)
+        asset_address = asset_did.pk_to_did(data).split(":")[-1]
+    else:
+        data = Hasher('sha3').hash(itx.SerializeToString())
+        asset_did = AbtDid(role_type='asset')
+        asset_address = asset_did.pk_to_did(data).split(":")[-1]
     return asset_address

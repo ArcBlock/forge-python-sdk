@@ -20,7 +20,7 @@ setuptools.setup(
     include_package_data=True,
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
+        "LICENSE :: OSI APPROVED :: APACHE SOFTWARE LICENSE",
         "Operating System :: OS Independent",
     ],
     install_requires=[
@@ -32,5 +32,6 @@ setuptools.setup(
         'pysha3',
         'ed25519',
         'secp256k1',
+        'pystache',
     ],
 )

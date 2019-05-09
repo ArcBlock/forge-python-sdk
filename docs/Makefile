@@ -12,8 +12,8 @@ help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 all:
-	@aws s3 sync ./build/html s3://docs.arcblock.io/forge-sdk/python/latest --region us-west-2 --profile prod
-	@aws s3 sync ./build/html s3://docs.arcblock.io/forge-sdk/python/$(basename $(VERSION)) --region us-west-2 --profile prod
+	@aws s3 sync ./build/html s3://docs.arcblock.io/forge/sdks/python/latest --region us-west-2 --profile prod
+	@aws s3 sync ./build/html s3://docs.arcblock.io/forge/sdks/python/$(basename $(VERSION)) --region us-west-2 --profile prod
 
 
 .PHONY: help Makefile

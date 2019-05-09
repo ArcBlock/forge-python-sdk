@@ -1,0 +1,11 @@
+---
+name: tickets
+version: 6
+namespace: CoreTx
+description: Ticket
+proto: protocol.proto
+type_urls:
+  fg:x:ticket: ForgeAbi.Ticket
+pipeline: protocol.yml
+sources: []
+

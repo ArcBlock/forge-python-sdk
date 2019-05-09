@@ -15,3 +15,7 @@ dist/
 forge_python_sdk.egg-info/
 .coverage
 .pytest_cache
+test/protocols/ticket/beams/
+test/protocols/ticket/pipe/
+test/protocols/ticket/proto/
+test/protocols/ticket/ticket.itx.json

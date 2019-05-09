@@ -1,5 +1,6 @@
-## 0.25.4 (May 07, 2019)
-  - update package information
+## 0.25.5 (May 08, 2019)
+  - Add support and test for asset factory and acquire test
+  - compile and delploy new protocol to forge
   - update readme (#154)
 
 ## 0.25.3 (May 07, 2019)

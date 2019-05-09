@@ -7,6 +7,8 @@ from forge_sdk.protos.protos.consume_asset_pb2 import *
 from forge_sdk.protos.protos.consume_asset_pb2_grpc import *
 from forge_sdk.protos.protos.create_asset_pb2 import *
 from forge_sdk.protos.protos.create_asset_pb2_grpc import *
+from forge_sdk.protos.protos.custom_pb2 import *
+from forge_sdk.protos.protos.custom_pb2_grpc import *
 from forge_sdk.protos.protos.declare_file_pb2 import *
 from forge_sdk.protos.protos.declare_file_pb2_grpc import *
 from forge_sdk.protos.protos.declare_pb2 import *

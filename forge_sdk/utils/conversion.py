@@ -52,6 +52,7 @@ def bytes_to_int(bytes):
 def int_to_biguint(n):
     """
     Convert integer to :obj:`protos.BigUint`
+
     Args:
         n(int): number to be converted
 
@@ -65,6 +66,24 @@ def int_to_biguint(n):
     """
 
     return protos.BigUint(value=int_to_bytes(n))
+
+
+def token_to_biguint(token):
+    r"""
+    Convert token to smallest unit, then to bigUint
+
+    Args:
+        token(num): token value
+
+    Returns:
+        :obj:`BigUint`
+
+    Examples:
+        >>> token_to_biguint(1)
+        value: "#\206\362o\301\000\000"
+
+    """
+    return int_to_biguint(int(token*1e+16))
 
 
 def biguint_to_int(biguint):

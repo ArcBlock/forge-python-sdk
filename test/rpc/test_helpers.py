@@ -1,3 +1,4 @@
+import json
 import unittest
 from time import sleep
 
@@ -41,8 +42,8 @@ class HelperRPCTest(unittest.TestCase):
         return res
 
     def test_build_tx(self):
-
-        forge_built_tx = rpc.create_tx(self.trans_tx, self.alice.wallet.address,
+        forge_built_tx = rpc.create_tx(self.trans_tx,
+                                       self.alice.wallet.address,
                                        self.alice.wallet, self.alice.token)
 
         built_tx_1 = rpc.build_tx(
@@ -78,3 +79,46 @@ class HelperRPCTest(unittest.TestCase):
         tx = rpc.finalize_exchange(tx, self.mike.wallet)
         res = rpc.send_tx(tx)
         assert res.hash
+
+    def test_asset_factory(self):
+        # create asset_factory
+
+        template = json.dumps({
+            "row": "{{ row }}",
+            "seat": "{{ seat }}",
+            "room": "5C",
+            "time": "11:00am 04/30/2019",
+            "name": "Avengers: Endgame"
+        })
+        asset_attributes = protos.AssetAttributes(
+            transferrable=True,
+            ttl=3600,
+        )
+
+        factory = protos.AssetFactory(
+            description='movie ticket factory',
+            limit=20,
+            price=utils.token_to_biguint(5),
+            template=template,
+            allowed_spec_args=['row', 'seat'],
+            asset_name='Ticket',
+            attributes=asset_attributes
+        )
+
+        res, factory_address = rpc.create_asset_factory('test_factory', factory,
+                                                        self.alice.wallet)
+        assert res.code == 0
+        assert factory_address
+        print(f"create asset factory: {res.hash}")
+        print(f"asset factory: {factory_address}")
+
+        # send acquireAssetTx
+        sleep(5)
+        spec_datas = [{'row': '1', 'seat': '1'}, {'row': '2', 'seat': '2'}]
+        res, asset_address_list = rpc.acquire_asset(factory_address,
+                                                    spec_datas,
+                                                    'fg:x:ticket',
+                                                    self.mike.wallet)
+        assert res.code == 0
+        print(f"acquire assets: {res.hash}")
+        print(asset_address_list)
