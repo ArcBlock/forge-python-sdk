@@ -1,4 +1,3 @@
-from forge_sdk.protos.protos.__init__ import *
 from forge_sdk.protos.protos.account_migrate_pb2 import *
 from forge_sdk.protos.protos.account_migrate_pb2_grpc import *
 from forge_sdk.protos.protos.acquire_asset_pb2 import *

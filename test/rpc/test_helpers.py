@@ -101,24 +101,32 @@ class HelperRPCTest(unittest.TestCase):
             price=utils.token_to_biguint(5),
             template=template,
             allowed_spec_args=['row', 'seat'],
-            asset_name='Ticket',
+            asset_name='TestTicket',
             attributes=asset_attributes
         )
 
         res, factory_address = rpc.create_asset_factory('test_factory', factory,
                                                         self.alice.wallet)
-        assert res.code == 0
-        assert factory_address
-        print(f"create asset factory: {res.hash}")
-        print(f"asset factory: {factory_address}")
+        assert utils.is_response_ok(res)
 
         # send acquireAssetTx
         sleep(5)
+        factory_state = rpc.get_single_asset_state(factory_address)
+        assert factory_state.issuer == self.alice.wallet.address
+        mike_original_balance = rpc.get_account_balance(
+            self.mike.wallet.address)
+
         spec_datas = [{'row': '1', 'seat': '1'}, {'row': '2', 'seat': '2'}]
         res, asset_address_list = rpc.acquire_asset(factory_address,
                                                     spec_datas,
                                                     'fg:x:ticket',
                                                     self.mike.wallet)
         assert res.code == 0
-        print(f"acquire assets: {res.hash}")
-        print(asset_address_list)
+
+        sleep(5)
+        ticket_1 = rpc.get_single_asset_state(asset_address_list[0])
+
+        mike_new_balance = rpc.get_account_balance(self.mike.wallet.address)
+        mike_original_balance - mike_new_balance == utils.token_to_unit(5)
+        assert ticket_1.issuer == self.alice.wallet.address
+        assert ticket_1.owner == self.mike.wallet.address

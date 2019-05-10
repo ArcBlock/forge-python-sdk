@@ -47,6 +47,9 @@ message AssetFactory {
   // asset attributes will be copied to generated asset. Note assets generated
   // from asset factory is read only.
   AssetAttributes attributes = 7;
+
+  // extra content that user can inject into the factory
+  google.protobuf.Any data = 15;
 }
 
 message AssetFactoryState {
@@ -59,4 +62,7 @@ message AssetFactoryState {
   AssetAttributes attributes = 7;
 
   uint32 num_created = 8;
+
+  // extra context that user
+  google.protobuf.Any data = 15;
 }

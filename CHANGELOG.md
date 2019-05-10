@@ -1,3 +1,6 @@
+## 0.25.5 (May 10, 2019)
+
+
 ## 0.25.5 (May 08, 2019)
   - Add support and test for asset factory and acquire test
   - compile and delploy new protocol to forge

@@ -86,6 +86,10 @@ def token_to_biguint(token):
     return int_to_biguint(int(token*1e+16))
 
 
+def token_to_unit(token):
+    return int(token*1e16)
+
+
 def biguint_to_int(biguint):
     """
     Convert :obj:`BigUint` to integer

@@ -50,7 +50,9 @@ def encode_to_any(type_url, data):
         b'test'
 
     """
-    if isinstance(data, str):
+    if not data:
+        value = None
+    elif isinstance(data, str):
         value = data.encode()
     elif isinstance(data, int):
         value = conversion.int_to_bytes(data)

@@ -1,7 +1,7 @@
 syntax = "proto3";
 package forge_abi;
 
-message Ticket {
+message TestTicket {
   string row = 1;
   string seat = 2;
   string room = 3;

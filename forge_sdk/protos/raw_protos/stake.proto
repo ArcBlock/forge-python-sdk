@@ -30,6 +30,7 @@ message StakeTx {
   string to = 1;
   BigSint value = 2;
   string message = 3;
+  string address = 4;
 
   // forge won't touch this field. Only forge app shall handle it.
   // forge app can extend the stake if the given data cannot meet its

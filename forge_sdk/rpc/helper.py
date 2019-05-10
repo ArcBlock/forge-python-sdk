@@ -428,7 +428,7 @@ def finalize_consume_asset(tx, wallet, token=None, data=None):
     return build_multisig(tx, wallet, token, data)
 
 
-def create_asset_factory(moniker, asset_factory, wallet, token=None):
+def create_asset_factory(moniker, asset_factory, wallet, token=None, data=None):
     """
     Create Asset Factory
 
@@ -448,18 +448,64 @@ def create_asset_factory(moniker, asset_factory, wallet, token=None):
                         moniker=moniker)
 
 
+def build_asset_factory(limit, price, template, allowed_spec_args, asset_name,
+                        **kwargs):
+    """
+    Helper function to build an asset factory, which can be used to create
+    a asset factory.
+
+    Args:
+        limit(int): maximum number of asset this factory can create
+        price(:obj:`BigUint`): token price of each asset created
+        template(stirng): json string of the template encoded with mustache
+        allowed_spec_args(list<string>): fields in template that need to be
+            filled with value from :obj:`AcquireAssetTx`
+        asset_name(string): the protobuf message encoded as data when creating
+            asset
+        **kwargs: additional parameters
+
+    Returns:
+        :obj:`AssetFactory`
+
+    """
+    if kwargs.get('type_url') and kwargs.get('data_value'):
+        data = utils.encode_to_any(kwargs.get(
+            'type_url'), kwargs.get('data_value'))
+    else:
+        data = None
+
+    factory = protos.AssetFactory(
+        description=kwargs.get('description'),
+        limit=limit,
+        price=utils.token_to_biguint(price),
+        allowed_spec_args=allowed_spec_args,
+        asset_name=asset_name,
+        template=template,
+        attributes=protos.AssetAttributes(
+            transferrable=True,
+            ttl=kwargs.get('ttl', 7200)
+        ),
+        data=data,
+    )
+
+    return factory
+
+
 def acquire_asset(to, spec_datas, type_url, wallet, data=None, token=None):
     """
-    Send transaction to acquire asset
+    Send transaction to acquire asset. Returns the response and calculated
+    asset address as a list, corresponding to the spec datas provided.
 
     Args:
         to(string): address of the assetFactory
-        acquire_asset_tx(:obj:`AcquireAssetTx`): AcquireAssetTx
+        spec_datas(list<:obj:`AcquireAssetTx`>): list of spec datas, used to
+            generate asset with factory template
         wallet(:obj:`WalletInfo`): wallet of the sender
+        data(bytes): optional, data to be included in the :obj:`AcquireAssetTx`
         token(string): required if the wallet does not have a secret key.
 
     Returns:
-        :obj:`ResponseSendTx`
+        :obj:`ResponseSendTx`, list<string>
 
     """
     factory_state = get_asset_factory(to)

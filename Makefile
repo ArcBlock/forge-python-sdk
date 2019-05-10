@@ -98,6 +98,7 @@ prepare-vendor-protos:
 	@echo "All protobuf files are fetched!"
 
 build-all-protos:
+	@rm -r $(PYTHON_TARGET)/protos
 	@mkdir -p $(PYTHON_TARGET)/protos;mkdir -p $(PYTHON_TARGET)/raw_protos
 	@echo "Buiding all protobuf files..."
 	@python -m grpc_tools.protoc -I ./$(PYTHON_TARGET)/raw_protos --python_out=./$(PYTHON_TARGET)/protos --grpc_python_out=./$(PYTHON_TARGET)/protos ./$(PYTHON_TARGET)/raw_protos/*.proto
