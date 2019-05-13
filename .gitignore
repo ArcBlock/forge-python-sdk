@@ -7,8 +7,7 @@ node_modules
 .vscode
 __pycache__
 
-src/test/_trial_temp
-src/_trial_temp/*
+**/_trial_temp*/*
 _trial_temp/
 build/
 dist/

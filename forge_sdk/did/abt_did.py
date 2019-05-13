@@ -50,6 +50,17 @@ class AbtDid:
         self.encode = kwargs.get('encode', True)
         self.form = kwargs.get('form', 'long')
 
+    def new(self):
+        """
+        Generate a new did address
+
+        Returns:
+            string
+
+        """
+        sk, pk = self.signer.keypair()
+        return self.sk_to_did(sk)
+
     @staticmethod
     def parse_type_from_did(did):
         """

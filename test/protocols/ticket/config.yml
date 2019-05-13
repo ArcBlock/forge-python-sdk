@@ -1,11 +1,11 @@
 ---
 name: testTicket
-version: 6
+version: 1
 namespace: CoreTx
-description: Ticket
+description: Ticket test
 proto: protocol.proto
 type_urls:
-  fg:x:ticket: ForgeAbi.TestTicket
+  fg:x:test_ticket: ForgeAbi.TestTicket
 pipeline: protocol.yml
 sources: []
 

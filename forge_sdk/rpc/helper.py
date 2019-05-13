@@ -101,7 +101,8 @@ def build_tx(itx, wallet, token=None, nonce=1):
 
 def build_multisig(tx, wallet, token=None, data=None):
     """
-    Build a multisig for transaction. If wallet has secret key, use the provided
+    Build a multisig for transaction. If wallet has secret key, use the
+    provided
     secret key to sign transaction; otherwise, it's assumed that this wallet
     is created and kept on forge, and sdk will ask forge to sign the
     transaction with provided token.
@@ -162,7 +163,8 @@ def transfer(transfer_tx, wallet, token=None):
         >>> from forge_sdk.rpc.forge_rpc import wallet
         >>> alice = wallet.create_wallet(moniker='alice', passphrase='abc123')
         >>> mike = wallet.create_wallet(moniker='mike', passphrase='abc123')
-        >>> transfer_tx = protos.TransferTx(to=mike.wallet.address, value = utils.int_to_biguint(10))
+        >>> transfer_tx = protos.TransferTx(to=mike.wallet.address, value =
+        utils.int_to_biguint(10))
         >>> res = transfer(transfer_tx, alice.wallet)
         >>> assert res.hash
 
@@ -240,7 +242,7 @@ def create_asset(type_url, asset, wallet, token=None, **kwargs):
         >>> response, asset_address = create_asset('test:test:asset', b'sample_asset', user.wallet, user.token)
     """
 
-    itx = build_create_asset_tx(type_url, asset, wallet.address, **kwargs)
+    itx = build_create_asset_tx(type_url, asset, **kwargs)
 
     tx = build_tx(utils.encode_to_any('fg:t:create_asset', itx), wallet, token)
     res = chain_rpc.send_tx(tx)
@@ -248,7 +250,7 @@ def create_asset(type_url, asset, wallet, token=None, **kwargs):
     return res, itx.address
 
 
-def build_create_asset_tx(type_url, asset, address, **kwargs):
+def build_create_asset_tx(type_url, asset, **kwargs):
     encoded_asset = utils.encode_to_any(type_url, asset)
     params = {
         'moniker': kwargs.get('moniker'),
@@ -258,12 +260,10 @@ def build_create_asset_tx(type_url, asset, address, **kwargs):
         'parent': kwargs.get('parent'),
         'data': encoded_asset,
     }
-    if not kwargs.get('address'):
-        itx_no_address = protos.CreateAssetTx(**params)
-        asset_address = did.get_asset_address(address, itx_no_address)
-        params['address'] = asset_address
-    else:
-        params['address'] = kwargs.get('address')
+
+    itx_no_address = protos.CreateAssetTx(**params)
+    asset_address = did.get_asset_address(itx_no_address)
+    params['address'] = asset_address
     itx = protos.CreateAssetTx(**params)
 
     return itx
@@ -287,8 +287,10 @@ def update_asset(address, type_url, asset, wallet, token=None):
     Examples:
         >>> from forge_sdk import rpc
         >>> user = rpc.create_wallet(moniker='user_alice', passphrase='abc123')
-        >>> response, asset_address = create_asset('test:test:asset', b'sample_asset', user.wallet)
-        >>> res = update_asset(asset_address, 'test:test:update', b'update asset', user.wallet)
+        >>> response, asset_address = create_asset('test:test:asset',
+        b'sample_asset', user.wallet)
+        >>> res = update_asset(asset_address, 'test:test:update', b'update
+        asset', user.wallet)
     """
 
     encoded_asset = utils.encode_to_any(type_url, asset)
@@ -371,7 +373,8 @@ def account_migrate(account_migrate_tx, wallet, token=None):
     Send account_migrate transaction
 
     Args:
-        account_migrate_tx(:obj:`AccountMigrateTx`): account migrate transaction
+        account_migrate_tx(:obj:`AccountMigrateTx`): account migrate
+        transaction
         wallet(:obj:`WalletInfo`): sender's old wallet
         token(string): sender's old wallet token
 
@@ -380,9 +383,11 @@ def account_migrate(account_migrate_tx, wallet, token=None):
 
     Examples:
         >>> from forge_sdk import rpc
-        >>> old_wallet = rpc.create_wallet(moniker='alice', passphrase='abc123')
+        >>> old_wallet = rpc.create_wallet(moniker='alice',
+        passphrase='abc123')
         >>> new_wallet = rpc.create_wallet(passphrase='abc123')
-        >>> migrate_tx = protos.AccountMigrateTx(pk=new_wallet.wallet.pk, address=new_wallet.wallet.address)
+        >>> migrate_tx = protos.AccountMigrateTx(pk=new_wallet.wallet.pk,
+        address=new_wallet.wallet.address)
         >>> res = account_migrate(migrate_tx, old_wallet.wallet)
     """
     type_url = 'fg:t:account_migrate'
@@ -428,7 +433,8 @@ def finalize_consume_asset(tx, wallet, token=None, data=None):
     return build_multisig(tx, wallet, token, data)
 
 
-def create_asset_factory(moniker, asset_factory, wallet, token=None, data=None):
+def create_asset_factory(moniker, asset_factory, wallet, token=None,
+                         data=None):
     """
     Create Asset Factory
 
@@ -445,10 +451,22 @@ def create_asset_factory(moniker, asset_factory, wallet, token=None, data=None):
                         asset=asset_factory,
                         wallet=wallet,
                         token=token,
-                        moniker=moniker)
+                        moniker=moniker,
+                        data=data)
 
 
-def build_asset_factory(limit, price, template, allowed_spec_args, asset_name,
+def is_template_match_asset(template, asset):
+    rendered = json.loads(pystache.render(template))
+    try:
+        asset(**rendered)
+        return True
+    except Exception as e:
+        logger.error(f'Rendered template {rendered} and asset {asset} does'
+                     f' not match')
+        return False
+
+
+def build_asset_factory(description, price, template, allowed_spec_args, asset_name,
                         **kwargs):
     """
     Helper function to build an asset factory, which can be used to create
@@ -475,14 +493,14 @@ def build_asset_factory(limit, price, template, allowed_spec_args, asset_name,
         data = None
 
     factory = protos.AssetFactory(
-        description=kwargs.get('description'),
-        limit=limit,
+        description=description,
+        limit=kwargs.get('limit'),
         price=utils.token_to_biguint(price),
         allowed_spec_args=allowed_spec_args,
         asset_name=asset_name,
         template=template,
         attributes=protos.AssetAttributes(
-            transferrable=True,
+            transferrable=kwargs.get('transferrable', True),
             ttl=kwargs.get('ttl', 7200)
         ),
         data=data,
@@ -491,7 +509,7 @@ def build_asset_factory(limit, price, template, allowed_spec_args, asset_name,
     return factory
 
 
-def acquire_asset(to, spec_datas, type_url, wallet, data=None, token=None):
+def acquire_asset(to, spec_datas, type_url, proto_lib, wallet, data=None, token=None):
     """
     Send transaction to acquire asset. Returns the response and calculated
     asset address as a list, corresponding to the spec datas provided.
@@ -519,7 +537,8 @@ def acquire_asset(to, spec_datas, type_url, wallet, data=None, token=None):
             asset_spec = _build_asset_spec(factory_state,
                                            type_url,
                                            spec_data,
-                                           to)
+                                           to,
+                                           proto_lib)
 
             asset_spec_list.append(asset_spec)
             asset_address_list.append(asset_spec.address)
@@ -544,7 +563,7 @@ def get_asset_factory(address):
         return utils.parse_to_proto(state.data.value, protos.AssetFactoryState)
 
 
-def _build_asset_spec(factory_state, type_url, spec_data, factory_address):
+def _build_asset_spec(factory_state, type_url, spec_data, factory_address, proto_lib):
     expected_args = factory_state.allowed_spec_args
     for arg in expected_args:
         if arg not in spec_data:
@@ -555,11 +574,10 @@ def _build_asset_spec(factory_state, type_url, spec_data, factory_address):
     try:
         asset_params = json.loads(pystache.render(
             factory_state.template, spec_data))
-        asset_proto = getattr(protos, factory_state.asset_name)
+        asset_proto = getattr(proto_lib, factory_state.asset_name)
         asset = asset_proto(**asset_params)
     except Exception as e:
-        logger.error(f"Provided spec data can't be parsed into "
-                     f"{asset_proto} with factory template "
+        logger.error(f"Provided spec data can't be parsed   with factory template "
                      f"{factory_state.template}")
         return None
 
@@ -572,8 +590,7 @@ def _build_asset_spec(factory_state, type_url, spec_data, factory_address):
         tx_params[attribute.name] = getattr(factory_state.attributes,
                                             attribute.name)
 
-    create_asset_itx = build_create_asset_tx('fg:x:ticket', asset, '',
-                                             **tx_params)
+    create_asset_itx = build_create_asset_tx(type_url, asset, **tx_params)
 
     return protos.AssetSpec(address=create_asset_itx.address,
                             data=json.dumps(spec_data))

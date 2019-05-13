@@ -1,3 +1,7 @@
+## 0.25.5 (May 13, 2019)
+  - update calculate asset_address and tests
+  - Add support, documentation, test for asset factory (#157)
+
 ## 0.25.5 (May 10, 2019)
 
 

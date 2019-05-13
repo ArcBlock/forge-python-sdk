@@ -3,7 +3,7 @@ from forge_sdk.did.lib import *
 from forge_sdk.mcrypto import Hasher
 
 
-def get_asset_address(did_address, itx):
+def get_asset_address(itx):
     """
     Calculate asset address for provided CreateAssetTx
 
@@ -16,20 +16,11 @@ def get_asset_address(did_address, itx):
 
     Examples:
         >>> from forge_sdk import protos, utils
-        >>> account = "z1cYzB4LHUKs7i6ZYt7BHRVm4eofnHeutoL"
         >>> itx = protos.CreateAssetTx(data=utils.encode_to_any(None,b'123'))
-        >>> get_asset_address(account, itx)
-        'zjdjoBZ8TCyQhbY2q3GZfJFAcWWBbF8ZXrts'
+        >>> res = get_asset_address(itx)
 
     """
-    if did_address:
-        data = did_address.encode() + Hasher('sha3').hash(itx.SerializeToString())
-        parsed_type = AbtDid.parse_type_from_did(did_address)
-        asset_did = AbtDid(role_type='asset', key_type=parsed_type.key_type,
-                           hash_type=parsed_type.hash_type)
-        asset_address = asset_did.pk_to_did(data).split(":")[-1]
-    else:
-        data = Hasher('sha3').hash(itx.SerializeToString())
-        asset_did = AbtDid(role_type='asset')
-        asset_address = asset_did.pk_to_did(data).split(":")[-1]
+    data = itx.SerializeToString()
+    asset_did = AbtDid(role_type='asset')
+    asset_address = asset_did.pk_to_did(data).split(":")[-1]
     return asset_address

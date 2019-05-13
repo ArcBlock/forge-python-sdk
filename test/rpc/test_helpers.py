@@ -1,5 +1,6 @@
 import json
 import unittest
+import uuid
 from time import sleep
 
 from google.protobuf.any_pb2 import Any
@@ -67,10 +68,19 @@ class HelperRPCTest(unittest.TestCase):
         assert rpc.is_tx_ok(res.hash)
 
     def test_send_exchange_tx(self):
+
         res, asset_address = rpc.create_asset('test',
-                                              'asset',
+                                              str(uuid.uuid1()),
                                               self.alice.wallet)
+        assert utils.is_response_ok(res)
         sleep(5)
+        asset = rpc.get_single_asset_state(asset_address)
+
+        print('hash', res.hash)
+        print('issuer', asset.issuer)
+        print('alice', self.alice.wallet.address)
+
+        assert(asset.issuer == self.alice.wallet.address)
         sender_info = protos.ExchangeInfo(assets=[asset_address])
         receiver_info = protos.ExchangeInfo(value=utils.int_to_biguint(10))
         exchange_tx = protos.ExchangeTx(sender=sender_info,
@@ -78,11 +88,10 @@ class HelperRPCTest(unittest.TestCase):
         tx = rpc.prepare_exchange(exchange_tx, self.alice.wallet)
         tx = rpc.finalize_exchange(tx, self.mike.wallet)
         res = rpc.send_tx(tx)
-        assert res.hash
+        assert utils.is_response_ok(res)
 
     def test_asset_factory(self):
         # create asset_factory
-
         template = json.dumps({
             "row": "{{ row }}",
             "seat": "{{ seat }}",
@@ -96,7 +105,7 @@ class HelperRPCTest(unittest.TestCase):
         )
 
         factory = protos.AssetFactory(
-            description='movie ticket factory',
+            description='movie ticket factory' + str(uuid.uuid1()),
             limit=20,
             price=utils.token_to_biguint(5),
             template=template,
@@ -116,17 +125,23 @@ class HelperRPCTest(unittest.TestCase):
         mike_original_balance = rpc.get_account_balance(
             self.mike.wallet.address)
 
-        spec_datas = [{'row': '1', 'seat': '1'}, {'row': '2', 'seat': '2'}]
-        res, asset_address_list = rpc.acquire_asset(factory_address,
-                                                    spec_datas,
-                                                    'fg:x:ticket',
-                                                    self.mike.wallet)
+        spec_datas = [{'row': '1', 'seat': str(uuid.uuid1())}, {
+            'row': '2', 'seat': str(uuid.uuid4())}]
+        res, tickets = rpc.acquire_asset(to=factory_address,
+                                         spec_datas=spec_datas,
+                                         type_url='fg:x:test_ticket',
+                                         proto_lib=protos,
+                                         wallet=self.mike.wallet)
+        print('tickets', tickets)
         assert res.code == 0
-
+        assert len(tickets) == len(spec_datas)
         sleep(5)
-        ticket_1 = rpc.get_single_asset_state(asset_address_list[0])
+        for ticket in tickets:
+            res = rpc.get_single_asset_state(ticket)
+            assert res
+            assert res.issuer == self.alice.wallet.address
+            assert res.owner == self.mike.wallet.address
 
         mike_new_balance = rpc.get_account_balance(self.mike.wallet.address)
-        mike_original_balance - mike_new_balance == utils.token_to_unit(5)
-        assert ticket_1.issuer == self.alice.wallet.address
-        assert ticket_1.owner == self.mike.wallet.address
+        assert (mike_original_balance -
+                mike_new_balance) == utils.token_to_unit(5)*2
