@@ -99,7 +99,7 @@ def build_tx(itx, wallet, token=None, nonce=1):
             return tx_response.tx
 
 
-def build_multisig(tx, wallet, token=None, data=None):
+def build_multisig_tx(tx, wallet, token=None, data=None):
     """
     Build a multisig for transaction. If wallet has secret key, use the
     provided
@@ -118,7 +118,7 @@ def build_multisig(tx, wallet, token=None, data=None):
 
     """
     if _is_sk_included(wallet) and not token:
-        return _build_multisig(tx, wallet, data)
+        return _build_multisig_tx(tx, wallet, data)
     else:
         return chain_rpc.multisig(tx, wallet, token, data)
 
@@ -140,11 +140,14 @@ def poke(wallet, token=None):
         >>> assert res.hash
 
     """
-    type_url = 'fg:t:poke'
+    itx = build_poke_tx()
+    return send_itx(itx, wallet, token, 0)
+
+
+def build_poke_tx():
     poke_tx = protos.PokeTx(date=str(datetime.utcnow().date()),
                             address='zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
-
-    return send_itx(type_url, poke_tx, wallet, token, 0)
+    return utils.encode_to_any('fg:t:poke', poke_tx)
 
 
 def transfer(transfer_tx, wallet, token=None):
@@ -169,8 +172,8 @@ def transfer(transfer_tx, wallet, token=None):
         >>> assert res.hash
 
     """
-    type_url = 'fg:t:transfer'
-    return send_itx(type_url, transfer_tx, wallet, token)
+    return send_itx(type_url='fg:t:transfer', tx=transfer_tx, wallet=wallet,
+                    token=token)
 
 
 def get_account_balance(address):
@@ -290,7 +293,7 @@ def update_asset(address, type_url, asset, wallet, token=None):
         >>> response, asset_address = create_asset('test:test:asset',
         b'sample_asset', user.wallet)
         >>> res = update_asset(asset_address, 'test:test:update', b'update
-        asset', user.wallet)
+    asset', user.wallet)
     """
 
     encoded_asset = utils.encode_to_any(type_url, asset)
@@ -342,7 +345,7 @@ def finalize_exchange(tx, wallet, token=None, data=None):
         :obj:`Transaction`
 
     """
-    return build_multisig(tx, wallet, token, data)
+    return build_multisig_tx(tx, wallet, token, data)
 
 
 def declare(declare_tx, wallet, token=None):
@@ -364,8 +367,8 @@ def declare(declare_tx, wallet, token=None):
         >>> res = declare(declare_tx, user.wallet)
 
     """
-    type_url = 'fg:t:declare'
-    return send_itx(type_url, declare_tx, wallet, token)
+    return send_itx(type_url='fg:t:declare', tx=declare_tx, wallet=wallet,
+                    token=token)
 
 
 def account_migrate(account_migrate_tx, wallet, token=None):
@@ -390,8 +393,9 @@ def account_migrate(account_migrate_tx, wallet, token=None):
         address=new_wallet.wallet.address)
         >>> res = account_migrate(migrate_tx, old_wallet.wallet)
     """
-    type_url = 'fg:t:account_migrate'
-    return send_itx(type_url, account_migrate_tx, wallet, token)
+
+    return send_itx(type_url='fg:t:account_migrate', tx=account_migrate_tx,
+                    wallet=wallet, token=token)
 
 
 def prepare_consume_asset(consume_asset_tx, wallet, token=None):
@@ -430,7 +434,7 @@ def finalize_consume_asset(tx, wallet, token=None, data=None):
         :obj:`Transaction`
 
     """
-    return build_multisig(tx, wallet, token, data)
+    return build_multisig_tx(tx, wallet, token, data)
 
 
 def create_asset_factory(moniker, asset_factory, wallet, token=None,
@@ -494,8 +498,8 @@ def build_asset_factory(description, price, template, allowed_spec_args, asset_n
 
     factory = protos.AssetFactory(
         description=description,
-        limit=kwargs.get('limit'),
-        price=utils.token_to_biguint(price),
+        limit=int(kwargs.get('limit')),
+        price=utils.token_to_biguint(int(price)),
         allowed_spec_args=allowed_spec_args,
         asset_name=asset_name,
         template=template,
@@ -526,10 +530,21 @@ def acquire_asset(to, spec_datas, type_url, proto_lib, wallet, data=None, token=
         :obj:`ResponseSendTx`, list<string>
 
     """
+    acquire_asset_tx, asset_address_list = build_acquire_asset_tx(to,
+                                                                  spec_datas,
+                                                                  type_url,
+                                                                  proto_lib,
+                                                                  data)
+
+    return send_itx(type_url="fg:t:acquire_asset", tx=acquire_asset_tx,
+                    wallet=wallet, token=token), asset_address_list
+
+
+def build_acquire_asset_tx(to, spec_datas, type_url, proto_lib, data=None):
     factory_state = get_asset_factory(to)
     if not factory_state:
         logger.error(f"AssetFactory with address {to} does not exist.")
-        return protos.ResponseSendTx(code=35)
+        return None
     else:
         asset_spec_list = []
         asset_address_list = []
@@ -546,9 +561,7 @@ def acquire_asset(to, spec_datas, type_url, proto_lib, wallet, data=None, token=
         acquire_asset_tx = protos.AcquireAssetTx(to=to,
                                                  specs=asset_spec_list,
                                                  data=data)
-
-    return send_itx("fg:t:acquire_asset", acquire_asset_tx, wallet,
-                    token), asset_address_list
+        return acquire_asset_tx, asset_address_list
 
 
 def get_asset_factory(address):
@@ -596,7 +609,7 @@ def _build_asset_spec(factory_state, type_url, spec_data, factory_address, proto
                             data=json.dumps(spec_data))
 
 
-def send_itx(type_url, tx, wallet, token, nonce=1):
+def send_itx(tx, wallet, token, type_url=None, nonce=1):
     """
     GRPC call to send inner transaction
 
@@ -611,7 +624,7 @@ def send_itx(type_url, tx, wallet, token, nonce=1):
         :obj:`ResponseSendTx`
 
     """
-    encoded_itx = utils.encode_to_any(type_url, tx)
+    encoded_itx = tx if not type_url else utils.encode_to_any(type_url, tx)
     tx = build_tx(
         itx=encoded_itx,
         wallet=wallet,
@@ -622,11 +635,16 @@ def send_itx(type_url, tx, wallet, token, nonce=1):
 
 
 def _is_sk_included(wallet):
-    assert (type(wallet) == protos.WalletInfo)
     return wallet.sk and not wallet.sk == b''
 
 
 def _build_tx(itx, wallet, nonce):
+    tx = build_unsigned_tx(itx, wallet, nonce)
+    tx.signature = _sign_tx(wallet, tx)
+    return tx
+
+
+def build_unsigned_tx(itx, wallet, nonce):
     __chain_id = chain_rpc.get_chain_info().info.network
     params = {
         'from': wallet.address,
@@ -635,32 +653,30 @@ def _build_tx(itx, wallet, nonce):
         'pk': wallet.pk,
         'itx': itx
     }
-    params['signature'] = _sign_tx(wallet, protos.Transaction(**params))
     return protos.Transaction(**params)
 
 
-def _build_multisig(tx, wallet, data):
-    params = {
-        'from': getattr(tx, 'from'),
-        'nonce': tx.nonce,
-        'chain_id': tx.chain_id,
-        'pk': tx.pk,
-        'signature': tx.signature,
-        'itx': tx.itx,
-        'signatures': [protos.Multisig(
-            signer=wallet.address,
-            pk=wallet.pk,
-            data=data,
-        )]
-    }
-    unmultisig_tx = protos.Transaction(**params)
-    params['signatures'] = [protos.Multisig(
+def _build_multisig_tx(tx, wallet, data):
+    add_multisigs(tx, [create_multisig(wallet=wallet, data=data)])
+
+    new_multisigs = [create_multisig(wallet=wallet, tx=tx, data=data)]
+    add_multisigs(tx, new_multisigs)
+    return tx
+
+
+def add_multisigs(tx, multisigs):
+    del tx.signatures[:]
+    tx.signatures.extend(multisigs)
+
+
+def create_multisig(wallet, tx=None, data=None):
+    signature = _sign_tx(wallet, tx) if tx else None
+    return protos.Multisig(
         signer=wallet.address,
         pk=wallet.pk,
-        signature=_sign_tx(wallet, unmultisig_tx),
+        signature=signature,
         data=data
-    )]
-    return protos.Transaction(**params)
+    )
 
 
 def _sign_tx(wallet, tx):

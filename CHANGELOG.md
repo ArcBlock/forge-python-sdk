@@ -1,3 +1,9 @@
+## 0.25.5 (May 15, 2019)
+  - extract build acquire_asset_tx
+  - uncouple the process of building tx and multisig
+  - use only itx for asset address and update tests (#158)
+  - Add support, documentation, test for asset factory (#157)
+
 ## 0.25.5 (May 13, 2019)
   - update calculate asset_address and tests
   - Add support, documentation, test for asset factory (#157)
