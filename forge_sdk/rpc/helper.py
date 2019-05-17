@@ -141,7 +141,7 @@ def poke(wallet, token=None):
 
     """
     itx = build_poke_tx()
-    return send_itx(itx, wallet, token, 0)
+    return send_itx(tx=itx, wallet=wallet, token=token, nonce=0)
 
 
 def build_poke_tx():

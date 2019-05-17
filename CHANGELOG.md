@@ -1,3 +1,9 @@
+## 0.26.0 (May 16, 2019)
+  - fix poke helper function
+  - extract common functions (#160)
+  - use only itx for asset address and update tests (#158)
+  - Add support, documentation, test for asset factory (#157)
+
 ## 0.25.5 (May 15, 2019)
   - extract build acquire_asset_tx
   - uncouple the process of building tx and multisig
