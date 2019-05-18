@@ -53,6 +53,8 @@ enum StatusCode {
   invalid_withdrawer = 47;
   duplicate_tether = 48;
   invalid_expiry_date = 49;
+  invalid_deposit = 50;
+  invalid_custodian = 51;
 
   forbidden = 403;
   internal = 500;

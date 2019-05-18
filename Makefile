@@ -109,18 +109,20 @@ build-all-protos:
 	 done
 
 
-clean-build:
+clean-pypi-build:
 	@rm -rf build
 	@rm -rf dist
 	@echo "All build and dist folders are cleaned!"
 
-package-pypi: clean-build
+package-pypi:
 	@python setup.py sdist bdist_wheel
 	@echo "file packaged successfully!"
 
-upload-pypi: package-pypi
+upload-pypi:
 	@twine upload -r pypi dist/*
 	@echo "file uploaded successfully!"
+
+pypi: clean-pypi-build package-pypi upload-pypi clean-pypi-build
 
 test-cov:
 	@pytest --cov=forge/mcrypto --cov=forge/rpc --cov=forge/did test/
