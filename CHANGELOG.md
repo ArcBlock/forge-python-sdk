@@ -1,3 +1,6 @@
+## 0.26.11 (May 17, 2019)
+
+
 ## 0.26.0 (May 16, 2019)
   - fix poke helper function
   - extract common functions (#160)
