@@ -640,7 +640,7 @@ def _is_sk_included(wallet):
 
 def _build_tx(itx, wallet, nonce):
     tx = build_unsigned_tx(itx, wallet, nonce)
-    tx.signature = _sign_tx(wallet, tx)
+    tx.signature = sign_tx(wallet, tx)
     return tx
 
 
@@ -670,7 +670,7 @@ def add_multisigs(tx, multisigs):
 
 
 def create_multisig(wallet, tx=None, data=None):
-    signature = _sign_tx(wallet, tx) if tx else None
+    signature = sign_tx(wallet, tx) if tx else None
     return protos.Multisig(
         signer=wallet.address,
         pk=wallet.pk,
@@ -679,7 +679,7 @@ def create_multisig(wallet, tx=None, data=None):
     )
 
 
-def _sign_tx(wallet, tx):
+def sign_tx(wallet, tx):
     did_type = did.AbtDid.parse_type_from_did(wallet.address)
     tx_hash = did_type.hasher.hash(tx.SerializeToString())
     signature = did_type.signer.sign(tx_hash, wallet.sk)

@@ -122,7 +122,7 @@ upload-pypi:
 	@twine upload -r pypi dist/*
 	@echo "file uploaded successfully!"
 
-pypi: clean-pypi-build package-pypi upload-pypi clean-pypi-build
+pypi: package-pypi upload-pypi clean-pypi-build
 
 test-cov:
 	@pytest --cov=forge/mcrypto --cov=forge/rpc --cov=forge/did test/
