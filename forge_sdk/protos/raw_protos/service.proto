@@ -81,4 +81,5 @@ service StatsRpc {
   rpc list_blocks(RequestListBlocks) returns (ResponseListBlocks);
   rpc get_health_status(RequestGetHealthStatus)
       returns (ResponseGetHealthStatus);
+  rpc list_tethers(RequestListTethers) returns (ResponseListTethers);
 }

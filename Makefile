@@ -88,6 +88,7 @@ prepare-tx-protos:
 	 mv $(PYTHON_TARGET)/raw_protos/$(proto).proto $(PYTHON_TARGET)/raw_protos/;\
 	 rm -rf $(PYTHON_TARGET)/raw_protos/$(proto).proto;)
 	@find $(PYTHON_TARGET) -type d -empty -delete
+	@rm $(PYTHON_TARGET)/raw_protos/deploy_protocol.proto
 	@echo "All tx protobufs are fetched!"
 
 prepare-vendor-protos:
@@ -97,7 +98,7 @@ prepare-vendor-protos:
 	@curl --silent https://raw.githubusercontent.com/ArcBlock/ex-abci-proto/master/lib/protos/vendor.proto > ./$(PYTHON_TARGET)/raw_protos/vendor.proto
 	@echo "All protobuf files are fetched!"
 
-build-all-protos:
+build-all-protos: prepare-tx-protos prepare-vendor-protos
 	@rm -r $(PYTHON_TARGET)/protos
 	@mkdir -p $(PYTHON_TARGET)/protos;mkdir -p $(PYTHON_TARGET)/raw_protos
 	@echo "Buiding all protobuf files..."

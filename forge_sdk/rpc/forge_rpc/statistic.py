@@ -153,3 +153,26 @@ def list_transactions(
         validity_filter=validity_filter,
     )
     return stub.list_transactions(request)
+
+
+def list_tethers(depositor=None, withdrawer=None, custodian=None,
+                 availiable=True, paging=None):
+    """ GRPC call to list all tethers
+
+    Args:
+        depositor(string): address of depositer
+        withdrawer(string): address of withdrawer
+        custodian(string): adress of custodian
+        availiable(bool): availiability of the tether
+        paging(:obj:`PagingInput`): paging preference
+
+    Returns:
+        ResponseListTethers
+
+    """
+    request = protos.RequestListTethers(depositor=depositor,
+                                        withdrawer=withdrawer,
+                                        custodian=custodian,
+                                        availiable=availiable,
+                                        paging=paging)
+    return stub.list_tethers(request)

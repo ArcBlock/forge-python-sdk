@@ -28,10 +28,10 @@ def use_config(user_config=None):
     env_config = os.environ.get('FORGE_CONFIG')
     if env_config:
         logger.info("Reading config from environment...")
-        __merge_config(env_config)
+        _merge_config(env_config)
     elif user_config:
         logger.info("FORGE_CONFIG not found!Using user_config...")
-        __merge_config(user_config)
+        _merge_config(user_config)
 
 
 def get_app_path():
@@ -97,7 +97,7 @@ def get_grpc_channel():
     return grpc.insecure_channel(get_grpc_socket())
 
 
-def __merge_config(config_path):
+def _merge_config(config_path):
     if path.exists(config_path):
         logger.info("Using config in {}".format(config_path))
         try:

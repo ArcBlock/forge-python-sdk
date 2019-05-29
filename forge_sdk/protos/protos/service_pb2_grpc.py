@@ -706,6 +706,11 @@ class StatsRpcStub(object):
         request_serializer=rpc__pb2.RequestGetHealthStatus.SerializeToString,
         response_deserializer=rpc__pb2.ResponseGetHealthStatus.FromString,
         )
+    self.list_tethers = channel.unary_unary(
+        '/forge_abi.StatsRpc/list_tethers',
+        request_serializer=rpc__pb2.RequestListTethers.SerializeToString,
+        response_deserializer=rpc__pb2.ResponseListTethers.FromString,
+        )
 
 
 class StatsRpcServicer(object):
@@ -775,6 +780,13 @@ class StatsRpcServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def list_tethers(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_StatsRpcServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -822,6 +834,11 @@ def add_StatsRpcServicer_to_server(servicer, server):
           servicer.get_health_status,
           request_deserializer=rpc__pb2.RequestGetHealthStatus.FromString,
           response_serializer=rpc__pb2.ResponseGetHealthStatus.SerializeToString,
+      ),
+      'list_tethers': grpc.unary_unary_rpc_method_handler(
+          servicer.list_tethers,
+          request_deserializer=rpc__pb2.RequestListTethers.FromString,
+          response_serializer=rpc__pb2.ResponseListTethers.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

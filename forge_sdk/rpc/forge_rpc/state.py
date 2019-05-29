@@ -73,6 +73,30 @@ def get_stake_state(queries):
     return stub.get_stake_state(requests)
 
 
+def get_tether_state(queries):
+    """GRPC call to get state of tether
+
+    Args:
+        queries(dict): dictionaries of requested parameters
+
+    Returns:
+        ResponseGetTetherState(stream)
+
+    """
+
+    def to_req(item):
+        kwargs = {
+            'address': item.get('address'),
+            'keys': item.get('keys', []),
+            'height': item.get('height')
+        }
+        return protos.RequestGetTetherState(**kwargs)
+
+    requests = lib.to_iter(to_req, queries)
+
+    return stub.get_tether_state(requests)
+
+
 def get_forge_state(keys=[], height=None):
     """ GRPC call to get forge state
 

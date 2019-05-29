@@ -425,6 +425,20 @@ message ResponseListBlocks {
   repeated IndexedBlock blocks = 3;
 }
 
+message RequestListTethers {
+  PageInput paging = 1;
+  string depositor = 2;
+  string withdrawer = 3;
+  string custodian = 4;
+  bool  available = 5;
+}
+
+message ResponseListTethers {
+  StatusCode code = 1;
+  PageInfo page = 2;
+  repeated TetherState tethers = 3;
+}
+
 message RequestGetHealthStatus {}
 
 message ResponseGetHealthStatus {
