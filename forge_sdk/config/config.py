@@ -14,24 +14,19 @@ default_forge_toml = path.join(path.dirname(__file__), "forge_default.toml")
 config = toml.load(default_forge_toml)
 
 
-def use_config(user_config=None):
+def use_config():
     """
     Specify the configuration that forte uses. Uses environment variable
     `FORGE_CONFIG` if exists; otherwise, use user provided config; if user
     doesn't provide, use default.
-
-    Args:
-        user_config(string): path of user-specify config if env `FORGE-CONFIG`
-            doesn't exist
 
     """
     env_config = os.environ.get('FORGE_CONFIG')
     if env_config:
         logger.info("Reading config from environment...")
         _merge_config(env_config)
-    elif user_config:
-        logger.info("FORGE_CONFIG not found!Using user_config...")
-        _merge_config(user_config)
+    else:
+        logger.warning("FORGE_CONFIG not found. Using default forge config.")
 
 
 def get_app_path():

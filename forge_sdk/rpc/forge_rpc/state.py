@@ -113,3 +113,15 @@ def get_forge_state(keys=[], height=None):
     request = protos.RequestGetForgeState(keys=keys,
                                           height=height)
     return stub.get_forge_state(request)
+
+
+def get_forge_token():
+    """
+    Get Forge Token
+
+    Returns:
+        (:obj:`ForgeToken`)
+
+    """
+
+    return get_forge_state(['token']).state.token

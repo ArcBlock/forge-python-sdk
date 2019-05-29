@@ -3,6 +3,11 @@ import math
 from functools import reduce
 
 from forge_sdk import protos
+from forge_sdk.rpc.forge_rpc import state as state_rpc
+
+
+forge_token = state_rpc.get_forge_token()
+token_decimal = (10 ** int(forge_token.decimal))
 
 
 def int_to_bytes(n):
@@ -83,15 +88,15 @@ def token_to_biguint(token):
         value: "#\206\362o\301\000\000"
 
     """
-    return int_to_biguint(int(token*1e+16))
+    return int_to_biguint(int(token*(10 ** int(token.symbol))))
 
 
 def token_to_unit(token):
-    return int(token*1e16)
+    return int(token * token_decimal)
 
 
 def unit_to_token(unit):
-    return int(unit/1e16)
+    return int(unit / token_decimal)
 
 
 def biguint_to_int(biguint):

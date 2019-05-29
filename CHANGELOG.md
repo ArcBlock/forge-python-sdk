@@ -1,3 +1,7 @@
+## 0.27.0 (May 29, 2019)
+  - Read token information from forge state
+  - Support tether rpc calls (#167)
+
 ## 0.26.18 (May 21, 2019)
 
 
