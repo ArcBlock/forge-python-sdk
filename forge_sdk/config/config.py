@@ -15,16 +15,10 @@ config = toml.load(default_forge_toml)
 
 
 def use_config():
-    """
-    Specify the configuration that forte uses. Uses environment variable
-    `FORGE_CONFIG` if exists; otherwise, use user provided config; if user
-    doesn't provide, use default.
-
-    """
     env_config = os.environ.get('FORGE_CONFIG')
     if env_config:
         logger.info("Reading config from environment...")
-        _merge_config(env_config)
+        merge_config(env_config)
     else:
         logger.warning("FORGE_CONFIG not found. Using default forge config.")
 
@@ -66,7 +60,7 @@ def get_grpc_socket():
     Returns: string
 
     """
-    return __parse_socket_grpc(
+    return _parse_socket_grpc(
         get_forge_path(),
         config['forge']['sock_grpc'],
     )
@@ -92,8 +86,10 @@ def get_grpc_channel():
     return grpc.insecure_channel(get_grpc_socket())
 
 
-def _merge_config(config_path):
-    if path.exists(config_path):
+def merge_config(config_path):
+    if not path.exists(config_path):
+        logger.error(f'{config_path} does not exist.')
+    else:
         logger.info("Using config in {}".format(config_path))
         try:
             user_config = toml.load(config_path)
@@ -119,7 +115,7 @@ def _merge_config(config_path):
             logger.error("Fail to parse toml config in {}".format(config_path))
 
 
-def __parse_socket(forge_path, forge_socket):
+def _parse_socket(forge_path, forge_socket):
     socket_type = forge_socket.split("://")[0]
     parsed_socket = forge_socket.split("://")[1]
     if socket_type == 'unix':
@@ -132,8 +128,8 @@ def __parse_socket(forge_path, forge_socket):
     return socket_target
 
 
-def __parse_socket_grpc(forge_path, forge_socket):
-    socket_addr = __parse_socket(forge_path, forge_socket)
+def _parse_socket_grpc(forge_path, forge_socket):
+    socket_addr = _parse_socket(forge_path, forge_socket)
     socket_type = socket_addr.split('://')[0]
     if socket_type == 'unix':
         return socket_addr

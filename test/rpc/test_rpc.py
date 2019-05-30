@@ -155,8 +155,8 @@ class RpcTest(unittest.TestCase):
             value=BigUint(value=b'11'),
         )
         res = rpc.send_itx(
-            'fg:t:transfer', trans_itx,
-            self.wallet1.wallet, self.wallet1.token,
+            type_url='fg:t:transfer', tx=trans_itx,
+            wallet=self.wallet1.wallet, token=self.wallet1.token,
         )
         assert (res.code == 0)
         print(res)

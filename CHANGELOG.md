@@ -1,4 +1,7 @@
 ## 0.27.0 (May 29, 2019)
+  - add did auth support
+
+## 0.27.0 (May 29, 2019)
   - Read token information from forge state
   - Support tether rpc calls (#167)
 
