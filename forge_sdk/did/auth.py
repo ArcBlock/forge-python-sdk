@@ -10,35 +10,46 @@ def require_sig(**kwargs):
     user_did_type = AbtDid.parse_type_from_did(kwargs.get('user_did'))
 
     claim = {
+        'type': "signature",
         'data': utils.multibase_b58encode(
-            user_did_type.hasher.hash(
-                kwargs.get('tx').SerializeToString())),
+                user_did_type.hasher.hash(
+                    kwargs.get('tx').SerializeToString())),
         'meta': {
             'description': kwargs.get('description')
         },
         'method': user_did_type.hash_type,
         'origin': utils.multibase_b58encode(
             kwargs.get('tx').SerializeToString()),
-        'type': "signature",
     }
 
-    return response([claim], **kwargs)
+    return build_claims([claim], **kwargs)
 
 
 def require_asset(**kwargs):
     claim = {
+        'type': "did",
         'meta': {
             'description': kwargs.get('description')
         },
         'did_type': 'asset',
         'target': kwargs.get('target'),
-        'type': "did",
     }
 
-    return response([claim], **kwargs)
+    return build_claims([claim], **kwargs)
 
 
-def response(claims, **kwargs):
+def require_profile(**kwargs):
+    claim = {
+        'type': 'profile',
+        'meta': {
+            'description': kwargs.get('description')
+        },
+        'items': ["fullName", "mailingAddress"]
+    }
+    return build_claims([claim], **kwargs)
+
+
+def build_claims(claims, **kwargs):
     chain_info = rpc.get_chain_info().info
     forge_token = rpc.get_forge_token()
     extra = {

@@ -1,3 +1,7 @@
+## 0.27.0 (June 04, 2019)
+  - support require_profile
+  - support did auth (#169)
+
 ## 0.27.0 (May 29, 2019)
   - add did auth support
 
