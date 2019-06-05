@@ -255,12 +255,12 @@ class AbtDid:
                                  **extra,
                                  })
         body = utils.multibase_b64encode(json.dumps(middle))
-        data = self.__header() + '.' + body
+        data = self._header() + '.' + body
         signature = utils.multibase_b64encode(
             self.signer.sign(data.encode(), sk))
         return data + '.' + signature
 
-    def __header(self):
+    def _header(self):
         if self.key_type == 'ed25519':
             alg = 'Ed25519'
         elif self.key_type == 'secp256k1':

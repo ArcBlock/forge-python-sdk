@@ -1,4 +1,9 @@
 ## 0.27.0 (June 04, 2019)
+  - support generic did auth request
+  - add require_profile and did_url (#171)
+  - support did auth (#169)
+
+## 0.27.0 (June 04, 2019)
   - support require_profile
   - support did auth (#169)
 

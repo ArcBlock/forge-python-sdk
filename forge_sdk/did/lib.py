@@ -26,7 +26,7 @@ KEY_MAP = {
 }
 
 HASH_MAP = {
-    'keecak': 0,
+    'keccak': 0,
     'sha3': 1,
     'keccak_384': 2,
     'sha3_384': 3,

@@ -44,7 +44,7 @@ def require_profile(**kwargs):
         'meta': {
             'description': kwargs.get('description')
         },
-        'items': ["fullName", "mailingAddress"]
+        'items': ["fullName", "email"]
     }
     return build_claims([claim], **kwargs)
 
@@ -56,28 +56,27 @@ def build_claims(claims, **kwargs):
         'url': kwargs.get('url'),
         'action': kwargs.get('action'),
         'appInfo': {
-            'chainHost': 'http://{0}:{1}/api'.format(config.get_app_host(),
-                                                     config.get_forge_port()),
+            'chainHost': kwargs.get('chain_host'),
             'chainId': chain_info.network,
             'chainVersion': chain_info.version,
             'chain_token': forge_token.symbol,
             'decimals': forge_token.decimal,
-            'description': 'Create and join events on Event Chain',
-            'icon': "http://eventchain.arcblock.co:5000/static/images"
-                    "/eventchain_h_2.png",
-            'name': 'Event Chain',
-            'subtitle': 'A decentralized solution for events',
+            'description': kwargs.get('app_description', "forge-python-app"),
+            'icon': kwargs.get('app_icon', "http://eventchain.arcblock.co:5000/static/images"
+                               "/eventchain_h_2.png"),
+            'name': kwargs.get('app_name', 'forge-python-app'),
+            'subtitle': kwargs.get('app_subtitle', 'This is a decentralized application'),
         },
         'requestedClaims': claims,
         'workflow': {
             'description': kwargs.get('workflow')
         }
     }
-    app_did_type = AbtDid.parse_type_from_did(kwargs.get('APP_ADDR'))
+    app_did_type = AbtDid.parse_type_from_did(kwargs.get('app_addr'))
     res = {
-        'appPk': utils.multibase_b58encode(kwargs.get('APP_PK')),
+        'appPk': utils.multibase_b58encode(kwargs.get('app_pk')),
         'authInfo': app_did_type.gen_and_sign(
-            kwargs.get('APP_SK'), extra)
+            kwargs.get('app_sk'), extra)
     }
 
     return json.dumps(res)
