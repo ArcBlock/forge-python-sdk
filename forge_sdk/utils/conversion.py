@@ -72,29 +72,29 @@ def int_to_biguint(n):
     return protos.BigUint(value=int_to_bytes(n))
 
 
-def token_to_biguint(token):
+def value_to_biguint(value):
     r"""
     Convert token to smallest unit, then to bigUint
 
     Args:
-        token(num): token value
+        value(num): token value
 
     Returns:
         :obj:`BigUint`
 
     Examples:
-        >>> token_to_biguint(1)
+        >>> value_to_biguint(1)
         value: "#\206\362o\301\000\000"
 
     """
-    return int_to_biguint(int(token * token_decimal))
+    return int_to_biguint(int(value * token_decimal))
 
 
-def token_to_unit(token):
+def to_unit(token):
     return int(token * token_decimal)
 
 
-def unit_to_token(unit):
+def from_unit(unit):
     return int(unit / token_decimal)
 
 

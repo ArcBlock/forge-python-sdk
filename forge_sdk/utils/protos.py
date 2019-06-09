@@ -36,7 +36,7 @@ def encode_to_any(type_url, data):
     Args:
         type_url(string): the type_url to encode the data with. This will be
             the `type_url` field of final result.
-        data(bytes): the data to encode. This will be the `value` field of
+        data(bytes or tx): the data to encode. This will be the `value` field of
             final result.
 
     Returns:

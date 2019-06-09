@@ -107,7 +107,7 @@ class HelperRPCTest(unittest.TestCase):
         factory = protos.AssetFactory(
             description='movie ticket factory' + str(uuid.uuid1()),
             limit=20,
-            price=utils.token_to_biguint(5),
+            price=utils.value_to_biguint(5),
             template=template,
             allowed_spec_args=['row', 'seat'],
             asset_name='TestTicket',
@@ -144,4 +144,4 @@ class HelperRPCTest(unittest.TestCase):
 
         mike_new_balance = rpc.get_account_balance(self.mike.wallet.address)
         assert (mike_original_balance -
-                mike_new_balance) == utils.token_to_unit(5)*2
+                mike_new_balance) == utils.to_unit(5) * 2

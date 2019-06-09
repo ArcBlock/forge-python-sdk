@@ -123,59 +123,6 @@ def build_multisig_tx(tx, wallet, token=None, data=None):
         return chain_rpc.multisig(tx, wallet, token, data)
 
 
-def poke(wallet, token=None):
-    """
-    Send a Poke Transaction.
-
-    Args:
-        token(string): required if the wallet does not have a secret key.
-
-    Returns:
-        :obj:`ResponseSendTx`
-
-    Examples:
-        >>> from forge_sdk.rpc.forge_rpc import wallet
-        >>> alice = wallet.create_wallet(moniker='alice', passphrase='abc123')
-        >>> res = poke(alice.wallet)
-        >>> assert res.hash
-
-    """
-    itx = build_poke_tx()
-    return send_itx(tx=itx, wallet=wallet, token=token, nonce=0)
-
-
-def build_poke_tx():
-    poke_tx = protos.PokeTx(date=str(datetime.utcnow().date()),
-                            address='zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
-    return utils.encode_to_any('fg:t:poke', poke_tx)
-
-
-def transfer(transfer_tx, wallet, token=None):
-    """
-    Send a Transfer transaction.
-
-    Args:
-        transfer_tx(:obj:`TransferTx`): transfer inner transaction
-        wallet(:obj:`WalletInfo`): wallet of the sender
-        token(string): required if the wallet does not have a secret key.
-
-    Returns:
-        :obj:`ResponseSendTx`
-
-    Examples:
-        >>> from forge_sdk.rpc.forge_rpc import wallet
-        >>> alice = wallet.create_wallet(moniker='alice', passphrase='abc123')
-        >>> mike = wallet.create_wallet(moniker='mike', passphrase='abc123')
-        >>> transfer_tx = protos.TransferTx(to=mike.wallet.address, value =
-        utils.int_to_biguint(10))
-        >>> res = transfer(transfer_tx, alice.wallet)
-        >>> assert res.hash
-
-    """
-    return send_itx(type_url='fg:t:transfer', tx=transfer_tx, wallet=wallet,
-                    token=token)
-
-
 def get_account_balance(address):
     """
     Retrieve the balance of account.
@@ -499,7 +446,7 @@ def build_asset_factory(description, price, template, allowed_spec_args, asset_n
     factory = protos.AssetFactory(
         description=description,
         limit=int(kwargs.get('limit')),
-        price=utils.token_to_biguint(int(price)),
+        price=utils.value_to_biguint(int(price)),
         allowed_spec_args=allowed_spec_args,
         asset_name=asset_name,
         template=template,
@@ -644,13 +591,13 @@ def _build_tx(itx, wallet, nonce):
     return tx
 
 
-def build_unsigned_tx(itx, wallet, nonce):
-    __chain_id = chain_rpc.get_chain_info().info.network
+def build_unsigned_tx(itx, nonce, wallet=None, pk=None, address=None):
+    chain_id = chain_rpc.get_chain_info().info.network
     params = {
-        'from': wallet.address,
+        'from': address if address else wallet.address,
         'nonce': nonce,
-        'chain_id': __chain_id,
-        'pk': wallet.pk,
+        'chain_id': chain_id,
+        'pk': pk if pk else wallet.pk,
         'itx': itx
     }
     return protos.Transaction(**params)
