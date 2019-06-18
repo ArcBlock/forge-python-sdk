@@ -1,127 +1,124 @@
-from forge_sdk.config import config
 from forge_sdk.protos import protos
 from forge_sdk.rpc import lib
 
-stub = protos.StateRpcStub(config.get_grpc_channel())
 
+class ForgeStateRpc:
 
-def get_account_state(queries):
-    """GRPC call to get detailed of account
+    def __init__(self, channel):
+        self.stub = protos.StateRpcStub(channel)
 
-    Args:
-        queries(dict): dictionaries of requested parameters
+    def get_account_state(self, queries):
+        """GRPC call to get detailed of account
 
-    Returns:
-        ResponseGetAccountState(stream)
+        Args:
+            queries(dict): dictionaries of requested parameters
 
-    """
+        Returns:
+            ResponseGetAccountState(stream)
 
-    def to_req(item):
-        kwargs = {
-            'address': item.get('address'),
-            'keys': item.get('keys', []),
-        }
-        return protos.RequestGetAccountState(**kwargs)
+        """
 
-    requests = lib.to_iter(to_req, queries)
+        def to_req(item):
+            kwargs = {
+                'address': item.get('address'),
+                'keys': item.get('keys', []),
+            }
+            return protos.RequestGetAccountState(**kwargs)
 
-    return stub.get_account_state(requests)
+        requests = lib.to_iter(to_req, queries)
 
+        return self.stub.get_account_state(requests)
 
-def get_asset_state(queries):
-    """GRPC call to get detailed of asset
+    def get_asset_state(self, queries):
+        """GRPC call to get detailed of asset
 
-    Args:
-        queries(dict): dictionaries of requested parameters
+        Args:
+            queries(dict): dictionaries of requested parameters
 
-    Returns:
-        ResponseGetAssetState(stream)
-    """
+        Returns:
+            ResponseGetAssetState(stream)
+        """
 
-    def to_req(item):
-        kwargs = {
-            'address': item.get('address'),
-            'keys': item.get('keys', []),
-        }
-        req = protos.RequestGetAssetState(**kwargs)
-        return req
+        def to_req(item):
+            kwargs = {
+                'address': item.get('address'),
+                'keys': item.get('keys', []),
+            }
+            req = protos.RequestGetAssetState(**kwargs)
+            return req
 
-    requests = lib.to_iter(to_req, queries)
+        requests = lib.to_iter(to_req, queries)
 
-    return stub.get_asset_state(requests)
+        return self.stub.get_asset_state(requests)
 
+    def get_stake_state(self, queries):
+        """GRPC call to get detailed of stake
 
-def get_stake_state(queries):
-    """GRPC call to get detailed of stake
+        Args:
+            queries(dict): dictionaries of requested parameters
 
-    Args:
-        queries(dict): dictionaries of requested parameters
+        Returns:
+            ResponseGetStakeState(stream)
 
-    Returns:
-        ResponseGetStakeState(stream)
+        """
 
-    """
+        def to_req(items):
+            kwargs = {
+                'address': items.get('address'),
+                'keys': items.get('keys', []),
+            }
+            return protos.RequestGetStakeState(**kwargs)
 
-    def to_req(items):
-        kwargs = {
-            'address': items.get('address'),
-            'keys': items.get('keys', []),
-        }
-        return protos.RequestGetStakeState(**kwargs)
+        requests = lib.to_iter(to_req, queries)
+        return self.stub.get_stake_state(requests)
 
-    requests = lib.to_iter(to_req, queries)
-    return stub.get_stake_state(requests)
+    def get_tether_state(self, queries):
+        """GRPC call to get state of tether
 
+        Args:
+            queries(dict): dictionaries of requested parameters
 
-def get_tether_state(queries):
-    """GRPC call to get state of tether
+        Returns:
+            ResponseGetTetherState(stream)
 
-    Args:
-        queries(dict): dictionaries of requested parameters
+        """
 
-    Returns:
-        ResponseGetTetherState(stream)
+        def to_req(item):
+            kwargs = {
+                'address': item.get('address'),
+                'keys': item.get('keys', []),
+                'height': item.get('height')
+            }
+            return protos.RequestGetTetherState(**kwargs)
 
-    """
+        requests = lib.to_iter(to_req, queries)
 
-    def to_req(item):
-        kwargs = {
-            'address': item.get('address'),
-            'keys': item.get('keys', []),
-            'height': item.get('height')
-        }
-        return protos.RequestGetTetherState(**kwargs)
+        return self.stub.get_tether_state(requests)
 
-    requests = lib.to_iter(to_req, queries)
+    def get_forge_state(self, keys=[], height=None):
+        """ GRPC call to get forge state
 
-    return stub.get_tether_state(requests)
+        Args:
+            keys(list[string]): optional, list of keys to receive. GRPC returns
+                all keys if not specified.
+            height(int): optional, forge state of specific block height
 
+        Returns:
+            ResponseGetForgeState
 
-def get_forge_state(keys=[], height=None):
-    """ GRPC call to get forge state
+        """
 
-    Args:
-        keys(list[string]): optional, list of keys to receive. GRPC returns
-            all keys if not specified.
-        height(int): optional, forge state of specific block height
+        request = protos.RequestGetForgeState(keys=keys,
+                                              height=height)
+        return self.stub.get_forge_state(request)
 
-    Returns:
-        ResponseGetForgeState
+    def get_forge_token(self):
+        """
+        Get Forge Token
 
-    """
+        Returns:
+            (:obj:`ForgeToken`)
 
-    request = protos.RequestGetForgeState(keys=keys,
-                                          height=height)
-    return stub.get_forge_state(request)
+        """
 
-
-def get_forge_token():
-    """
-    Get Forge Token
-
-    Returns:
-        (:obj:`ForgeToken`)
-
-    """
-
-    return get_forge_state(['token']).state.token
+        return self.get_forge_state(['token']).state.token

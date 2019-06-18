@@ -102,6 +102,8 @@ message RootState {
   bytes asset = 3;
   bytes receipt = 4;
   bytes protocol = 5;
+  bytes governance = 6;
+  bytes custom = 7;
 }
 
 message StakeState {

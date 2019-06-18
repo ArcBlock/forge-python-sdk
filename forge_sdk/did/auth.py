@@ -1,8 +1,6 @@
 import json
 
-from forge_sdk import rpc
 from forge_sdk import utils
-from forge_sdk.config import config
 from forge_sdk.did.abt_did import AbtDid
 
 
@@ -44,23 +42,21 @@ def require_profile(**kwargs):
         'meta': {
             'description': kwargs.get('description')
         },
-        'items': ["fullName", "email"]
+        'items': kwargs.get('items', ["fullName", "email"])
     }
     return build_claims([claim], **kwargs)
 
 
 def build_claims(claims, **kwargs):
-    chain_info = rpc.get_chain_info().info
-    forge_token = rpc.get_forge_token()
     extra = {
         'url': kwargs.get('url'),
         'action': kwargs.get('action'),
         'appInfo': {
             'chainHost': kwargs.get('chain_host'),
-            'chainId': chain_info.network,
-            'chainVersion': chain_info.version,
-            'chain_token': forge_token.symbol,
-            'decimals': forge_token.decimal,
+            'chainId': kwargs.get('chain_id'),
+            'chainVersion': kwargs.get('chain_version'),
+            'chain_token': kwargs.get('token_symbol'),
+            'decimals': kwargs.get('decimals'),
             'description': kwargs.get('app_description', "forge-python-app"),
             'icon': kwargs.get('app_icon', "http://eventchain.arcblock.co:5000/static/images"
                                "/eventchain_h_2.png"),

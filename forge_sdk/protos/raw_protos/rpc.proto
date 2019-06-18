@@ -323,7 +323,7 @@ message RequestUnsubscribe { string topic = 1; }
 message ResponseUnsubscribe { StatusCode code = 1; }
 
 // get config
-message RequestGetConfig {}
+message RequestGetConfig { bool parsed = 1; }
 message ResponseGetConfig {
   StatusCode code = 1;
   string config = 2;
@@ -430,7 +430,7 @@ message RequestListTethers {
   string depositor = 2;
   string withdrawer = 3;
   string custodian = 4;
-  bool  available = 5;
+  bool available = 5;
 }
 
 message ResponseListTethers {

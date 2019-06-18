@@ -1,39 +1,40 @@
-from forge_sdk.config import config
 from forge_sdk.protos import protos
 
-stub = protos.EventRpcStub(config.get_grpc_channel())
 
+class ForgeEventRpc:
 
-def subscribe(topic_type, tx_filter=None):
-    """ RPC request to subscribe to specific type of transactions
+    def __init__(self, channel):
+        self.stub = protos.EventRpcStub(channel)
 
-    Note:
-        This request might block the python thread
+    def subscribe(self, topic_type, tx_filter=None):
+        """ RPC request to subscribe to specific type of transactions
 
-    Args:
-        topic_type(:obj:`TopicType`): type of topic to subscribe
-        tx_filter(string): filter for targetd transactions
+        Note:
+            This request might block the python thread
 
-    Returns:
-        ResponseSubscribe
+        Args:
+            topic_type(:obj:`TopicType`): type of topic to subscribe
+            tx_filter(string): filter for targetd transactions
 
-    """
+        Returns:
+            ResponseSubscribe
 
-    request = protos.RequestSubscribe(type=topic_type, filter=tx_filter)
-    res = stub.subscribe(request)
-    for r in res:
-        yield r
+        """
 
+        request = protos.RequestSubscribe(type=topic_type, filter=tx_filter)
+        res = self.stub.subscribe(request)
+        for r in res:
+            yield r
 
-def unsubscribe(topic):
-    """GRPC call to stop previously subscribed transactions
+    def unsubscribe(self, topic):
+        """GRPC call to stop previously subscribed transactions
 
-    Args:
-        topic(string): topic id returned in subscribe request
+        Args:
+            topic(string): topic id returned in subscribe request
 
-    Returns:
-        ResponseUnsubscribe
+        Returns:
+            ResponseUnsubscribe
 
-    """
-    request = protos.RequestUnsubscribe(topic=topic)
-    return stub.unsubscribe(request)
+        """
+        request = protos.RequestUnsubscribe(topic=topic)
+        return self.stub.unsubscribe(request)

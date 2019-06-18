@@ -36,5 +36,4 @@ from .forge_rpc.file import *
 from .forge_rpc.state import *
 from .forge_rpc.statistic import *
 from .forge_rpc.wallet import *
-from .helper import *
-from .txs import *
+from forge_sdk.rpc.forge_rpc.rpc import *

@@ -3,10 +3,8 @@ import math
 from functools import reduce
 
 from forge_sdk import protos
-from forge_sdk.rpc.forge_rpc import state as state_rpc
 
-forge_token = state_rpc.get_forge_token()
-token_decimal = (10 ** int(forge_token.decimal))
+token_decimal = (10 ** int(16))
 
 
 def int_to_bytes(n):

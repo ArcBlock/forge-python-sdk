@@ -1,3 +1,17 @@
+## 0.29.0 (June 17, 2019)
+
+
+## 0.28.0 (June 11, 2019)
+
+
+## 0.28.0 (June 11, 2019)
+  - move txs builder out of rpc to utils
+  - refactor rpc calls into classes
+  - refactor transfer
+  - supprt geneirc did request (#172)
+  - add require_profile and did_url (#171)
+  - support did auth (#169)
+
 ## 0.27.0 (June 08, 2019)
   - supprt geneirc did request (#172)
   - add require_profile and did_url (#171)
