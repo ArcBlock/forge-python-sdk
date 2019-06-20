@@ -34,3 +34,26 @@ def sign_tx(wallet, tx):
     tx_hash = did_type.hasher.hash(tx.SerializeToString())
     signature = did_type.signer.sign(tx_hash, wallet.sk)
     return signature
+
+
+def is_sk_included(wallet):
+    return wallet.sk and not wallet.sk == b''
+
+
+def build_signed_tx_local(itx, wallet, nonce, chain_id):
+    tx = build_unsigned_tx(
+        itx=itx, wallet=wallet, nonce=nonce, chain_id=chain_id)
+    tx.signature = sign_tx(wallet, tx)
+    return tx
+
+
+def build_multisig_tx_local(tx, wallet, data):
+    # Prepare tx to be multisigned
+    add_multisigs(
+        tx, [create_multisig(wallet=wallet, data=data)])
+
+    # Add multisign to tx
+    new_multisigs = [create_multisig(
+        wallet=wallet, tx=tx, data=data)]
+    add_multisigs(tx, new_multisigs)
+    return tx

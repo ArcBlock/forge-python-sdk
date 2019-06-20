@@ -1,3 +1,16 @@
+## 0.29.0 (June 19, 2019)
+  - bump version
+  - Use decorator to validate rpc response;fix stats tests
+  - fix simple rpc tests
+  - Add cross-chain txs to rpc
+  - Add proto files for cross chain txs
+
+## 0.29.0 (June 19, 2019)
+  - Use decorator to validate rpc response;fix stats tests
+  - fix simple rpc tests
+  - Add cross-chain txs to rpc
+  - Add proto files for cross chain txs
+
 ## 0.29.0 (June 17, 2019)
 
 

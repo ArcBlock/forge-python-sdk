@@ -12,7 +12,6 @@ class DidTest(unittest.TestCase):
         self.did = AbtDid()
         self.did_address = self.did.pk_to_did(self.pk)
 
-
     def test_sk_to_did(self):
         sk = base64.b16decode(
             '3E0F9A313300226D51E33D5D98A126E86396956122E97E3'

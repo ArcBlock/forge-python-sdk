@@ -3,7 +3,7 @@ from forge_sdk import utils
 from forge_sdk.protos import protos
 
 
-def build_create_asset_itx(type_url, asset, **kwargs):
+def build_create_asset_itx(type_url, asset, encoded=True, **kwargs):
     encoded_asset = utils.encode_to_any(type_url, asset)
     params = {
         'moniker': kwargs.get('moniker'),
@@ -19,4 +19,6 @@ def build_create_asset_itx(type_url, asset, **kwargs):
     params['address'] = asset_address
     itx = protos.CreateAssetTx(**params)
 
-    return itx
+    res = itx if not encoded else utils.encode_to_any('fg:t:create_asset', itx)
+
+    return res

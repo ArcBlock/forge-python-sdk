@@ -3,12 +3,9 @@ import unittest
 import uuid
 from time import sleep
 
-from google.protobuf.any_pb2 import Any
-
 from forge_sdk import ForgeConn
 from forge_sdk import utils
 from forge_sdk.protos import protos
-from forge_sdk.protos.protos import TransferTx
 
 SLEEP_SECS = 1
 forge = ForgeConn('127.0.0.1:27210')
@@ -28,13 +25,8 @@ class HelperRPCTest(unittest.TestCase):
         self.wallet_type = protos.WalletType(pk=0, hash=1, address=1)
         self.alice = self.init_wallet('alice')
         self.mike = self.init_wallet('mike')
-        self.trans_tx = Any(
-            type_url='fg:t:transfer',
-            value=TransferTx(
-                to=self.alice.wallet.address,
-                value=utils.int_to_biguint(2),
-            ).SerializeToString(),
-        )
+        self.trans_tx = utils.build_transfer_itx(to=self.alice.wallet.address,
+                                                 value=2)
 
     def init_wallet(self, moniker):
         res = rpc.create_wallet(
@@ -50,26 +42,22 @@ class HelperRPCTest(unittest.TestCase):
                                        self.alice.wallet,
                                        self.alice.token)
 
-        built_tx_1 = rpc.build_tx(
+        built_tx_1 = rpc.build_signed_tx(
             itx=self.trans_tx, wallet=self.alice.wallet,
             token=self.alice.token,
             chain_id=forge.config.chain_id)
 
-        built_tx_2 = rpc.build_tx(itx=self.trans_tx, wallet=self.alice.wallet,
-                                  chain_id=forge.config.chain_id)
+        built_tx_2 = rpc.build_signed_tx(itx=self.trans_tx,
+                                         wallet=self.alice.wallet,
+                                         chain_id=forge.config.chain_id)
 
         assert forge_built_tx.tx.signature == built_tx_2.signature
         assert forge_built_tx.tx.signature == built_tx_1.signature
 
-    def test_send_poke_tx(self):
-        res = utils.build_poke_itx(self.alice.wallet)
-        sleep(5)
-        assert rpc.is_tx_ok(res.hash)
-
     def test_send_transfer_tx(self):
-        transfer_tx = protos.TransferTx(to=self.mike.wallet.address,
-                                        value=utils.int_to_biguint(10))
-        res = rpc.transfer(transfer_tx, self.alice.wallet)
+        tx = rpc.build_signed_tx(itx=self.trans_tx, wallet=self.mike.wallet,
+                                 chain_id=forge.config.chain_id)
+        res = rpc.send_tx(tx)
         sleep(5)
         assert rpc.is_tx_ok(res.hash)
 
@@ -91,7 +79,8 @@ class HelperRPCTest(unittest.TestCase):
         receiver_info = protos.ExchangeInfo(value=utils.int_to_biguint(10))
         exchange_tx = protos.ExchangeTx(sender=sender_info,
                                         receiver=receiver_info)
-        tx = rpc.prepare_exchange(exchange_tx=exchange_tx, wallet=self.alice.wallet,
+        tx = rpc.prepare_exchange(exchange_tx=exchange_tx,
+                                  wallet=self.alice.wallet,
                                   chain_id=forge.config.chain_id)
         tx = rpc.finalize_exchange(tx, self.mike.wallet)
         res = rpc.send_tx(tx)
@@ -140,11 +129,12 @@ class HelperRPCTest(unittest.TestCase):
                                          spec_datas=spec_datas,
                                          type_url='fg:x:test_ticket',
                                          proto_lib=protos,
-                                         wallet=self.mike.wallet)
+                                         wallet=self.mike.wallet,
+                                         chain_id=forge.config.chain_id)
         print('tickets', tickets)
         assert res.code == 0
         assert len(tickets) == len(spec_datas)
-        sleep(5)
+        sleep(6)
         for ticket in tickets:
             res = rpc.get_single_asset_state(ticket)
             assert res

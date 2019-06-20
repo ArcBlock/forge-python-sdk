@@ -1,7 +1,5 @@
 import unittest
 
-from google.protobuf.any_pb2 import Any
-
 from forge_sdk import did
 from forge_sdk import protos
 
