@@ -1,3 +1,8 @@
+## 0.29.1 (June 25, 2019)
+  - Update travis setting
+  - Add cross chain support and test (#181)
+  - support multi-chain (#177)
+
 
 ## 0.29.0 (June 25, 2019)
   - Add cross chain tests

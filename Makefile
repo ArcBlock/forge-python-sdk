@@ -28,7 +28,7 @@ create_env:
 add_precommit_hook:
 	@pre-commit install
 
-travis-init: add_precommit_hook
+travis-init:
 	@echo "Initialize software required for travis (normally ubuntu software)"
 
 install:
@@ -47,10 +47,10 @@ all: pre-build build post-build
 
 test:
 	@echo "Running test suites..."
+	@python -m pytest test/mcrypto
 
 lint:
 	@echo "Linting the software..."
-	@python .git/hooks/pre-commit
 
 doc:
 	@echo "Building the documenation..."

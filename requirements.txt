@@ -1,11 +1,13 @@
 base58
-deepmerge
+ed25519
 grpcio
 grpcio-tools
 pre-commit
 pre-commit-hooks
 pysha3
 pystache
+pytest
+python-dotenv
 requests
 secp256k1
 sphinx
