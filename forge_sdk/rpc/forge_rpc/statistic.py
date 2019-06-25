@@ -152,7 +152,7 @@ class ForgeStatsRpc:
         return self.stub.list_transactions(request)
 
     def list_tethers(self, depositor=None, withdrawer=None, custodian=None,
-                     availiable=True, paging=None):
+                     available=True, paging=None):
         """ GRPC call to list all tethers
 
         Args:
@@ -169,6 +169,6 @@ class ForgeStatsRpc:
         request = protos.RequestListTethers(depositor=depositor,
                                             withdrawer=withdrawer,
                                             custodian=custodian,
-                                            availiable=availiable,
+                                            available=available,
                                             paging=paging)
         return self.stub.list_tethers(request)

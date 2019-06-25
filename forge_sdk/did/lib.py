@@ -17,6 +17,7 @@ ROLE_MAP = {
     'validator': 8,
     'group': 9,
     'tx': 10,
+    'tether': 11,
     'any': 63,
 }
 

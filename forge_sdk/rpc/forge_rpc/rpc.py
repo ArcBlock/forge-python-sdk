@@ -1,8 +1,11 @@
 import json
 import logging
+import random
 
 import pystache
+from google.protobuf.any_pb2 import Any
 
+from forge_sdk import did
 from forge_sdk import utils
 from forge_sdk.protos import protos
 from forge_sdk.rpc.forge_rpc.chain import ForgeChainRpc
@@ -44,10 +47,15 @@ class ForgeRpc:
         if address:
             accounts = self.state_rpc.get_account_state({'address': address})
             account = next(accounts)
-            if utils.is_proto_empty(account):
-                return None
-            else:
+            if not utils.is_proto_empty(account):
                 return account.state
+
+    def get_single_tether_state(self, address):
+        if address:
+            tethers = self.state_rpc.get_tether_state({'address': address})
+            tether = next(tethers)
+            if not utils.is_proto_empty(tether):
+                return tether.state
 
     def get_single_tx_info(self, hash):
         """
@@ -63,9 +71,7 @@ class ForgeRpc:
         if hash:
             infos = self.chain_rpc.get_tx(hash)
             info = next(infos)
-            if utils.is_proto_empty(info):
-                return None
-            else:
+            if not utils.is_proto_empty(info):
                 return info.info
 
     def get_single_asset_state(self, address):
@@ -85,7 +91,8 @@ class ForgeRpc:
             if not utils.is_proto_empty(asset):
                 return asset.state
 
-    def build_signed_tx(self, itx, wallet, token=None, nonce=1, chain_id=None,
+
+    def build_signed_tx(self, itx, wallet, token=None, nonce=random.randint(1, 10000), chain_id=None,
                         type_url=None):
         """
         Build a transaction for user. If wallet has secret key, use the
@@ -105,11 +112,11 @@ class ForgeRpc:
             :obj:`Transaction`
 
         """
-        encoded_itx = itx if not type_url and not isinstance(itx,
-                                                             bytes) else \
-            utils.encode_to_any(
-            type_url,
-            itx)
+
+        chain_id = chain_id if chain_id else self.chain_id
+        encoded_itx = utils.encode_to_any(type_url, itx) if (
+            type_url and not isinstance(itx, Any)) else itx
+
         if utils.is_sk_included(wallet) and not token:
             return utils.build_signed_tx_local(itx=encoded_itx, wallet=wallet,
                                                nonce=nonce, chain_id=chain_id)
@@ -304,7 +311,7 @@ class ForgeRpc:
         """
         return self.build_multisig_tx(tx, wallet, token, data)
 
-    def declare(self, declare_tx, wallet, token=None):
+    def declare(self, moniker, wallet, token=None, issuer=None, data=None):
         """
         Send DeclareTx
 
@@ -323,7 +330,11 @@ class ForgeRpc:
             >>> res = declare(declare_tx, user.wallet)
 
         """
-        return self.send_itx(type_url='fg:t:declare', tx=declare_tx,
+        itx = protos.DeclareTx(moniker=moniker,
+                               issuer=issuer,
+                               data=data,
+                               )
+        return self.send_itx(type_url='fg:t:declare', tx=itx,
                              wallet=wallet,
                              token=token)
 
@@ -575,7 +586,7 @@ class ForgeRpc:
         return protos.AssetSpec(address=create_asset_itx.address,
                                 data=json.dumps(spec_data))
 
-    def send_itx(self, tx, wallet, token, type_url=None, nonce=1,
+    def send_itx(self, tx, wallet, token, type_url=None, nonce=random.randint(1, 10000),
                  chain_id=None):
         """
         GRPC call to send inner transaction
@@ -591,6 +602,7 @@ class ForgeRpc:
             :obj:`ResponseSendTx`
 
         """
+        chain_id = chain_id if chain_id else self.chain_id
 
         tx = self.build_signed_tx(
             itx=tx,
@@ -602,7 +614,24 @@ class ForgeRpc:
         )
         return self.chain_rpc.send_tx(tx)
 
-    def deposit_tether(self, wallet, token=None, **kwargs):
+    def stake_for_node(self, to, value, wallet, token=None, message=None):
+        stake_address = did.get_stake_address(wallet.address, to)
+        stake_itx = protos.StakeTx(
+            to=to,
+            value=utils.int_to_bigsint(value),
+            message=message,
+            address=stake_address,
+            data=utils.encode_to_any('fg:x:stake_node',
+                                     protos.StakeForNode())
+        )
+        tx = self.build_signed_tx(type_url='fg:t:stake',
+                                  itx=stake_itx,
+                                  wallet=wallet,
+                                  token=token)
+        return self.chain_rpc.send_tx(tx)
+
+    def prepare_deposit_tether_tx(self, wallet, token=None, **kwargs):
+        # signed by buyer
         itx = protos.DepositTetherTx(
             value=utils.int_to_biguint(kwargs.get('value')),
             commission=utils.int_to_biguint(kwargs.get('commission')),
@@ -611,19 +640,29 @@ class ForgeRpc:
             withdrawer=kwargs.get('withdrawer'),
             locktime=kwargs.get('locktime')
         )
-        return self.send_itx(tx=itx, type_url='fg:t:deposit_tether',
-                             wallet=wallet,
-                             token=token, chain_id=kwargs.get('chain_id'))
+        return self.build_signed_tx(
+            itx=utils.encode_to_any('fg:t:deposit_tether', itx),
+            wallet=wallet,
+            token=token, )
 
-    def exchange_tether(self, wallet, sender, receiver, expired_at, data=None,
-                        token=None, chain_id=None):
+    def finalize_deposit_tether_tx(self, tx, wallet, token=None, data=None):
+        return self.build_multisig_tx(tx=tx, wallet=wallet, token=token,
+                                      data=data)
+
+    def prepare_exchange_tether(self, wallet, sender, receiver, expired_at,
+                                data=None,
+                                token=None):
         itx = protos.ExchangeTetherTx(sender=sender,
                                       receiver=receiver,
                                       expired_at=expired_at,
                                       data=data)
-        return self.send_itx(tx=itx, type_url='fg:t:exchange_tether',
-                             wallet=wallet,
-                             token=token, chain_id=chain_id)
+        return self.build_signed_tx(itx=itx, type_url='fg:t:exchange_tether',
+                                    wallet=wallet,
+                                    token=token)
+
+    def finalize_exchange_tether_tx(self, tx, wallet, token=None, data=None):
+        return self.build_multisig_tx(tx=tx, wallet=wallet, token=token,
+                                      data=data)
 
     def revoke_tether(self, wallet, tether, data=None, token=None,
                       chain_id=None):

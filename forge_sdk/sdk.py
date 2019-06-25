@@ -22,6 +22,7 @@ class ForgeConn:
 
         self.rpc = self._connect_rpc()
         self.config = self._get_config()
+        self.rpc.__setattr__('chain_id', self.config.chain_id)
 
     def _connect_rpc(self):
         return ForgeRpc(self.channel)

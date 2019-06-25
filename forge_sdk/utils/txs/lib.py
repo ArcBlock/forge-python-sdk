@@ -1,8 +1,12 @@
+import random
+
 from forge_sdk import did
 from forge_sdk.protos import protos
 
+RANDOM_NONCE = random.randint(1, 10000)
 
-def build_unsigned_tx(itx, chain_id, nonce=2, wallet=None, pk=None,
+
+def build_unsigned_tx(itx, chain_id, nonce=RANDOM_NONCE, wallet=None, pk=None,
                       address=None):
     params = {
         'from': address if address else wallet.address,
@@ -29,8 +33,8 @@ def create_multisig(wallet, tx=None, data=None):
     )
 
 
-def sign_tx(wallet, tx):
-    did_type = did.AbtDid.parse_type_from_did(wallet.address)
+def sign_tx(wallet, tx, round=None):
+    did_type = did.AbtDid.parse_type_from_did(wallet.address, round=round)
     tx_hash = did_type.hasher.hash(tx.SerializeToString())
     signature = did_type.signer.sign(tx_hash, wallet.sk)
     return signature
@@ -40,7 +44,8 @@ def is_sk_included(wallet):
     return wallet.sk and not wallet.sk == b''
 
 
-def build_signed_tx_local(itx, wallet, nonce, chain_id):
+
+def build_signed_tx_local(itx, wallet,  chain_id, nonce=RANDOM_NONCE):
     tx = build_unsigned_tx(
         itx=itx, wallet=wallet, nonce=nonce, chain_id=chain_id)
     tx.signature = sign_tx(wallet, tx)

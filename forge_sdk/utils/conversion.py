@@ -70,6 +70,11 @@ def int_to_biguint(n):
     return protos.BigUint(value=int_to_bytes(n))
 
 
+def int_to_bigsint(n, minus=False):
+    return protos.BigSint(value=int_to_bytes(n),
+                          minus=minus)
+
+
 def value_to_biguint(value):
     r"""
     Convert token to smallest unit, then to bigUint

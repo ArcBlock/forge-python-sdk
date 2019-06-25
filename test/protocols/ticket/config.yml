@@ -1,6 +1,6 @@
 ---
 name: testTicket
-version: 1
+version: 2
 namespace: CoreTx
 description: Ticket test
 proto: protocol.proto

@@ -1,4 +1,4 @@
-import ast
+import base64
 import json
 import logging
 from datetime import datetime
@@ -45,7 +45,7 @@ class AbtDid:
 
         self.hash_type = hash_type
         assert (hash_type in HASH_MAP.keys())
-        self.hasher = Hasher(hash_type)
+        self.hasher = Hasher(name=hash_type, round=kwargs.get('round'))
 
         self.encode = kwargs.get('encode', True)
         self.form = kwargs.get('form', 'long')
@@ -59,10 +59,10 @@ class AbtDid:
 
         """
         sk, pk = self.signer.keypair()
-        return self.sk_to_did(sk)
+        return sk, pk, self.sk_to_did(sk)
 
     @staticmethod
-    def parse_type_from_did(did):
+    def parse_type_from_did(did, round=None):
         """
         Parse the correct DID type used in provided did address
         Args:
@@ -84,7 +84,7 @@ class AbtDid:
             did = did.lstrip(AbtDid.PREFIX)
             decoded = utils.multibase_b58decode(did)
             type_bytes = decoded[0:2]
-            return AbtDid.__bytes_to_type(type_bytes)
+            return AbtDid._bytes_to_type(type_bytes, round=round)
         except Exception as e:
             logger.error('Fail to parse type from given did {}'.format(did))
             logger.error(e, exc_info=True)
@@ -124,13 +124,23 @@ class AbtDid:
             'did:abt:z1XEw92uJKkTqyTuMnFFQ1BrgkGinfz72dF'
 
         """
-        type_bytes = self.__type_to_bytes()
+
         pk_hash = self.hasher.hash(pk)
-        extended_hash = type_bytes + pk_hash[0:20]
+        return self.hash_to_did(pk_hash)
+
+    def hash_to_did(self, hash):
+        if not isinstance(hash, bytes):
+            hash = hash.encode()
+        try:
+            hash = base64.b16decode(hash, True)
+        except Exception:
+            hash = hash
+        type_bytes = self._type_to_bytes()
+
+        extended_hash = type_bytes + hash[0:20]
 
         did_bytes = extended_hash + self.hasher.hash(extended_hash)[0:4]
         encoded_did = utils.multibase_b58encode(did_bytes)
-
         if not self.encode:
             return did_bytes
         elif self.form == 'long':
@@ -139,7 +149,7 @@ class AbtDid:
             return encoded_did
 
     @staticmethod
-    def is_match_pk(did, pk):
+    def is_match_pk(did, pk, round=None):
         """
         check if the provided did is calculated from provided public key
 
@@ -163,7 +173,7 @@ class AbtDid:
         try:
             decoded = utils.multibase_b58decode(did)
             type_bytes = decoded[0:2]
-            did_type = AbtDid.__bytes_to_type(type_bytes)
+            did_type = AbtDid._bytes_to_type(type_bytes, round=round)
             if did == did_type.pk_to_did(pk).lstrip(AbtDid.PREFIX):
                 return True
             return False
@@ -173,7 +183,7 @@ class AbtDid:
             return False
 
     @staticmethod
-    def is_valid(did):
+    def is_valid(did, round=None):
         """
         Check is the provided DID address valid
 
@@ -197,7 +207,7 @@ class AbtDid:
             pk_hash = decoded[2:22]
             actual_check_sum = decoded[22:26]
 
-            did_type = AbtDid.__bytes_to_type(type_bytes)
+            did_type = AbtDid._bytes_to_type(type_bytes, round=round)
             expectued_check_sum = did_type.hasher.hash(type_bytes + pk_hash)[
                 0:4]
             if actual_check_sum == expectued_check_sum:
@@ -208,7 +218,7 @@ class AbtDid:
             logger.error(e, exc_info=True)
             return False
 
-    def __type_to_bytes(self):
+    def _type_to_bytes(self):
         role_bits = lib.to_six_bits(ROLE_MAP.get(self.role_type))
         key_bits = lib.to_five_bits(KEY_MAP.get(self.key_type))
         hash_bits = lib.to_five_bits(HASH_MAP.get(self.hash_type))
@@ -218,7 +228,7 @@ class AbtDid:
         return first_byte + second_byte
 
     @staticmethod
-    def __bytes_to_type(input_bytes):
+    def _bytes_to_type(input_bytes, round):
         bits = bin(utils.bytes_to_int(input_bytes) | 65536)[3:]
         role_type = lib.get_did_type_key(ROLE_MAP, bits[0:6])
         key_type = lib.get_did_type_key(KEY_MAP, bits[6:11])
@@ -226,7 +236,8 @@ class AbtDid:
 
         return AbtDid(role_type=role_type,
                       key_type=key_type,
-                      hash_type=hash_type)
+                      hash_type=hash_type,
+                      round=round)
 
     def gen_and_sign(self, sk, extra):
         """

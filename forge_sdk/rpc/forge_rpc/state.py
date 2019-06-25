@@ -66,6 +66,7 @@ class ForgeStateRpc:
             kwargs = {
                 'address': items.get('address'),
                 'keys': items.get('keys', []),
+                'height': items.get('height'),
             }
             return protos.RequestGetStakeState(**kwargs)
 
