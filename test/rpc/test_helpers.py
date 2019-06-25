@@ -1,4 +1,5 @@
 import json
+import random
 import unittest
 import uuid
 from time import sleep
@@ -6,6 +7,7 @@ from time import sleep
 from forge_sdk import ForgeConn
 from forge_sdk import utils
 from forge_sdk.protos import protos
+from test.lib import validate_response
 
 SLEEP_SECS = 1
 forge = ForgeConn('127.0.0.1:27210')
@@ -37,29 +39,29 @@ class HelperRPCTest(unittest.TestCase):
         return res
 
     def test_build_tx(self):
+        nonce = random.randrange(1, 100)
         forge_built_tx = rpc.create_tx(self.trans_tx,
                                        self.alice.wallet.address,
                                        self.alice.wallet,
-                                       self.alice.token)
+                                       self.alice.token,
+                                       nonce=nonce)
 
         built_tx_1 = rpc.build_signed_tx(
             itx=self.trans_tx, wallet=self.alice.wallet,
-            token=self.alice.token,
-            chain_id=forge.config.chain_id)
+            token=self.alice.token, nonce=nonce)
 
         built_tx_2 = rpc.build_signed_tx(itx=self.trans_tx,
                                          wallet=self.alice.wallet,
-                                         chain_id=forge.config.chain_id)
+                                         nonce=nonce)
 
         assert forge_built_tx.tx.signature == built_tx_2.signature
         assert forge_built_tx.tx.signature == built_tx_1.signature
 
+    @validate_response
     def test_send_transfer_tx(self):
-        tx = rpc.build_signed_tx(itx=self.trans_tx, wallet=self.mike.wallet,
-                                 chain_id=forge.config.chain_id)
+        tx = rpc.build_signed_tx(itx=self.trans_tx, wallet=self.mike.wallet)
         res = rpc.send_tx(tx)
-        sleep(5)
-        assert rpc.is_tx_ok(res.hash)
+        return res
 
     def test_send_exchange_tx(self):
         res, asset_address = rpc.create_asset(type_url='test',

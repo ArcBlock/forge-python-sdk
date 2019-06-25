@@ -47,7 +47,7 @@ all: pre-build build post-build
 
 test:
 	@echo "Running test suites..."
-	@python -m pytest test/mcrypto
+	@python -m pytest test/unittests
 
 lint:
 	@echo "Linting the software..."

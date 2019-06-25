@@ -53,3 +53,17 @@ class DidTest(unittest.TestCase):
         assert did_type.hash_type == self.did.hash_type
         assert did_type.role_type == self.did.role_type
         assert did_type.key_type == self.did.key_type
+
+    def test_hash_to_did(self):
+        type = AbtDid(role_type='tether', hash_type='sha2', round=1)
+        assert type.hash_to_did(
+            'helloworld') == "did:abt:z6SK3aK9412cu9bVHiEGEML"
+
+        short_type = AbtDid(role_type='tether',
+                            hash_type='sha2', round=1, form='short')
+        assert short_type.hash_to_did(
+            'helloworld') == "z6SK3aK9412cu9bVHiEGEML"
+
+        tx_type = AbtDid(role_type='tx', hash_type='sha3', form='short')
+        assert tx_type.hash_to_did(
+            'F303FAD87F4DD6FDF879B9498965631C4849E50111FE7BAD3891B50D8E16C074') == "z2E49U9aBht1LbjoHv5hLKipm99zTFCxm6nPj"
