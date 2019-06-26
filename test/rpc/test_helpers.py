@@ -66,8 +66,7 @@ class HelperRPCTest(unittest.TestCase):
     def test_send_exchange_tx(self):
         res, asset_address = rpc.create_asset(type_url='test',
                                               asset=str(uuid.uuid1()),
-                                              wallet=self.alice.wallet,
-                                              chain_id=forge.config.chain_id)
+                                              wallet=self.alice.wallet)
         assert utils.is_response_ok(res)
         sleep(5)
         asset = rpc.get_single_asset_state(asset_address)
@@ -82,8 +81,7 @@ class HelperRPCTest(unittest.TestCase):
         exchange_tx = protos.ExchangeTx(sender=sender_info,
                                         receiver=receiver_info)
         tx = rpc.prepare_exchange(exchange_tx=exchange_tx,
-                                  wallet=self.alice.wallet,
-                                  chain_id=forge.config.chain_id)
+                                  wallet=self.alice.wallet)
         tx = rpc.finalize_exchange(tx, self.mike.wallet)
         res = rpc.send_tx(tx)
         assert utils.is_response_ok(res)
@@ -114,8 +112,7 @@ class HelperRPCTest(unittest.TestCase):
 
         res, factory_address = rpc.create_asset_factory(moniker='test_factory',
                                                         asset=factory,
-                                                        wallet=self.alice.wallet,
-                                                        chain_id=forge.config.chain_id)
+                                                        wallet=self.alice.wallet)
         assert utils.is_response_ok(res)
 
         # send acquireAssetTx
@@ -131,8 +128,7 @@ class HelperRPCTest(unittest.TestCase):
                                          spec_datas=spec_datas,
                                          type_url='fg:x:test_ticket',
                                          proto_lib=protos,
-                                         wallet=self.mike.wallet,
-                                         chain_id=forge.config.chain_id)
+                                         wallet=self.mike.wallet)
         print('tickets', tickets)
         assert res.code == 0
         assert len(tickets) == len(spec_datas)

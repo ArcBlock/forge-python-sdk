@@ -112,7 +112,6 @@ class ForgeCrossChainTest(unittest.TestCase):
         }
         alice_signed_tx = abt_chain.rpc.prepare_deposit_tether_tx(
             alice1,
-            chain_id=abt_chain.config.chain_id,
             **deposit_params)
         custodian_signed_tx = abt_chain.rpc.finalize_deposit_tether_tx(
             alice_signed_tx, custodian)

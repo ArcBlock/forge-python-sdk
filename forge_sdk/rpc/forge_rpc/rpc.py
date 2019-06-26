@@ -17,6 +17,8 @@ from forge_sdk.rpc.forge_rpc.wallet import ForgeWalletRpc
 
 logger = logging.getLogger('rpc')
 
+RAND_NONCE = random.randint(1, 10000)
+
 
 class ForgeRpc:
     def __init__(self, channel):
@@ -91,8 +93,7 @@ class ForgeRpc:
             if not utils.is_proto_empty(asset):
                 return asset.state
 
-
-    def build_signed_tx(self, itx, wallet, token=None, nonce=random.randint(1, 10000), chain_id=None,
+    def build_signed_tx(self, itx, wallet, token=None, nonce=RAND_NONCE,
                         type_url=None):
         """
         Build a transaction for user. If wallet has secret key, use the
@@ -113,15 +114,17 @@ class ForgeRpc:
 
         """
 
-        chain_id = chain_id if chain_id else self.chain_id
         encoded_itx = utils.encode_to_any(type_url, itx) if (
             type_url and not isinstance(itx, Any)) else itx
 
         if utils.is_sk_included(wallet) and not token:
-            return utils.build_signed_tx_local(itx=encoded_itx, wallet=wallet,
-                                               nonce=nonce, chain_id=chain_id)
+            return utils.build_signed_tx_local(itx=encoded_itx,
+                                               wallet=wallet,
+                                               nonce=nonce,
+                                               chain_id=self.chain_id)
         else:
-            tx_response = self.chain_rpc.create_tx(encoded_itx, wallet.address,
+            tx_response = self.chain_rpc.create_tx(encoded_itx,
+                                                   wallet.address,
                                                    wallet,
                                                    token,
                                                    nonce)
@@ -199,8 +202,7 @@ class ForgeRpc:
             logger.error(f'tx: {tx_hash} failed with code {tx_state.code}')
             return False
 
-    def create_asset(self, type_url, asset, wallet, token=None, chain_id=None,
-                     **kwargs):
+    def create_asset(self, type_url, asset, wallet, token=None, **kwargs):
         """
         GRPC call to create asset
         Create asset on the chain. If asset address is not provided in kwargs,
@@ -230,7 +232,8 @@ class ForgeRpc:
 
         tx = self.build_signed_tx(
             itx=utils.encode_to_any('fg:t:create_asset', itx),
-            wallet=wallet, token=token, chain_id=chain_id)
+            wallet=wallet,
+            token=token)
 
         res = self.chain_rpc.send_tx(tx)
 
@@ -269,12 +272,13 @@ class ForgeRpc:
                 data=encoded_asset,
             ),
         )
-        tx = self.chain_rpc.create_tx(
-            update_asset_itx, wallet.address, wallet, token,
+        tx = self.build_signed_tx(
+            itx=update_asset_itx,
+            wallet=wallet, token=token,
         )
         return self.chain_rpc.send_tx(tx.tx)
 
-    def prepare_exchange(self, exchange_tx, wallet, token=None, chain_id=None):
+    def prepare_exchange(self, exchange_tx, wallet, token=None):
         """
         Add sender's signature to  exchange transaction
 
@@ -292,7 +296,7 @@ class ForgeRpc:
         type_url = 'fg:t:exchange'
         tx = self.build_signed_tx(
             itx=utils.encode_to_any(type_url, exchange_tx),
-            wallet=wallet, token=token, chain_id=chain_id)
+            wallet=wallet, token=token)
         return tx
 
     def finalize_exchange(self, tx, wallet, token=None, data=None):
@@ -332,9 +336,9 @@ class ForgeRpc:
         """
         itx = protos.DeclareTx(moniker=moniker,
                                issuer=issuer,
-                               data=data,
-                               )
-        return self.send_itx(type_url='fg:t:declare', tx=itx,
+                               data=data)
+        return self.send_itx(type_url='fg:t:declare',
+                             tx=itx,
                              wallet=wallet,
                              token=token)
 
@@ -403,7 +407,7 @@ class ForgeRpc:
         return self.build_multisig_tx(tx, wallet, token, data)
 
     def create_asset_factory(self, moniker, asset, wallet, token=None,
-                             data=None, chain_id=None):
+                             data=None):
         """
         Create Asset Factory
 
@@ -422,8 +426,7 @@ class ForgeRpc:
                                  asset=asset,
                                  wallet=wallet,
                                  token=token,
-                                 data=data,
-                                 chain_id=chain_id)
+                                 data=data)
 
     def is_template_match_asset(self, template, asset):
         rendered = json.loads(pystache.render(template))
@@ -480,7 +483,7 @@ class ForgeRpc:
         return factory
 
     def acquire_asset(self, to, spec_datas, type_url, proto_lib, wallet,
-                      data=None, token=None, chain_id=None):
+                      data=None, token=None):
         """
         Send transaction to acquire asset. Returns the response and calculated
         asset address as a list, corresponding to the spec datas provided.
@@ -508,8 +511,7 @@ class ForgeRpc:
 
         return self.send_itx(type_url="fg:t:acquire_asset",
                              tx=acquire_asset_tx,
-                             wallet=wallet, token=token,
-                             chain_id=chain_id), asset_address_list
+                             wallet=wallet, token=token), asset_address_list
 
     def build_acquire_asset_tx(self, to, spec_datas, type_url, proto_lib,
                                data=None):
@@ -586,8 +588,7 @@ class ForgeRpc:
         return protos.AssetSpec(address=create_asset_itx.address,
                                 data=json.dumps(spec_data))
 
-    def send_itx(self, tx, wallet, token, type_url=None, nonce=random.randint(1, 10000),
-                 chain_id=None):
+    def send_itx(self, tx, wallet, token, type_url=None, nonce=RAND_NONCE):
         """
         GRPC call to send inner transaction
 
@@ -602,15 +603,12 @@ class ForgeRpc:
             :obj:`ResponseSendTx`
 
         """
-        chain_id = chain_id if chain_id else self.chain_id
-
         tx = self.build_signed_tx(
             itx=tx,
             wallet=wallet,
             token=token,
             nonce=nonce,
             type_url=type_url,
-            chain_id=chain_id,
         )
         return self.chain_rpc.send_tx(tx)
 
@@ -643,7 +641,7 @@ class ForgeRpc:
         return self.build_signed_tx(
             itx=utils.encode_to_any('fg:t:deposit_tether', itx),
             wallet=wallet,
-            token=token, )
+            token=token)
 
     def finalize_deposit_tether_tx(self, tx, wallet, token=None, data=None):
         return self.build_multisig_tx(tx=tx, wallet=wallet, token=token,
@@ -670,7 +668,7 @@ class ForgeRpc:
 
         return self.send_itx(tx=itx, type_url='fg:t:revoke_tether',
                              wallet=wallet,
-                             token=token, chain_id=chain_id)
+                             token=token)
 
     def approve_tether(self, wallet, withdraw, data=None, token=None,
                        chain_id=None):
@@ -678,7 +676,7 @@ class ForgeRpc:
 
         return self.send_itx(tx=itx, type_url='fg:t:approve_tether',
                              wallet=wallet,
-                             token=token, chain_id=chain_id)
+                             token=token)
 
     def withdraw_tether(self, wallet, token=None, **kwargs):
         params = {
@@ -696,4 +694,4 @@ class ForgeRpc:
         itx = protos.WithdrawTetherTx(**params)
         return self.send_itx(tx=itx, type_url='fg:t:withdraw_tether',
                              wallet=wallet,
-                             token=token, chain_id=kwargs.get('chain_id'))
+                             token=token)

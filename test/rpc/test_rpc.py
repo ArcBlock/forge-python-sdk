@@ -55,7 +55,6 @@ class RpcTest(unittest.TestCase):
             'type_url': 'fg:t:transfer',
             'wallet': self.wallet1.wallet,
             'token': self.wallet1.token,
-            'chain_id': forge.config.chain_id,
         }
         tx = rpc.build_signed_tx(**kwargs)
         return rpc.send_tx(tx=tx)
@@ -119,7 +118,6 @@ class RpcTest(unittest.TestCase):
         return rpc.send_itx(
             type_url='fg:t:transfer', tx=self.trans_itx,
             wallet=self.wallet1.wallet, token=self.wallet1.token,
-            chain_id=forge.config.chain_id,
         )
 
     @validate_response
@@ -129,5 +127,4 @@ class RpcTest(unittest.TestCase):
             wallet=self.wallet1.wallet,
             token=self.wallet1.token,
             nonce=0,
-            chain_id=forge.config.chain_id,
         )

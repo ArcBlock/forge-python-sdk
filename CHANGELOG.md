@@ -1,3 +1,6 @@
+## 0.30.0 (June 26, 2019)
+  - refactor chain-id
+
 ## 0.29.2 (June 25, 2019)
 
 
