@@ -1,5 +1,5 @@
-# Python SDK
-## Forge-python-sdk
+![forge-python-sdk](https://www.arcblock.io/.netlify/functions/badge/?text=Forge%20Python%20SDK)
+
 For details about how to set up Forge, please checkout [Forge](https://github.com/ArcBlock/forge).
 
 A more detailed reference manual for forge-python-sdk can be found [Here](https://docs.arcblock.io/forge-sdk/python/latest/).
