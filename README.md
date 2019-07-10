@@ -1,3 +1,5 @@
+[![Gitter](https://badges.gitter.im/ArcBlock/community.svg)](https://gitter.im/ArcBlock/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
 ![forge-python-sdk](https://www.arcblock.io/.netlify/functions/badge/?text=Forge%20Python%20SDK)
 
 For details about how to set up Forge, please checkout [Forge](https://github.com/ArcBlock/forge).

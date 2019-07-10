@@ -1,3 +1,7 @@
+## 0.30.0 (July 10, 2019)
+  - Add gitter badge
+  - Update README.md
+
 ## 0.30.0 (June 26, 2019)
   - refactor chain-id
 
