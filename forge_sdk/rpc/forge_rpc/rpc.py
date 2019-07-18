@@ -588,7 +588,7 @@ class ForgeRpc:
         return protos.AssetSpec(address=create_asset_itx.address,
                                 data=json.dumps(spec_data))
 
-    def send_itx(self, tx, wallet, token, type_url=None, nonce=RAND_NONCE):
+    def send_itx(self, tx, wallet, token=None, type_url=None, nonce=RAND_NONCE):
         """
         GRPC call to send inner transaction
 
@@ -627,71 +627,3 @@ class ForgeRpc:
                                   wallet=wallet,
                                   token=token)
         return self.chain_rpc.send_tx(tx)
-
-    def prepare_deposit_tether_tx(self, wallet, token=None, **kwargs):
-        # signed by buyer
-        itx = protos.DepositTetherTx(
-            value=utils.int_to_biguint(kwargs.get('value')),
-            commission=utils.int_to_biguint(kwargs.get('commission')),
-            charge=utils.int_to_biguint(kwargs.get('charge')),
-            target=kwargs.get('target'),
-            withdrawer=kwargs.get('withdrawer'),
-            locktime=kwargs.get('locktime')
-        )
-        return self.build_signed_tx(
-            itx=utils.encode_to_any('fg:t:deposit_tether', itx),
-            wallet=wallet,
-            token=token)
-
-    def finalize_deposit_tether_tx(self, tx, wallet, token=None, data=None):
-        return self.build_multisig_tx(tx=tx, wallet=wallet, token=token,
-                                      data=data)
-
-    def prepare_exchange_tether(self, wallet, sender, receiver, expired_at,
-                                data=None,
-                                token=None):
-        itx = protos.ExchangeTetherTx(sender=sender,
-                                      receiver=receiver,
-                                      expired_at=expired_at,
-                                      data=data)
-        return self.build_signed_tx(itx=itx, type_url='fg:t:exchange_tether',
-                                    wallet=wallet,
-                                    token=token)
-
-    def finalize_exchange_tether_tx(self, tx, wallet, token=None, data=None):
-        return self.build_multisig_tx(tx=tx, wallet=wallet, token=token,
-                                      data=data)
-
-    def revoke_tether(self, wallet, tether, data=None, token=None,
-                      chain_id=None):
-        itx = protos.RevokeTetherTx(tether=tether, data=data)
-
-        return self.send_itx(tx=itx, type_url='fg:t:revoke_tether',
-                             wallet=wallet,
-                             token=token)
-
-    def approve_tether(self, wallet, withdraw, data=None, token=None,
-                       chain_id=None):
-        itx = protos.ApproveTetherTx(withdraw=withdraw, data=data)
-
-        return self.send_itx(tx=itx, type_url='fg:t:approve_tether',
-                             wallet=wallet,
-                             token=token)
-
-    def withdraw_tether(self, wallet, token=None, **kwargs):
-        params = {
-            'from': kwargs.get('from'),
-            'nonce': kwargs.get('nonce'),
-            'chain_id': kwargs.get('chain_id'),
-            'pk': kwargs.get('pk'),
-            'signature': kwargs.get('signature'),
-            'signatures': kwargs.get('signatures'),
-            'sender': kwargs.get('sender'),
-            'receiver': kwargs.get('receiver'),
-            'expired_at': kwargs.get('expired_at'),
-            'data': kwargs.get('data'),
-        }
-        itx = protos.WithdrawTetherTx(**params)
-        return self.send_itx(tx=itx, type_url='fg:t:withdraw_tether',
-                             wallet=wallet,
-                             token=token)

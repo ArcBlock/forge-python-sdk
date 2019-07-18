@@ -1,3 +1,11 @@
+## 0.31.0 (July 18, 2019)
+
+
+## 0.31.0 (July 16, 2019)
+  - make tokenn not required
+  - Gitter badge (#187)
+  - Update README.md
+
 ## 0.30.0 (July 10, 2019)
   - Add gitter badge
   - Update README.md
