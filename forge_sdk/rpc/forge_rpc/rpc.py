@@ -588,7 +588,8 @@ class ForgeRpc:
         return protos.AssetSpec(address=create_asset_itx.address,
                                 data=json.dumps(spec_data))
 
-    def send_itx(self, tx, wallet, token=None, type_url=None, nonce=RAND_NONCE):
+    def send_itx(self, tx, wallet, token=None, type_url=None,
+                 nonce=RAND_NONCE):
         """
         GRPC call to send inner transaction
 
@@ -627,3 +628,31 @@ class ForgeRpc:
                                   wallet=wallet,
                                   token=token)
         return self.chain_rpc.send_tx(tx)
+
+    def deploy_protocol(self, text, wallet, token=None):
+        """
+        This helper function helps deploy a pre-compiled transaction protocol
+        Args:
+            text(string): output of forge compiler; a precompiled and encoded
+                :obj:`DeployProtocolTx`
+            wallet(:obj:`WalletInfo`): wallet to build the tx
+            token(string): only required if wallet doesn't include secret key
+
+        Returns:
+            :obj:`ResponseSendTx`
+        """
+        itx = utils.parse_to_proto(utils.multibase_b64decode(text),
+                                   protos.DeployProtocolTx)
+
+        itx.address = did.get_tx_address(itx)
+        return self.send_itx(tx=itx, wallet=wallet, token=token,
+                             type_url='fg:t:deploy_protocol',
+                             nonce=0)
+
+    def poke(self, wallet, token=None):
+        itx = utils.build_poke_itx()
+        return self.send_itx(tx=itx, wallet=wallet, token=token, nonce=0)
+
+    def transfer(self, wallet, to, value=None, assets=None, data=None, token=None):
+        itx = utils.build_transfer_itx(to, value, assets, data)
+        return self.send_itx(tx=itx, wallet=wallet, token=token)

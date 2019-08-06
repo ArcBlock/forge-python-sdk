@@ -1,0 +1,11 @@
+syntax = "proto3";
+package forge_abi;
+
+import "google/protobuf/any.proto";
+
+message ActivateProtocolTx {
+  //Address of the protocol that needs to be activate
+  string address = 1;
+
+  google.protobuf.Any data = 15;
+}

@@ -55,6 +55,10 @@ service StateRpc {
       returns (stream ResponseGetStakeState);
   rpc get_tether_state(stream RequestGetTetherState)
       returns (stream ResponseGetTetherState);
+  rpc get_swap_state(stream RequestGetSwapState)
+      returns (stream ResponseGetSwapState);
+  rpc get_delegate_state(stream RequestGetDelegateState)
+      returns (stream ResponseGetDelegateState);
 }
 
 service WalletRpc {
@@ -82,4 +86,5 @@ service StatsRpc {
   rpc get_health_status(RequestGetHealthStatus)
       returns (ResponseGetHealthStatus);
   rpc list_tethers(RequestListTethers) returns (ResponseListTethers);
+  rpc list_swap(RequestListSwap) returns (ResponseListSwap);
 }

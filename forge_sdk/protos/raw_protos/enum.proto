@@ -55,49 +55,25 @@ enum StatusCode {
   invalid_expiry_date = 49;
   invalid_deposit = 50;
   invalid_custodian = 51;
+  insufficient_gas = 52;
+  invalid_swap = 53;
+  invalid_hashkey = 54;
+  invalid_delegation = 55;
+  insufficient_delegation = 56;
+  invalid_delegation_rule = 57;
+  invalid_delegation_type_url = 58;
+
+  sender_not_authorized =59;
+  protocol_not_running=60;
+  protocol_not_paused=61;
+  protocol_not_activated=62;
+  invalid_deactivation=63;
 
   forbidden = 403;
   internal = 500;
   timeout = 504;
 
   // user defined status code shall start from 600
-}
-
-// event happened on Forge powered chain
-enum TopicType {
-  // most commonly used event
-  transfer = 0;
-
-  // 1-15 fequently used event
-  exchange = 1;
-  declare = 2;
-  create_asset = 3;
-  update_asset = 4;
-  stake = 5;
-  account_migrate = 6;
-
-  // 7-15 reserved for future frequent forge tx
-
-  // 16-2047 infrequently used event
-  begin_block = 16;
-  end_block = 17;
-
-  consensus_upgrade = 21;
-  declare_file = 22;
-  sys_upgrade = 23;
-  application = 24;
-  consume_asset = 25;
-  poke = 26;
-
-  // 24-128 reserved for future infrequent forge tx
-
-  account_state = 129;
-  asset_state = 130;
-  forge_state = 131;
-  stake_state = 132;
-  protocol_state = 133;
-
-  // user defined event type shall start from 256.
 }
 
 enum KeyType {

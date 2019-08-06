@@ -42,3 +42,10 @@ def get_tether_address(hash):
     tether_did = AbtDid(role_type='tether',
                         hash_type='sha2', round=1, form='short')
     return tether_did.hash_to_did(hash)
+
+
+def get_tx_address(tx):
+    tx_did = AbtDid(role_type='tx',
+                    form='short')
+    tx_hash = Hasher('sha3').hash(tx.SerializeToString())
+    return tx_did.hash_to_did(tx_hash)

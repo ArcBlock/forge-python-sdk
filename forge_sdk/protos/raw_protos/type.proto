@@ -120,6 +120,8 @@ message Multisig {
   bytes pk = 2;
   // signature
   bytes signature = 3;
+  // delegator
+  string delegator = 4;
 
   // extra data
   google.protobuf.Any data = 15;
@@ -133,6 +135,10 @@ message Transaction {
   string chain_id = 3;
   // public key of the sender
   bytes pk = 4;
+  // gas required for this tx
+  uint32 gas = 5;
+  // delegator
+  string delegator = 6;
 
   // signature of the transaction
   bytes signature = 13;
@@ -158,12 +164,21 @@ message DeclareConfig {
   bool restricted = 1;
   uint32 hierarchy = 2;
 }
+
+message DelegateConfig {
+  // the interval used for calculate the num_txs_delta / num_tokens_delta
+  uint32 delta_interval = 1;
+  // a list of type_urls that are allowed for delegation
+  repeated string type_urls = 2;
+}
+
 message TransactionConfig {
   uint32 max_asset_size = 1;
   uint32 max_list_size = 2;
   uint32 max_multisig = 3;
   uint64 minimum_stake = 4;
   DeclareConfig declare = 5;
+  DelegateConfig delegate = 6;
 }
 
 message BlockInfo {

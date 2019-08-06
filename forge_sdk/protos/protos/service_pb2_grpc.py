@@ -437,6 +437,16 @@ class StateRpcStub(object):
         request_serializer=rpc__pb2.RequestGetTetherState.SerializeToString,
         response_deserializer=rpc__pb2.ResponseGetTetherState.FromString,
         )
+    self.get_swap_state = channel.stream_stream(
+        '/forge_abi.StateRpc/get_swap_state',
+        request_serializer=rpc__pb2.RequestGetSwapState.SerializeToString,
+        response_deserializer=rpc__pb2.ResponseGetSwapState.FromString,
+        )
+    self.get_delegate_state = channel.stream_stream(
+        '/forge_abi.StateRpc/get_delegate_state',
+        request_serializer=rpc__pb2.RequestGetDelegateState.SerializeToString,
+        response_deserializer=rpc__pb2.ResponseGetDelegateState.FromString,
+        )
 
 
 class StateRpcServicer(object):
@@ -485,6 +495,20 @@ class StateRpcServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def get_swap_state(self, request_iterator, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def get_delegate_state(self, request_iterator, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_StateRpcServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -517,6 +541,16 @@ def add_StateRpcServicer_to_server(servicer, server):
           servicer.get_tether_state,
           request_deserializer=rpc__pb2.RequestGetTetherState.FromString,
           response_serializer=rpc__pb2.ResponseGetTetherState.SerializeToString,
+      ),
+      'get_swap_state': grpc.stream_stream_rpc_method_handler(
+          servicer.get_swap_state,
+          request_deserializer=rpc__pb2.RequestGetSwapState.FromString,
+          response_serializer=rpc__pb2.ResponseGetSwapState.SerializeToString,
+      ),
+      'get_delegate_state': grpc.stream_stream_rpc_method_handler(
+          servicer.get_delegate_state,
+          request_deserializer=rpc__pb2.RequestGetDelegateState.FromString,
+          response_serializer=rpc__pb2.ResponseGetDelegateState.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(
@@ -711,6 +745,11 @@ class StatsRpcStub(object):
         request_serializer=rpc__pb2.RequestListTethers.SerializeToString,
         response_deserializer=rpc__pb2.ResponseListTethers.FromString,
         )
+    self.list_swap = channel.unary_unary(
+        '/forge_abi.StatsRpc/list_swap',
+        request_serializer=rpc__pb2.RequestListSwap.SerializeToString,
+        response_deserializer=rpc__pb2.ResponseListSwap.FromString,
+        )
 
 
 class StatsRpcServicer(object):
@@ -787,6 +826,13 @@ class StatsRpcServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def list_swap(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_StatsRpcServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -839,6 +885,11 @@ def add_StatsRpcServicer_to_server(servicer, server):
           servicer.list_tethers,
           request_deserializer=rpc__pb2.RequestListTethers.FromString,
           response_serializer=rpc__pb2.ResponseListTethers.SerializeToString,
+      ),
+      'list_swap': grpc.unary_unary_rpc_method_handler(
+          servicer.list_swap,
+          request_deserializer=rpc__pb2.RequestListSwap.FromString,
+          response_serializer=rpc__pb2.ResponseListSwap.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

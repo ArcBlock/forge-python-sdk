@@ -44,7 +44,6 @@ def is_sk_included(wallet):
     return wallet.sk and not wallet.sk == b''
 
 
-
 def build_signed_tx_local(itx, wallet,  chain_id, nonce=RANDOM_NONCE):
     tx = build_unsigned_tx(
         itx=itx, wallet=wallet, nonce=nonce, chain_id=chain_id)

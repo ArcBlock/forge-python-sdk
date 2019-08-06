@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='abci_vendor',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x0cvendor.proto\x12\x0b\x61\x62\x63i_vendor\x1a\x1fgoogle/protobuf/timestamp.proto\"$\n\x06KVPair\x12\x0b\n\x03key\x18\x01 \x01(\x0c\x12\r\n\x05value\x18\x02 \x01(\x0c\"2\n\x07ProofOp\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x0b\n\x03key\x18\x02 \x01(\x0c\x12\x0c\n\x04\x64\x61ta\x18\x03 \x01(\x0c\"*\n\x05Proof\x12!\n\x03ops\x18\x01 \x03(\x0b\x32\x14.abci_vendor.ProofOp\"1\n\x0b\x42lockParams\x12\x11\n\tmax_bytes\x18\x01 \x01(\x03\x12\x0f\n\x07max_gas\x18\x02 \x01(\x03\"!\n\x0e\x45videnceParams\x12\x0f\n\x07max_age\x18\x01 \x01(\x03\"(\n\x0fValidatorParams\x12\x15\n\rpub_key_types\x18\x01 \x03(\t\"\x9a\x01\n\x0f\x43onsensusParams\x12\'\n\x05\x62lock\x18\x01 \x01(\x0b\x32\x18.abci_vendor.BlockParams\x12-\n\x08\x65vidence\x18\x02 \x01(\x0b\x32\x1b.abci_vendor.EvidenceParams\x12/\n\tvalidator\x18\x03 \x01(\x0b\x32\x1c.abci_vendor.ValidatorParams\"E\n\x0eLastCommitInfo\x12\r\n\x05round\x18\x01 \x01(\x05\x12$\n\x05votes\x18\x02 \x03(\x0b\x32\x15.abci_vendor.VoteInfo\"%\n\x07Version\x12\r\n\x05\x42lock\x18\x01 \x01(\x04\x12\x0b\n\x03\x41pp\x18\x02 \x01(\x04\"I\n\x07\x42lockID\x12\x0c\n\x04hash\x18\x01 \x01(\x0c\x12\x30\n\x0cparts_header\x18\x02 \x01(\x0b\x32\x1a.abci_vendor.PartSetHeader\",\n\rPartSetHeader\x12\r\n\x05total\x18\x01 \x01(\x05\x12\x0c\n\x04hash\x18\x02 \x01(\x0c\"+\n\tValidator\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\x0c\x12\r\n\x05power\x18\x03 \x01(\x03\"F\n\x0fValidatorUpdate\x12$\n\x07pub_key\x18\x01 \x01(\x0b\x32\x13.abci_vendor.PubKey\x12\r\n\x05power\x18\x02 \x01(\x03\"P\n\x08VoteInfo\x12)\n\tvalidator\x18\x01 \x01(\x0b\x32\x16.abci_vendor.Validator\x12\x19\n\x11signed_last_block\x18\x02 \x01(\x08\"$\n\x06PubKey\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\x0c\"\x99\x01\n\x08\x45vidence\x12\x0c\n\x04type\x18\x01 \x01(\t\x12)\n\tvalidator\x18\x02 \x01(\x0b\x32\x16.abci_vendor.Validator\x12\x0e\n\x06height\x18\x03 \x01(\x03\x12(\n\x04time\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x1a\n\x12total_voting_power\x18\x05 \x01(\x03\"\xa6\x03\n\x06Header\x12%\n\x07version\x18\x01 \x01(\x0b\x32\x14.abci_vendor.Version\x12\x10\n\x08\x63hain_id\x18\x02 \x01(\t\x12\x0e\n\x06height\x18\x03 \x01(\x03\x12(\n\x04time\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0f\n\x07num_txs\x18\x05 \x01(\x03\x12\x11\n\ttotal_txs\x18\x06 \x01(\x03\x12+\n\rlast_block_id\x18\x07 \x01(\x0b\x32\x14.abci_vendor.BlockID\x12\x18\n\x10last_commit_hash\x18\x08 \x01(\x0c\x12\x11\n\tdata_hash\x18\t \x01(\x0c\x12\x17\n\x0fvalidators_hash\x18\n \x01(\x0c\x12\x1c\n\x14next_validators_hash\x18\x0b \x01(\x0c\x12\x16\n\x0e\x63onsensus_hash\x18\x0c \x01(\x0c\x12\x10\n\x08\x61pp_hash\x18\r \x01(\x0c\x12\x19\n\x11last_results_hash\x18\x0e \x01(\x0c\x12\x15\n\revidence_hash\x18\x0f \x01(\x0c\x12\x18\n\x10proposer_address\x18\x10 \x01(\x0c\"\x1e\n\x0bRequestEcho\x12\x0f\n\x07message\x18\x01 \x01(\t\"\x0e\n\x0cRequestFlush\"J\n\x0bRequestInfo\x12\x0f\n\x07version\x18\x01 \x01(\t\x12\x15\n\rblock_version\x18\x02 \x01(\x04\x12\x13\n\x0bp2p_version\x18\x03 \x01(\x04\".\n\x10RequestSetOption\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"\xd1\x01\n\x10RequestInitChain\x12(\n\x04time\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x10\n\x08\x63hain_id\x18\x02 \x01(\t\x12\x36\n\x10\x63onsensus_params\x18\x03 \x01(\x0b\x32\x1c.abci_vendor.ConsensusParams\x12\x30\n\nvalidators\x18\x04 \x03(\x0b\x32\x1c.abci_vendor.ValidatorUpdate\x12\x17\n\x0f\x61pp_state_bytes\x18\x05 \x01(\x0c\"I\n\x0cRequestQuery\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\x0c\x12\x0c\n\x04path\x18\x02 \x01(\t\x12\x0e\n\x06height\x18\x03 \x01(\x03\x12\r\n\x05prove\x18\x04 \x01(\x08\"\xb2\x01\n\x11RequestBeginBlock\x12\x0c\n\x04hash\x18\x01 \x01(\x0c\x12#\n\x06header\x18\x02 \x01(\x0b\x32\x13.abci_vendor.Header\x12\x35\n\x10last_commit_info\x18\x03 \x01(\x0b\x32\x1b.abci_vendor.LastCommitInfo\x12\x33\n\x14\x62yzantine_validators\x18\x04 \x03(\x0b\x32\x15.abci_vendor.Evidence\"\x1c\n\x0eRequestCheckTx\x12\n\n\x02tx\x18\x01 \x01(\x0c\"\x1e\n\x10RequestDeliverTx\x12\n\n\x02tx\x18\x01 \x01(\x0c\"!\n\x0fRequestEndBlock\x12\x0e\n\x06height\x18\x01 \x01(\x03\"\x0f\n\rRequestCommit\"\xa6\x04\n\x07Request\x12(\n\x04\x65\x63ho\x18\x02 \x01(\x0b\x32\x18.abci_vendor.RequestEchoH\x00\x12*\n\x05\x66lush\x18\x03 \x01(\x0b\x32\x19.abci_vendor.RequestFlushH\x00\x12(\n\x04info\x18\x04 \x01(\x0b\x32\x18.abci_vendor.RequestInfoH\x00\x12\x33\n\nset_option\x18\x05 \x01(\x0b\x32\x1d.abci_vendor.RequestSetOptionH\x00\x12\x33\n\ninit_chain\x18\x06 \x01(\x0b\x32\x1d.abci_vendor.RequestInitChainH\x00\x12*\n\x05query\x18\x07 \x01(\x0b\x32\x19.abci_vendor.RequestQueryH\x00\x12\x35\n\x0b\x62\x65gin_block\x18\x08 \x01(\x0b\x32\x1e.abci_vendor.RequestBeginBlockH\x00\x12/\n\x08\x63heck_tx\x18\t \x01(\x0b\x32\x1b.abci_vendor.RequestCheckTxH\x00\x12\x33\n\ndeliver_tx\x18\x13 \x01(\x0b\x32\x1d.abci_vendor.RequestDeliverTxH\x00\x12\x31\n\tend_block\x18\x0b \x01(\x0b\x32\x1c.abci_vendor.RequestEndBlockH\x00\x12,\n\x06\x63ommit\x18\x0c \x01(\x0b\x32\x1a.abci_vendor.RequestCommitH\x00\x42\x07\n\x05value\"\"\n\x11ResponseException\x12\r\n\x05\x65rror\x18\x01 \x01(\t\"\x1f\n\x0cResponseEcho\x12\x0f\n\x07message\x18\x01 \x01(\t\"\x0f\n\rResponseFlush\"z\n\x0cResponseInfo\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\t\x12\x0f\n\x07version\x18\x02 \x01(\t\x12\x13\n\x0b\x61pp_version\x18\x03 \x01(\x04\x12\x19\n\x11last_block_height\x18\x04 \x01(\x03\x12\x1b\n\x13last_block_app_hash\x18\x05 \x01(\x0c\"<\n\x11ResponseSetOption\x12\x0c\n\x04\x63ode\x18\x01 \x01(\r\x12\x0b\n\x03log\x18\x03 \x01(\t\x12\x0c\n\x04info\x18\x04 \x01(\t\"}\n\x11ResponseInitChain\x12\x36\n\x10\x63onsensus_params\x18\x01 \x01(\x0b\x32\x1c.abci_vendor.ConsensusParams\x12\x30\n\nvalidators\x18\x02 \x03(\x0b\x32\x1c.abci_vendor.ValidatorUpdate\"\xa9\x01\n\rResponseQuery\x12\x0c\n\x04\x63ode\x18\x01 \x01(\r\x12\x0b\n\x03log\x18\x03 \x01(\t\x12\x0c\n\x04info\x18\x04 \x01(\t\x12\r\n\x05index\x18\x05 \x01(\x03\x12\x0b\n\x03key\x18\x06 \x01(\x0c\x12\r\n\x05value\x18\x07 \x01(\x0c\x12!\n\x05proof\x18\x08 \x01(\x0b\x32\x12.abci_vendor.Proof\x12\x0e\n\x06height\x18\t \x01(\x03\x12\x11\n\tcodespace\x18\n \x01(\t\"7\n\x12ResponseBeginBlock\x12!\n\x04tags\x18\x01 \x03(\x0b\x32\x13.abci_vendor.KVPair\"\xa4\x01\n\x0fResponseCheckTx\x12\x0c\n\x04\x63ode\x18\x01 \x01(\r\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\x0c\x12\x0b\n\x03log\x18\x03 \x01(\t\x12\x0c\n\x04info\x18\x04 \x01(\t\x12\x12\n\ngas_wanted\x18\x05 \x01(\x03\x12\x10\n\x08gas_used\x18\x06 \x01(\x03\x12!\n\x04tags\x18\x07 \x03(\x0b\x32\x13.abci_vendor.KVPair\x12\x11\n\tcodespace\x18\x08 \x01(\t\"\xa6\x01\n\x11ResponseDeliverTx\x12\x0c\n\x04\x63ode\x18\x01 \x01(\r\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\x0c\x12\x0b\n\x03log\x18\x03 \x01(\t\x12\x0c\n\x04info\x18\x04 \x01(\t\x12\x12\n\ngas_wanted\x18\x05 \x01(\x03\x12\x10\n\x08gas_used\x18\x06 \x01(\x03\x12!\n\x04tags\x18\x07 \x03(\x0b\x32\x13.abci_vendor.KVPair\x12\x11\n\tcodespace\x18\x08 \x01(\t\"\xad\x01\n\x10ResponseEndBlock\x12\x37\n\x11validator_updates\x18\x01 \x03(\x0b\x32\x1c.abci_vendor.ValidatorUpdate\x12=\n\x17\x63onsensus_param_updates\x18\x02 \x01(\x0b\x32\x1c.abci_vendor.ConsensusParams\x12!\n\x04tags\x18\x03 \x03(\x0b\x32\x13.abci_vendor.KVPair\"\x1e\n\x0eResponseCommit\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\x0c\"\xe7\x04\n\x08Response\x12\x33\n\texception\x18\x01 \x01(\x0b\x32\x1e.abci_vendor.ResponseExceptionH\x00\x12)\n\x04\x65\x63ho\x18\x02 \x01(\x0b\x32\x19.abci_vendor.ResponseEchoH\x00\x12+\n\x05\x66lush\x18\x03 \x01(\x0b\x32\x1a.abci_vendor.ResponseFlushH\x00\x12)\n\x04info\x18\x04 \x01(\x0b\x32\x19.abci_vendor.ResponseInfoH\x00\x12\x34\n\nset_option\x18\x05 \x01(\x0b\x32\x1e.abci_vendor.ResponseSetOptionH\x00\x12\x34\n\ninit_chain\x18\x06 \x01(\x0b\x32\x1e.abci_vendor.ResponseInitChainH\x00\x12+\n\x05query\x18\x07 \x01(\x0b\x32\x1a.abci_vendor.ResponseQueryH\x00\x12\x36\n\x0b\x62\x65gin_block\x18\x08 \x01(\x0b\x32\x1f.abci_vendor.ResponseBeginBlockH\x00\x12\x30\n\x08\x63heck_tx\x18\t \x01(\x0b\x32\x1c.abci_vendor.ResponseCheckTxH\x00\x12\x34\n\ndeliver_tx\x18\n \x01(\x0b\x32\x1e.abci_vendor.ResponseDeliverTxH\x00\x12\x32\n\tend_block\x18\x0b \x01(\x0b\x32\x1d.abci_vendor.ResponseEndBlockH\x00\x12-\n\x06\x63ommit\x18\x0c \x01(\x0b\x32\x1b.abci_vendor.ResponseCommitH\x00\x42\x07\n\x05value\"\r\n\x0bRequestPing\" \n\x12RequestBroadcastTx\x12\n\n\x02tx\x18\x01 \x01(\x0c\"\x0e\n\x0cResponsePing\"y\n\x13ResponseBroadcastTx\x12.\n\x08\x63heck_tx\x18\x01 \x01(\x0b\x32\x1c.abci_vendor.ResponseCheckTx\x12\x32\n\ndeliver_tx\x18\x02 \x01(\x0b\x32\x1e.abci_vendor.ResponseDeliverTx2\x90\x06\n\x0f\x41\x42\x43IApplication\x12;\n\x04\x45\x63ho\x12\x18.abci_vendor.RequestEcho\x1a\x19.abci_vendor.ResponseEcho\x12>\n\x05\x46lush\x12\x19.abci_vendor.RequestFlush\x1a\x1a.abci_vendor.ResponseFlush\x12;\n\x04Info\x12\x18.abci_vendor.RequestInfo\x1a\x19.abci_vendor.ResponseInfo\x12J\n\tSetOption\x12\x1d.abci_vendor.RequestSetOption\x1a\x1e.abci_vendor.ResponseSetOption\x12J\n\tDeliverTx\x12\x1d.abci_vendor.RequestDeliverTx\x1a\x1e.abci_vendor.ResponseDeliverTx\x12\x44\n\x07\x43heckTx\x12\x1b.abci_vendor.RequestCheckTx\x1a\x1c.abci_vendor.ResponseCheckTx\x12>\n\x05Query\x12\x19.abci_vendor.RequestQuery\x1a\x1a.abci_vendor.ResponseQuery\x12\x41\n\x06\x43ommit\x12\x1a.abci_vendor.RequestCommit\x1a\x1b.abci_vendor.ResponseCommit\x12J\n\tInitChain\x12\x1d.abci_vendor.RequestInitChain\x1a\x1e.abci_vendor.ResponseInitChain\x12M\n\nBeginBlock\x12\x1e.abci_vendor.RequestBeginBlock\x1a\x1f.abci_vendor.ResponseBeginBlock\x12G\n\x08\x45ndBlock\x12\x1c.abci_vendor.RequestEndBlock\x1a\x1d.abci_vendor.ResponseEndBlockb\x06proto3')
+  serialized_pb=_b('\n\x0cvendor.proto\x12\x0b\x61\x62\x63i_vendor\x1a\x1fgoogle/protobuf/timestamp.proto\"$\n\x06KVPair\x12\x0b\n\x03key\x18\x01 \x01(\x0c\x12\r\n\x05value\x18\x02 \x01(\x0c\"2\n\x07ProofOp\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x0b\n\x03key\x18\x02 \x01(\x0c\x12\x0c\n\x04\x64\x61ta\x18\x03 \x01(\x0c\"*\n\x05Proof\x12!\n\x03ops\x18\x01 \x03(\x0b\x32\x14.abci_vendor.ProofOp\"1\n\x0b\x42lockParams\x12\x11\n\tmax_bytes\x18\x01 \x01(\x03\x12\x0f\n\x07max_gas\x18\x02 \x01(\x03\"!\n\x0e\x45videnceParams\x12\x0f\n\x07max_age\x18\x01 \x01(\x03\"(\n\x0fValidatorParams\x12\x15\n\rpub_key_types\x18\x01 \x03(\t\"\x9a\x01\n\x0f\x43onsensusParams\x12\'\n\x05\x62lock\x18\x01 \x01(\x0b\x32\x18.abci_vendor.BlockParams\x12-\n\x08\x65vidence\x18\x02 \x01(\x0b\x32\x1b.abci_vendor.EvidenceParams\x12/\n\tvalidator\x18\x03 \x01(\x0b\x32\x1c.abci_vendor.ValidatorParams\"E\n\x0eLastCommitInfo\x12\r\n\x05round\x18\x01 \x01(\x05\x12$\n\x05votes\x18\x02 \x03(\x0b\x32\x15.abci_vendor.VoteInfo\">\n\x05\x45vent\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\'\n\nattributes\x18\x02 \x03(\x0b\x32\x13.abci_vendor.KVPair\"%\n\x07Version\x12\r\n\x05\x42lock\x18\x01 \x01(\x04\x12\x0b\n\x03\x41pp\x18\x02 \x01(\x04\"I\n\x07\x42lockID\x12\x0c\n\x04hash\x18\x01 \x01(\x0c\x12\x30\n\x0cparts_header\x18\x02 \x01(\x0b\x32\x1a.abci_vendor.PartSetHeader\",\n\rPartSetHeader\x12\r\n\x05total\x18\x01 \x01(\x05\x12\x0c\n\x04hash\x18\x02 \x01(\x0c\"+\n\tValidator\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\x0c\x12\r\n\x05power\x18\x03 \x01(\x03\"F\n\x0fValidatorUpdate\x12$\n\x07pub_key\x18\x01 \x01(\x0b\x32\x13.abci_vendor.PubKey\x12\r\n\x05power\x18\x02 \x01(\x03\"P\n\x08VoteInfo\x12)\n\tvalidator\x18\x01 \x01(\x0b\x32\x16.abci_vendor.Validator\x12\x19\n\x11signed_last_block\x18\x02 \x01(\x08\"$\n\x06PubKey\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\x0c\"\x99\x01\n\x08\x45vidence\x12\x0c\n\x04type\x18\x01 \x01(\t\x12)\n\tvalidator\x18\x02 \x01(\x0b\x32\x16.abci_vendor.Validator\x12\x0e\n\x06height\x18\x03 \x01(\x03\x12(\n\x04time\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x1a\n\x12total_voting_power\x18\x05 \x01(\x03\"\xa6\x03\n\x06Header\x12%\n\x07version\x18\x01 \x01(\x0b\x32\x14.abci_vendor.Version\x12\x10\n\x08\x63hain_id\x18\x02 \x01(\t\x12\x0e\n\x06height\x18\x03 \x01(\x03\x12(\n\x04time\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0f\n\x07num_txs\x18\x05 \x01(\x03\x12\x11\n\ttotal_txs\x18\x06 \x01(\x03\x12+\n\rlast_block_id\x18\x07 \x01(\x0b\x32\x14.abci_vendor.BlockID\x12\x18\n\x10last_commit_hash\x18\x08 \x01(\x0c\x12\x11\n\tdata_hash\x18\t \x01(\x0c\x12\x17\n\x0fvalidators_hash\x18\n \x01(\x0c\x12\x1c\n\x14next_validators_hash\x18\x0b \x01(\x0c\x12\x16\n\x0e\x63onsensus_hash\x18\x0c \x01(\x0c\x12\x10\n\x08\x61pp_hash\x18\r \x01(\x0c\x12\x19\n\x11last_results_hash\x18\x0e \x01(\x0c\x12\x15\n\revidence_hash\x18\x0f \x01(\x0c\x12\x18\n\x10proposer_address\x18\x10 \x01(\x0c\"\x1e\n\x0bRequestEcho\x12\x0f\n\x07message\x18\x01 \x01(\t\"\x0e\n\x0cRequestFlush\"J\n\x0bRequestInfo\x12\x0f\n\x07version\x18\x01 \x01(\t\x12\x15\n\rblock_version\x18\x02 \x01(\x04\x12\x13\n\x0bp2p_version\x18\x03 \x01(\x04\".\n\x10RequestSetOption\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"\xd1\x01\n\x10RequestInitChain\x12(\n\x04time\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x10\n\x08\x63hain_id\x18\x02 \x01(\t\x12\x36\n\x10\x63onsensus_params\x18\x03 \x01(\x0b\x32\x1c.abci_vendor.ConsensusParams\x12\x30\n\nvalidators\x18\x04 \x03(\x0b\x32\x1c.abci_vendor.ValidatorUpdate\x12\x17\n\x0f\x61pp_state_bytes\x18\x05 \x01(\x0c\"I\n\x0cRequestQuery\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\x0c\x12\x0c\n\x04path\x18\x02 \x01(\t\x12\x0e\n\x06height\x18\x03 \x01(\x03\x12\r\n\x05prove\x18\x04 \x01(\x08\"\xb2\x01\n\x11RequestBeginBlock\x12\x0c\n\x04hash\x18\x01 \x01(\x0c\x12#\n\x06header\x18\x02 \x01(\x0b\x32\x13.abci_vendor.Header\x12\x35\n\x10last_commit_info\x18\x03 \x01(\x0b\x32\x1b.abci_vendor.LastCommitInfo\x12\x33\n\x14\x62yzantine_validators\x18\x04 \x03(\x0b\x32\x15.abci_vendor.Evidence\"\x1c\n\x0eRequestCheckTx\x12\n\n\x02tx\x18\x01 \x01(\x0c\"\x1e\n\x10RequestDeliverTx\x12\n\n\x02tx\x18\x01 \x01(\x0c\"!\n\x0fRequestEndBlock\x12\x0e\n\x06height\x18\x01 \x01(\x03\"\x0f\n\rRequestCommit\"\xa6\x04\n\x07Request\x12(\n\x04\x65\x63ho\x18\x02 \x01(\x0b\x32\x18.abci_vendor.RequestEchoH\x00\x12*\n\x05\x66lush\x18\x03 \x01(\x0b\x32\x19.abci_vendor.RequestFlushH\x00\x12(\n\x04info\x18\x04 \x01(\x0b\x32\x18.abci_vendor.RequestInfoH\x00\x12\x33\n\nset_option\x18\x05 \x01(\x0b\x32\x1d.abci_vendor.RequestSetOptionH\x00\x12\x33\n\ninit_chain\x18\x06 \x01(\x0b\x32\x1d.abci_vendor.RequestInitChainH\x00\x12*\n\x05query\x18\x07 \x01(\x0b\x32\x19.abci_vendor.RequestQueryH\x00\x12\x35\n\x0b\x62\x65gin_block\x18\x08 \x01(\x0b\x32\x1e.abci_vendor.RequestBeginBlockH\x00\x12/\n\x08\x63heck_tx\x18\t \x01(\x0b\x32\x1b.abci_vendor.RequestCheckTxH\x00\x12\x33\n\ndeliver_tx\x18\x13 \x01(\x0b\x32\x1d.abci_vendor.RequestDeliverTxH\x00\x12\x31\n\tend_block\x18\x0b \x01(\x0b\x32\x1c.abci_vendor.RequestEndBlockH\x00\x12,\n\x06\x63ommit\x18\x0c \x01(\x0b\x32\x1a.abci_vendor.RequestCommitH\x00\x42\x07\n\x05value\"\"\n\x11ResponseException\x12\r\n\x05\x65rror\x18\x01 \x01(\t\"\x1f\n\x0cResponseEcho\x12\x0f\n\x07message\x18\x01 \x01(\t\"\x0f\n\rResponseFlush\"z\n\x0cResponseInfo\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\t\x12\x0f\n\x07version\x18\x02 \x01(\t\x12\x13\n\x0b\x61pp_version\x18\x03 \x01(\x04\x12\x19\n\x11last_block_height\x18\x04 \x01(\x03\x12\x1b\n\x13last_block_app_hash\x18\x05 \x01(\x0c\"<\n\x11ResponseSetOption\x12\x0c\n\x04\x63ode\x18\x01 \x01(\r\x12\x0b\n\x03log\x18\x03 \x01(\t\x12\x0c\n\x04info\x18\x04 \x01(\t\"}\n\x11ResponseInitChain\x12\x36\n\x10\x63onsensus_params\x18\x01 \x01(\x0b\x32\x1c.abci_vendor.ConsensusParams\x12\x30\n\nvalidators\x18\x02 \x03(\x0b\x32\x1c.abci_vendor.ValidatorUpdate\"\xa9\x01\n\rResponseQuery\x12\x0c\n\x04\x63ode\x18\x01 \x01(\r\x12\x0b\n\x03log\x18\x03 \x01(\t\x12\x0c\n\x04info\x18\x04 \x01(\t\x12\r\n\x05index\x18\x05 \x01(\x03\x12\x0b\n\x03key\x18\x06 \x01(\x0c\x12\r\n\x05value\x18\x07 \x01(\x0c\x12!\n\x05proof\x18\x08 \x01(\x0b\x32\x12.abci_vendor.Proof\x12\x0e\n\x06height\x18\t \x01(\x03\x12\x11\n\tcodespace\x18\n \x01(\t\"8\n\x12ResponseBeginBlock\x12\"\n\x06\x65vents\x18\x01 \x03(\x0b\x32\x12.abci_vendor.Event\"\xa5\x01\n\x0fResponseCheckTx\x12\x0c\n\x04\x63ode\x18\x01 \x01(\r\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\x0c\x12\x0b\n\x03log\x18\x03 \x01(\t\x12\x0c\n\x04info\x18\x04 \x01(\t\x12\x12\n\ngas_wanted\x18\x05 \x01(\x03\x12\x10\n\x08gas_used\x18\x06 \x01(\x03\x12\"\n\x06\x65vents\x18\x07 \x03(\x0b\x32\x12.abci_vendor.Event\x12\x11\n\tcodespace\x18\x08 \x01(\t\"\xa7\x01\n\x11ResponseDeliverTx\x12\x0c\n\x04\x63ode\x18\x01 \x01(\r\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\x0c\x12\x0b\n\x03log\x18\x03 \x01(\t\x12\x0c\n\x04info\x18\x04 \x01(\t\x12\x12\n\ngas_wanted\x18\x05 \x01(\x03\x12\x10\n\x08gas_used\x18\x06 \x01(\x03\x12\"\n\x06\x65vents\x18\x07 \x03(\x0b\x32\x12.abci_vendor.Event\x12\x11\n\tcodespace\x18\x08 \x01(\t\"\xae\x01\n\x10ResponseEndBlock\x12\x37\n\x11validator_updates\x18\x01 \x03(\x0b\x32\x1c.abci_vendor.ValidatorUpdate\x12=\n\x17\x63onsensus_param_updates\x18\x02 \x01(\x0b\x32\x1c.abci_vendor.ConsensusParams\x12\"\n\x06\x65vents\x18\x03 \x03(\x0b\x32\x12.abci_vendor.Event\"\x1e\n\x0eResponseCommit\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\x0c\"\xe7\x04\n\x08Response\x12\x33\n\texception\x18\x01 \x01(\x0b\x32\x1e.abci_vendor.ResponseExceptionH\x00\x12)\n\x04\x65\x63ho\x18\x02 \x01(\x0b\x32\x19.abci_vendor.ResponseEchoH\x00\x12+\n\x05\x66lush\x18\x03 \x01(\x0b\x32\x1a.abci_vendor.ResponseFlushH\x00\x12)\n\x04info\x18\x04 \x01(\x0b\x32\x19.abci_vendor.ResponseInfoH\x00\x12\x34\n\nset_option\x18\x05 \x01(\x0b\x32\x1e.abci_vendor.ResponseSetOptionH\x00\x12\x34\n\ninit_chain\x18\x06 \x01(\x0b\x32\x1e.abci_vendor.ResponseInitChainH\x00\x12+\n\x05query\x18\x07 \x01(\x0b\x32\x1a.abci_vendor.ResponseQueryH\x00\x12\x36\n\x0b\x62\x65gin_block\x18\x08 \x01(\x0b\x32\x1f.abci_vendor.ResponseBeginBlockH\x00\x12\x30\n\x08\x63heck_tx\x18\t \x01(\x0b\x32\x1c.abci_vendor.ResponseCheckTxH\x00\x12\x34\n\ndeliver_tx\x18\n \x01(\x0b\x32\x1e.abci_vendor.ResponseDeliverTxH\x00\x12\x32\n\tend_block\x18\x0b \x01(\x0b\x32\x1d.abci_vendor.ResponseEndBlockH\x00\x12-\n\x06\x63ommit\x18\x0c \x01(\x0b\x32\x1b.abci_vendor.ResponseCommitH\x00\x42\x07\n\x05value\"\r\n\x0bRequestPing\" \n\x12RequestBroadcastTx\x12\n\n\x02tx\x18\x01 \x01(\x0c\"\x0e\n\x0cResponsePing\"y\n\x13ResponseBroadcastTx\x12.\n\x08\x63heck_tx\x18\x01 \x01(\x0b\x32\x1c.abci_vendor.ResponseCheckTx\x12\x32\n\ndeliver_tx\x18\x02 \x01(\x0b\x32\x1e.abci_vendor.ResponseDeliverTx2\x90\x06\n\x0f\x41\x42\x43IApplication\x12;\n\x04\x45\x63ho\x12\x18.abci_vendor.RequestEcho\x1a\x19.abci_vendor.ResponseEcho\x12>\n\x05\x46lush\x12\x19.abci_vendor.RequestFlush\x1a\x1a.abci_vendor.ResponseFlush\x12;\n\x04Info\x12\x18.abci_vendor.RequestInfo\x1a\x19.abci_vendor.ResponseInfo\x12J\n\tSetOption\x12\x1d.abci_vendor.RequestSetOption\x1a\x1e.abci_vendor.ResponseSetOption\x12J\n\tDeliverTx\x12\x1d.abci_vendor.RequestDeliverTx\x1a\x1e.abci_vendor.ResponseDeliverTx\x12\x44\n\x07\x43heckTx\x12\x1b.abci_vendor.RequestCheckTx\x1a\x1c.abci_vendor.ResponseCheckTx\x12>\n\x05Query\x12\x19.abci_vendor.RequestQuery\x1a\x1a.abci_vendor.ResponseQuery\x12\x41\n\x06\x43ommit\x12\x1a.abci_vendor.RequestCommit\x1a\x1b.abci_vendor.ResponseCommit\x12J\n\tInitChain\x12\x1d.abci_vendor.RequestInitChain\x1a\x1e.abci_vendor.ResponseInitChain\x12M\n\nBeginBlock\x12\x1e.abci_vendor.RequestBeginBlock\x1a\x1f.abci_vendor.ResponseBeginBlock\x12G\n\x08\x45ndBlock\x12\x1c.abci_vendor.RequestEndBlock\x1a\x1d.abci_vendor.ResponseEndBlockb\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,])
 
@@ -324,6 +324,44 @@ _LASTCOMMITINFO = _descriptor.Descriptor(
 )
 
 
+_EVENT = _descriptor.Descriptor(
+  name='Event',
+  full_name='abci_vendor.Event',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='type', full_name='abci_vendor.Event.type', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='attributes', full_name='abci_vendor.Event.attributes', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=552,
+  serialized_end=614,
+)
+
+
 _VERSION = _descriptor.Descriptor(
   name='Version',
   full_name='abci_vendor.Version',
@@ -357,8 +395,8 @@ _VERSION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=552,
-  serialized_end=589,
+  serialized_start=616,
+  serialized_end=653,
 )
 
 
@@ -395,8 +433,8 @@ _BLOCKID = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=591,
-  serialized_end=664,
+  serialized_start=655,
+  serialized_end=728,
 )
 
 
@@ -433,8 +471,8 @@ _PARTSETHEADER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=666,
-  serialized_end=710,
+  serialized_start=730,
+  serialized_end=774,
 )
 
 
@@ -471,8 +509,8 @@ _VALIDATOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=712,
-  serialized_end=755,
+  serialized_start=776,
+  serialized_end=819,
 )
 
 
@@ -509,8 +547,8 @@ _VALIDATORUPDATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=757,
-  serialized_end=827,
+  serialized_start=821,
+  serialized_end=891,
 )
 
 
@@ -547,8 +585,8 @@ _VOTEINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=829,
-  serialized_end=909,
+  serialized_start=893,
+  serialized_end=973,
 )
 
 
@@ -585,8 +623,8 @@ _PUBKEY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=911,
-  serialized_end=947,
+  serialized_start=975,
+  serialized_end=1011,
 )
 
 
@@ -644,8 +682,8 @@ _EVIDENCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=950,
-  serialized_end=1103,
+  serialized_start=1014,
+  serialized_end=1167,
 )
 
 
@@ -780,8 +818,8 @@ _HEADER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1106,
-  serialized_end=1528,
+  serialized_start=1170,
+  serialized_end=1592,
 )
 
 
@@ -811,8 +849,8 @@ _REQUESTECHO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1530,
-  serialized_end=1560,
+  serialized_start=1594,
+  serialized_end=1624,
 )
 
 
@@ -835,8 +873,8 @@ _REQUESTFLUSH = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1562,
-  serialized_end=1576,
+  serialized_start=1626,
+  serialized_end=1640,
 )
 
 
@@ -880,8 +918,8 @@ _REQUESTINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1578,
-  serialized_end=1652,
+  serialized_start=1642,
+  serialized_end=1716,
 )
 
 
@@ -918,8 +956,8 @@ _REQUESTSETOPTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1654,
-  serialized_end=1700,
+  serialized_start=1718,
+  serialized_end=1764,
 )
 
 
@@ -977,8 +1015,8 @@ _REQUESTINITCHAIN = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1703,
-  serialized_end=1912,
+  serialized_start=1767,
+  serialized_end=1976,
 )
 
 
@@ -1029,8 +1067,8 @@ _REQUESTQUERY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1914,
-  serialized_end=1987,
+  serialized_start=1978,
+  serialized_end=2051,
 )
 
 
@@ -1081,8 +1119,8 @@ _REQUESTBEGINBLOCK = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1990,
-  serialized_end=2168,
+  serialized_start=2054,
+  serialized_end=2232,
 )
 
 
@@ -1112,8 +1150,8 @@ _REQUESTCHECKTX = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2170,
-  serialized_end=2198,
+  serialized_start=2234,
+  serialized_end=2262,
 )
 
 
@@ -1143,8 +1181,8 @@ _REQUESTDELIVERTX = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2200,
-  serialized_end=2230,
+  serialized_start=2264,
+  serialized_end=2294,
 )
 
 
@@ -1174,8 +1212,8 @@ _REQUESTENDBLOCK = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2232,
-  serialized_end=2265,
+  serialized_start=2296,
+  serialized_end=2329,
 )
 
 
@@ -1198,8 +1236,8 @@ _REQUESTCOMMIT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2267,
-  serialized_end=2282,
+  serialized_start=2331,
+  serialized_end=2346,
 )
 
 
@@ -1302,8 +1340,8 @@ _REQUEST = _descriptor.Descriptor(
       name='value', full_name='abci_vendor.Request.value',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=2285,
-  serialized_end=2835,
+  serialized_start=2349,
+  serialized_end=2899,
 )
 
 
@@ -1333,8 +1371,8 @@ _RESPONSEEXCEPTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2837,
-  serialized_end=2871,
+  serialized_start=2901,
+  serialized_end=2935,
 )
 
 
@@ -1364,8 +1402,8 @@ _RESPONSEECHO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2873,
-  serialized_end=2904,
+  serialized_start=2937,
+  serialized_end=2968,
 )
 
 
@@ -1388,8 +1426,8 @@ _RESPONSEFLUSH = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2906,
-  serialized_end=2921,
+  serialized_start=2970,
+  serialized_end=2985,
 )
 
 
@@ -1447,8 +1485,8 @@ _RESPONSEINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2923,
-  serialized_end=3045,
+  serialized_start=2987,
+  serialized_end=3109,
 )
 
 
@@ -1492,8 +1530,8 @@ _RESPONSESETOPTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3047,
-  serialized_end=3107,
+  serialized_start=3111,
+  serialized_end=3171,
 )
 
 
@@ -1530,8 +1568,8 @@ _RESPONSEINITCHAIN = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3109,
-  serialized_end=3234,
+  serialized_start=3173,
+  serialized_end=3298,
 )
 
 
@@ -1617,8 +1655,8 @@ _RESPONSEQUERY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3237,
-  serialized_end=3406,
+  serialized_start=3301,
+  serialized_end=3470,
 )
 
 
@@ -1630,7 +1668,7 @@ _RESPONSEBEGINBLOCK = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='tags', full_name='abci_vendor.ResponseBeginBlock.tags', index=0,
+      name='events', full_name='abci_vendor.ResponseBeginBlock.events', index=0,
       number=1, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -1648,8 +1686,8 @@ _RESPONSEBEGINBLOCK = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3408,
-  serialized_end=3463,
+  serialized_start=3472,
+  serialized_end=3528,
 )
 
 
@@ -1703,7 +1741,7 @@ _RESPONSECHECKTX = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='tags', full_name='abci_vendor.ResponseCheckTx.tags', index=6,
+      name='events', full_name='abci_vendor.ResponseCheckTx.events', index=6,
       number=7, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -1728,8 +1766,8 @@ _RESPONSECHECKTX = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3466,
-  serialized_end=3630,
+  serialized_start=3531,
+  serialized_end=3696,
 )
 
 
@@ -1783,7 +1821,7 @@ _RESPONSEDELIVERTX = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='tags', full_name='abci_vendor.ResponseDeliverTx.tags', index=6,
+      name='events', full_name='abci_vendor.ResponseDeliverTx.events', index=6,
       number=7, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -1808,8 +1846,8 @@ _RESPONSEDELIVERTX = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3633,
-  serialized_end=3799,
+  serialized_start=3699,
+  serialized_end=3866,
 )
 
 
@@ -1835,7 +1873,7 @@ _RESPONSEENDBLOCK = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='tags', full_name='abci_vendor.ResponseEndBlock.tags', index=2,
+      name='events', full_name='abci_vendor.ResponseEndBlock.events', index=2,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -1853,8 +1891,8 @@ _RESPONSEENDBLOCK = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3802,
-  serialized_end=3975,
+  serialized_start=3869,
+  serialized_end=4043,
 )
 
 
@@ -1884,8 +1922,8 @@ _RESPONSECOMMIT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3977,
-  serialized_end=4007,
+  serialized_start=4045,
+  serialized_end=4075,
 )
 
 
@@ -1995,8 +2033,8 @@ _RESPONSE = _descriptor.Descriptor(
       name='value', full_name='abci_vendor.Response.value',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=4010,
-  serialized_end=4625,
+  serialized_start=4078,
+  serialized_end=4693,
 )
 
 
@@ -2019,8 +2057,8 @@ _REQUESTPING = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4627,
-  serialized_end=4640,
+  serialized_start=4695,
+  serialized_end=4708,
 )
 
 
@@ -2050,8 +2088,8 @@ _REQUESTBROADCASTTX = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4642,
-  serialized_end=4674,
+  serialized_start=4710,
+  serialized_end=4742,
 )
 
 
@@ -2074,8 +2112,8 @@ _RESPONSEPING = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4676,
-  serialized_end=4690,
+  serialized_start=4744,
+  serialized_end=4758,
 )
 
 
@@ -2112,8 +2150,8 @@ _RESPONSEBROADCASTTX = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4692,
-  serialized_end=4813,
+  serialized_start=4760,
+  serialized_end=4881,
 )
 
 _PROOF.fields_by_name['ops'].message_type = _PROOFOP
@@ -2121,6 +2159,7 @@ _CONSENSUSPARAMS.fields_by_name['block'].message_type = _BLOCKPARAMS
 _CONSENSUSPARAMS.fields_by_name['evidence'].message_type = _EVIDENCEPARAMS
 _CONSENSUSPARAMS.fields_by_name['validator'].message_type = _VALIDATORPARAMS
 _LASTCOMMITINFO.fields_by_name['votes'].message_type = _VOTEINFO
+_EVENT.fields_by_name['attributes'].message_type = _KVPAIR
 _BLOCKID.fields_by_name['parts_header'].message_type = _PARTSETHEADER
 _VALIDATORUPDATE.fields_by_name['pub_key'].message_type = _PUBKEY
 _VOTEINFO.fields_by_name['validator'].message_type = _VALIDATOR
@@ -2182,12 +2221,12 @@ _REQUEST.fields_by_name['commit'].containing_oneof = _REQUEST.oneofs_by_name['va
 _RESPONSEINITCHAIN.fields_by_name['consensus_params'].message_type = _CONSENSUSPARAMS
 _RESPONSEINITCHAIN.fields_by_name['validators'].message_type = _VALIDATORUPDATE
 _RESPONSEQUERY.fields_by_name['proof'].message_type = _PROOF
-_RESPONSEBEGINBLOCK.fields_by_name['tags'].message_type = _KVPAIR
-_RESPONSECHECKTX.fields_by_name['tags'].message_type = _KVPAIR
-_RESPONSEDELIVERTX.fields_by_name['tags'].message_type = _KVPAIR
+_RESPONSEBEGINBLOCK.fields_by_name['events'].message_type = _EVENT
+_RESPONSECHECKTX.fields_by_name['events'].message_type = _EVENT
+_RESPONSEDELIVERTX.fields_by_name['events'].message_type = _EVENT
 _RESPONSEENDBLOCK.fields_by_name['validator_updates'].message_type = _VALIDATORUPDATE
 _RESPONSEENDBLOCK.fields_by_name['consensus_param_updates'].message_type = _CONSENSUSPARAMS
-_RESPONSEENDBLOCK.fields_by_name['tags'].message_type = _KVPAIR
+_RESPONSEENDBLOCK.fields_by_name['events'].message_type = _EVENT
 _RESPONSE.fields_by_name['exception'].message_type = _RESPONSEEXCEPTION
 _RESPONSE.fields_by_name['echo'].message_type = _RESPONSEECHO
 _RESPONSE.fields_by_name['flush'].message_type = _RESPONSEFLUSH
@@ -2246,6 +2285,7 @@ DESCRIPTOR.message_types_by_name['EvidenceParams'] = _EVIDENCEPARAMS
 DESCRIPTOR.message_types_by_name['ValidatorParams'] = _VALIDATORPARAMS
 DESCRIPTOR.message_types_by_name['ConsensusParams'] = _CONSENSUSPARAMS
 DESCRIPTOR.message_types_by_name['LastCommitInfo'] = _LASTCOMMITINFO
+DESCRIPTOR.message_types_by_name['Event'] = _EVENT
 DESCRIPTOR.message_types_by_name['Version'] = _VERSION
 DESCRIPTOR.message_types_by_name['BlockID'] = _BLOCKID
 DESCRIPTOR.message_types_by_name['PartSetHeader'] = _PARTSETHEADER
@@ -2341,6 +2381,13 @@ LastCommitInfo = _reflection.GeneratedProtocolMessageType('LastCommitInfo', (_me
   # @@protoc_insertion_point(class_scope:abci_vendor.LastCommitInfo)
   ))
 _sym_db.RegisterMessage(LastCommitInfo)
+
+Event = _reflection.GeneratedProtocolMessageType('Event', (_message.Message,), dict(
+  DESCRIPTOR = _EVENT,
+  __module__ = 'vendor_pb2'
+  # @@protoc_insertion_point(class_scope:abci_vendor.Event)
+  ))
+_sym_db.RegisterMessage(Event)
 
 Version = _reflection.GeneratedProtocolMessageType('Version', (_message.Message,), dict(
   DESCRIPTOR = _VERSION,
@@ -2616,8 +2663,8 @@ _ABCIAPPLICATION = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=4816,
-  serialized_end=5600,
+  serialized_start=4884,
+  serialized_end=5668,
   methods=[
   _descriptor.MethodDescriptor(
     name='Echo',

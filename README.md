@@ -24,12 +24,16 @@ This sdk supports python verison `>=3.6`.
 First get your Forge running on local with [Forge CLI](https://docs.arcblock.io/forge/latest/tools/forge_cli.html).
 
 ### Step 1
-
-Find the config your forge is using by `forge config`
-
-### Step 2
-
-Set `FORGE_CONFIG` as your environment variable, pointing to the config your forge is running on.
+Create a Forge Connection with your Forge port (Default is `127.0.0.1:28210` if your Forge runs with `forge-cli`)
+```python
+from forge_sdk import ForgeConn
+f = ForgeConn('127.0.0.1:28210')
+rpc = f.rpc
+config = f.config
+```
+::: warning
+This step applies to every tutorial
+:::
 
 ## Tutorials
 
@@ -38,15 +42,15 @@ Set `FORGE_CONFIG` as your environment variable, pointing to the config your for
 **Scenario**: Alice wants to transfer 10 TBA to Mike.
 
 ::: tip Notes
-**TBA** is the default currency on Forge Chain. 1 TBA has 16 digits, so it shows as `10000000000000000`.
+**TBA** is the default currency on Forge Chain. If 1 TBA has 16 digits, it shows as `10000000000000000`.
 :::
 
 #### Step 1: create wallets for Alice and Mike
 
 ```python
->>> from forge_sdk import rpc, protos, utils
->>> alice=rpc.create_wallet(moniker='alice', passphrase='abc123')
->>> mike = rpc.create_wallet(moniker='mike', passphrase='abc123')
+from forge_sdk import protos, utils
+alice = rpc.create_wallet(moniker='alice', passphrase='abc123')
+mike = rpc.create_wallet(moniker='mike', passphrase='abc123')
 ```
 
 ::: tip Notes
@@ -102,17 +106,14 @@ Now let's check Alice's account balance. There should be 25 TBA.
 Now Alice has 25 TBA in her account and Mike has nothing. We can help Alice transfer 10 TBA to Mike by sending out a **transfer transaction**.
 
 ```python
-
->>> transfer_itx = protos.TransferTx(to=mike.wallet.address,value=utils.int_to_biguint(100000000000000000))
-
->>> rpc.transfer(transfer_itx, alice.wallet)
+rpc.transfer(to=mike.wallet.address,value=utils.to_unit(100),wallet=alice.wallet)
  hash: "CAEF155B1A3A684DAF57C595F68821502BC0187BEC514E4660BA1BD568474345"
 
->>> rpc.is_tx_ok('CAEF155B1A3A684DAF57C595F68821502BC0187BEC514E4660BA1BD568474345')
+rpc.is_tx_ok('CAEF155B1A3A684DAF57C595F68821502BC0187BEC514E4660BA1BD568474345')
 True
 
->>> rpc.get_account_balance(mike.wallet.address)
-100000000000000000
+rpc.get_account_balance(mike.wallet.address)
+101000000000000000
 ```
 
 Now we can see tht Alice just successfully transferred 10 TBA to Mike's Account!
@@ -126,19 +127,18 @@ Now we can see tht Alice just successfully transferred 10 TBA to Mike's Account!
 #### Step 1: Create accounts for Alice and Mike
 
 ```python
->>> from forge_sdk import rpc, protos, utils
->>> alice=rpc.create_wallet(moniker='alice', passphrase='abc123')
->>> mike = rpc.create_wallet(moniker='mike', passphrase='abc123')
+alice=rpc.create_wallet(moniker='alice', passphrase='abc123')
+mike = rpc.create_wallet(moniker='mike', passphrase='abc123')
 ```
 
 After creating accounts for Alice and Mike, we help Alice to get some money to buy Mike's laptop
 
 ```python
 
->>> rpc.poke(alice.wallet, alice.token)
+rpc.poke(alice.wallet, alice.token)
 hash: "CF0513E473ED13712CDB65EFC196A77BD6193E7DF5124C6233C55732573C85A2"
 
->>> rpc.get_account_balance(alice.wallet.address)
+rpc.get_account_balance(alice.wallet.address)
 250000000000000000
 ```
 
@@ -149,17 +149,17 @@ In real world, Mike could have just sold Alice his laptop. With Forge SDK, any p
 Let's try to help Mike create a laptop asset with the **CreateAssetTx**. The `data` field is for users to put item-specific information, where `type_url` is hints for how to decode the serialized `value` field. In this tutorial, for simplicity purpose, we only put the name of thel laptop.
 
 ```python
->>>res, asset_address= rpc.create_asset('test:name:laptop', b'Laptop from Mike',mike.wallet, mike.token)
->>> rpc.is_tx_ok(res.hash)
+res, asset_address= rpc.create_asset('test:name:laptop', b'Laptop from Mike',mike.wallet, mike.token)
+rpc.is_tx_ok(res.hash)
 True
->>> asset_address
+asset_address
 'zjdwghZpZN45ig6ytP74r8VF9CHhQtEjBype'
 ```
 
 Then we can see how the asset acutally look like.
 
 ```python
->>> rpc.get_single_asset_state(asset_address)
+rpc.get_single_asset_state(asset_address)
 address: "zjdwghZpZN45ig6ytP74r8VF9CHhQtEjBype"
 owner: "z1QyzoxdPPEk9A2Uz6h18rvjsAHtmJ78mGD"
 transferrable: true
@@ -212,13 +212,13 @@ Now Alice has 25 TBA in her account, and Mike has a laptop asset. What should Mi
 Since Mike is going to be the sender, we put the laptop `asset_address` as what he will exchange. Similarly, Alice will exchange 10 TBA.
 
 ```python
->>> mike_exchange_info = protos.ExchangeInfo(assets=[asset_address])
->>> alice_exchange_info = protos.ExchangeInfo(value = utils.int_to_biguint(100000000000000000))
->>> exchange_tx = protos.ExchangeTx(sender = mike_exchange_info, receiver=alice_exchange_info)
+mike_exchange_info = protos.ExchangeInfo(assets=[asset_address])
+alice_exchange_info = protos.ExchangeInfo(value = utils.int_to_biguint(100000000000000000))
+exchange_tx = protos.ExchangeTx(sender = mike_exchange_info, receiver=alice_exchange_info)
 
->>> tx = rpc.prepare_exchange(exchange_tx, mike.wallet)
->>> tx = rpc.finalize_exchange(tx, alice.wallet)
->>> res = rpc.send_tx(tx)
+tx = rpc.prepare_exchange(exchange_tx, mike.wallet)
+tx = rpc.finalize_exchange(tx, alice.wallet)
+res = rpc.send_tx(tx)
 
 >>> rpc.is_tx_ok(res.hash)
 True
@@ -228,14 +228,14 @@ In the `prepare_exchange`, we ask Mike the seller to verify the transaction; and
 Now if we check the laptop's owner, it should be Alice's address.
 
 ```python
->>> rpc.get_single_asset_state(asset_address).owner == alice.wallet.address
+rpc.get_single_asset_state(asset_address).owner == alice.wallet.address
 True
 ```
 
 Alice's account should have only 15 TBA after she pays for the laptop.
 
 ```python
->>> rpc.get_account_balance(alice.wallet.address)
+>rpc.get_account_balance(alice.wallet.address)
 150000000000000000
 ```
 

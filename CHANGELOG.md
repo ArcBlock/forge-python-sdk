@@ -1,3 +1,7 @@
+## 0.35.0 (August 06, 2019)
+  - Update tutorials
+  - add protos for tx activation
+
 ## 0.31.0 (July 18, 2019)
 
 

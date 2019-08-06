@@ -31,6 +31,7 @@ message RequestMultisig {
   google.protobuf.Any data = 2;
   WalletInfo wallet = 3;
   string token = 4;
+  string delegatee = 5;
 }
 
 message ResponseMultisig {
@@ -210,6 +211,28 @@ message ResponseGetTetherState {
   TetherState state = 2;
 }
 
+message RequestGetSwapState {
+  string address = 1;
+  repeated string keys = 2;
+  uint64 height = 3;
+}
+
+message ResponseGetSwapState {
+  StatusCode code = 1;
+  SwapState state = 2;
+}
+
+message RequestGetDelegateState {
+  string address = 1;
+  repeated string keys = 2;
+  uint64 height = 3;
+}
+
+message ResponseGetDelegateState {
+  StatusCode code = 1;
+  DelegateState state = 2;
+}
+
 // store_file(chunk): store a piece of data into ipfs, return its hash address
 message RequestStoreFile { bytes chunk = 1; }
 
@@ -309,12 +332,16 @@ message ResponseSubscribe {
     Transaction declare_file = 22;
     Transaction sys_upgrade = 23;
     Transaction stake = 24;
+    Transaction delegate = 25;
+    Transaction activate_protocol=26;
+    Transaction deactivate_protocol=27;
 
     AccountState account_state = 129;
     AssetState asset_state = 130;
     ForgeState forge_state = 131;
     StakeState stake_state = 132;
     ProtocolState protocol_state = 133;
+    DelegateState delegate_state = 134;
   }
 }
 
@@ -437,6 +464,19 @@ message ResponseListTethers {
   StatusCode code = 1;
   PageInfo page = 2;
   repeated TetherState tethers = 3;
+}
+
+message RequestListSwap {
+  PageInput paging = 1;
+  string sender = 2;
+  string receiver = 3;
+  bool available = 4;
+}
+
+message ResponseListSwap {
+  StatusCode code = 1;
+  PageInfo page = 2;
+  repeated SwapState swap = 3;
 }
 
 message RequestGetHealthStatus {}

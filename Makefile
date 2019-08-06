@@ -6,7 +6,7 @@ VERSION=$(strip $(shell cat version))
 PROTOS=enum rpc state service type trace_type tx
 PYTHON_TARGET=forge_sdk/protos
 CONFIGS=forge forge_release forge_test forge_default
-TX_PROTOS=account/account_migrate asset/consume_asset asset/create_asset asset/acquire_asset account/declare governance/deploy_protocol trade/exchange misc/poke stake/stake trade/transfer asset/update_asset governance/upgrade_node deprecated/declare_file trade/deposit_tether trade/approve_tether trade/exchange_tether trade/revoke_tether trade/withdraw_tether
+TX_PROTOS=account/account_migrate asset/consume_asset asset/create_asset asset/acquire_asset account/declare governance/deploy_protocol trade/exchange misc/poke stake/stake trade/transfer asset/update_asset governance/upgrade_node governance/deactivate_protocol governance/activate_protocol
 
 build:
 	@echo "Building the software..."
@@ -98,7 +98,7 @@ prepare-vendor-protos:
 	@curl --silent https://raw.githubusercontent.com/ArcBlock/ex-abci-proto/master/lib/protos/vendor.proto > ./$(PYTHON_TARGET)/raw_protos/vendor.proto
 	@echo "All protobuf files are fetched!"
 
-build-all-protos: #prepare-tx-protos prepare-vendor-protos
+build-all-protos:
 	@rm -r $(PYTHON_TARGET)/protos
 	@mkdir -p $(PYTHON_TARGET)/protos;mkdir -p $(PYTHON_TARGET)/raw_protos
 	@echo "Buiding all protobuf files..."

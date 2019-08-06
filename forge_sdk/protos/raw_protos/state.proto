@@ -19,6 +19,7 @@ message AccountState {
   string moniker = 7;
   StateContext context = 8;
   string issuer = 9;
+  BigUint gas_balance = 10;
 
   // the address that is being migrated. Once this is set this account state is
   // read only. No further tx can alter this account state. And tx with "from"
@@ -50,7 +51,8 @@ message AssetState {
   google.protobuf.Timestamp consumed_time = 7;
   // who issued the asset
   string issuer = 8;
-  // parent address for the asset state, e.g. a ticket is inherited from an event
+  // parent address for the asset state, e.g. a ticket is inherited from an
+  // event
   string parent = 9;
 
   // 10-12 is reserved
@@ -85,8 +87,7 @@ message ForgeState {
   StakeConfig stake_config = 10;
   PokeConfig poke_config = 11;
   repeated CoreProtocol protocols = 12;
-
-  // 12-13 is reserved for future
+  map<string, uint32> gas = 13;
   UpgradeInfo upgrade_info = 14;
 
   google.protobuf.Any data = 15; // forge app can define their own app state
@@ -163,4 +164,45 @@ message TetherState {
 message TetherInfo {
   bool available = 1;
   string hash = 2;
+}
+
+// TODO: [peiling] We have already defined this state in core protocols repo.
+// The only reason we define this state here again is because the protobuf
+// definition ResponseGetSwapState needs to reference to this SwapState.
+message SwapState {
+  string hash = 1;
+  string address = 2;
+  bytes hashkey = 3;
+  string sender = 4;
+  string receiver = 5;
+  BigUint value = 6;
+  repeated string assets = 7;
+  uint32 locktime = 8;
+  bytes hashlock = 9;
+  StateContext context = 10;
+}
+
+// a rule can check against the statistics values, e.g. state.num_txs < 10000,
+// state.balance_delta < 50000, delta is calculated based on the
+// configuration for interval.
+message DelegateOpState {
+  // all the individual rules in DelegateTx will be concat into one per type_url
+  // by "AND"
+  string rule = 1;
+
+  uint64 num_txs = 2;
+  uint64 num_txs_delta = 3;
+
+  BigUint balance = 4;
+  BigUint balance_delta = 5;
+}
+
+message DelegateState {
+  string address = 1;
+  map<string, DelegateOpState> ops = 2;
+
+  // state context, replace exiting fields
+  StateContext context = 14;
+  // forge app can extend this
+  google.protobuf.Any data = 15;
 }

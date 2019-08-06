@@ -63,6 +63,11 @@ message LastCommitInfo {
   repeated VoteInfo votes = 2;
 }
 
+message Event {
+  string type = 1;
+  repeated KVPair attributes = 2;
+}
+
 //----------------------------------------
 // Blockchain Types
 
@@ -257,7 +262,7 @@ message ResponseQuery {
   string codespace = 10;
 }
 
-message ResponseBeginBlock { repeated KVPair tags = 1; }
+message ResponseBeginBlock { repeated Event events = 1; }
 
 message ResponseCheckTx {
   uint32 code = 1;
@@ -266,7 +271,7 @@ message ResponseCheckTx {
   string info = 4; // nondeterministic
   int64 gas_wanted = 5;
   int64 gas_used = 6;
-  repeated KVPair tags = 7;
+  repeated Event events = 7;
   string codespace = 8;
 }
 
@@ -277,14 +282,14 @@ message ResponseDeliverTx {
   string info = 4; // nondeterministic
   int64 gas_wanted = 5;
   int64 gas_used = 6;
-  repeated KVPair tags = 7;
+  repeated Event events = 7;
   string codespace = 8;
 }
 
 message ResponseEndBlock {
   repeated ValidatorUpdate validator_updates = 1;
   ConsensusParams consensus_param_updates = 2;
-  repeated KVPair tags = 3;
+  repeated Event events = 3;
 }
 
 message ResponseCommit {
