@@ -2,6 +2,7 @@ import base64
 import json
 import logging
 from datetime import datetime
+from datetime import timezone
 
 from forge_sdk import utils
 from forge_sdk.did import lib
@@ -27,7 +28,7 @@ class AbtDid:
         Args:
             role_type(string): role type of this did instance, default is 'account'
             key_type(string): key type of this did instance, default is 'ed25519'
-            hash_type: hash type of this did instance, defualt is 'sha3'
+            hash_type: hash type of this did instance, default is 'sha3'
 
         Kwargs:
             encode(bool): if the calculated did address should be encoded.
@@ -258,7 +259,7 @@ class AbtDid:
             'eyJhbGciOiAiRWQyNTUxOSIsICJ0eXAiOiAiSldUIn0'
 
         """
-        now = round(datetime.utcnow().timestamp())
+        now = round(datetime.now(timezone.utc).timestamp())
         middle = lib.clean_dict({'iss': self.sk_to_did(sk),
                                  'iat': now,
                                  'nbf': now,

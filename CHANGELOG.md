@@ -1,3 +1,6 @@
+## 0.35.1 (August 08, 2019)
+  - Fix utc time conversion
+
 ## 0.35.0 (August 06, 2019)
   - Update tutorials
   - add protos for tx activation
