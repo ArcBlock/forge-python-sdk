@@ -13,9 +13,12 @@ We recommend installing through `pip`
 ```sh
 pip install forge-python-sdk
 ```
-::: warning
-This sdk supports python verison `>=3.6`.
-:::
+
+For developers:
+```sh
+pip install -r requirements.txt
+
+```
 
 ## Usage
 

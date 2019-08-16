@@ -2,8 +2,6 @@ base58
 ed25519
 grpcio
 grpcio-tools
-pre-commit
-pre-commit-hooks
 pysha3
 pystache
 pytest

@@ -19,3 +19,4 @@ test/protocols/ticket/beams/
 test/protocols/ticket/pipe/
 test/protocols/ticket/proto/
 test/protocols/ticket/ticket.itx.json
+.pre-commit-config.yaml

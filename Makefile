@@ -103,7 +103,7 @@ build-all-protos:
 	@mkdir -p $(PYTHON_TARGET)/protos;mkdir -p $(PYTHON_TARGET)/raw_protos
 	@echo "Buiding all protobuf files..."
 	@python -m grpc_tools.protoc -I ./$(PYTHON_TARGET)/raw_protos --python_out=./$(PYTHON_TARGET)/protos --grpc_python_out=./$(PYTHON_TARGET)/protos ./$(PYTHON_TARGET)/raw_protos/*.proto
-	@sed -i -E 's/^import.*_pb2/from . \0/' ./$(PYTHON_TARGET)/protos/*.py
+	@sed -i 's/^import.*_pb2/from . &/' ./$(PYTHON_TARGET)/protos/*.py
 	@echo "All protobuf files are built and ready to use!.."
 	@for filename in ./$(PYTHON_TARGET)/protos/*.py; do \
 	 echo "from forge_sdk.protos.protos.$$(basename $$filename .py) import *" >>$(PYTHON_TARGET)/protos/__init__.py; \
