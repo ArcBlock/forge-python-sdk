@@ -3,8 +3,9 @@ import math
 from functools import reduce
 
 from forge_sdk import protos
+import logging
 
-token_decimal = (10 ** int(16))
+logger = logging.getLogger('utils-conversion')
 
 
 def int_to_bytes(n):
@@ -73,32 +74,6 @@ def int_to_biguint(n):
 def int_to_bigsint(n, minus=False):
     return protos.BigSint(value=int_to_bytes(n),
                           minus=minus)
-
-
-def value_to_biguint(value):
-    r"""
-    Convert token to smallest unit, then to bigUint
-
-    Args:
-        value(num): token value
-
-    Returns:
-        :obj:`BigUint`
-
-    Examples:
-        >>> value_to_biguint(1)
-        value: "#\206\362o\301\000\000"
-
-    """
-    return int_to_biguint(int(value * token_decimal))
-
-
-def to_unit(token):
-    return int(token * token_decimal)
-
-
-def from_unit(unit):
-    return int(unit / token_decimal)
 
 
 def biguint_to_int(biguint):

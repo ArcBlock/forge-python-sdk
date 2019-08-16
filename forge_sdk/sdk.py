@@ -24,9 +24,18 @@ class ForgeConn:
         self.config = self._get_config()
         self.rpc.__setattr__('chain_id', self.config.chain_id)
 
+        self.token_decimal = self.config.decimal
+        self.symbol = self.config.symbol
+
     def _connect_rpc(self):
         return ForgeRpc(self.channel)
 
     def _get_config(self):
         config = self.rpc.get_config().config
         return ForgeConfig(json.loads(config))
+
+    def to_unit(self, token):
+        return int(token * (10 ** int(self.token_decimal)))
+
+    def from_unit(self, unit):
+        return int(unit / (10 ** int(self.token_decimal)))

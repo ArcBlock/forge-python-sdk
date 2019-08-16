@@ -20,7 +20,7 @@ create_env:
 	@pip install virtualenvwrapper
 	( \
 		source /usr/local/bin/virtualenvwrapper.sh; \
-		mkvirtualenv forge-python-sdk; \
+		mkvirtualenv -p python3 forge-sdk; \
 		pip install -r requirements.txt; \
 		pre-commit install; \
 	)
@@ -30,18 +30,6 @@ add_precommit_hook:
 
 travis-init:
 	@echo "Initialize software required for travis (normally ubuntu software)"
-
-install:
-	@echo "Install software required for this repo..."
-
-dep:
-	@echo "Install dependencies required for this repo..."
-
-pre-build: install dep
-	@echo "Running scripts before the build..."
-
-post-build:
-	@echo "Running scripts after the build is done..."
 
 all: pre-build build post-build
 
@@ -61,24 +49,6 @@ travis: precommit
 
 travis-deploy: release
 	@echo "Deploy the software by travis"
-
-clean:
-	@echo "Cleaning the build..."
-
-watch:
-	@make build
-	@echo "Watching templates and slides changes..."
-	@fswatch -o src/ | xargs -n1 -I{} make build
-
-run:
-	@echo "Running the software..."
-
-fetch-configs:
-	@mkdir -p ./configs
-	@echo "Fetching latest configs from Forge..."
-	@$(foreach config, $(CONFIGS), curl --silent https://$(GITHUB_TOKEN)@raw.githubusercontent.com/ArcBlock/forge-elixir-sdk/master/priv/$(config).toml > ./configs/$(config).toml;)
-	@curl --silent https://$(GITHUB_TOKEN)@raw.githubusercontent.com/ArcBlock/forge-elixir-sdk/master/priv/forge_default.toml> ./forge/config/forge_default.toml
-	@echo "All config files are fetched and updated!"
 
 prepare-tx-protos:
 	@echo "Preparing tx protobuf..."
@@ -108,7 +78,6 @@ build-all-protos:
 	@for filename in ./$(PYTHON_TARGET)/protos/*.py; do \
 	 echo "from forge_sdk.protos.protos.$$(basename $$filename .py) import *" >>$(PYTHON_TARGET)/protos/__init__.py; \
 	 done
-
 
 clean-pypi-build:
 	@rm -rf build
