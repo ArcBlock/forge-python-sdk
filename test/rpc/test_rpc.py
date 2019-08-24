@@ -49,6 +49,13 @@ class RpcTest(unittest.TestCase):
             print(i)
 
     @validate_response
+    def test_get_blocks(self):
+        args = {"from": 2, "to": 5}
+        range_filter = protos.RangeFilter(**args)
+        return rpc.get_blocks(height_filter=range_filter,
+                             empty_excluded = True)
+
+    @validate_response
     def test_send_tx(self):
         kwargs = {
             'itx': self.trans_itx,
