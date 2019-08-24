@@ -1,3 +1,7 @@
+## 0.36.0 (August 24, 2019)
+  - make rpc all under rpc module
+  - support deploy protocols
+
 ## 0.35.1 (August 08, 2019)
   - Fix utc time conversion
 

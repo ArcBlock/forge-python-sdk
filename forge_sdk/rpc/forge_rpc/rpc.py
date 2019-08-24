@@ -3,8 +3,6 @@ import logging
 import random
 
 import pystache
-from google.protobuf.any_pb2 import Any
-
 from forge_sdk import did
 from forge_sdk import utils
 from forge_sdk.protos import protos
@@ -14,6 +12,7 @@ from forge_sdk.rpc.forge_rpc.file import ForgeFileRpc
 from forge_sdk.rpc.forge_rpc.state import ForgeStateRpc
 from forge_sdk.rpc.forge_rpc.statistic import ForgeStatsRpc
 from forge_sdk.rpc.forge_rpc.wallet import ForgeWalletRpc
+from google.protobuf.any_pb2 import Any
 
 logger = logging.getLogger('rpc')
 
@@ -29,11 +28,45 @@ class ForgeRpc:
         self.stats_rpc = ForgeStatsRpc(channel)
         self.wallet_rpc = ForgeWalletRpc(channel)
 
-    def __getattr__(self, item):
-        for stub in [self.chain_rpc, self.event_rpc, self.file_rpc,
-                     self.state_rpc, self.stats_rpc, self.wallet_rpc]:
-            if hasattr(stub, item):
-                return getattr(stub, item)
+        self.create_tx = self.chain_rpc.create_tx
+        self.send_tx = self.chain_rpc.send_tx
+        self.get_tx = self.chain_rpc.get_tx
+        self.get_block = self.chain_rpc.get_block
+        self.search = self.chain_rpc.search
+        self.get_unconfirmed_tx = self.chain_rpc.get_unconfirmed_tx
+        self.get_chain_info = self.chain_rpc.get_chain_info
+        self.get_net_info = self.chain_rpc.get_net_info
+        self.get_validators_info = self.chain_rpc.get_validators_info
+        self.get_config = self.chain_rpc.get_config
+        self.multisig = self.chain_rpc.multisig
+        self.get_blocks = self.chain_rpc.get_blocks
+        self.get_node_info = self.chain_rpc.get_node_info
+
+        self.subscribe = self.event_rpc.subscribe
+        self.unsubscribe = self.event_rpc.unsubscribe
+
+        self.get_account_state = self.state_rpc.get_account_state
+        self.get_asset_state = self.state_rpc.get_asset_state
+        self.get_stake_state = self.state_rpc.get_stake_state
+        self.get_tether_state = self.state_rpc.get_tether_state
+        self.get_forge_state = self.state_rpc.get_forge_state
+        self.get_forge_token = self.state_rpc.get_forge_token
+
+        self.get_forge_stats = self.stats_rpc.get_forge_stats
+        self.list_assets = self.stats_rpc.list_assets
+        self.list_stakes = self.stats_rpc.list_stakes
+        self.list_top_accounts = self.stats_rpc.list_top_accounts
+        self.list_blocks = self.stats_rpc.list_blocks
+        self.get_health_status = self.stats_rpc.get_health_status
+        self.list_asset_transactions = self.stats_rpc.list_asset_transactions
+        self.list_transactions = self.stats_rpc.list_transactions
+        self.list_tethers = self.stats_rpc.list_tethers
+
+        self.create_wallet = self.wallet_rpc.create_wallet
+        self.load_wallet = self.wallet_rpc.load_wallet
+        self.recover_wallet = self.wallet_rpc.recover_wallet
+        self.remove_wallet = self.wallet_rpc.remove_wallet
+        self.declare_node = self.wallet_rpc.declare_node
 
     def get_single_account_state(self, address):
         """
@@ -115,7 +148,7 @@ class ForgeRpc:
         """
 
         encoded_itx = utils.encode_to_any(type_url, itx) if (
-            type_url and not isinstance(itx, Any)) else itx
+                type_url and not isinstance(itx, Any)) else itx
 
         if utils.is_sk_included(wallet) and not token:
             return utils.build_signed_tx_local(itx=encoded_itx,
@@ -231,9 +264,9 @@ class ForgeRpc:
                                            encoded=False, **kwargs)
 
         tx = self.build_signed_tx(
-            itx=utils.encode_to_any('fg:t:create_asset', itx),
-            wallet=wallet,
-            token=token)
+                itx=utils.encode_to_any('fg:t:create_asset', itx),
+                wallet=wallet,
+                token=token)
 
         res = self.chain_rpc.send_tx(tx)
 
@@ -266,15 +299,15 @@ class ForgeRpc:
 
         encoded_asset = utils.encode_to_any(type_url, asset)
         update_asset_itx = utils.encode_to_any(
-            type_url='fg:t:update_asset',
-            data=protos.UpdateAssetTx(
-                address=address,
-                data=encoded_asset,
-            ),
+                type_url='fg:t:update_asset',
+                data=protos.UpdateAssetTx(
+                        address=address,
+                        data=encoded_asset,
+                ),
         )
         tx = self.build_signed_tx(
-            itx=update_asset_itx,
-            wallet=wallet, token=token,
+                itx=update_asset_itx,
+                wallet=wallet, token=token,
         )
         return self.chain_rpc.send_tx(tx.tx)
 
@@ -295,8 +328,8 @@ class ForgeRpc:
         """
         type_url = 'fg:t:exchange'
         tx = self.build_signed_tx(
-            itx=utils.encode_to_any(type_url, exchange_tx),
-            wallet=wallet, token=token)
+                itx=utils.encode_to_any(type_url, exchange_tx),
+                wallet=wallet, token=token)
         return tx
 
     def finalize_exchange(self, tx, wallet, token=None, data=None):
@@ -385,7 +418,7 @@ class ForgeRpc:
         """
         type_url = 'fg:t:consume_asset'
         tx = self.build_signed_tx(utils.encode_to_any(
-            type_url, consume_asset_tx), wallet, token)
+                type_url, consume_asset_tx), wallet, token)
         return tx
 
     def finalize_consume_asset(self, tx, wallet, token=None, data=None):
@@ -462,22 +495,22 @@ class ForgeRpc:
         """
         if kwargs.get('type_url') and kwargs.get('data_value'):
             data = utils.encode_to_any(kwargs.get(
-                'type_url'), kwargs.get('data_value'))
+                    'type_url'), kwargs.get('data_value'))
         else:
             data = None
 
         factory = protos.AssetFactory(
-            description=description,
-            limit=int(kwargs.get('limit')),
-            price=utils.value_to_biguint(int(price)),
-            allowed_spec_args=allowed_spec_args,
-            asset_name=asset_name,
-            template=template,
-            attributes=protos.AssetAttributes(
-                transferrable=kwargs.get('transferrable', True),
-                ttl=kwargs.get('ttl', 7200)
-            ),
-            data=data,
+                description=description,
+                limit=int(kwargs.get('limit')),
+                price=utils.value_to_biguint(int(price)),
+                allowed_spec_args=allowed_spec_args,
+                asset_name=asset_name,
+                template=template,
+                attributes=protos.AssetAttributes(
+                        transferrable=kwargs.get('transferrable', True),
+                        ttl=kwargs.get('ttl', 7200)
+                ),
+                data=data,
         )
 
         return factory
@@ -541,7 +574,7 @@ class ForgeRpc:
         state = self.get_single_asset_state(address)
         if not state:
             logger.error(
-                f"AssetFactory with address {address} does not exist.")
+                    f"AssetFactory with address {address} does not exist.")
             return None
         elif state.data.type_url != 'fg:s:asset_factory_state':
             logger.error(f"{address} is not an address for asset factory.")
@@ -561,14 +594,14 @@ class ForgeRpc:
         # apply specs to create new params
         try:
             asset_params = json.loads(pystache.render(
-                factory_state.template, spec_data))
+                    factory_state.template, spec_data))
             asset_proto = getattr(proto_lib, factory_state.asset_name)
             asset = asset_proto(**asset_params)
         except Exception as e:
             logger.error(
-                f"Provided spec data can't be parsed   with factory "
-                f"template "
-                f"{factory_state.template}")
+                    f"Provided spec data can't be parsed   with factory "
+                    f"template "
+                    f"{factory_state.template}")
             return None
 
         # apply params to createAssetTx and calculate address
@@ -605,23 +638,23 @@ class ForgeRpc:
 
         """
         tx = self.build_signed_tx(
-            itx=tx,
-            wallet=wallet,
-            token=token,
-            nonce=nonce,
-            type_url=type_url,
+                itx=tx,
+                wallet=wallet,
+                token=token,
+                nonce=nonce,
+                type_url=type_url,
         )
         return self.chain_rpc.send_tx(tx)
 
     def stake_for_node(self, to, value, wallet, token=None, message=None):
         stake_address = did.get_stake_address(wallet.address, to)
         stake_itx = protos.StakeTx(
-            to=to,
-            value=utils.int_to_bigsint(value),
-            message=message,
-            address=stake_address,
-            data=utils.encode_to_any('fg:x:stake_node',
-                                     protos.StakeForNode())
+                to=to,
+                value=utils.int_to_bigsint(value),
+                message=message,
+                address=stake_address,
+                data=utils.encode_to_any('fg:x:stake_node',
+                                         protos.StakeForNode())
         )
         tx = self.build_signed_tx(type_url='fg:t:stake',
                                   itx=stake_itx,
@@ -653,6 +686,7 @@ class ForgeRpc:
         itx = utils.build_poke_itx()
         return self.send_itx(tx=itx, wallet=wallet, token=token, nonce=0)
 
-    def transfer(self, wallet, to, value=None, assets=None, data=None, token=None):
+    def transfer(self, wallet, to, value=None, assets=None, data=None,
+                 token=None):
         itx = utils.build_transfer_itx(to, value, assets, data)
         return self.send_itx(tx=itx, wallet=wallet, token=token)
