@@ -52,16 +52,18 @@ def build_claims(claims, **kwargs):
         'url': kwargs.get('url'),
         'action': kwargs.get('action'),
         'appInfo': {
+            'description': kwargs.get('app_description', "forge-python-app"),
+            'icon': kwargs.get('app_icon'),
+            'name': kwargs.get('app_name'),
+            'subtitle': kwargs.get('app_subtitle'),
+        },
+        'chainInfo': {
             'chainHost': kwargs.get('chain_host'),
             'chainId': kwargs.get('chain_id'),
-            'chainVersion': kwargs.get('chain_version'),
             'chain_token': kwargs.get('token_symbol'),
+            'chainVersion': kwargs.get('chain_version'),
             'decimals': kwargs.get('decimals'),
-            'description': kwargs.get('app_description', "forge-python-app"),
-            'icon': kwargs.get('app_icon', "http://eventchain.arcblock.co:5000/static/images"
-                               "/eventchain_h_2.png"),
-            'name': kwargs.get('app_name', 'forge-python-app'),
-            'subtitle': kwargs.get('app_subtitle', 'This is a decentralized application'),
+
         },
         'requestedClaims': claims,
         'workflow': {

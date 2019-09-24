@@ -1,3 +1,9 @@
+## 0.37.0 (September 24, 2019)
+
+
+## 0.37.0 (September 24, 2019)
+  - Add chain_info
+
 ## 0.36.0 (August 24, 2019)
   - make rpc all under rpc module
   - support deploy protocols
