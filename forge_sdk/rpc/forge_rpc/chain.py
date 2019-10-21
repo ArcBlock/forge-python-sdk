@@ -184,7 +184,7 @@ class ForgeChainRpc:
         request = protos.RequestGetConfig(parsed=parsed)
         return self.stub.get_config(request)
 
-    def multisig(self, tx, wallet=None, token=None, data=None):
+    def multisig(self, tx, wallet=None, token=None, data=None, delegatee=None):
         """GRPC call to get multi-signature of a transaction. When executing
         this
         transactions, Forge will insert the address to `signatures` field as
@@ -203,8 +203,9 @@ class ForgeChainRpc:
 
         """
         request = protos.RequestMultisig(
-            tx=tx, wallet=wallet, token=token,
-            data=data,
+                tx=tx, wallet=wallet, token=token,
+                data=data,
+                delegatee=delegatee,
         )
         return self.stub.multisig(request).tx
 
@@ -223,9 +224,9 @@ class ForgeChainRpc:
 
         """
         request = protos.RequestGetBlocks(
-            height_filter=height_filter,
-            paging=paging,
-            empty_excluded=empty_excluded
+                height_filter=height_filter,
+                paging=paging,
+                empty_excluded=empty_excluded
         )
         return self.stub.get_blocks(request)
 

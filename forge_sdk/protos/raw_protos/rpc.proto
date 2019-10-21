@@ -335,6 +335,11 @@ message ResponseSubscribe {
     Transaction delegate = 25;
     Transaction activate_protocol=26;
     Transaction deactivate_protocol=27;
+    Transaction revoke_delegate=28;
+    Transaction deposit_token=29;
+    Transaction withdraw_token=30;
+    Transaction approve_withdraw=31;
+    Transaction revoke_withdraw=32;
 
     AccountState account_state = 129;
     AssetState asset_state = 130;

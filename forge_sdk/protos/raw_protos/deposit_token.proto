@@ -1,0 +1,10 @@
+syntax = "proto3";
+package forge_abi;
+
+import "type.proto";
+
+message DepositTokenTx {
+  BigUint value = 1;     // how many units to issue
+  string address = 2;    // address of the controlled account on Forge
+  Evidence evidence = 3; // the evidence of the original transaction
+}

@@ -28,7 +28,7 @@ message AccountState {
   repeated string migrated_from = 14;
 
   uint64 num_assets = 15;
-  // 16-49 reserve for future
+
 
   StakeContext stake = 16;
   CircularQueue pinned_files = 17;
@@ -36,6 +36,9 @@ message AccountState {
   // The current deposit this account has received. It cannot exceed the deposit
   // cap.
   BigUint deposit_received = 19;
+
+  CircularQueue withdraw_items = 20;
+  // 20-49 reserve for future
 
   google.protobuf.Any data = 50;
 }
@@ -80,17 +83,22 @@ message ForgeState {
   // string data_version = 6; current data version deprecated
 
   // app state returned by forge app
-  bytes forge_app_hash = 7;
+  // bytes forge_app_hash = 7; deprecated
 
   ForgeToken token = 8;
   TransactionConfig tx_config = 9;
-  StakeConfig stake_config = 10;
-  PokeConfig poke_config = 11;
+  // StakeConfig stake_config = 10; deprecated
+  // PokeConfig poke_config = 11; deprecated
   repeated CoreProtocol protocols = 12;
   map<string, uint32> gas = 13;
   UpgradeInfo upgrade_info = 14;
 
-  google.protobuf.Any data = 15; // forge app can define their own app state
+  // google.protobuf.Any data = 15; // deprecated
+
+  map<string, AccountConfig> account_config = 16;
+  TokenSwapConfig token_swap_config = 17;
+
+  google.protobuf.Any data = 2047; // forge app can define their own app state
 }
 
 // keep a list of state root for different dbs (column families).

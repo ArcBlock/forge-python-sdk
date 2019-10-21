@@ -21,7 +21,8 @@ class AbtDid:
 
     def __init__(self, role_type='account',
                  key_type='ed25519',
-                 hash_type='sha3', **kwargs):
+                 hash_type='sha3',
+                 **kwargs):
         """
         Initialize an AbtDid Instance.
 
@@ -46,7 +47,7 @@ class AbtDid:
 
         self.hash_type = hash_type
         assert (hash_type in HASH_MAP.keys())
-        self.hasher = Hasher(name=hash_type, round=kwargs.get('round'))
+        self.hasher = Hasher(name=hash_type, rd=kwargs.get('rd'))
 
         self.encode = kwargs.get('encode', True)
         self.form = kwargs.get('form', 'long')
@@ -63,7 +64,7 @@ class AbtDid:
         return sk, pk, self.sk_to_did(sk)
 
     @staticmethod
-    def parse_type_from_did(did, round=None):
+    def parse_type_from_did(did, rd=None):
         """
         Parse the correct DID type used in provided did address
         Args:
@@ -85,7 +86,7 @@ class AbtDid:
             did = did.lstrip(AbtDid.PREFIX)
             decoded = utils.multibase_b58decode(did)
             type_bytes = decoded[0:2]
-            return AbtDid._bytes_to_type(type_bytes, round=round)
+            return AbtDid._bytes_to_type(type_bytes, rd=rd)
         except Exception as e:
             logger.error('Fail to parse type from given did {}'.format(did))
             logger.error(e, exc_info=True)
@@ -150,7 +151,7 @@ class AbtDid:
             return encoded_did
 
     @staticmethod
-    def is_match_pk(did, pk, round=None):
+    def is_match_pk(did, pk, rd=None):
         """
         check if the provided did is calculated from provided public key
 
@@ -174,7 +175,7 @@ class AbtDid:
         try:
             decoded = utils.multibase_b58decode(did)
             type_bytes = decoded[0:2]
-            did_type = AbtDid._bytes_to_type(type_bytes, round=round)
+            did_type = AbtDid._bytes_to_type(type_bytes, rd=rd)
             if did == did_type.pk_to_did(pk).lstrip(AbtDid.PREFIX):
                 return True
             return False
@@ -184,7 +185,7 @@ class AbtDid:
             return False
 
     @staticmethod
-    def is_valid(did, round=None):
+    def is_valid(did, rd=None):
         """
         Check is the provided DID address valid
 
@@ -208,7 +209,7 @@ class AbtDid:
             pk_hash = decoded[2:22]
             actual_check_sum = decoded[22:26]
 
-            did_type = AbtDid._bytes_to_type(type_bytes, round=round)
+            did_type = AbtDid._bytes_to_type(type_bytes, rd=rd)
             expectued_check_sum = did_type.hasher.hash(type_bytes + pk_hash)[
                 0:4]
             if actual_check_sum == expectued_check_sum:
@@ -229,7 +230,7 @@ class AbtDid:
         return first_byte + second_byte
 
     @staticmethod
-    def _bytes_to_type(input_bytes, round):
+    def _bytes_to_type(input_bytes, rd):
         bits = bin(utils.bytes_to_int(input_bytes) | 65536)[3:]
         role_type = lib.get_did_type_key(ROLE_MAP, bits[0:6])
         key_type = lib.get_did_type_key(KEY_MAP, bits[6:11])
@@ -238,7 +239,7 @@ class AbtDid:
         return AbtDid(role_type=role_type,
                       key_type=key_type,
                       hash_type=hash_type,
-                      round=round)
+                      rd=rd)
 
     def gen_and_sign(self, sk, extra):
         """

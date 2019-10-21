@@ -179,6 +179,8 @@ message TransactionConfig {
   uint64 minimum_stake = 4;
   DeclareConfig declare = 5;
   DelegateConfig delegate = 6;
+  PokeConfig poke = 7;
+  StakeConfig stake = 8;
 }
 
 message BlockInfo {
@@ -383,13 +385,41 @@ message PokeInfo {
 }
 
 message PokeConfig {
-  string address = 1;
+  // string address = 1; deprecated
   uint64 daily_limit = 2;
-  uint64 balance = 3;
+  // uint64 balance = 3; deprecated
   uint64 amount = 4;
+  bool enabled = 5;
 }
 
 message UpgradeInfo {
   uint64 height = 1;
   string version = 2;
+}
+
+message WithdrawItem{
+  string hash = 1;
+  BigUint value = 2;
+}
+
+message AccountConfig {
+  string address = 1;
+  bytes pk = 2;
+  BigUint balance = 3;
+}
+
+message TokenSwapConfig {
+  string commission_holder_address = 1;
+  uint32 withdraw_interval = 2;
+  BigUint commission = 3;
+  uint32 commission_rate = 4;
+  uint32 revoke_commission = 5;
+}
+
+message Evidence {
+  string hash = 1;        // tx hash from a foreign chain
+  string chain_type = 2;  // type of the chain, currently only "eth"
+  string chain_id = 3;    // chain id of the chain. Could be testnet or mainnet.
+  bytes original_tx = 4;  // the binary for the original tx
+  string receiver_address = 5; // the address of the receiver (can only be controlled account)
 }

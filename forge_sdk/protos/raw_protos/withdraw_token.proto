@@ -1,0 +1,13 @@
+syntax = "proto3";
+package forge_abi;
+
+import "type.proto";
+import "google/protobuf/timestamp.proto";
+
+message WithdrawTokenTx {
+  BigUint value = 1;      // how many units to revokes
+  string to = 2;					// foreign address to withdraw token to.
+  string chain_type = 3;  // type of the chain currently only "eth"
+  string chain_id = 4;    // chain id of the chain. Could be testnet or mainnet.
+  google.protobuf.Timestamp ttl = 5;   // the time that a withdraw token tx would expire so user can unlock her tokens from intermediate state
+}

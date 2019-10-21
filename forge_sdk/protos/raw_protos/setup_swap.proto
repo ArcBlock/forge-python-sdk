@@ -1,0 +1,22 @@
+syntax = "proto3";
+package forge_abi;
+
+import "google/protobuf/any.proto";
+import "type.proto";
+
+message SetupSwapTx {
+  // The amount of token to swap.
+  BigUint value = 1;
+  // The addresses of assets to swap.
+  repeated string assets = 2;
+  // The address of the receiver who is the only one allowed to get the token and assets locktime.
+  string receiver = 3;
+  // The sha3 value of the random number.
+  bytes hashlock = 4;
+  // The height of the block before which the swap is locked.
+  uint32 locktime = 5;
+
+  // forge won't touch this field. Only forge app shall handle it.
+  google.protobuf.Any data = 15;
+}
+

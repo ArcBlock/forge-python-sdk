@@ -18,6 +18,8 @@ ROLE_MAP = {
     'group': 9,
     'tx': 10,
     'tether': 11,
+    'swap': 12,
+    'delegate': 13,
     'any': 63,
 }
 

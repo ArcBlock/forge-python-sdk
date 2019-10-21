@@ -24,15 +24,15 @@ class Hasher:
     sizes = [224, 256, 384, 512]
     types = ['sha2', 'sha3', 'keccak']
 
-    def __init__(self, name, round=None):
+    def __init__(self, name, rd=None):
         self.name = name
         self.supported_hash = [t + '_' + str(z) for t in Hasher.types
                                for z in Hasher.sizes] + Hasher.types
 
-        if is_sha2(name) and not round:
-            self.round = 2
+        if is_sha2(name) and not rd:
+            self.rd = 2
         else:
-            self.round = round if round else 1
+            self.rd = rd if rd else 1
 
     def is_supported(self, name):
         if name in self.supported_hash:
@@ -62,7 +62,7 @@ class Hasher:
 
         """
         res = data_bytes
-        for i in range(0, self.round):
+        for i in range(0, self.rd):
             hash_helper = self.init_hasher(self.name)
             hash_helper.update(res)
             res = hash_helper.digest()

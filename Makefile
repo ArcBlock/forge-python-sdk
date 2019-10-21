@@ -3,10 +3,21 @@ ENV=~/.envs
 README=$(TOP_DIR)/README.md
 
 VERSION=$(strip $(shell cat version))
-PROTOS=enum rpc state service type trace_type tx
+
 PYTHON_TARGET=forge_sdk/protos
-CONFIGS=forge forge_release forge_test forge_default
-TX_PROTOS=account/account_migrate asset/consume_asset asset/create_asset asset/acquire_asset account/declare governance/deploy_protocol trade/exchange misc/poke stake/stake trade/transfer asset/update_asset governance/upgrade_node governance/deactivate_protocol governance/activate_protocol
+
+PROTOS=enum rpc state service type trace_type tx
+ACCOUNT = account/account_migrate account/delegate account/revoke_delegate account/declare
+ASSET = asset/create_asset asset/consume_asset asset/acquire_asset asset/update_asset
+GOVERNANCE=governance/deploy_protocol governance/activate_protocol governance/deactivate_protocol governance/upgrade_node
+TOKEN=token/deposit_token token/withdraw_token token/approve_withdraw token/revoke_withdraw
+TRADE=trade/transfer trade/exchange
+MISC=misc/poke
+SWAP=swap/setup_swap swap/retrieve_swap swap/revoke_swap
+TX_PROTOS = $(ACCOUNT) $(ASSET) $(GOVERNANCE) $(TOKEN) $(TRADE) $(MISC) $(SWAP)
+
+test1:
+	@echo $(TX_PROTOS)
 
 build:
 	@echo "Building the software..."
@@ -33,9 +44,15 @@ travis-init:
 
 all: pre-build build post-build
 
+test-forge:
+	@echo "Running test suites..."
+	@python -m pytest test/rpc
+
 test:
 	@echo "Running test suites..."
-	@python -m pytest test/unittests
+	@python -m pytest test/mcrypto
+
+test-all: test test-forge
 
 lint:
 	@echo "Linting the software..."
@@ -94,8 +111,6 @@ upload-pypi:
 
 pypi: package-pypi upload-pypi clean-pypi-build
 
-test-cov:
-	@pytest --cov=forge/mcrypto --cov=forge/rpc --cov=forge/did test/
 
 include .makefiles/*.mk
 

@@ -1,0 +1,9 @@
+syntax = "proto3";
+package forge_abi;
+
+import "type.proto";
+
+message ApproveWithdrawTx {
+  string withdraw_tx_hash = 1;  // the hash of withdraw tx
+  Evidence evidence = 2;        // the evidence of the original transaction that transferred the token back
+}

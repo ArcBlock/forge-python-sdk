@@ -1,6 +1,7 @@
 syntax = "proto3";
 package forge_abi;
 
+import "google/protobuf/any.proto";
 import "type.proto";
 import "enum.proto";
 
@@ -79,6 +80,13 @@ message IndexedAssetState {
   string renaissance_time = 4;
   string moniker = 5;
   bool readonly = 6;
+  string consumed_time = 7;
+  string issuer = 8;
+  string parent = 9;
+  bool transferrable = 10;
+  uint64 ttl = 11;
+
+  google.protobuf.Any data = 50;
 }
 
 message IndexedStakeState {

@@ -1,4 +1,0 @@
-syntax = "proto3";
-package forge_abi;
-
-message DeclareFileTx { string hash = 1; }

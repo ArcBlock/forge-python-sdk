@@ -1,0 +1,21 @@
+syntax = "proto3";
+package forge_abi;
+
+import "google/protobuf/any.proto";
+
+message DelegateTx {
+  string address = 1; // address of the delegation between sender and receiver
+  string to = 2;      // delegatee's address
+  repeated DelegateOp ops = 3; // a list of operations permitted
+
+  google.protobuf.Any data = 15;
+}
+
+// if rules are empty, signature for this type_url is entirely delegated
+// otherwise rules are checked one by one, relationship between rules is AND.
+// a rule is an expression defined in rule_parser
+// (github.com/arcblock/rule-parser) one can setup
+message DelegateOp {
+  string type_url = 1;
+  repeated string rules = 2;
+}
