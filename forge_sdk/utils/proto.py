@@ -153,7 +153,9 @@ def is_proto_empty(proto_message):
 
 def proto_time(time):
     t = Timestamp()
-    if isinstance(time, datetime):
+    if not time:
+        return
+    elif isinstance(time, datetime):
         return t.FromDatetime(time)
     elif isinstance(time, int):
         return t.FromSeconds(time)

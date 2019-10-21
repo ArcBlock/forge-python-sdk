@@ -1,3 +1,7 @@
+## 0.38.1 (October 21, 2019)
+  - fix generating random nonce
+  - Add test for multisign delegator
+
 ## 0.38.0 (October 20, 2019)
 
 

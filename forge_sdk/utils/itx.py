@@ -70,9 +70,12 @@ def account_migrate_itx(address, pk, **kwargs):
 
 
 def delegate_itx(to, **kwargs):
+    ops = kwargs.get('ops')
+    if ops and not isinstance(ops, list):
+        ops = list(ops)
     itx = protos.DelegateTx(
             to=to,
-            ops=kwargs.get('ops'),
+            ops=ops,
             data=kwargs.get('data')
     )
     sender = kwargs.get('wallet').address

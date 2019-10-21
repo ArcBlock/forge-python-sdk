@@ -10,7 +10,6 @@ from forge_sdk.rpc.forge_rpc.statistic import ForgeStatsRpc
 
 logger = logging.getLogger('helper-rpc')
 
-RANDOM_NONCE = random.randint(1, 10000)
 
 class ForgeRpcHelper:
 
@@ -117,13 +116,14 @@ class ForgeRpcHelper:
                 return asset.state
 
     def build_unsigned_tx(self, itx, wallet, **kwargs):
+        random_nonce = random.randint(1, 10000)
         if not isinstance(itx, Any):
             itx = utils.to_any(itx)
         delegatee = kwargs.get('delegatee')
         params = {
             'from': delegatee if delegatee else wallet.address,
             'delegator': wallet.address if delegatee else None,
-            'nonce': kwargs.get('nonce', RANDOM_NONCE),
+            'nonce': kwargs.get('nonce', random_nonce),
             'chain_id': self.chain_id,
             'pk': wallet.pk,
             'itx': itx,

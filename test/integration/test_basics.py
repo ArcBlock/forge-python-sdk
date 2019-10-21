@@ -4,25 +4,12 @@ from uuid import uuid4
 
 from forge_sdk import utils
 from test.integration import forge
+from . import lib
 
 
-def create_users():
-    w1 = forge.create_wallet(moniker="alice", passphrase='abcd1234')
-    w2 = forge.create_wallet(moniker="bobby", passphrase='abcd1234')
-    return w1.wallet, w2.wallet
-
-
-def create_asset(owner):
-    old_laptop = json.dumps({'name': 'old laptop', 'serial': str(uuid4())})
-    data = utils.to_any(old_laptop)
-    res, addr = forge.create_asset(data=data, wallet=owner)
-    assert res.code == 0
-    return addr
-
-
-w1, w2 = create_users()
-asset1 = create_asset(w1)
-asset2 = create_asset(w1)
+w1, w2, w3 = lib.create_users()
+asset1 = lib.create_asset(w1)
+asset2 = lib.create_asset(w1)
 value = forge.to_unit(55)
 
 sleep(5)
