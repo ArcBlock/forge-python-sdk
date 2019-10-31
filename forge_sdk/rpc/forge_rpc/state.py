@@ -18,12 +18,12 @@ class ForgeStateRpc:
 
         """
 
-        def to_req(item):
-            kwargs = {
-                'address': item.get('address'),
-                'keys': item.get('keys', []),
-            }
-            return protos.RequestGetAccountState(**kwargs)
+        def to_req(query):
+            return protos.RequestGetAccountState(
+                    address=query.get('address'),
+                    keys=query.get('keys'),
+                    height=query.get('height')
+            )
 
         requests = lib.to_iter(to_req, queries)
 
@@ -39,19 +39,39 @@ class ForgeStateRpc:
             ResponseGetAssetState(stream)
         """
 
-        def to_req(item):
-            kwargs = {
-                'address': item.get('address'),
-                'keys': item.get('keys', []),
-            }
-            req = protos.RequestGetAssetState(**kwargs)
-            return req
+        def to_req(query):
+            return protos.RequestGetAssetState(
+                    address=query.get('address'),
+                    keys=query.get('keys'),
+                    height=query.get('height'),
+            )
 
         requests = lib.to_iter(to_req, queries)
 
         return self.stub.get_asset_state(requests)
 
-    def get_stake_state(self, queries):
+    def get_protocol_state(self, queries):
+        """GRPC call to get detailed of asset
+
+        Args:
+            queries(dict): dictionaries of requested parameters
+
+        Returns:
+            ResponseGetAssetState(stream)
+        """
+
+        def to_req(query):
+            return protos.RequestGetProtocolState(
+                    address=query.get('address'),
+                    keys=query.get('keys'),
+                    height=query.get('height'),
+            )
+
+        requests = lib.to_iter(to_req, queries)
+
+        return self.stub.get_protocol_state(requests)
+
+    def get_delegate_state(self, queries):
         """GRPC call to get detailed of stake
 
         Args:
@@ -62,18 +82,17 @@ class ForgeStateRpc:
 
         """
 
-        def to_req(items):
-            kwargs = {
-                'address': items.get('address'),
-                'keys': items.get('keys', []),
-                'height': items.get('height'),
-            }
-            return protos.RequestGetStakeState(**kwargs)
+        def to_req(query):
+            return protos.RequestGetDelegateState(
+                    address=query.get('address'),
+                    keys=query.get('keys'),
+                    height=query.get('height'),
+            )
 
         requests = lib.to_iter(to_req, queries)
-        return self.stub.get_stake_state(requests)
+        return self.stub.get_delegate_state(requests)
 
-    def get_tether_state(self, queries):
+    def get_swap_state(self, queries):
         """GRPC call to get state of tether
 
         Args:
@@ -84,19 +103,18 @@ class ForgeStateRpc:
 
         """
 
-        def to_req(item):
-            kwargs = {
-                'address': item.get('address'),
-                'keys': item.get('keys', []),
-                'height': item.get('height')
-            }
-            return protos.RequestGetTetherState(**kwargs)
+        def to_req(query):
+            return protos.RequestGetSwapState(
+                    address=query.get('address'),
+                    keys=query.get('keys'),
+                    height=query.get('height'),
+            )
 
         requests = lib.to_iter(to_req, queries)
 
-        return self.stub.get_tether_state(requests)
+        return self.stub.get_swap_state(requests)
 
-    def get_forge_state(self, keys=[], height=None):
+    def get_forge_state(self, keys=None, height=None):
         """ GRPC call to get forge state
 
         Args:

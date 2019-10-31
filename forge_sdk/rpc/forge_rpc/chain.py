@@ -173,7 +173,6 @@ class ForgeChainRpc:
         return self.stub.get_validators_info(request)
 
     def get_config(self, parsed=True):
-        # TODO: add correct parameters
         """ RPC call to get detailed configuration current chain is using
 
         Returns:

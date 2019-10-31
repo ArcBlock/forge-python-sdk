@@ -1,10 +1,11 @@
 from time import sleep
 
 from forge_sdk import protos, utils
-from test.integration import forge, create_asset, create_users
+from test.integration import forge
+from test import lib
 
-boss, helper, partner = create_users()
-asset = create_asset(partner)
+boss, helper, partner = lib.create_users(forge)
+asset = lib.create_asset(partner, forge)
 
 value = forge.to_unit(50)
 sleep(5)

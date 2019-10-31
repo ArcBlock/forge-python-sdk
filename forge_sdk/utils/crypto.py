@@ -148,3 +148,25 @@ def to_tx_address(tx):
                         form='short')
     tx_hash = Hasher('sha3').hash(tx.SerializeToString())
     return tx_did.hash_to_did(tx_hash)
+
+
+def generate_wallet(**kwargs):
+    did_type = did.AbtDid(**kwargs, form='short')
+    sk, pk, address = did_type.new()
+    return protos.WalletInfo(
+            sk=sk,
+            pk=pk,
+            address=address
+    )
+
+
+def recover_wallet(sk, **kwargs):
+    if not kwargs.get('did'):
+        did_type = did.AbtDid(**kwargs, form='short')
+    else:
+        did_type = did.AbtDid.parse_type_from_did(kwargs.get('did'))
+    return protos.WalletInfo(
+            sk=sk,
+            pk=did_type.signer.sk_to_pk(sk),
+            address=did_type.sk_to_did(sk)
+    )

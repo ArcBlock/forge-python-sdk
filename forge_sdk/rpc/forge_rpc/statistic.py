@@ -150,25 +150,3 @@ class ForgeStatsRpc:
             validity_filter=validity_filter,
         )
         return self.stub.list_transactions(request)
-
-    def list_tethers(self, depositor=None, withdrawer=None, custodian=None,
-                     available=True, paging=None):
-        """ GRPC call to list all tethers
-
-        Args:
-            depositor(string): address of depositer
-            withdrawer(string): address of withdrawer
-            custodian(string): adress of custodian
-            availiable(bool): availiability of the tether
-            paging(:obj:`PagingInput`): paging preference
-
-        Returns:
-            ResponseListTethers
-
-        """
-        request = protos.RequestListTethers(depositor=depositor,
-                                            withdrawer=withdrawer,
-                                            custodian=custodian,
-                                            available=available,
-                                            paging=paging)
-        return self.stub.list_tethers(request)

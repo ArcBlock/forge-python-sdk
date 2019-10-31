@@ -1,12 +1,12 @@
 import logging
 import random
-from google.protobuf.any_pb2 import Any
 
 from forge_sdk import utils
 from forge_sdk.protos import protos
 from forge_sdk.rpc.forge_rpc.chain import ForgeChainRpc
 from forge_sdk.rpc.forge_rpc.state import ForgeStateRpc
 from forge_sdk.rpc.forge_rpc.statistic import ForgeStatsRpc
+from google.protobuf.any_pb2 import Any
 
 logger = logging.getLogger('helper-rpc')
 

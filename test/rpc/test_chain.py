@@ -14,29 +14,31 @@ class ChainRpcTest(unittest.TestCase):
         self.wallet1 = self.init_wallet('wallet1')
         self.wallet2 = self.init_wallet('wallet2')
         self.trans_itx = utils.transfer_itx(
-                to=self.wallet2.wallet.address,
+                to=self.wallet2.address,
                 value=1,
         )
 
     def init_wallet(self, moniker):
-        res = forge.create_wallet(
-                moniker=moniker,
-                passphrase='abc123',
-        )
+        res = forge.create_wallet(moniker=moniker)
         return res
 
     def test_get_tx(self):
         tx_hash = self.test_send_tx().hash
 
-        hash_list = [tx_hash]
+        res = forge.get_tx(tx_hash=[tx_hash])
+        for i in res:
+            assert (i.code == 0)
 
-        res = forge.get_tx(tx_hash=hash_list)
+        res = forge.get_tx(tx_hash=tx_hash)
         for i in res:
             assert (i.code == 0)
 
     def test_get_block(self):
-        height_list = [1, 2, 3]
-        res = forge.get_block(height=height_list)
+        res = forge.get_block(height=[1, 2, 3])
+        for i in res:
+            assert (i.code == 0)
+
+        res = forge.get_block(height=2)
         for i in res:
             assert (i.code == 0)
 
@@ -51,7 +53,7 @@ class ChainRpcTest(unittest.TestCase):
     def test_send_tx(self):
         kwargs = {
             'itx': self.trans_itx,
-            'wallet': self.wallet1.wallet,
+            'wallet': self.wallet1,
         }
         tx = forge.build_tx(**kwargs)
         return forge.send_tx(tx=tx)

@@ -121,12 +121,14 @@ def exchange_info(value=None, assets=None):
     return protos.ExchangeInfo(value=value,
                                assets=assets)
 
+
 def activate_protocol_itx(address, **kwargs):
     itx = protos.ActivateProtocolTx(
             address=address,
             data=kwargs.get('data')
     )
     return itx
+
 
 def deactivate_protocol_itx(address, **kwargs):
     itx = protos.DeactivateProtocolTx(
@@ -135,10 +137,31 @@ def deactivate_protocol_itx(address, **kwargs):
     )
     return itx
 
+
 def upgrade_node_itx(height, version, **kwargs):
     itx = protos.UpgradeNodeTx(
             height=height,
             version=version,
             overwrite=kwargs.get('overwrite', False),
+    )
+    return itx
+
+
+def deposit_token_itx(value, address, evidence, **kwargs):
+    itx = protos.DepositTokenTx(
+            value=value,
+            address=address,
+            evidence=evidence
+    )
+    return itx
+
+
+def withdraw_token(value, to, **kwargs):
+    itx = protos.WithdrawTokenTx(
+            value=value,
+            to=to,
+            chain_type=kwargs.get('chain_type', 'eth'),
+            chain_id=kwargs.get('chain_id'),
+            ttl=proto_util.proto_time(kwargs.get('ttl'))
     )
     return itx

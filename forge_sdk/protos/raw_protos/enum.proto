@@ -32,6 +32,7 @@ enum StatusCode {
   storage_rpc_error = 25;
   noent = 26;
   account_migrated = 27;
+  rpc_connection_error = 28;
 
   unsupported_stake = 30;
   insufficient_stake = 31;
@@ -73,6 +74,7 @@ enum StatusCode {
   withdraw_item_missing=65;
   invalid_withdraw_tx=66;
   invalid_chain_type=67;
+  invalid_time=68;
 
   forbidden = 403;
   internal = 500;

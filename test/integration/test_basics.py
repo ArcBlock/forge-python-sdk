@@ -4,12 +4,12 @@ from uuid import uuid4
 
 from forge_sdk import utils
 from test.integration import forge
-from . import lib
+from test import lib
 
 
-w1, w2, w3 = lib.create_users()
-asset1 = lib.create_asset(w1)
-asset2 = lib.create_asset(w1)
+w1, w2, w3 = lib.create_users(forge)
+asset1 = lib.create_asset(w1, forge)
+asset2 = lib.create_asset(w1, forge)
 value = forge.to_unit(55)
 
 sleep(5)
@@ -78,6 +78,3 @@ def test_consume_asset():
     new_state = forge.fetch_asset(asset2)
     assert not new_state.transferrable
 
-
-if __name__ == '__main__':
-    test_consume_asset()

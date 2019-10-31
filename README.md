@@ -52,8 +52,8 @@ This step applies to every tutorial
 
 ```python
 from forge_sdk import protos, utils
-alice = rpc.create_wallet(moniker='alice', passphrase='abc123')
-mike = rpc.create_wallet(moniker='mike', passphrase='abc123')
+alice = rpc.create_wallet(moniker='alice')
+mike = rpc.create_wallet(moniker='mike')
 ```
 
 ::: tip Notes
@@ -71,7 +71,7 @@ wallet {
   address: "z1brhJCteRSvHUQ9BytsZePkY4KJ9LFBayC"
 }
 
->>> rpc.get_account_balance(alice.wallet.address)
+>>> rpc.get_account_balance(alice.address)
 0
 ```
 
@@ -80,7 +80,7 @@ wallet {
 Now you have created wallets for Alice and Mike, but there's no money in their accounts. Let's help Alice to earn some money by sending a **Poke** transaction.
 
 ```python
->>> rpc.poke(alice.wallet)
+>>> rpc.poke(alice)
 hash: "CF0513E473ED13712CDB65EFC196A77BD6193E7DF5124C6233C55732573C85A2"
 ```
 Receiving the **hash** means the transaction has been passed to Forge, but doens't mean the transaction is successful. To confirm that the transaction is sent successfully, let's dive deeper into the tranaction details.
@@ -95,7 +95,7 @@ If `is_tx_ok` returns `True`, that means the transaction has been executed succe
 Now let's check Alice's account balance. There should be 25 TBA.
 
 ```python
->>> rpc.get_account_balance(alice.wallet.address)
+>>> rpc.get_account_balance(alice.address)
 250000000000000000
 ```
 
@@ -109,13 +109,13 @@ Now let's check Alice's account balance. There should be 25 TBA.
 Now Alice has 25 TBA in her account and Mike has nothing. We can help Alice transfer 10 TBA to Mike by sending out a **transfer transaction**.
 
 ```python
-rpc.transfer(to=mike.wallet.address,value=utils.to_unit(100),wallet=alice.wallet)
+rpc.transfer(to=mike.address,value=utils.to_unit(100),wallet=alice)
  hash: "CAEF155B1A3A684DAF57C595F68821502BC0187BEC514E4660BA1BD568474345"
 
 rpc.is_tx_ok('CAEF155B1A3A684DAF57C595F68821502BC0187BEC514E4660BA1BD568474345')
 True
 
-rpc.get_account_balance(mike.wallet.address)
+rpc.get_account_balance(mike.address)
 101000000000000000
 ```
 
@@ -130,18 +130,18 @@ Now we can see tht Alice just successfully transferred 10 TBA to Mike's Account!
 #### Step 1: Create accounts for Alice and Mike
 
 ```python
-alice=rpc.create_wallet(moniker='alice', passphrase='abc123')
-mike = rpc.create_wallet(moniker='mike', passphrase='abc123')
+alice=rpc.create_wallet(moniker='alice')
+mike = rpc.create_wallet(moniker='mike')
 ```
 
 After creating accounts for Alice and Mike, we help Alice to get some money to buy Mike's laptop
 
 ```python
 
-rpc.poke(alice.wallet, alice.token)
+rpc.poke(alice)
 hash: "CF0513E473ED13712CDB65EFC196A77BD6193E7DF5124C6233C55732573C85A2"
 
-rpc.get_account_balance(alice.wallet.address)
+rpc.get_account_balance(alice.address)
 250000000000000000
 ```
 
@@ -152,7 +152,7 @@ In real world, Mike could have just sold Alice his laptop. With Forge SDK, any p
 Let's try to help Mike create a laptop asset with the **CreateAssetTx**. The `data` field is for users to put item-specific information, where `type_url` is hints for how to decode the serialized `value` field. In this tutorial, for simplicity purpose, we only put the name of thel laptop.
 
 ```python
-res, asset_address= rpc.create_asset('test:name:laptop', b'Laptop from Mike',mike.wallet, mike.token)
+res, asset_address= rpc.create_asset('test:name:laptop', b'Laptop from Mike',mike, mike.token)
 rpc.is_tx_ok(res.hash)
 True
 asset_address
@@ -219,7 +219,7 @@ mike_exchange_info = protos.ExchangeInfo(assets=[asset_address])
 alice_exchange_info = protos.ExchangeInfo(value = utils.int_to_biguint(100000000000000000))
 exchange_tx = protos.ExchangeTx(sender = mike_exchange_info, receiver=alice_exchange_info)
 
-tx = rpc.prepare_exchange(exchange_tx, mike.wallet)
+tx = rpc.prepare_exchange(exchange_tx, mike)
 tx = rpc.finalize_exchange(tx, alice.wallet)
 res = rpc.send_tx(tx)
 

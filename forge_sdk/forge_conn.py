@@ -3,6 +3,7 @@ import logging
 import os
 
 import grpc
+from forge_sdk import utils
 from forge_sdk.config import ForgeConfig
 from forge_sdk.rpc import ForgeRpcHelper
 from forge_sdk.rpc.forge_rpc.chain import ForgeChainRpc
@@ -12,7 +13,6 @@ from forge_sdk.rpc.forge_rpc.state import ForgeStateRpc
 from forge_sdk.rpc.forge_rpc.statistic import ForgeStatsRpc
 from forge_sdk.rpc.forge_rpc.wallet import ForgeWalletRpc
 from forge_sdk.utils import itx as itx_utils, tx as tx_util
-from forge_sdk import utils
 
 logger = logging.getLogger('forge-conn')
 
@@ -55,8 +55,9 @@ class ForgeConn:
         # state rpc
         self.get_account_state = self._state_rpc.get_account_state
         self.get_asset_state = self._state_rpc.get_asset_state
-        self.get_stake_state = self._state_rpc.get_stake_state
-        self.get_tether_state = self._state_rpc.get_tether_state
+        self.get_swap_state = self._state_rpc.get_swap_state
+        self.get_protocol_state = self._state_rpc.get_protocol_state
+        self.get_delegate_state = self._state_rpc.get_delegate_state
         self.get_forge_state = self._state_rpc.get_forge_state
         self.get_forge_token = self._state_rpc.get_forge_token
 
@@ -69,13 +70,8 @@ class ForgeConn:
         self.get_health_status = self._stats_rpc.get_health_status
         self.list_asset_transactions = self._stats_rpc.list_asset_transactions
         self.list_transactions = self._stats_rpc.list_transactions
-        self.list_tethers = self._stats_rpc.list_tethers
 
         # wallet rpc
-        self.create_wallet = self._wallet_rpc.create_wallet
-        self.load_wallet = self._wallet_rpc.load_wallet
-        self.recover_wallet = self._wallet_rpc.recover_wallet
-        self.remove_wallet = self._wallet_rpc.remove_wallet
         self.declare_node = self._wallet_rpc.declare_node
 
         # Config
@@ -93,13 +89,19 @@ class ForgeConn:
         self.build_tx = self.rpc_helper.build_tx
         self.send_itx = self.rpc_helper.send_itx
 
+    def create_wallet(self, moniker, **kwargs):
+        wallet = utils.generate_wallet(**kwargs)
+        res = self.declare(moniker=moniker, wallet=wallet)
+        if res.code == 0:
+            return wallet
+
     @send_forge_transaction
     def transfer(self, **kwargs):
         return
 
     def create_asset(self, data, **kwargs):
         itx = itx_utils.create_asset_itx(data=data, **kwargs)
-        return self.send_itx(itx, **kwargs), itx.address
+        return self.send_itx(itx, **kwargs)
 
     @send_forge_transaction
     def update_asset(self, **kwargs):

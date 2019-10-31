@@ -82,7 +82,7 @@ message ResponseGetBlocks {
 
 // create_wallet(moniker, passphrase): create an account locally
 message RequestCreateWallet {
-  string passphrase = 1;
+  // string passphrase = 1;
   WalletType type = 2;
   string moniker = 3;
 }
