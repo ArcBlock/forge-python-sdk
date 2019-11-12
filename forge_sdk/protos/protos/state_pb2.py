@@ -24,7 +24,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='forge_abi',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x0bstate.proto\x12\tforge_abi\x1a\x19google/protobuf/any.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\nenum.proto\x1a\ntype.proto\x1a\x08tx.proto\"\xcc\x04\n\x0c\x41\x63\x63ountState\x12#\n\x07\x62\x61lance\x18\x01 \x01(\x0b\x32\x12.forge_abi.BigUint\x12\r\n\x05nonce\x18\x02 \x01(\x04\x12\x0f\n\x07num_txs\x18\x03 \x01(\x04\x12\x0f\n\x07\x61\x64\x64ress\x18\x04 \x01(\t\x12\n\n\x02pk\x18\x05 \x01(\x0c\x12\'\n\x04type\x18\x06 \x01(\x0b\x32\x15.forge_abi.WalletTypeB\x02\x18\x01\x12\x0f\n\x07moniker\x18\x07 \x01(\t\x12(\n\x07\x63ontext\x18\x08 \x01(\x0b\x32\x17.forge_abi.StateContext\x12\x0e\n\x06issuer\x18\t \x01(\t\x12\'\n\x0bgas_balance\x18\n \x01(\x0b\x32\x12.forge_abi.BigUint\x12\x13\n\x0bmigrated_to\x18\r \x03(\t\x12\x15\n\rmigrated_from\x18\x0e \x03(\t\x12\x12\n\nnum_assets\x18\x0f \x01(\x04\x12&\n\x05stake\x18\x10 \x01(\x0b\x32\x17.forge_abi.StakeContext\x12.\n\x0cpinned_files\x18\x11 \x01(\x0b\x32\x18.forge_abi.CircularQueue\x12!\n\x04poke\x18\x12 \x01(\x0b\x32\x13.forge_abi.PokeInfo\x12,\n\x10\x64\x65posit_received\x18\x13 \x01(\x0b\x32\x12.forge_abi.BigUint\x12\x30\n\x0ewithdraw_items\x18\x14 \x01(\x0b\x32\x18.forge_abi.CircularQueue\x12\"\n\x04\x64\x61ta\x18\x32 \x01(\x0b\x32\x14.google.protobuf.Any\"\xbc\x02\n\nAssetState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\r\n\x05owner\x18\x02 \x01(\t\x12\x0f\n\x07moniker\x18\x03 \x01(\t\x12\x10\n\x08readonly\x18\x04 \x01(\x08\x12\x15\n\rtransferrable\x18\x05 \x01(\x08\x12\x0b\n\x03ttl\x18\x06 \x01(\r\x12\x31\n\rconsumed_time\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0e\n\x06issuer\x18\x08 \x01(\t\x12\x0e\n\x06parent\x18\t \x01(\t\x12&\n\x05stake\x18\r \x01(\x0b\x32\x17.forge_abi.StakeContext\x12(\n\x07\x63ontext\x18\x0e \x01(\x0b\x32\x17.forge_abi.StateContext\x12\"\n\x04\x64\x61ta\x18\x32 \x01(\x0b\x32\x14.google.protobuf.Any\"-\n\x0c\x43oreProtocol\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0f\n\x07\x61\x64\x64ress\x18\x02 \x01(\t\"\xdb\x06\n\nForgeState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12-\n\tconsensus\x18\x02 \x01(\x0b\x32\x1a.forge_abi.ConsensusParams\x12/\n\x05tasks\x18\x03 \x03(\x0b\x32 .forge_abi.ForgeState.TasksEntry\x12>\n\rstake_summary\x18\x04 \x03(\x0b\x32\'.forge_abi.ForgeState.StakeSummaryEntry\x12\x0f\n\x07version\x18\x05 \x01(\t\x12$\n\x05token\x18\x08 \x01(\x0b\x32\x15.forge_abi.ForgeToken\x12/\n\ttx_config\x18\t \x01(\x0b\x32\x1c.forge_abi.TransactionConfig\x12*\n\tprotocols\x18\x0c \x03(\x0b\x32\x17.forge_abi.CoreProtocol\x12+\n\x03gas\x18\r \x03(\x0b\x32\x1e.forge_abi.ForgeState.GasEntry\x12,\n\x0cupgrade_info\x18\x0e \x01(\x0b\x32\x16.forge_abi.UpgradeInfo\x12@\n\x0e\x61\x63\x63ount_config\x18\x10 \x03(\x0b\x32(.forge_abi.ForgeState.AccountConfigEntry\x12\x35\n\x11token_swap_config\x18\x11 \x01(\x0b\x32\x1a.forge_abi.TokenSwapConfig\x12#\n\x04\x64\x61ta\x18\xff\x0f \x01(\x0b\x32\x14.google.protobuf.Any\x1a\x45\n\nTasksEntry\x12\x0b\n\x03key\x18\x01 \x01(\x04\x12&\n\x05value\x18\x02 \x01(\x0b\x32\x17.forge_abi.UpgradeTasks:\x02\x38\x01\x1aL\n\x11StakeSummaryEntry\x12\x0b\n\x03key\x18\x01 \x01(\r\x12&\n\x05value\x18\x02 \x01(\x0b\x32\x17.forge_abi.StakeSummary:\x02\x38\x01\x1a*\n\x08GasEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\r:\x02\x38\x01\x1aN\n\x12\x41\x63\x63ountConfigEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\'\n\x05value\x18\x02 \x01(\x0b\x32\x18.forge_abi.AccountConfig:\x02\x38\x01\"\x83\x01\n\tRootState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x0f\n\x07\x61\x63\x63ount\x18\x02 \x01(\x0c\x12\r\n\x05\x61sset\x18\x03 \x01(\x0c\x12\x0f\n\x07receipt\x18\x04 \x01(\x0c\x12\x10\n\x08protocol\x18\x05 \x01(\x0c\x12\x12\n\ngovernance\x18\x06 \x01(\x0c\x12\x0e\n\x06\x63ustom\x18\x07 \x01(\x0c\"\xbb\x01\n\nStakeState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x0c\n\x04\x66rom\x18\x02 \x01(\t\x12\n\n\x02to\x18\x03 \x01(\t\x12#\n\x07\x62\x61lance\x18\x04 \x01(\x0b\x32\x12.forge_abi.BigUint\x12\x0f\n\x07message\x18\x05 \x01(\t\x12(\n\x07\x63ontext\x18\x0e \x01(\x0b\x32\x17.forge_abi.StateContext\x12\"\n\x04\x64\x61ta\x18\x0f \x01(\x0b\x32\x14.google.protobuf.Any\"\xb7\x01\n\x0fStatisticsState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x12\n\nnum_blocks\x18\x02 \x01(\x04\x12\x0f\n\x07num_txs\x18\x03 \x01(\x04\x12&\n\nnum_stakes\x18\x04 \x01(\x0b\x32\x12.forge_abi.BigUint\x12\x16\n\x0enum_validators\x18\x05 \x01(\r\x12.\n\rtx_statistics\x18\x06 \x01(\x0b\x32\x17.forge_abi.TxStatistics\"!\n\x0e\x42lacklistState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x03(\t\"\x82\x02\n\rProtocolState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12(\n\x03itx\x18\x02 \x01(\x0b\x32\x1b.forge_abi.DeployProtocolTx\x12\x11\n\troot_hash\x18\x03 \x01(\x0c\x12)\n\x06status\x18\x04 \x01(\x0e\x32\x19.forge_abi.ProtocolStatus\x12\x13\n\x0bmigrated_to\x18\x0c \x03(\t\x12\x15\n\rmigrated_from\x18\r \x03(\t\x12(\n\x07\x63ontext\x18\x0e \x01(\x0b\x32\x17.forge_abi.StateContext\x12\"\n\x04\x64\x61ta\x18\x0f \x01(\x0b\x32\x14.google.protobuf.Any\"\xa6\x02\n\x0bTetherState\x12\x0c\n\x04hash\x18\x01 \x01(\t\x12\x11\n\tavailable\x18\x02 \x01(\x08\x12\x11\n\tcustodian\x18\x03 \x01(\t\x12\x11\n\tdepositor\x18\x04 \x01(\t\x12\x12\n\nwithdrawer\x18\x05 \x01(\t\x12!\n\x05value\x18\x06 \x01(\x0b\x32\x12.forge_abi.BigUint\x12&\n\ncommission\x18\x07 \x01(\x0b\x32\x12.forge_abi.BigUint\x12\"\n\x06\x63harge\x18\x08 \x01(\x0b\x32\x12.forge_abi.BigUint\x12\x0e\n\x06target\x18\t \x01(\t\x12,\n\x08locktime\x18\n \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0f\n\x07\x61\x64\x64ress\x18\x0b \x01(\t\"-\n\nTetherInfo\x12\x11\n\tavailable\x18\x01 \x01(\x08\x12\x0c\n\x04hash\x18\x02 \x01(\t\"\xde\x01\n\tSwapState\x12\x0c\n\x04hash\x18\x01 \x01(\t\x12\x0f\n\x07\x61\x64\x64ress\x18\x02 \x01(\t\x12\x0f\n\x07hashkey\x18\x03 \x01(\x0c\x12\x0e\n\x06sender\x18\x04 \x01(\t\x12\x10\n\x08receiver\x18\x05 \x01(\t\x12!\n\x05value\x18\x06 \x01(\x0b\x32\x12.forge_abi.BigUint\x12\x0e\n\x06\x61ssets\x18\x07 \x03(\t\x12\x10\n\x08locktime\x18\x08 \x01(\r\x12\x10\n\x08hashlock\x18\t \x01(\x0c\x12(\n\x07\x63ontext\x18\n \x01(\x0b\x32\x17.forge_abi.StateContext\"\x97\x01\n\x0f\x44\x65legateOpState\x12\x0c\n\x04rule\x18\x01 \x01(\t\x12\x0f\n\x07num_txs\x18\x02 \x01(\x04\x12\x15\n\rnum_txs_delta\x18\x03 \x01(\x04\x12#\n\x07\x62\x61lance\x18\x04 \x01(\x0b\x32\x12.forge_abi.BigUint\x12)\n\rbalance_delta\x18\x05 \x01(\x0b\x32\x12.forge_abi.BigUint\"\xe6\x01\n\rDelegateState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12.\n\x03ops\x18\x02 \x03(\x0b\x32!.forge_abi.DelegateState.OpsEntry\x12(\n\x07\x63ontext\x18\x0e \x01(\x0b\x32\x17.forge_abi.StateContext\x12\"\n\x04\x64\x61ta\x18\x0f \x01(\x0b\x32\x14.google.protobuf.Any\x1a\x46\n\x08OpsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12)\n\x05value\x18\x02 \x01(\x0b\x32\x1a.forge_abi.DelegateOpState:\x02\x38\x01\x62\x06proto3')
+  serialized_pb=_b('\n\x0bstate.proto\x12\tforge_abi\x1a\x19google/protobuf/any.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\nenum.proto\x1a\ntype.proto\x1a\x08tx.proto\"\xcc\x04\n\x0c\x41\x63\x63ountState\x12#\n\x07\x62\x61lance\x18\x01 \x01(\x0b\x32\x12.forge_abi.BigUint\x12\r\n\x05nonce\x18\x02 \x01(\x04\x12\x0f\n\x07num_txs\x18\x03 \x01(\x04\x12\x0f\n\x07\x61\x64\x64ress\x18\x04 \x01(\t\x12\n\n\x02pk\x18\x05 \x01(\x0c\x12\'\n\x04type\x18\x06 \x01(\x0b\x32\x15.forge_abi.WalletTypeB\x02\x18\x01\x12\x0f\n\x07moniker\x18\x07 \x01(\t\x12(\n\x07\x63ontext\x18\x08 \x01(\x0b\x32\x17.forge_abi.StateContext\x12\x0e\n\x06issuer\x18\t \x01(\t\x12\'\n\x0bgas_balance\x18\n \x01(\x0b\x32\x12.forge_abi.BigUint\x12\x13\n\x0bmigrated_to\x18\r \x03(\t\x12\x15\n\rmigrated_from\x18\x0e \x03(\t\x12\x12\n\nnum_assets\x18\x0f \x01(\x04\x12&\n\x05stake\x18\x10 \x01(\x0b\x32\x17.forge_abi.StakeContext\x12.\n\x0cpinned_files\x18\x11 \x01(\x0b\x32\x18.forge_abi.CircularQueue\x12!\n\x04poke\x18\x12 \x01(\x0b\x32\x13.forge_abi.PokeInfo\x12,\n\x10\x64\x65posit_received\x18\x13 \x01(\x0b\x32\x12.forge_abi.BigUint\x12\x30\n\x0ewithdraw_items\x18\x14 \x01(\x0b\x32\x18.forge_abi.CircularQueue\x12\"\n\x04\x64\x61ta\x18\x32 \x01(\x0b\x32\x14.google.protobuf.Any\"\xbc\x02\n\nAssetState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\r\n\x05owner\x18\x02 \x01(\t\x12\x0f\n\x07moniker\x18\x03 \x01(\t\x12\x10\n\x08readonly\x18\x04 \x01(\x08\x12\x15\n\rtransferrable\x18\x05 \x01(\x08\x12\x0b\n\x03ttl\x18\x06 \x01(\r\x12\x31\n\rconsumed_time\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0e\n\x06issuer\x18\x08 \x01(\t\x12\x0e\n\x06parent\x18\t \x01(\t\x12&\n\x05stake\x18\r \x01(\x0b\x32\x17.forge_abi.StakeContext\x12(\n\x07\x63ontext\x18\x0e \x01(\x0b\x32\x17.forge_abi.StateContext\x12\"\n\x04\x64\x61ta\x18\x32 \x01(\x0b\x32\x14.google.protobuf.Any\"-\n\x0c\x43oreProtocol\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0f\n\x07\x61\x64\x64ress\x18\x02 \x01(\t\"\xdb\x06\n\nForgeState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12-\n\tconsensus\x18\x02 \x01(\x0b\x32\x1a.forge_abi.ConsensusParams\x12/\n\x05tasks\x18\x03 \x03(\x0b\x32 .forge_abi.ForgeState.TasksEntry\x12>\n\rstake_summary\x18\x04 \x03(\x0b\x32\'.forge_abi.ForgeState.StakeSummaryEntry\x12\x0f\n\x07version\x18\x05 \x01(\t\x12$\n\x05token\x18\x08 \x01(\x0b\x32\x15.forge_abi.ForgeToken\x12/\n\ttx_config\x18\t \x01(\x0b\x32\x1c.forge_abi.TransactionConfig\x12*\n\tprotocols\x18\x0c \x03(\x0b\x32\x17.forge_abi.CoreProtocol\x12+\n\x03gas\x18\r \x03(\x0b\x32\x1e.forge_abi.ForgeState.GasEntry\x12,\n\x0cupgrade_info\x18\x0e \x01(\x0b\x32\x16.forge_abi.UpgradeInfo\x12@\n\x0e\x61\x63\x63ount_config\x18\x10 \x03(\x0b\x32(.forge_abi.ForgeState.AccountConfigEntry\x12\x35\n\x11token_swap_config\x18\x11 \x01(\x0b\x32\x1a.forge_abi.TokenSwapConfig\x12#\n\x04\x64\x61ta\x18\xff\x0f \x01(\x0b\x32\x14.google.protobuf.Any\x1a\x45\n\nTasksEntry\x12\x0b\n\x03key\x18\x01 \x01(\x04\x12&\n\x05value\x18\x02 \x01(\x0b\x32\x17.forge_abi.UpgradeTasks:\x02\x38\x01\x1aL\n\x11StakeSummaryEntry\x12\x0b\n\x03key\x18\x01 \x01(\r\x12&\n\x05value\x18\x02 \x01(\x0b\x32\x17.forge_abi.StakeSummary:\x02\x38\x01\x1a*\n\x08GasEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\r:\x02\x38\x01\x1aN\n\x12\x41\x63\x63ountConfigEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\'\n\x05value\x18\x02 \x01(\x0b\x32\x18.forge_abi.AccountConfig:\x02\x38\x01\"\x83\x01\n\tRootState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x0f\n\x07\x61\x63\x63ount\x18\x02 \x01(\x0c\x12\r\n\x05\x61sset\x18\x03 \x01(\x0c\x12\x0f\n\x07receipt\x18\x04 \x01(\x0c\x12\x10\n\x08protocol\x18\x05 \x01(\x0c\x12\x12\n\ngovernance\x18\x06 \x01(\x0c\x12\x0e\n\x06\x63ustom\x18\x07 \x01(\x0c\"\xbb\x01\n\nStakeState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x0c\n\x04\x66rom\x18\x02 \x01(\t\x12\n\n\x02to\x18\x03 \x01(\t\x12#\n\x07\x62\x61lance\x18\x04 \x01(\x0b\x32\x12.forge_abi.BigUint\x12\x0f\n\x07message\x18\x05 \x01(\t\x12(\n\x07\x63ontext\x18\x0e \x01(\x0b\x32\x17.forge_abi.StateContext\x12\"\n\x04\x64\x61ta\x18\x0f \x01(\x0b\x32\x14.google.protobuf.Any\"\xb7\x01\n\x0fStatisticsState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x12\n\nnum_blocks\x18\x02 \x01(\x04\x12\x0f\n\x07num_txs\x18\x03 \x01(\x04\x12&\n\nnum_stakes\x18\x04 \x01(\x0b\x32\x12.forge_abi.BigUint\x12\x16\n\x0enum_validators\x18\x05 \x01(\r\x12.\n\rtx_statistics\x18\x06 \x01(\x0b\x32\x17.forge_abi.TxStatistics\"!\n\x0e\x42lacklistState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x03(\t\"\x82\x02\n\rProtocolState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12(\n\x03itx\x18\x02 \x01(\x0b\x32\x1b.forge_abi.DeployProtocolTx\x12\x11\n\troot_hash\x18\x03 \x01(\x0c\x12)\n\x06status\x18\x04 \x01(\x0e\x32\x19.forge_abi.ProtocolStatus\x12\x13\n\x0bmigrated_to\x18\x0c \x03(\t\x12\x15\n\rmigrated_from\x18\r \x03(\t\x12(\n\x07\x63ontext\x18\x0e \x01(\x0b\x32\x17.forge_abi.StateContext\x12\"\n\x04\x64\x61ta\x18\x0f \x01(\x0b\x32\x14.google.protobuf.Any\"\xde\x01\n\tSwapState\x12\x0c\n\x04hash\x18\x01 \x01(\t\x12\x0f\n\x07\x61\x64\x64ress\x18\x02 \x01(\t\x12\x0f\n\x07hashkey\x18\x03 \x01(\x0c\x12\x0e\n\x06sender\x18\x04 \x01(\t\x12\x10\n\x08receiver\x18\x05 \x01(\t\x12!\n\x05value\x18\x06 \x01(\x0b\x32\x12.forge_abi.BigUint\x12\x0e\n\x06\x61ssets\x18\x07 \x03(\t\x12\x10\n\x08locktime\x18\x08 \x01(\r\x12\x10\n\x08hashlock\x18\t \x01(\x0c\x12(\n\x07\x63ontext\x18\n \x01(\x0b\x32\x17.forge_abi.StateContext\"\x97\x01\n\x0f\x44\x65legateOpState\x12\x0c\n\x04rule\x18\x01 \x01(\t\x12\x0f\n\x07num_txs\x18\x02 \x01(\x04\x12\x15\n\rnum_txs_delta\x18\x03 \x01(\x04\x12#\n\x07\x62\x61lance\x18\x04 \x01(\x0b\x32\x12.forge_abi.BigUint\x12)\n\rbalance_delta\x18\x05 \x01(\x0b\x32\x12.forge_abi.BigUint\"\xe6\x01\n\rDelegateState\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12.\n\x03ops\x18\x02 \x03(\x0b\x32!.forge_abi.DelegateState.OpsEntry\x12(\n\x07\x63ontext\x18\x0e \x01(\x0b\x32\x17.forge_abi.StateContext\x12\"\n\x04\x64\x61ta\x18\x0f \x01(\x0b\x32\x14.google.protobuf.Any\x1a\x46\n\x08OpsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12)\n\x05value\x18\x02 \x01(\x0b\x32\x1a.forge_abi.DelegateOpState:\x02\x38\x01\x62\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_any__pb2.DESCRIPTOR,google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,enum__pb2.DESCRIPTOR,type__pb2.DESCRIPTOR,tx__pb2.DESCRIPTOR,])
 
@@ -920,145 +920,6 @@ _PROTOCOLSTATE = _descriptor.Descriptor(
 )
 
 
-_TETHERSTATE = _descriptor.Descriptor(
-  name='TetherState',
-  full_name='forge_abi.TetherState',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='hash', full_name='forge_abi.TetherState.hash', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='available', full_name='forge_abi.TetherState.available', index=1,
-      number=2, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='custodian', full_name='forge_abi.TetherState.custodian', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='depositor', full_name='forge_abi.TetherState.depositor', index=3,
-      number=4, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='withdrawer', full_name='forge_abi.TetherState.withdrawer', index=4,
-      number=5, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='value', full_name='forge_abi.TetherState.value', index=5,
-      number=6, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='commission', full_name='forge_abi.TetherState.commission', index=6,
-      number=7, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='charge', full_name='forge_abi.TetherState.charge', index=7,
-      number=8, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='target', full_name='forge_abi.TetherState.target', index=8,
-      number=9, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='locktime', full_name='forge_abi.TetherState.locktime', index=9,
-      number=10, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='address', full_name='forge_abi.TetherState.address', index=10,
-      number=11, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2746,
-  serialized_end=3040,
-)
-
-
-_TETHERINFO = _descriptor.Descriptor(
-  name='TetherInfo',
-  full_name='forge_abi.TetherInfo',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='available', full_name='forge_abi.TetherInfo.available', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='hash', full_name='forge_abi.TetherInfo.hash', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3042,
-  serialized_end=3087,
-)
-
-
 _SWAPSTATE = _descriptor.Descriptor(
   name='SwapState',
   full_name='forge_abi.SwapState',
@@ -1148,8 +1009,8 @@ _SWAPSTATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3090,
-  serialized_end=3312,
+  serialized_start=2746,
+  serialized_end=2968,
 )
 
 
@@ -1207,8 +1068,8 @@ _DELEGATEOPSTATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3315,
-  serialized_end=3466,
+  serialized_start=2971,
+  serialized_end=3122,
 )
 
 
@@ -1245,8 +1106,8 @@ _DELEGATESTATE_OPSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3629,
-  serialized_end=3699,
+  serialized_start=3285,
+  serialized_end=3355,
 )
 
 _DELEGATESTATE = _descriptor.Descriptor(
@@ -1296,8 +1157,8 @@ _DELEGATESTATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3469,
-  serialized_end=3699,
+  serialized_start=3125,
+  serialized_end=3355,
 )
 
 _ACCOUNTSTATE.fields_by_name['balance'].message_type = type__pb2._BIGUINT
@@ -1341,10 +1202,6 @@ _PROTOCOLSTATE.fields_by_name['itx'].message_type = tx__pb2._DEPLOYPROTOCOLTX
 _PROTOCOLSTATE.fields_by_name['status'].enum_type = enum__pb2._PROTOCOLSTATUS
 _PROTOCOLSTATE.fields_by_name['context'].message_type = type__pb2._STATECONTEXT
 _PROTOCOLSTATE.fields_by_name['data'].message_type = google_dot_protobuf_dot_any__pb2._ANY
-_TETHERSTATE.fields_by_name['value'].message_type = type__pb2._BIGUINT
-_TETHERSTATE.fields_by_name['commission'].message_type = type__pb2._BIGUINT
-_TETHERSTATE.fields_by_name['charge'].message_type = type__pb2._BIGUINT
-_TETHERSTATE.fields_by_name['locktime'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _SWAPSTATE.fields_by_name['value'].message_type = type__pb2._BIGUINT
 _SWAPSTATE.fields_by_name['context'].message_type = type__pb2._STATECONTEXT
 _DELEGATEOPSTATE.fields_by_name['balance'].message_type = type__pb2._BIGUINT
@@ -1363,8 +1220,6 @@ DESCRIPTOR.message_types_by_name['StakeState'] = _STAKESTATE
 DESCRIPTOR.message_types_by_name['StatisticsState'] = _STATISTICSSTATE
 DESCRIPTOR.message_types_by_name['BlacklistState'] = _BLACKLISTSTATE
 DESCRIPTOR.message_types_by_name['ProtocolState'] = _PROTOCOLSTATE
-DESCRIPTOR.message_types_by_name['TetherState'] = _TETHERSTATE
-DESCRIPTOR.message_types_by_name['TetherInfo'] = _TETHERINFO
 DESCRIPTOR.message_types_by_name['SwapState'] = _SWAPSTATE
 DESCRIPTOR.message_types_by_name['DelegateOpState'] = _DELEGATEOPSTATE
 DESCRIPTOR.message_types_by_name['DelegateState'] = _DELEGATESTATE
@@ -1464,20 +1319,6 @@ ProtocolState = _reflection.GeneratedProtocolMessageType('ProtocolState', (_mess
   # @@protoc_insertion_point(class_scope:forge_abi.ProtocolState)
   ))
 _sym_db.RegisterMessage(ProtocolState)
-
-TetherState = _reflection.GeneratedProtocolMessageType('TetherState', (_message.Message,), dict(
-  DESCRIPTOR = _TETHERSTATE,
-  __module__ = 'state_pb2'
-  # @@protoc_insertion_point(class_scope:forge_abi.TetherState)
-  ))
-_sym_db.RegisterMessage(TetherState)
-
-TetherInfo = _reflection.GeneratedProtocolMessageType('TetherInfo', (_message.Message,), dict(
-  DESCRIPTOR = _TETHERINFO,
-  __module__ = 'state_pb2'
-  # @@protoc_insertion_point(class_scope:forge_abi.TetherInfo)
-  ))
-_sym_db.RegisterMessage(TetherInfo)
 
 SwapState = _reflection.GeneratedProtocolMessageType('SwapState', (_message.Message,), dict(
   DESCRIPTOR = _SWAPSTATE,

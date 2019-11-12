@@ -1,3 +1,6 @@
+## 0.40.0 (November 12, 2019)
+  - update proto files
+
 ## 0.39.0 (October 31, 2019)
   - deprecate wallet rpcs
   - Add test for states rpc calls

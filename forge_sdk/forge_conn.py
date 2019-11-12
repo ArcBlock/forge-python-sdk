@@ -135,6 +135,34 @@ class ForgeConn:
     def upgrade_node(self, **kwargs):
         return
 
+    @send_forge_transaction
+    def deposit_token(self, **kwargs):
+        return
+
+    @send_forge_transaction
+    def withdraw_token(self, **kwargs):
+        return
+
+    @send_forge_transaction
+    def approve_withdraw(self, **kwargs):
+        return
+
+    @send_forge_transaction
+    def revoke_withdraw(self, **kwargs):
+        return
+
+    @send_forge_transaction
+    def setup_swap(self, **kwargs):
+        return
+
+    @send_forge_transaction
+    def retrieve_swap(self, **kwargs):
+        return
+
+    @send_forge_transaction
+    def revoke_swap(self, **kwargs):
+        return
+
     def poke(self, wallet):
         itx = itx_utils.poke_itx()
         return self.rpc_helper.send_itx(itx=itx,

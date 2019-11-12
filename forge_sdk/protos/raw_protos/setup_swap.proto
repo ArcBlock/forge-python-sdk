@@ -19,4 +19,3 @@ message SetupSwapTx {
   // forge won't touch this field. Only forge app shall handle it.
   google.protobuf.Any data = 15;
 }
-

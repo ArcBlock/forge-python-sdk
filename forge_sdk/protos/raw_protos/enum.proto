@@ -52,7 +52,7 @@ enum StatusCode {
   invalid_deposit_target = 45;
   invalid_depositor = 46;
   invalid_withdrawer = 47;
-  duplicate_tether = 48;
+  // duplicate_tether = 48;
   invalid_expiry_date = 49;
   invalid_deposit = 50;
   invalid_custodian = 51;
@@ -75,6 +75,7 @@ enum StatusCode {
   invalid_withdraw_tx=66;
   invalid_chain_type=67;
   invalid_time=68;
+  invalid_subscribe=69;
 
   forbidden = 403;
   internal = 500;
@@ -121,7 +122,7 @@ enum RoleType {
   role_validator = 8;
   role_group = 9;
   role_tx = 10;
-  role_tether = 11;
+  // role_tether = 11;
   role_any = 63;
 }
 

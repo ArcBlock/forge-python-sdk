@@ -153,27 +153,6 @@ message ProtocolState {
   google.protobuf.Any data = 15; // forge app can define their own app state
 }
 
-// This is just for displaying purpose.
-message TetherState {
-  string hash = 1;
-  bool available = 2;
-  string custodian = 3;
-  string depositor = 4;
-  string withdrawer = 5;
-  BigUint value = 6;
-  BigUint commission = 7;
-  BigUint charge = 8;
-  string target = 9;
-  google.protobuf.Timestamp locktime = 10;
-  string address = 11;
-}
-
-// This is the one stored in state DB.
-message TetherInfo {
-  bool available = 1;
-  string hash = 2;
-}
-
 // TODO: [peiling] We have already defined this state in core protocols repo.
 // The only reason we define this state here again is because the protobuf
 // definition ResponseGetSwapState needs to reference to this SwapState.

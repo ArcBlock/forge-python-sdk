@@ -12,8 +12,6 @@ import "rpc.proto";
 
 service ChainRpc {
   // tx related
-  rpc create_tx(RequestCreateTx) returns (ResponseCreateTx);
-  rpc multisig(RequestMultisig) returns (ResponseMultisig);
   rpc send_tx(RequestSendTx) returns (ResponseSendTx);
   rpc get_tx(stream RequestGetTx) returns (stream ResponseGetTx);
   rpc get_block(stream RequestGetBlock) returns (stream ResponseGetBlock);
@@ -53,8 +51,6 @@ service StateRpc {
       returns (stream ResponseGetProtocolState);
   rpc get_stake_state(stream RequestGetStakeState)
       returns (stream ResponseGetStakeState);
-  rpc get_tether_state(stream RequestGetTetherState)
-      returns (stream ResponseGetTetherState);
   rpc get_swap_state(stream RequestGetSwapState)
       returns (stream ResponseGetSwapState);
   rpc get_delegate_state(stream RequestGetDelegateState)
@@ -63,11 +59,6 @@ service StateRpc {
 
 service WalletRpc {
   // wallet related
-  rpc create_wallet(RequestCreateWallet) returns (ResponseCreateWallet);
-  rpc load_wallet(RequestLoadWallet) returns (ResponseLoadWallet);
-  rpc recover_wallet(RequestRecoverWallet) returns (ResponseRecoverWallet);
-  rpc list_wallet(RequestListWallet) returns (stream ResponseListWallet);
-  rpc remove_wallet(RequestRemoveWallet) returns (ResponseRemoveWallet);
   rpc declare_node(RequestDeclareNode) returns (ResponseDeclareNode);
 }
 
@@ -85,6 +76,5 @@ service StatsRpc {
   rpc list_blocks(RequestListBlocks) returns (ResponseListBlocks);
   rpc get_health_status(RequestGetHealthStatus)
       returns (ResponseGetHealthStatus);
-  rpc list_tethers(RequestListTethers) returns (ResponseListTethers);
   rpc list_swap(RequestListSwap) returns (ResponseListSwap);
 }

@@ -1,7 +1,6 @@
 syntax = "proto3";
 package forge_abi;
 
-import "google/protobuf/any.proto";
 import "vendor.proto";
 import "enum.proto";
 import "type.proto";
@@ -9,35 +8,6 @@ import "state.proto";
 import "trace_type.proto";
 
 // Request / Response message definition
-
-// create_tx(itx, wallet, token)
-message RequestCreateTx {
-  google.protobuf.Any itx = 1;
-  string from = 2;
-  uint64 nonce = 3;
-  WalletInfo wallet = 4;
-  string token = 5;
-}
-
-message ResponseCreateTx {
-  StatusCode code = 1;
-  Transaction tx = 2;
-}
-
-// multisig(tx, wallet, token)
-message RequestMultisig {
-  Transaction tx = 1;
-  // extra data for multisig
-  google.protobuf.Any data = 2;
-  WalletInfo wallet = 3;
-  string token = 4;
-  string delegatee = 5;
-}
-
-message ResponseMultisig {
-  StatusCode code = 1;
-  Transaction tx = 2;
-}
 
 // send_tx(tx, wallet, token, commit \\ false)
 message RequestSendTx {
@@ -79,60 +49,6 @@ message ResponseGetBlocks {
   PageInfo page = 2;
   repeated BlockInfoSimple blocks = 3;
 }
-
-// create_wallet(moniker, passphrase): create an account locally
-message RequestCreateWallet {
-  // string passphrase = 1;
-  WalletType type = 2;
-  string moniker = 3;
-}
-
-message ResponseCreateWallet {
-  StatusCode code = 1;
-  string token = 2;
-  WalletInfo wallet = 3;
-}
-
-// load_wallet(address, passphrase): load account to memory with given
-// passphrase
-message RequestLoadWallet {
-  string address = 1;
-  string passphrase = 2;
-}
-
-message ResponseLoadWallet {
-  StatusCode code = 1;
-  string token = 2;
-  WalletInfo wallet = 3;
-}
-
-// recover_wallet(data, passphrase): recover to a keystore with given
-// passphrase. data could be seed words or bytes of secret key.
-message RequestRecoverWallet {
-  bytes data = 1;
-  WalletType type = 2;
-  string passphrase = 3;
-  string moniker = 4;
-}
-
-message ResponseRecoverWallet {
-  StatusCode code = 1;
-  string token = 2;
-  WalletInfo wallet = 3;
-}
-
-// list_wallet(): list accounts stored in this node
-message RequestListWallet {}
-
-message ResponseListWallet {
-  StatusCode code = 1;
-  string address = 2;
-}
-
-// remove_wallet(hash): remove account by hash for this node
-message RequestRemoveWallet { string address = 1; }
-
-message ResponseRemoveWallet { StatusCode code = 1; }
 
 message RequestDeclareNode { bool validator = 1; }
 
@@ -198,17 +114,6 @@ message RequestGetForgeState {
 message ResponseGetForgeState {
   StatusCode code = 1;
   ForgeState state = 2;
-}
-
-message RequestGetTetherState {
-  string address = 1;
-  repeated string keys = 2;
-  uint64 height = 3;
-}
-
-message ResponseGetTetherState {
-  StatusCode code = 1;
-  TetherState state = 2;
 }
 
 message RequestGetSwapState {
@@ -321,7 +226,7 @@ message ResponseSubscribe {
     Transaction confirm = 5;
     Transaction create_asset = 6;
     Transaction exchange = 7;
-    Transaction revoke = 8;
+    Transaction revoke = 8 [deprecated = true];
 
     abci_vendor.RequestBeginBlock begin_block = 16;
     abci_vendor.RequestEndBlock end_block = 17;
@@ -329,17 +234,26 @@ message ResponseSubscribe {
     Transaction declare = 19;
     Transaction update_asset = 20;
     Transaction consensus_upgrade = 21;
-    Transaction declare_file = 22;
+    Transaction declare_file = 22 [deprecated = true];
     Transaction sys_upgrade = 23;
     Transaction stake = 24;
     Transaction delegate = 25;
-    Transaction activate_protocol=26;
-    Transaction deactivate_protocol=27;
-    Transaction revoke_delegate=28;
-    Transaction deposit_token=29;
-    Transaction withdraw_token=30;
-    Transaction approve_withdraw=31;
-    Transaction revoke_withdraw=32;
+    Transaction activate_protocol = 26;
+    Transaction deactivate_protocol = 27;
+    Transaction revoke_delegate = 28;
+    Transaction deposit_token = 29;
+    Transaction withdraw_token = 30;
+    Transaction approve_withdraw = 31;
+    Transaction revoke_withdraw = 32;
+    Transaction setup_swap = 33;
+    Transaction revoke_swap = 34;
+    Transaction retrieve_swap = 35;
+    Transaction poke = 36;
+    Transaction deploy_protocol = 37;
+    Transaction consume_asset = 38;
+    Transaction acquire_asset = 39;
+    Transaction upgrade_node = 40;
+
 
     AccountState account_state = 129;
     AssetState asset_state = 130;
@@ -347,6 +261,7 @@ message ResponseSubscribe {
     StakeState stake_state = 132;
     ProtocolState protocol_state = 133;
     DelegateState delegate_state = 134;
+    SwapState swap_state = 135;
   }
 }
 
@@ -455,20 +370,6 @@ message ResponseListBlocks {
   StatusCode code = 1;
   PageInfo page = 2;
   repeated IndexedBlock blocks = 3;
-}
-
-message RequestListTethers {
-  PageInput paging = 1;
-  string depositor = 2;
-  string withdrawer = 3;
-  string custodian = 4;
-  bool available = 5;
-}
-
-message ResponseListTethers {
-  StatusCode code = 1;
-  PageInfo page = 2;
-  repeated TetherState tethers = 3;
 }
 
 message RequestListSwap {

@@ -20,16 +20,6 @@ class ChainRpcStub(object):
     Args:
       channel: A grpc.Channel.
     """
-    self.create_tx = channel.unary_unary(
-        '/forge_abi.ChainRpc/create_tx',
-        request_serializer=rpc__pb2.RequestCreateTx.SerializeToString,
-        response_deserializer=rpc__pb2.ResponseCreateTx.FromString,
-        )
-    self.multisig = channel.unary_unary(
-        '/forge_abi.ChainRpc/multisig',
-        request_serializer=rpc__pb2.RequestMultisig.SerializeToString,
-        response_deserializer=rpc__pb2.ResponseMultisig.FromString,
-        )
     self.send_tx = channel.unary_unary(
         '/forge_abi.ChainRpc/send_tx',
         request_serializer=rpc__pb2.RequestSendTx.SerializeToString,
@@ -97,23 +87,9 @@ class ChainRpcServicer(object):
 
   """
 
-  def create_tx(self, request, context):
+  def send_tx(self, request, context):
     """tx related
     """
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
-  def multisig(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
-  def send_tx(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
@@ -191,16 +167,6 @@ class ChainRpcServicer(object):
 
 def add_ChainRpcServicer_to_server(servicer, server):
   rpc_method_handlers = {
-      'create_tx': grpc.unary_unary_rpc_method_handler(
-          servicer.create_tx,
-          request_deserializer=rpc__pb2.RequestCreateTx.FromString,
-          response_serializer=rpc__pb2.ResponseCreateTx.SerializeToString,
-      ),
-      'multisig': grpc.unary_unary_rpc_method_handler(
-          servicer.multisig,
-          request_deserializer=rpc__pb2.RequestMultisig.FromString,
-          response_serializer=rpc__pb2.ResponseMultisig.SerializeToString,
-      ),
       'send_tx': grpc.unary_unary_rpc_method_handler(
           servicer.send_tx,
           request_deserializer=rpc__pb2.RequestSendTx.FromString,
@@ -432,11 +398,6 @@ class StateRpcStub(object):
         request_serializer=rpc__pb2.RequestGetStakeState.SerializeToString,
         response_deserializer=rpc__pb2.ResponseGetStakeState.FromString,
         )
-    self.get_tether_state = channel.stream_stream(
-        '/forge_abi.StateRpc/get_tether_state',
-        request_serializer=rpc__pb2.RequestGetTetherState.SerializeToString,
-        response_deserializer=rpc__pb2.ResponseGetTetherState.FromString,
-        )
     self.get_swap_state = channel.stream_stream(
         '/forge_abi.StateRpc/get_swap_state',
         request_serializer=rpc__pb2.RequestGetSwapState.SerializeToString,
@@ -488,13 +449,6 @@ class StateRpcServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def get_tether_state(self, request_iterator, context):
-    # missing associated documentation comment in .proto file
-    pass
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
   def get_swap_state(self, request_iterator, context):
     # missing associated documentation comment in .proto file
     pass
@@ -537,11 +491,6 @@ def add_StateRpcServicer_to_server(servicer, server):
           request_deserializer=rpc__pb2.RequestGetStakeState.FromString,
           response_serializer=rpc__pb2.ResponseGetStakeState.SerializeToString,
       ),
-      'get_tether_state': grpc.stream_stream_rpc_method_handler(
-          servicer.get_tether_state,
-          request_deserializer=rpc__pb2.RequestGetTetherState.FromString,
-          response_serializer=rpc__pb2.ResponseGetTetherState.SerializeToString,
-      ),
       'get_swap_state': grpc.stream_stream_rpc_method_handler(
           servicer.get_swap_state,
           request_deserializer=rpc__pb2.RequestGetSwapState.FromString,
@@ -568,31 +517,6 @@ class WalletRpcStub(object):
     Args:
       channel: A grpc.Channel.
     """
-    self.create_wallet = channel.unary_unary(
-        '/forge_abi.WalletRpc/create_wallet',
-        request_serializer=rpc__pb2.RequestCreateWallet.SerializeToString,
-        response_deserializer=rpc__pb2.ResponseCreateWallet.FromString,
-        )
-    self.load_wallet = channel.unary_unary(
-        '/forge_abi.WalletRpc/load_wallet',
-        request_serializer=rpc__pb2.RequestLoadWallet.SerializeToString,
-        response_deserializer=rpc__pb2.ResponseLoadWallet.FromString,
-        )
-    self.recover_wallet = channel.unary_unary(
-        '/forge_abi.WalletRpc/recover_wallet',
-        request_serializer=rpc__pb2.RequestRecoverWallet.SerializeToString,
-        response_deserializer=rpc__pb2.ResponseRecoverWallet.FromString,
-        )
-    self.list_wallet = channel.unary_stream(
-        '/forge_abi.WalletRpc/list_wallet',
-        request_serializer=rpc__pb2.RequestListWallet.SerializeToString,
-        response_deserializer=rpc__pb2.ResponseListWallet.FromString,
-        )
-    self.remove_wallet = channel.unary_unary(
-        '/forge_abi.WalletRpc/remove_wallet',
-        request_serializer=rpc__pb2.RequestRemoveWallet.SerializeToString,
-        response_deserializer=rpc__pb2.ResponseRemoveWallet.FromString,
-        )
     self.declare_node = channel.unary_unary(
         '/forge_abi.WalletRpc/declare_node',
         request_serializer=rpc__pb2.RequestDeclareNode.SerializeToString,
@@ -604,44 +528,9 @@ class WalletRpcServicer(object):
   # missing associated documentation comment in .proto file
   pass
 
-  def create_wallet(self, request, context):
+  def declare_node(self, request, context):
     """wallet related
     """
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
-  def load_wallet(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
-  def recover_wallet(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
-  def list_wallet(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
-  def remove_wallet(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
-  def declare_node(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
@@ -649,31 +538,6 @@ class WalletRpcServicer(object):
 
 def add_WalletRpcServicer_to_server(servicer, server):
   rpc_method_handlers = {
-      'create_wallet': grpc.unary_unary_rpc_method_handler(
-          servicer.create_wallet,
-          request_deserializer=rpc__pb2.RequestCreateWallet.FromString,
-          response_serializer=rpc__pb2.ResponseCreateWallet.SerializeToString,
-      ),
-      'load_wallet': grpc.unary_unary_rpc_method_handler(
-          servicer.load_wallet,
-          request_deserializer=rpc__pb2.RequestLoadWallet.FromString,
-          response_serializer=rpc__pb2.ResponseLoadWallet.SerializeToString,
-      ),
-      'recover_wallet': grpc.unary_unary_rpc_method_handler(
-          servicer.recover_wallet,
-          request_deserializer=rpc__pb2.RequestRecoverWallet.FromString,
-          response_serializer=rpc__pb2.ResponseRecoverWallet.SerializeToString,
-      ),
-      'list_wallet': grpc.unary_stream_rpc_method_handler(
-          servicer.list_wallet,
-          request_deserializer=rpc__pb2.RequestListWallet.FromString,
-          response_serializer=rpc__pb2.ResponseListWallet.SerializeToString,
-      ),
-      'remove_wallet': grpc.unary_unary_rpc_method_handler(
-          servicer.remove_wallet,
-          request_deserializer=rpc__pb2.RequestRemoveWallet.FromString,
-          response_serializer=rpc__pb2.ResponseRemoveWallet.SerializeToString,
-      ),
       'declare_node': grpc.unary_unary_rpc_method_handler(
           servicer.declare_node,
           request_deserializer=rpc__pb2.RequestDeclareNode.FromString,
@@ -739,11 +603,6 @@ class StatsRpcStub(object):
         '/forge_abi.StatsRpc/get_health_status',
         request_serializer=rpc__pb2.RequestGetHealthStatus.SerializeToString,
         response_deserializer=rpc__pb2.ResponseGetHealthStatus.FromString,
-        )
-    self.list_tethers = channel.unary_unary(
-        '/forge_abi.StatsRpc/list_tethers',
-        request_serializer=rpc__pb2.RequestListTethers.SerializeToString,
-        response_deserializer=rpc__pb2.ResponseListTethers.FromString,
         )
     self.list_swap = channel.unary_unary(
         '/forge_abi.StatsRpc/list_swap',
@@ -819,13 +678,6 @@ class StatsRpcServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def list_tethers(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
   def list_swap(self, request, context):
     # missing associated documentation comment in .proto file
     pass
@@ -880,11 +732,6 @@ def add_StatsRpcServicer_to_server(servicer, server):
           servicer.get_health_status,
           request_deserializer=rpc__pb2.RequestGetHealthStatus.FromString,
           response_serializer=rpc__pb2.ResponseGetHealthStatus.SerializeToString,
-      ),
-      'list_tethers': grpc.unary_unary_rpc_method_handler(
-          servicer.list_tethers,
-          request_deserializer=rpc__pb2.RequestListTethers.FromString,
-          response_serializer=rpc__pb2.ResponseListTethers.SerializeToString,
       ),
       'list_swap': grpc.unary_unary_rpc_method_handler(
           servicer.list_swap,

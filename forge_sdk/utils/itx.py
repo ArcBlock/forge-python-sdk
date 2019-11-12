@@ -156,7 +156,7 @@ def deposit_token_itx(value, address, evidence, **kwargs):
     return itx
 
 
-def withdraw_token(value, to, **kwargs):
+def withdraw_token_itx(value, to, **kwargs):
     itx = protos.WithdrawTokenTx(
             value=value,
             to=to,
@@ -165,3 +165,42 @@ def withdraw_token(value, to, **kwargs):
             ttl=proto_util.proto_time(kwargs.get('ttl'))
     )
     return itx
+
+
+def approve_withdraw_itx(withdraw_tx_hash, evidence, **kwargs):
+    return protos.ApproveWithdrawTx(
+            withdraw_tx_hash=withdraw_tx_hash,
+            evidence=evidence
+    )
+
+
+def revoke_withdraw_itx(withdraw_tx_hash, **kwargs):
+    return protos.RevokeWithdrawTx(
+            withdraw_tx_hash=withdraw_tx_hash
+    )
+
+
+def setup_swap_itx(receiver, hashlock, locktime, **kwargs):
+    return protos.SetupSwapTx(
+            value=kwargs.get('value'),
+            assets=kwargs.get('assets'),
+            receiver=receiver,
+            hashlock=hashlock,
+            locktime=locktime,
+            data=kwargs.get('data')
+    )
+
+
+def retrieve_swap_itx(address, hashkey, **kwargs):
+    return protos.RetrieveSwapTx(
+            address=address,
+            hashkey=hashkey,
+            data=kwargs.get('data')
+    )
+
+
+def revoke_swap_itx(address, **kwargs):
+    return protos.RevokeSwapTx(
+            address=address,
+            data=kwargs.get('data')
+    )
