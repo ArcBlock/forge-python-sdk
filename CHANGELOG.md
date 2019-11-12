@@ -1,3 +1,9 @@
+## 1.1.0 (November 12, 2019)
+
+
+## 1.0.0 (November 12, 2019)
+
+
 ## 0.40.0 (November 12, 2019)
   - update proto files
 
