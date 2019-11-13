@@ -5,14 +5,6 @@ Forge Python SDK
 Forge-python-SDK is a software developer kit that helps python developer to use Forge framework to build their own decentralized applications.
 If you have any questions or suggestions, please go to `Github <https://github.com/ArcBlock/forge-python-sdk>`_ . The team will be more than willing to help.
 
-Getting Started
--------------------
-1. Follow `Forge Installation <https://docs.arcblock.io/forge/latest/install/>`_ to install Forge on your device
-
-2. Install forge-python-sdk with `Python SDK Guide <https://docs.arcblock.io/forge/latest/sdk/python.html#forge-python-sdk>`_
-
-3. Start your journey with some `Python Tutorials <https://docs.arcblock.io/forge/latest/sdk/python.html#tutorials>`_
-
 .. toctree::
     :maxdepth: 3
     :caption: GRPC
