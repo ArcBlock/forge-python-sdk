@@ -12,11 +12,6 @@ Event
 .. automodule:: forge_sdk.rpc.forge_rpc.event
     :members:
 
-File
------
-
-.. automodule:: forge_sdk.rpc.forge_rpc.file
-    :members:
 
 State
 -----

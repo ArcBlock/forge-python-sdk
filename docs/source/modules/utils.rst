@@ -1,6 +1,6 @@
-Encrypt
+Crypto
 ---------------------
-.. automodule:: forge_sdk.utils.encrypt
+.. automodule:: forge_sdk.utils.crypto
     :members:
 
 
@@ -12,5 +12,15 @@ Conversion
 
 Protos
 --------------
-.. automodule:: forge_sdk.utils.conversion
+.. automodule:: forge_sdk.utils.proto
+    :members:
+
+Transaction
+--------------
+.. automodule:: forge_sdk.utils.tx
+    :members:
+
+Transaction Types
+--------------
+.. automodule:: forge_sdk.utils.itx
     :members:
